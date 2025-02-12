@@ -56,6 +56,25 @@
                     "Host": "sg1.foolvpn.me"
                 }
             }
+        },
+        {
+            "security": "",
+            "server": "quiz.int.vidio.com",
+            "server_port": 80,
+            "tag": "ID CHI Vmess NTLS (Prem)",
+            "tls": {
+                "insecure": true,
+                "server_name": "quiz.int.vidio.com"
+            },
+            "transport": {
+                "headers": {
+                    "Host": "id1.foolvpn.me"
+                },
+                "path": "/vmess",
+                "type": "ws"
+            },
+            "type": "vmess",
+            "uuid": "b0bf6247-7866-478b-93f1-ad050d1d261e"
         }
     ]
 }
