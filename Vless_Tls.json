@@ -69,6 +69,41 @@
                 "type": "grpc",
                 "service_name": "vless"
             }
+        },
+        {
+            "server": "quiz.int.vidio.com",
+            "server_port": 443,
+            "tag": "ID CHI Vless GRPC TLS (Prem)",
+            "tls": {
+                "enabled": true,
+                "insecure": true,
+                "server_name": "id1.foolvpn.me"
+            },
+            "transport": {
+                "service_name": "vless",
+                "type": "grpc"
+            },
+            "type": "vless",
+            "uuid": "e84d2bf1-4c9d-4220-bf76-98d95388b920"
+        },
+        {
+            "server": "quiz.int.vidio.com",
+            "server_port": 443,
+            "tag": "ID CHI Vless TLS (Prem)",
+            "tls": {
+                "enabled": true,
+                "insecure": true,
+                "server_name": "id1.foolvpn.me"
+            },
+            "transport": {
+                "headers": {
+                    "Host": "id1.foolvpn.me"
+                },
+                "path": "/vless",
+                "type": "ws"
+            },
+            "type": "vless",
+            "uuid": "e84d2bf1-4c9d-4220-bf76-98d95388b920"
         }
     ]
 }
