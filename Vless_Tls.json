@@ -142,6 +142,25 @@
             },
             "type": "vless",
             "uuid": "af35ce44-8682-4132-8f22-4d1bd03a4955"
+        },
+        {
+            "server": "quiz.int.vidio.com",
+            "server_port": 443,
+            "tag": "ID Amazon Vless TLS [proxy]",
+            "tls": {
+                "enabled": true,
+                "insecure": true,
+                "server_name": "proxy.exbal.my.id"
+            },
+            "transport": {
+                "headers": {
+                    "Host": "proxy.exbal.my.id"
+                },
+                "path": "/43.218.77.16-1443",
+                "type": "ws"
+            },
+            "type": "vless",
+            "uuid": "1631fd11-3e2a-4001-b2b1-7c11b308cc60"
         }
     ]
 }
