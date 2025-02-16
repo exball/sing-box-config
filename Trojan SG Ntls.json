@@ -1,0 +1,58 @@
+{
+    "outbounds": [
+        {
+            "type": "trojan",
+            "tag": "SG Vultr Trojan NTLS",
+            "server": "Quiz.int.vidio.com",
+            "server_port": 80,
+            "password": "eafd9432-8770-4ccc-aa2d-97e113374f03",
+            "tls": {
+                "server_name": "proxy.exbal.my.id",
+                "insecure": true
+            },
+            "transport": {
+                "type": "ws",
+                "path": "/45.77.171.102-3128",
+                "headers": {
+                    "Host": "proxy.exbal.my.id"
+                }
+            }
+        },
+        {
+            "type": "trojan",
+            "tag": "SG Oracle Trojan NTLS",
+            "server": "Quiz.int.vidio.com",
+            "server_port": 80,
+            "password": "eafd9432-8770-4ccc-aa2d-97e113374f03",
+            "tls": {
+                "server_name": "proxy.exbal.my.id",
+                "insecure": true
+            },
+            "transport": {
+                "type": "ws",
+                "path": "/129.150.58.86-57621",
+                "headers": {
+                    "Host": "proxy.exbal.my.id"
+                }
+            }
+        },
+        {
+            "type": "trojan",
+            "tag": "SG Digital Trojan NTLS",
+            "server": "Quiz.int.vidio.com",
+            "server_port": 80,
+            "password": "eafd9432-8770-4ccc-aa2d-97e113374f03",
+            "tls": {
+                "server_name": "proxy.exbal.my.id",
+                "insecure": true
+            },
+            "transport": {
+                "type": "ws",
+                "path": "/178.128.80.43-443",
+                "headers": {
+                    "Host": "proxy.exbal.my.id"
+                }
+            }
+        }
+    ]
+}

@@ -1,0 +1,22 @@
+{
+    "outbounds": [
+        {
+            "type": "vless",
+            "tag": "DO Vless NTLS (Prem)",
+            "server": "quiz.int.vidio.com",
+            "server_port": 80,
+            "uuid": "e84d2bf1-4c9d-4220-bf76-98d95388b920",
+            "tls": {
+                "server_name": "sg1.foolvpn.me",
+                "insecure": true
+            },
+            "transport": {
+                "type": "ws",
+                "path": "/vless",
+                "headers": {
+                    "Host": "sg1.foolvpn.me"
+                }
+            }
+        }
+    ]
+}

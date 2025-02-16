@@ -1,0 +1,58 @@
+{
+    "outbounds": [
+        {
+            "type": "trojan",
+            "tag": "Herza Trojan NTLS",
+            "server": "Quiz.int.vidio.com",
+            "server_port": 80,
+            "password": "f6515c09-e110-47dd-a6d3-d3916a19f2c4",
+            "tls": {
+                "server_name": "proxy.exbal.my.id",
+                "insecure": true
+            },
+            "transport": {
+                "type": "ws",
+                "path": "/103.168.146.169-20132",
+                "headers": {
+                    "Host": "proxy.exbal.my.id"
+                }
+            }
+        },
+        {
+            "type": "trojan",
+            "tag": "Tencent Trojan NTLS",
+            "server": "Quiz.int.vidio.com",
+            "server_port": 80,
+            "password": "f6515c09-e110-47dd-a6d3-d3916a19f2c4",
+            "tls": {
+                "server_name": "proxy.exbal.my.id",
+                "insecure": true
+            },
+            "transport": {
+                "type": "ws",
+                "path": "/43.133.145.156-53136",
+                "headers": {
+                    "Host": "proxy.exbal.my.id"
+                }
+            }
+        },
+        {
+            "type": "trojan",
+            "tag": "Akamai Trojan NTLS",
+            "server": "Quiz.int.vidio.com",
+            "server_port": 80,
+            "password": "f6515c09-e110-47dd-a6d3-d3916a19f2c4",
+            "tls": {
+                "server_name": "proxy.exbal.my.id",
+                "insecure": true
+            },
+            "transport": {
+                "type": "ws",
+                "path": "/172.232.239.249-587",
+                "headers": {
+                    "Host": "proxy.exbal.my.id"
+                }
+            }
+        }
+    ]
+}

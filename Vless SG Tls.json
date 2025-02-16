@@ -1,0 +1,39 @@
+{
+    "outbounds": [
+        {
+            "type": "vless",
+            "tag": "DO Vless TLS (Prem)",
+            "server": "quiz.int.vidio.com",
+            "server_port": 443,
+            "uuid": "e84d2bf1-4c9d-4220-bf76-98d95388b920",
+            "tls": {
+                "enabled": true,
+                "server_name": "sg1.foolvpn.me",
+                "insecure": true
+            },
+            "transport": {
+                "type": "ws",
+                "path": "/vless",
+                "headers": {
+                    "Host": "sg1.foolvpn.me"
+                }
+            }
+        },
+        {
+            "type": "vless",
+            "tag": "DO Vless GRPC TLS (Prem)",
+            "server": "quiz.int.vidio.com",
+            "server_port": 443,
+            "uuid": "e84d2bf1-4c9d-4220-bf76-98d95388b920",
+            "tls": {
+                "enabled": true,
+                "server_name": "sg1.foolvpn.me",
+                "insecure": true
+            },
+            "transport": {
+                "type": "grpc",
+                "service_name": "vless"
+            }
+        }
+    ]
+}
