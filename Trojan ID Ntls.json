@@ -2,7 +2,7 @@
     "outbounds": [
         {
             "type": "trojan",
-            "tag": "Herza Trojan NTLS",
+            "tag": "Herza Ntls",
             "server": "Quiz.int.vidio.com",
             "server_port": 80,
             "password": "f6515c09-e110-47dd-a6d3-d3916a19f2c4",
@@ -20,7 +20,7 @@
         },
         {
             "type": "trojan",
-            "tag": "Tencent Trojan NTLS",
+            "tag": "Tencent Ntls",
             "server": "Quiz.int.vidio.com",
             "server_port": 80,
             "password": "f6515c09-e110-47dd-a6d3-d3916a19f2c4",
@@ -38,7 +38,7 @@
         },
         {
             "type": "trojan",
-            "tag": "Akamai Trojan NTLS",
+            "tag": "Akamai Ntls",
             "server": "Quiz.int.vidio.com",
             "server_port": 80,
             "password": "f6515c09-e110-47dd-a6d3-d3916a19f2c4",
@@ -53,6 +53,42 @@
                     "Host": "proxy.exbal.my.id"
                 }
             }
+        },
+        {
+            "password": "5bb3e0da-3980-454b-9f23-2daa43a86315",
+            "server": "Quiz.int.vidio.com",
+            "server_port": 80,
+            "tag": "Amazon Ntls",
+            "tls": {
+                "insecure": true,
+                "server_name": "proxy.exbal.my.id"
+            },
+            "transport": {
+                "headers": {
+                    "Host": "proxy.exbal.my.id"
+                },
+                "path": "/43.218.77.16-1443",
+                "type": "ws"
+            },
+            "type": "trojan"
+        },
+        {
+            "password": "5bb3e0da-3980-454b-9f23-2daa43a86315",
+            "server": "Quiz.int.vidio.com",
+            "server_port": 80,
+            "tag": "Google Ntls",
+            "tls": {
+                "insecure": true,
+                "server_name": "proxy.exbal.my.id"
+            },
+            "transport": {
+                "headers": {
+                    "Host": "proxy.exbal.my.id"
+                },
+                "path": "/35.219.50.99-443",
+                "type": "ws"
+            },
+            "type": "trojan"
         }
     ]
 }
