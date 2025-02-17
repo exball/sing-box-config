@@ -2,7 +2,7 @@
     "outbounds": [
         {
             "type": "trojan",
-            "tag": "SG Vultr Trojan NTLS",
+            "tag": "Vultr Ntls",
             "server": "Quiz.int.vidio.com",
             "server_port": 80,
             "password": "eafd9432-8770-4ccc-aa2d-97e113374f03",
@@ -20,7 +20,7 @@
         },
         {
             "type": "trojan",
-            "tag": "SG Oracle Trojan NTLS",
+            "tag": "Oracle Ntls",
             "server": "Quiz.int.vidio.com",
             "server_port": 80,
             "password": "eafd9432-8770-4ccc-aa2d-97e113374f03",
@@ -38,7 +38,7 @@
         },
         {
             "type": "trojan",
-            "tag": "SG Digital Trojan NTLS",
+            "tag": "Digital Ocean Ntls",
             "server": "Quiz.int.vidio.com",
             "server_port": 80,
             "password": "eafd9432-8770-4ccc-aa2d-97e113374f03",
@@ -53,6 +53,42 @@
                     "Host": "proxy.exbal.my.id"
                 }
             }
+        },
+        {
+            "password": "e4782d31-1c45-46ed-866c-212fdbb27bf4",
+            "server": "Quiz.int.vidio.com",
+            "server_port": 80,
+            "tag": "OVH Hosting Ntls",
+            "tls": {
+                "insecure": true,
+                "server_name": "proxy.exbal.my.id"
+            },
+            "transport": {
+                "headers": {
+                    "Host": "proxy.exbal.my.id"
+                },
+                "path": "/51.79.158.126-443",
+                "type": "ws"
+            },
+            "type": "trojan"
+        },
+        {
+            "password": "e4782d31-1c45-46ed-866c-212fdbb27bf4",
+            "server": "Quiz.int.vidio.com",
+            "server_port": 80,
+            "tag": "SoftLayer Ntls",
+            "tls": {
+                "insecure": true,
+                "server_name": "proxy.exbal.my.id"
+            },
+            "transport": {
+                "headers": {
+                    "Host": "proxy.exbal.my.id"
+                },
+                "path": "/119.81.201.154-9089",
+                "type": "ws"
+            },
+            "type": "trojan"
         }
     ]
 }
