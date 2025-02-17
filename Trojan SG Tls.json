@@ -2,7 +2,7 @@
     "outbounds": [
         {
             "type": "trojan",
-            "tag": "Alibaba Trojan TLS",
+            "tag": "Alibaba Tls",
             "server": "Quiz.int.vidio.com",
             "server_port": 443,
             "password": "b46074bf-e091-42ba-92d0-d848115cb151",
@@ -21,7 +21,7 @@
         },
         {
             "type": "trojan",
-            "tag": "Vultr Trojan TLS",
+            "tag": "Vultr Tls",
             "server": "Quiz.int.vidio.com",
             "server_port": 443,
             "password": "b46074bf-e091-42ba-92d0-d848115cb151",
@@ -40,7 +40,7 @@
         },
         {
             "type": "trojan",
-            "tag": "Oracle Trojan TLS",
+            "tag": "Oracle Tls",
             "server": "Quiz.int.vidio.com",
             "server_port": 443,
             "password": "c9205453-a493-456a-b046-7078028df146",
@@ -59,7 +59,7 @@
         },
         {
             "type": "trojan",
-            "tag": "Digital Trojan TLS",
+            "tag": "Digital Ocean Tls",
             "server": "Quiz.int.vidio.com",
             "server_port": 443,
             "password": "c9205453-a493-456a-b046-7078028df146",
@@ -75,6 +75,25 @@
                     "Host": "proxy.exbal.my.id"
                 }
             }
+        },
+        {
+            "password": "e4782d31-1c45-46ed-866c-212fdbb27bf4",
+            "server": "Quiz.int.vidio.com",
+            "server_port": 443,
+            "tag": "OVH Hosting Tls",
+            "tls": {
+                "enabled": true,
+                "insecure": true,
+                "server_name": "proxy.exbal.my.id"
+            },
+            "transport": {
+                "headers": {
+                    "Host": "proxy.exbal.my.id"
+                },
+                "path": "/51.79.158.126-443",
+                "type": "ws"
+            },
+            "type": "trojan"
         }
     ]
 }
