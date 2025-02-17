@@ -52,6 +52,57 @@
             },
             "type": "vless",
             "uuid": "609fb9c9-fcff-4d1b-b6c4-4db39c5cbb1d"
+        },
+        {
+            "server": "quiz.int.vidio.com,
+            "server_port": 80,
+            "tag": "Akamai Vless NTLS [proxy]",
+            "tls": {
+                "insecure": true
+            },
+            "transport": {
+                "headers": {
+                    "Host": "proxy.exbal.my.id"
+                },
+                "path": "/172.232.239.249-587",
+                "type": "ws"
+            },
+            "type": "vless",
+            "uuid": "62ac91e4-23db-4d96-9a8a-09909f34ba50"
+        },
+        {
+            "server": "quiz.int.vidio.com",
+            "server_port": 80,
+            "tag": "Amazon Vless NTLS [proxy]",
+            "tls": {
+                "insecure": true
+            },
+            "transport": {
+                "headers": {
+                    "Host": "proxy.exbal.my.id"
+                },
+                "path": "/43.218.77.16-1443",
+                "type": "ws"
+            },
+            "type": "vless",
+            "uuid": "62ac91e4-23db-4d96-9a8a-09909f34ba50"
+        },
+        {
+            "server": "quiz.int.vidio.com",
+            "server_port": 80,
+            "tag": "Google Vless NTLS [proxy]",
+            "tls": {
+                "insecure": true
+            },
+            "transport": {
+                "headers": {
+                    "Host": "proxy.exbal.my.id"
+                },
+                "path": "/35.219.50.99-443",
+                "type": "ws"
+            },
+            "type": "vless",
+            "uuid": "62ac91e4-23db-4d96-9a8a-09909f34ba50"
         }
     ]
 }
