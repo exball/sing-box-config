@@ -24,7 +24,7 @@
             "tag": "CHI Vless NTLS (Prem)",
             "tls": {
                 "insecure": true,
-                "server_name": "quiz.int.vidio.com"
+                "server_name": "id1.foolvpn.me"
             },
             "transport": {
                 "headers": {
@@ -35,6 +35,23 @@
             },
             "type": "vless",
             "uuid": "e84d2bf1-4c9d-4220-bf76-98d95388b920"
+        },
+        {
+            "server": "quiz.int.vidio.com",
+            "server_port": 80,
+            "tag": "Herza Vless NTLS [proxy]",
+            "tls": {
+                "insecure": true
+            },
+            "transport": {
+                "headers": {
+                    "Host": "proxy.exbal.my.id"
+                },
+                "path": "/103.168.146.169-20132",
+                "type": "ws"
+            },
+            "type": "vless",
+            "uuid": "609fb9c9-fcff-4d1b-b6c4-4db39c5cbb1d"
         }
     ]
 }
