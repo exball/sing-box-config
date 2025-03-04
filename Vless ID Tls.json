@@ -1,74 +1,156 @@
 {
     "outbounds": [
         {
-            "type": "vless",
-            "tag": "LG Tls (Prem)",
             "server": "quiz.int.vidio.com",
             "server_port": 443,
-            "uuid": "e84d2bf1-4c9d-4220-bf76-98d95388b920",
-            "tls": {
-                "enabled": true,
-                "server_name": "id1.foolvpn.me",
-                "insecure": true
-            },
-            "transport": {
-                "type": "ws",
-                "path": "/vless",
-                "headers": {
-                    "Host": "id1.foolvpn.me"
-                }
-            }
-        },
-        {
-            "type": "vless",
-            "tag": "LG GRPC Tls (Prem)",
-            "server": "quiz.int.vidio.com",
-            "server_port": 443,
-            "uuid": "e84d2bf1-4c9d-4220-bf76-98d95388b920",
-            "tls": {
-                "enabled": true,
-                "server_name": "id1.foolvpn.me",
-                "insecure": true
-            },
-            "transport": {
-                "type": "grpc",
-                "service_name": "vless"
-            }
-        },
-        {
-            "server": "quiz.int.vidio.com",
-            "server_port": 443,
-            "tag": "Cloud Hosting GRPC Tls (Prem)",
+            "tag": "1 🇮🇩 Amazon.com WS TLS [proxy]",
             "tls": {
                 "enabled": true,
                 "insecure": true,
-                "server_name": "id1.foolvpn.me"
-            },
-            "transport": {
-                "service_name": "vless",
-                "type": "grpc"
-            },
-            "type": "vless",
-            "uuid": "e84d2bf1-4c9d-4220-bf76-98d95388b920"
-        },
-        {
-            "server": "quiz.int.vidio.com",
-            "server_port": 443,
-            "tag": "Cloud Hosting Tls (Prem)",
-            "tls": {
-                "enabled": true,
-                "insecure": true,
-                "server_name": "id1.foolvpn.me"
+                "server_name": "proxy.exbal.my.id"
             },
             "transport": {
                 "headers": {
-                    "Host": "id1.foolvpn.me"
+                    "Host": "proxy.exbal.my.id"
                 },
-                "path": "/vless",
+                "path": "/43.218.77.16-1443",
                 "type": "ws"
             },
             "type": "vless",
-            "uuid": "e84d2bf1-4c9d-4220-bf76-98d95388b920"
+            "uuid": "b3252235-1681-408e-927f-c021dbbb2213"
+        },
+        {
+            "server": "quiz.int.vidio.com",
+            "server_port": 443,
+            "tag": "2 🇮🇩 Google Cloud WS TLS [proxy]",
+            "tls": {
+                "enabled": true,
+                "insecure": true,
+                "server_name": "proxy.exbal.my.id"
+            },
+            "transport": {
+                "headers": {
+                    "Host": "proxy.exbal.my.id"
+                },
+                "path": "/35.219.15.90-443",
+                "type": "ws"
+            },
+            "type": "vless",
+            "uuid": "b3252235-1681-408e-927f-c021dbbb2213"
+        },
+        {
+            "server": "quiz.int.vidio.com",
+            "server_port": 443,
+            "tag": "3 🇮🇩 Google Cloud WS TLS [proxy]",
+            "tls": {
+                "enabled": true,
+                "insecure": true,
+                "server_name": "proxy.exbal.my.id"
+            },
+            "transport": {
+                "headers": {
+                    "Host": "proxy.exbal.my.id"
+                },
+                "path": "/35.219.50.99-443",
+                "type": "ws"
+            },
+            "type": "vless",
+            "uuid": "b3252235-1681-408e-927f-c021dbbb2213"
+        },
+        {
+            "server": "quiz.int.vidio.com",
+            "server_port": 443,
+            "tag": "4 🇮🇩 Akamai Connected Cloud WS TLS [proxy]",
+            "tls": {
+                "enabled": true,
+                "insecure": true,
+                "server_name": "proxy.exbal.my.id"
+            },
+            "transport": {
+                "headers": {
+                    "Host": "proxy.exbal.my.id"
+                },
+                "path": "/172.235.251.7-587",
+                "type": "ws"
+            },
+            "type": "vless",
+            "uuid": "b3252235-1681-408e-927f-c021dbbb2213"
+        },
+        {
+            "server": "quiz.int.vidio.com",
+            "server_port": 443,
+            "tag": "5 🇮🇩 Akamai Connected Cloud WS TLS [proxy]",
+            "tls": {
+                "enabled": true,
+                "insecure": true,
+                "server_name": "proxy.exbal.my.id"
+            },
+            "transport": {
+                "headers": {
+                    "Host": "proxy.exbal.my.id"
+                },
+                "path": "/172.232.237.112-2053",
+                "type": "ws"
+            },
+            "type": "vless",
+            "uuid": "b3252235-1681-408e-927f-c021dbbb2213"
+        },
+        {
+            "server": "quiz.int.vidio.com",
+            "server_port": 443,
+            "tag": "8 🇮🇩 First Cagayan Converge Data Center Inc. WS TLS [proxy]",
+            "tls": {
+                "enabled": true,
+                "insecure": true,
+                "server_name": "proxy.exbal.my.id"
+            },
+            "transport": {
+                "headers": {
+                    "Host": "proxy.exbal.my.id"
+                },
+                "path": "/203.194.112.119-2053",
+                "type": "ws"
+            },
+            "type": "vless",
+            "uuid": "b3252235-1681-408e-927f-c021dbbb2213"
+        },
+        {
+            "server": "quiz.int.vidio.com",
+            "server_port": 443,
+            "tag": "9 🇮🇩 First Cagayan Converge Data Center Inc. WS TLS [proxy]",
+            "tls": {
+                "enabled": true,
+                "insecure": true,
+                "server_name": "proxy.exbal.my.id"
+            },
+            "transport": {
+                "headers": {
+                    "Host": "proxy.exbal.my.id"
+                },
+                "path": "/203.194.112.119-8443",
+                "type": "ws"
+            },
+            "type": "vless",
+            "uuid": "b3252235-1681-408e-927f-c021dbbb2213"
+        },
+        {
+            "server": "quiz.int.vidio.com",
+            "server_port": 443,
+            "tag": "10 🇮🇩 PT Pusat Media Indonesia WS TLS [proxy]",
+            "tls": {
+                "enabled": true,
+                "insecure": true,
+                "server_name": "proxy.exbal.my.id"
+            },
+            "transport": {
+                "headers": {
+                    "Host": "proxy.exbal.my.id"
+                },
+                "path": "/103.6.207.108-8080",
+                "type": "ws"
+            },
+            "type": "vless",
+            "uuid": "b3252235-1681-408e-927f-c021dbbb2213"
         },
         {
             "server": "quiz.int.vidio.com",
@@ -107,44 +189,6 @@
             },
             "type": "vless",
             "uuid": "af35ce44-8682-4132-8f22-4d1bd03a4955"
-        },
-        {
-            "server": "quiz.int.vidio.com",
-            "server_port": 443,
-            "tag": "Amazon Tls [proxy]",
-            "tls": {
-                "enabled": true,
-                "insecure": true,
-                "server_name": "proxy.exbal.my.id"
-            },
-            "transport": {
-                "headers": {
-                    "Host": "proxy.exbal.my.id"
-                },
-                "path": "/43.218.77.16-1443",
-                "type": "ws"
-            },
-            "type": "vless",
-            "uuid": "1631fd11-3e2a-4001-b2b1-7c11b308cc60"
-        },
-        {
-            "server": "quiz.int.vidio.com",
-            "server_port": 443,
-            "tag": "Google Tls [proxy]",
-            "tls": {
-                "enabled": true,
-                "insecure": true,
-                "server_name": "proxy.exbal.my.id"
-            },
-            "transport": {
-                "headers": {
-                    "Host": "proxy.exbal.my.id"
-                },
-                "path": "/35.219.50.99-443",
-                "type": "ws"
-            },
-            "type": "vless",
-            "uuid": "1631fd11-3e2a-4001-b2b1-7c11b308cc60"
         }
     ]
 }
