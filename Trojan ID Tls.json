@@ -1,99 +1,194 @@
 {
-    "outbounds": [
-        {
-            "type": "trojan",
-            "tag": "Herza Tls",
-            "server": "Quiz.int.vidio.com",
-            "server_port": 443,
-            "password": "33aa75e6-12e3-4152-9bc9-cbb03a4c7bc3",
-            "tls": {
-                "enabled": true,
-                "server_name": "proxy.exbal.my.id",
-                "insecure": true
-            },
-            "transport": {
-                "type": "ws",
-                "path": "/103.168.146.169-20132",
-                "headers": {
-                    "Host": "proxy.exbal.my.id"
-                }
-            }
+  "outbounds": [
+    {
+      "password": "2b405194-3f13-4821-bffa-4deb0fef36a2",
+      "server": "quiz.int.vidio.com",
+      "server_port": 443,
+      "tag": "1 🇮🇩 Amazon.com WS TLS [proxy]",
+      "tls": {
+        "enabled": true,
+        "insecure": true,
+        "server_name": "proxy.exbal.my.id"
+      },
+      "transport": {
+        "headers": {
+          "Host": "proxy.exbal.my.id"
         },
-        {
-            "type": "trojan",
-            "tag": "Tencent Tls",
-            "server": "Quiz.int.vidio.com",
-            "server_port": 443,
-            "password": "33aa75e6-12e3-4152-9bc9-cbb03a4c7bc3",
-            "tls": {
-                "enabled": true,
-                "server_name": "proxy.exbal.my.id",
-                "insecure": true
-            },
-            "transport": {
-                "type": "ws",
-                "path": "/43.133.145.156-53136",
-                "headers": {
-                    "Host": "proxy.exbal.my.id"
-                }
-            }
+        "path": "/43.218.77.16-1443",
+        "type": "ws"
+      },
+      "type": "trojan"
+    },
+    {
+      "password": "2b405194-3f13-4821-bffa-4deb0fef36a2",
+      "server": "quiz.int.vidio.com",
+      "server_port": 443,
+      "tag": "2 🇮🇩 Akamai Connected Cloud WS TLS [proxy]",
+      "tls": {
+        "enabled": true,
+        "insecure": true,
+        "server_name": "proxy.exbal.my.id"
+      },
+      "transport": {
+        "headers": {
+          "Host": "proxy.exbal.my.id"
         },
-        {
-            "type": "trojan",
-            "tag": "Akamai Tls",
-            "server": "Quiz.int.vidio.com",
-            "server_port": 443,
-            "password": "33aa75e6-12e3-4152-9bc9-cbb03a4c7bc3",
-            "tls": {
-                "enabled": true,
-                "server_name": "proxy.exbal.my.id",
-                "insecure": true
-            },
-            "transport": {
-                "type": "ws",
-                "path": "/172.232.239.249-587",
-                "headers": {
-                    "Host": "proxy.exbal.my.id"
-                }
-            }
+        "path": "/172.232.239.151-587",
+        "type": "ws"
+      },
+      "type": "trojan"
+    },
+    {
+      "password": "2b405194-3f13-4821-bffa-4deb0fef36a2",
+      "server": "quiz.int.vidio.com",
+      "server_port": 443,
+      "tag": "3 🇮🇩 Amazon.com WS TLS [proxy]",
+      "tls": {
+        "enabled": true,
+        "insecure": true,
+        "server_name": "proxy.exbal.my.id"
+      },
+      "transport": {
+        "headers": {
+          "Host": "proxy.exbal.my.id"
         },
-        {
-            "type": "trojan",
-            "tag": "Amazon Tls",
-            "server": "Quiz.int.vidio.com",
-            "server_port": 443,
-            "password": "33aa75e6-12e3-4152-9bc9-cbb03a4c7bc3",
-            "tls": {
-                "enabled": true,
-                "server_name": "proxy.exbal.my.id",
-                "insecure": true
-            },
-            "transport": {
-                "type": "ws",
-                "path": "/43.218.77.16-1443",
-                "headers": {
-                    "Host": "proxy.exbal.my.id"
-                }
-            }
+        "path": "/43.218.77.16-443",
+        "type": "ws"
+      },
+      "type": "trojan"
+    },
+    {
+      "password": "2b405194-3f13-4821-bffa-4deb0fef36a2",
+      "server": "quiz.int.vidio.com",
+      "server_port": 443,
+      "tag": "4 🇮🇩 Akamai Connected Cloud WS TLS [proxy]",
+      "tls": {
+        "enabled": true,
+        "insecure": true,
+        "server_name": "proxy.exbal.my.id"
+      },
+      "transport": {
+        "headers": {
+          "Host": "proxy.exbal.my.id"
         },
-        {
-            "password": "5bb3e0da-3980-454b-9f23-2daa43a86315",
-            "server": "quiz.int.vidio.com",
-            "server_port": 443,
-            "tag": "Google Tls",
-            "tls": {
-                "enabled": true,
-                "insecure": true,
-                "server_name": "proxy.exbal.my.id"
-            },
-            "transport": {
-                "headers": {
-                    "Host": "proxy.exbal.my.id"
-                },
-                "path": "/35.219.50.99-443",
-                "type": "ws"
-            },
-            "type": "trojan"
-        }
-    ]
+        "path": "/172.232.237.112-2053",
+        "type": "ws"
+      },
+      "type": "trojan"
+    },
+    {
+      "password": "2b405194-3f13-4821-bffa-4deb0fef36a2",
+      "server": "quiz.int.vidio.com",
+      "server_port": 443,
+      "tag": "5 🇮🇩 PT Pusat Media Indonesia WS TLS [proxy]",
+      "tls": {
+        "enabled": true,
+        "insecure": true,
+        "server_name": "proxy.exbal.my.id"
+      },
+      "transport": {
+        "headers": {
+          "Host": "proxy.exbal.my.id"
+        },
+        "path": "/103.6.207.108-8080",
+        "type": "ws"
+      },
+      "type": "trojan"
+    },
+    {
+      "password": "2b405194-3f13-4821-bffa-4deb0fef36a2",
+      "server": "quiz.int.vidio.com",
+      "server_port": 443,
+      "tag": "6 🇮🇩 Alibaba WS TLS [proxy]",
+      "tls": {
+        "enabled": true,
+        "insecure": true,
+        "server_name": "proxy.exbal.my.id"
+      },
+      "transport": {
+        "headers": {
+          "Host": "proxy.exbal.my.id"
+        },
+        "path": "/8.215.196.18-587",
+        "type": "ws"
+      },
+      "type": "trojan"
+    },
+    {
+      "password": "2b405194-3f13-4821-bffa-4deb0fef36a2",
+      "server": "quiz.int.vidio.com",
+      "server_port": 443,
+      "tag": "7 🇮🇩 Google Cloud WS TLS [proxy]",
+      "tls": {
+        "enabled": true,
+        "insecure": true,
+        "server_name": "proxy.exbal.my.id"
+      },
+      "transport": {
+        "headers": {
+          "Host": "proxy.exbal.my.id"
+        },
+        "path": "/35.219.15.90-443",
+        "type": "ws"
+      },
+      "type": "trojan"
+    },
+    {
+      "password": "2b405194-3f13-4821-bffa-4deb0fef36a2",
+      "server": "quiz.int.vidio.com",
+      "server_port": 443,
+      "tag": "8 🇮🇩 PT Telkom Indonesia WS TLS [proxy]",
+      "tls": {
+        "enabled": true,
+        "insecure": true,
+        "server_name": "proxy.exbal.my.id"
+      },
+      "transport": {
+        "headers": {
+          "Host": "proxy.exbal.my.id"
+        },
+        "path": "/36.95.152.58-12137",
+        "type": "ws"
+      },
+      "type": "trojan"
+    },
+    {
+      "password": "2b405194-3f13-4821-bffa-4deb0fef36a2",
+      "server": "quiz.int.vidio.com",
+      "server_port": 443,
+      "tag": "9 🇮🇩 First Cagayan Converge Data Center Inc. WS TLS [proxy]",
+      "tls": {
+        "enabled": true,
+        "insecure": true,
+        "server_name": "proxy.exbal.my.id"
+      },
+      "transport": {
+        "headers": {
+          "Host": "proxy.exbal.my.id"
+        },
+        "path": "/203.194.112.119-8443",
+        "type": "ws"
+      },
+      "type": "trojan"
+    },
+    {
+      "password": "2b405194-3f13-4821-bffa-4deb0fef36a2",
+      "server": "quiz.int.vidio.com",
+      "server_port": 443,
+      "tag": "10 🇮🇩 First Cagayan Converge Data Center Inc. WS TLS [proxy]",
+      "tls": {
+        "enabled": true,
+        "insecure": true,
+        "server_name": "proxy.exbal.my.id"
+      },
+      "transport": {
+        "headers": {
+          "Host": "proxy.exbal.my.id"
+        },
+        "path": "/203.194.112.119-2053",
+        "type": "ws"
+      },
+      "type": "trojan"
+    }
+  ]
 }
