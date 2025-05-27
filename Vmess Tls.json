@@ -167,6 +167,26 @@
                     "Host": "id1.foolvpn.me"
                 }
             }
+        },
+        {
+            "security": "auto",
+            "server": "quiz.int.vidio.com",
+            "server_port": 443,
+            "tag": "ex_ball - VMess ws TLS",
+            "tls": {
+                "enabled": true,
+                "insecure": true,
+                "server_name": "ado1.xmd.asia"
+            },
+            "transport": {
+                "headers": {
+                    "Host": "ado1.xmd.asia"
+                },
+                "path": "/vmess-ws",
+                "type": "ws"
+            },
+            "type": "vmess",
+            "uuid": "01d88f3b-c812-401a-b5b9-ed99dc45f234"
         }
     ]
 }
