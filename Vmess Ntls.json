@@ -75,6 +75,25 @@
             },
             "type": "vmess",
             "uuid": "b0bf6247-7866-478b-93f1-ad050d1d261e"
+        },
+        {
+            "security": "auto",
+            "server": "ado1.xmd.asia",
+            "server_port": 80,
+            "tag": "ex_ball - VMess ws nTLS",
+            "tls": {
+                "insecure": true,
+                "server_name": "ado1.xmd.asia"
+            },
+            "transport": {
+                "headers": {
+                    "Host": "ado1.xmd.asia"
+                },
+                "path": "/vmess-ws",
+                "type": "ws"
+            },
+            "type": "vmess",
+            "uuid": "01d88f3b-c812-401a-b5b9-ed99dc45f234"
         }
     ]
 }
