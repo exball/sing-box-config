@@ -194,20 +194,8 @@ def main():
         "total_proxies": len(all_outbounds)
     }
     
-    # Simpan file gabungan di direktori utama
-    all_file = "outbound-all.json"  # File gabungan di direktori utama
-    with open(all_file, "w", encoding="utf-8") as f:
-        json.dump(all_result, f, indent=4, ensure_ascii=False)
-    
-    print(f"Successfully saved all {len(all_outbounds)} proxies to {all_file}")
-    
-    # Simpan juga ke file utama di root direktori untuk kompatibilitas
-    # Ubah nama file utama di sini
-    main_file = "outbound.json"  # Ganti dengan nama file utama yang Anda inginkan
-    with open(main_file, "w", encoding="utf-8") as f:
-        json.dump(all_result, f, indent=4, ensure_ascii=False)
-    
-    print(f"Successfully saved all {len(all_outbounds)} proxies to {main_file}")
+    # Tidak lagi membuat file outbound-all.json dan outbound.json
+    print(f"Total proxies collected: {len(all_outbounds)}")
     
     # Buat README.md dengan informasi tentang proxy
     readme_content = f"""# Proxy List
@@ -260,8 +248,6 @@ This repository is automatically updated every 6 hours with fresh proxies.
 
 ### Available Files
 
-- `outbound-all.json` - All proxies from all countries
-- `outbound.json` - All proxies (same as outbound-all.json, for compatibility)
 """
 
     # Tambahkan informasi tentang file per kategori
