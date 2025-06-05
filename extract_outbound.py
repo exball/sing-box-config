@@ -76,7 +76,12 @@ def fetch_with_retry(url, max_retries=5, retry_delay=3):
 def main():
     # URL API untuk mendapatkan konfigurasi BFR
     # Kita bisa mendapatkan proxy dari beberapa negara
-    countries = ["ID", "SG", "US"]  # Indonesia, Singapore, United States
+    # Daftar kode negara yang tersedia:
+    # ID (Indonesia), SG (Singapore), US (United States), JP (Japan), KR (South Korea),
+    # HK (Hong Kong), TW (Taiwan), GB (United Kingdom), DE (Germany), FR (France),
+    # CA (Canada), AU (Australia), NL (Netherlands), RU (Russia), IN (India),
+    # BR (Brazil), IT (Italy), ES (Spain), MX (Mexico), TR (Turkey)
+    countries = ["ID", "SG", "US", "JP", "KR"]  # Contoh: menambahkan Jepang dan Korea Selatan
     protocols = ["vless", "trojan"]  # Protokol yang didukung
     securities = ["tls", "ntls"]  # Jenis keamanan yang didukung
     
@@ -123,12 +128,17 @@ def main():
                     
                     # Filter outbound berdasarkan protokol dan keamanan
                     filtered_outbounds = []
+                    
+                    # Untuk melacak provider yang sudah diambil (untuk negara selain Indonesia)
+                    providers_seen = set()
+                    
                     for outbound in outbounds:
                         if (outbound.get("type") == protocol and 
                             ((security == "tls" and outbound.get("tls", {}).get("enabled") == True) or
                              (security == "ntls" and (not outbound.get("tls") or outbound.get("tls", {}).get("enabled") != True)))):
                             
                             # Tambahkan emoji bendera ke tag
+                            provider_name = "unknown"
                             if "tag" in outbound:
                                 tag_parts = outbound["tag"].split(" ")
                                 if len(tag_parts) >= 3:
@@ -138,6 +148,8 @@ def main():
                                     flag_emoji = get_flag_emoji(country)
                                     # Ambil provider dan seterusnya (skip nomor dan emoji asli)
                                     provider_parts = tag_parts[2:]
+                                    # Ekstrak nama provider untuk tracking
+                                    provider_name = ' '.join(provider_parts).lower()
                                     # Gabungkan kembali dengan emoji yang benar
                                     clean_tag = f"{number} {flag_emoji} {' '.join(provider_parts)}"
                                     outbound["tag"] = clean_tag
@@ -145,7 +157,18 @@ def main():
                             # Tambahkan metadata negara untuk memudahkan filtering
                             outbound["country_code"] = country
                             
-                            filtered_outbounds.append(outbound)
+                            # Logika untuk memfilter proxy:
+                            # 1. Untuk Indonesia (ID): Ambil semua proxy
+                            # 2. Untuk negara lain: Ambil hanya 1 proxy per provider
+                            if country == "ID" or provider_name not in providers_seen:
+                                filtered_outbounds.append(outbound)
+                                
+                                # Tambahkan provider ke set untuk melacak (kecuali untuk Indonesia)
+                                if country != "ID":
+                                    providers_seen.add(provider_name)
+                                    
+                                    # Debug info
+                                    print(f"Added {country} proxy from provider: {provider_name}")
                     
                     print(f"Found {len(filtered_outbounds)} {protocol} {security} proxies from {country}")
                     
