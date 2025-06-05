@@ -35,5 +35,6 @@ jobs:
         run: |
           git config --global user.name 'GitHub Actions Bot'
           git config --global user.email 'actions@github.com'
+          git remote set-url origin https://x-access-token:${TOKEN}@github.com/exball/sing-box-config.git
           git add test.json README.md proxies/
           git diff --quiet && git diff --staged --quiet || (git commit -m "Update proxy list [automated]" && git push)
