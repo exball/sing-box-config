@@ -1,350 +1,709 @@
 {
     "log": {
-      "level": "error",
-      "output": "/data/adb/box/run/sing-box.log",
-      "timestamp": true
+        "level": "error",
+        "output": "/data/adb/box/run/sing-box.log",
+        "timestamp": true
     },
     "dns": {
-      "servers": [
-        {
-          "tag": "remote",
-          "address": [
-            "tls://dns.google",
-            "tls://one.one.one.one",
-            "tls://dns.opendns.com",
-            "tls://dns.quad9.net",
-            "tls://dns.adguard.com"
-          ],
-          "address_resolver": "dns_resolver"
+        "servers": [
+            {
+                "tag": "remote",
+                "address": [
+                    "tls://dns.google",
+                    "tls://one.one.one.one",
+                    "tls://dns.opendns.com",
+                    "tls://dns.quad9.net",
+                    "tls://dns.adguard.com"
+                ],
+                "address_resolver": "dns_resolver"
+            },
+            {
+                "tag": "dns_resolver",
+                "address": [
+                    "1.1.1.1",
+                    "1.0.0.1",
+                    "8.8.8.8",
+                    "8.8.4.4",
+                    "9.9.9.9",
+                    "149.112.112.112",
+                    "208.67.222.222",
+                    "208.67.220.220"
+                ],
+                "detour": "server"
+            },
+            {
+                "tag": "local",
+                "address": [
+                    "104.22.4.240",
+                    "104.22.5.240",
+                    "104.17.105.89",
+                    "104.17.103.89",
+                    "104.17.106.89",
+                    "104.16.230.163",
+                    "104.17.70.206",
+                    "104.17.71.206",
+                    "104.16.231.163",
+                    "104.16.232.163",
+                    "13.225.4.107",
+                    "172.67.5.14",
+                    "112.215.203.246",
+                    "112.215.203.247",
+                    "112.215.203.248",
+                    "112.215.203.254",
+                    "112.215.198.248",
+                    "112.215.198.254"
+                ],
+                "detour": "direct"
+            },
+            {
+                "tag": "rcode",
+                "address": "rcode://success"
+            },
+            {
+                "tag": "fakedns",
+                "address": "fakeip"
+            }
+        ],
+        "rules": [
+            {
+                "domain_suffix": [
+                    ".arpa.",
+                    ".arpa"
+                ],
+                "server": "block-dns",
+                "rewrite_ttl": 20
+            },
+            {
+                "outbound": "any",
+                "server": "local",
+                "disable_cache": true
+            },
+            {
+                "outbound": "any",
+                "server": "rcode",
+                "disable_cache": true
+            },
+            {
+                "query_type": [
+                    "AAAA",
+                    "A"
+                ],
+                "server": "fakedns"
+            }
+        ],
+        "fakeip": {
+            "enabled": true,
+            "inet4_range": "198.18.0.0/15",
+            "inet6_range": "fc00::/18"
         },
-        {
-          "tag": "dns_resolver",
-          "address": [
-            "1.1.1.1",
-            "1.0.0.1",
-            "8.8.8.8",
-            "8.8.4.4",
-            "9.9.9.9",
-            "149.112.112.112",
-            "208.67.222.222",
-            "208.67.220.220"
-          ],
-          "detour": "server"
-        },
-        {
-          "tag": "local",
-          "address": [
-            "104.22.4.240",
-            "104.22.5.240",
-            "104.17.105.89",
-            "104.17.103.89",
-            "104.17.106.89",
-            "104.16.230.163",
-            "104.17.70.206",
-            "104.17.71.206",
-            "104.16.231.163",
-            "104.16.232.163",
-            "13.225.4.107",
-            "172.67.5.14",
-            "112.215.203.246",
-            "112.215.203.247",
-            "112.215.203.248",
-            "112.215.203.254",
-            "112.215.198.248",
-            "112.215.198.254"
-          ],
-          "detour": "direct"
-        },
-        {
-          "tag": "rcode",
-          "address": "rcode://success"
-        },
-        {
-          "tag": "fakedns",
-          "address": "fakeip"
-        }
-      ],
-      "rules": [
-        {
-          "domain_suffix": [
-            ".arpa.",
-            ".arpa"
-          ],
-          "server": "block-dns",
-          "rewrite_ttl": 20
-        },
-        {
-          "outbound": "any",
-          "server": "local",
-          "disable_cache": true
-        },
-        {
-          "outbound": "any",
-          "server": "rcode",
-          "disable_cache": true
-        },
-        {
-          "query_type": [
-            "AAAA",
-            "A"
-          ],
-          "server": "fakedns"
-        }
-      ],
-      "fakeip": {
-        "enabled": true,
-        "inet4_range": "198.18.0.0/15",
-        "inet6_range": "fc00::/18"
-      },
-      "strategy": "ipv4_only"
+        "strategy": "ipv4_only"
     },
     "inbounds": [
-      {
-        "type": "tproxy",
-        "tag": "tproxy-in",
-        "listen": "::",
-        "listen_port": 9898,
-        "sniff": true
-      },
-      {
-        "type": "redirect",
-        "tag": "redirect-in",
-        "listen": "::",
-        "listen_port": 9797,
-        "sniff": true
-      }
-    ],
-    "outbounds": [
-      {
-        "type": "selector",
-        "tag": "server",
-        "outbounds": [
-          "best latency",
-          "best latency vmess",
-          "Vmess Tls",
-          "Vmess Ntls",
-          "Vless ID Tls",
-          "Vless ID Ntls",
-          "Vless SG Tls",
-          "Vless SG Ntls",
-          "Trojan ID Tls",
-          "Trojan ID Ntls",
-          "Trojan SG Tls",
-          "Trojan SG Ntls"
-        ],
-        "providers": [
-          "Vmess Tls",
-          "Vmess Ntls",
-          "Vless ID Tls",
-          "Vless ID Ntls",
-          "Vless SG Tls",
-          "Vless SG Ntls",
-          "Trojan ID Tls",
-          "Trojan ID Ntls",
-          "Trojan SG Tls",
-          "Trojan SG Ntls"
-        ]
-      },
-      {
-        "type": "urltest",
-        "tag": "best latency",
-        "outbounds": [
-          "Vmess Tls",
-          "Vmess Ntls",
-          "Vless ID Tls",
-          "Vless ID Ntls",
-          "Vless SG Tls",
-          "Vless SG Ntls"
-        ]
-      },
-      {
-        "type": "urltest",
-        "tag": "best latency vmess",
-        "outbounds": [
-          "Vmess Tls",
-          "Vmess Ntls"
-        ]
-      },
-      {
-        "type": "urltest",
-        "tag": "Vmess Tls",
-        "providers": "Vmess Tls",
-        "url": "https://www.gstatic.com/generate_204",
-        "interval": "1m0s"
-      },
-      {
-        "type": "urltest",
-        "tag": "Vmess Ntls",
-        "providers": "Vmess Ntls",
-        "url": "https://www.gstatic.com/generate_204",
-        "interval": "1m0s"
-      },
-      {
-        "type": "urltest",
-        "tag": "Vless ID Tls",
-        "providers": "Vless ID Tls",
-        "url": "https://www.gstatic.com/generate_204",
-        "interval": "1m0s"
-      },
-      {
-        "type": "urltest",
-        "tag": "Vless ID Ntls",
-        "providers": "Vless ID Ntls",
-        "url": "https://www.gstatic.com/generate_204",
-        "interval": "1m0s"
-      },
-      {
-        "type": "urltest",
-        "tag": "Vless SG Tls",
-        "providers": "Vless SG Tls",
-        "url": "https://www.gstatic.com/generate_204",
-        "interval": "1m0s"
-      },
-      {
-        "type": "urltest",
-        "tag": "Vless SG Ntls",
-        "providers": "Vless SG Ntls",
-        "url": "https://www.gstatic.com/generate_204",
-        "interval": "1m0s"
-      },
-      {
-        "type": "urltest",
-        "tag": "Trojan ID Tls",
-        "providers": "Trojan ID Tls",
-        "url": "https://www.gstatic.com/generate_204",
-        "interval": "1m0s"
-      },
-      {
-        "type": "urltest",
-        "tag": "Trojan ID Ntls",
-        "providers": "Trojan ID Ntls",
-        "url": "https://www.gstatic.com/generate_204",
-        "interval": "1m0s"
-      },
-      {
-        "type": "urltest",
-        "tag": "Trojan SG Tls",
-        "providers": "Trojan SG Tls",
-        "url": "https://www.gstatic.com/generate_204",
-        "interval": "1m0s"
-      },
-      {
-        "type": "urltest",
-        "tag": "Trojan SG Ntls",
-        "providers": "Trojan SG Ntls",
-        "url": "https://www.gstatic.com/generate_204",
-        "interval": "1m0s"
-      },
-      {
-        "type": "dns",
-        "tag": "dns"
-      },
-      {
-        "type": "direct",
-        "tag": "direct"
-      },
-      {
-        "type": "block",
-        "tag": "block"
-      }
-    ],
-    "route": {
-      "rules": [
         {
-          "port": 53,
-          "outbound": "dns"
+            "type": "tproxy",
+            "tag": "tproxy-in",
+            "listen": "::",
+            "listen_port": 9898,
+            "sniff": true
         },
         {
-          "domain_suffix": "zimperium.com",
-          "outbound": "block"
+            "type": "redirect",
+            "tag": "redirect-in",
+            "listen": "::",
+            "listen_port": 9797,
+            "sniff": true
         }
-      ],
-      "final": "server",
-      "auto_detect_interface": false
+    ],
+    "outbounds": [
+        {
+            "type": "selector",
+            "tag": "server",
+            "outbounds": [
+                "best latency",
+                "best latency vmess",
+                "Vmess Tls",
+                "Vmess Ntls",
+                "Vless ID Tls",
+                "Vless ID Ntls",
+                "Vless SG Tls",
+                "Vless SG Ntls",
+                "Trojan ID Tls",
+                "Trojan ID Ntls",
+                "Trojan SG Tls",
+                "Trojan SG Ntls",
+                "ID Vless Tls",
+                "ID Vless Ntls",
+                "ID Trojan Tls",
+                "ID Trojan Ntls",
+                "SG Vless Tls",
+                "SG Vless Ntls",
+                "SG Trojan Tls",
+                "SG Trojan Ntls",
+                "US Vless Tls",
+                "US Vless Ntls",
+                "US Trojan Tls",
+                "US Trojan Ntls",
+                "JP Vless Tls",
+                "JP Vless Ntls",
+                "JP Trojan Tls",
+                "JP Trojan Ntls",
+                "KR Vless Tls",
+                "KR Vless Ntls",
+                "KR Trojan Tls",
+                "KR Trojan Ntls"
+            "providers": [
+                "Vmess Tls",
+                "Vmess Ntls",
+                "Vless ID Tls",
+                "Vless ID Ntls",
+                "Vless SG Tls",
+                "Vless SG Ntls",
+                "Trojan ID Tls",
+                "Trojan ID Ntls",
+                "Trojan SG Tls",
+                "Trojan SG Ntls",
+                "ID Vless Tls",
+                "ID Vless Ntls",
+                "ID Trojan Tls",
+                "ID Trojan Ntls",
+                "SG Vless Tls",
+                "SG Vless Ntls",
+                "SG Trojan Tls",
+                "SG Trojan Ntls",
+                "US Vless Tls",
+                "US Vless Ntls",
+                "US Trojan Tls",
+                "US Trojan Ntls",
+                "JP Vless Tls",
+                "JP Vless Ntls",
+                "JP Trojan Tls",
+                "JP Trojan Ntls",
+                "KR Vless Tls",
+                "KR Vless Ntls",
+                "KR Trojan Tls",
+                "KR Trojan Ntls"
+            ]
+        },
+        {
+            "type": "urltest",
+            "tag": "best latency",
+            "outbounds": [
+                "Vmess Tls",
+                "Vmess Ntls",
+                "Vless ID Tls",
+                "Vless ID Ntls",
+                "Vless SG Tls",
+                "Vless SG Ntls",
+                "ID Vless Tls",
+                "ID Vless Ntls",
+                "ID Trojan Tls",
+                "ID Trojan Ntls",
+                "SG Vless Tls",
+                "SG Vless Ntls",
+                "SG Trojan Tls",
+                "SG Trojan Ntls",
+                "US Vless Tls",
+                "US Vless Ntls",
+                "US Trojan Tls",
+                "US Trojan Ntls",
+                "JP Vless Tls",
+                "JP Vless Ntls",
+                "JP Trojan Tls",
+                "JP Trojan Ntls",
+                "KR Vless Tls",
+                "KR Vless Ntls",
+                "KR Trojan Tls",
+                "KR Trojan Ntls"
+            ]
+        },
+        {
+            "type": "urltest",
+            "tag": "best latency vmess",
+            "outbounds": [
+                "Vmess Tls",
+                "Vmess Ntls"
+            ]
+        },
+        {
+            "type": "urltest",
+            "tag": "Vmess Tls",
+            "providers": "Vmess Tls",
+            "url": "https://www.gstatic.com/generate_204",
+            "interval": "1m0s"
+        },
+        {
+            "type": "urltest",
+            "tag": "Vmess Ntls",
+            "providers": "Vmess Ntls",
+            "url": "https://www.gstatic.com/generate_204",
+            "interval": "1m0s"
+        },
+        {
+            "type": "urltest",
+            "tag": "Vless ID Tls",
+            "providers": "Vless ID Tls",
+            "url": "https://www.gstatic.com/generate_204",
+            "interval": "1m0s"
+        },
+        {
+            "type": "urltest",
+            "tag": "Vless ID Ntls",
+            "providers": "Vless ID Ntls",
+            "url": "https://www.gstatic.com/generate_204",
+            "interval": "1m0s"
+        },
+        {
+            "type": "urltest",
+            "tag": "Vless SG Tls",
+            "providers": "Vless SG Tls",
+            "url": "https://www.gstatic.com/generate_204",
+            "interval": "1m0s"
+        },
+        {
+            "type": "urltest",
+            "tag": "Vless SG Ntls",
+            "providers": "Vless SG Ntls",
+            "url": "https://www.gstatic.com/generate_204",
+            "interval": "1m0s"
+        },
+        {
+            "type": "urltest",
+            "tag": "Trojan ID Tls",
+            "providers": "Trojan ID Tls",
+            "url": "https://www.gstatic.com/generate_204",
+            "interval": "1m0s"
+        },
+        {
+            "type": "urltest",
+            "tag": "Trojan ID Ntls",
+            "providers": "Trojan ID Ntls",
+            "url": "https://www.gstatic.com/generate_204",
+            "interval": "1m0s"
+        },
+        {
+            "type": "urltest",
+            "tag": "Trojan SG Tls",
+            "providers": "Trojan SG Tls",
+            "url": "https://www.gstatic.com/generate_204",
+            "interval": "1m0s"
+        },
+        {
+            "type": "urltest",
+            "tag": "Trojan SG Ntls",
+            "providers": "Trojan SG Ntls",
+            "url": "https://www.gstatic.com/generate_204",
+            "interval": "1m0s"
+        },
+
+        // ID
+        {
+            "type": "urltest",
+            "tag": "ID Vless Tls",
+            "providers": "ID Vless Tls",
+            "url": "https://www.gstatic.com/generate_204",
+            "interval": "1m0s"
+        },
+        {
+            "type": "urltest",
+            "tag": "ID Vless Ntls",
+            "providers": "ID Vless Ntls",
+            "url": "https://www.gstatic.com/generate_204",
+            "interval": "1m0s"
+        },
+        {
+            "type": "urltest",
+            "tag": "ID Trojan Tls",
+            "providers": "ID Trojan Tls",
+            "url": "https://www.gstatic.com/generate_204",
+            "interval": "1m0s"
+        },
+        {
+            "type": "urltest",
+            "tag": "ID Trojan Ntls",
+            "providers": "ID Trojan Ntls",
+            "url": "https://www.gstatic.com/generate_204",
+            "interval": "1m0s"
+        },
+
+        // SG
+        {
+            "type": "urltest",
+            "tag": "SG Vless Tls",
+            "providers": "SG Vless Tls",
+            "url": "https://www.gstatic.com/generate_204",
+            "interval": "1m0s"
+        },
+        {
+            "type": "urltest",
+            "tag": "SG Vless Ntls",
+            "providers": "SG Vless Ntls",
+            "url": "https://www.gstatic.com/generate_204",
+            "interval": "1m0s"
+        },
+        {
+            "type": "urltest",
+            "tag": "SG Trojan Tls",
+            "providers": "SG Trojan Tls",
+            "url": "https://www.gstatic.com/generate_204",
+            "interval": "1m0s"
+        },
+        {
+            "type": "urltest",
+            "tag": "SG Trojan Ntls",
+            "providers": "SG Trojan Ntls",
+            "url": "https://www.gstatic.com/generate_204",
+            "interval": "1m0s"
+        },
+
+        // US
+        {
+            "type": "urltest",
+            "tag": "US Vless Tls",
+            "providers": "US Vless Tls",
+            "url": "https://www.gstatic.com/generate_204",
+            "interval": "1m0s"
+        },
+        {
+            "type": "urltest",
+            "tag": "US Vless Ntls",
+            "providers": "US Vless Ntls",
+            "url": "https://www.gstatic.com/generate_204",
+            "interval": "1m0s"
+        },
+        {
+            "type": "urltest",
+            "tag": "US Trojan Tls",
+            "providers": "US Trojan Tls",
+            "url": "https://www.gstatic.com/generate_204",
+            "interval": "1m0s"
+        },
+        {
+            "type": "urltest",
+            "tag": "US Trojan Ntls",
+            "providers": "US Trojan Ntls",
+            "url": "https://www.gstatic.com/generate_204",
+            "interval": "1m0s"
+        },
+
+        // JP
+        {
+            "type": "urltest",
+            "tag": "JP Vless Tls",
+            "providers": "JP Vless Tls",
+            "url": "https://www.gstatic.com/generate_204",
+            "interval": "1m0s"
+        },
+        {
+            "type": "urltest",
+            "tag": "JP Vless Ntls",
+            "providers": "JP Vless Ntls",
+            "url": "https://www.gstatic.com/generate_204",
+            "interval": "1m0s"
+        },
+        {
+            "type": "urltest",
+            "tag": "JP Trojan Tls",
+            "providers": "JP Trojan Tls",
+            "url": "https://www.gstatic.com/generate_204",
+            "interval": "1m0s"
+        },
+        {
+            "type": "urltest",
+            "tag": "JP Trojan Ntls",
+            "providers": "JP Trojan Ntls",
+            "url": "https://www.gstatic.com/generate_204",
+            "interval": "1m0s"
+        },
+
+        // KR
+        {
+            "type": "urltest",
+            "tag": "KR Vless Tls",
+            "providers": "KR Vless Tls",
+            "url": "https://www.gstatic.com/generate_204",
+            "interval": "1m0s"
+        },
+        {
+            "type": "urltest",
+            "tag": "KR Vless Ntls",
+            "providers": "KR Vless Ntls",
+            "url": "https://www.gstatic.com/generate_204",
+            "interval": "1m0s"
+        },
+        {
+            "type": "urltest",
+            "tag": "KR Trojan Tls",
+            "providers": "KR Trojan Tls",
+            "url": "https://www.gstatic.com/generate_204",
+            "interval": "1m0s"
+        },
+        {
+            "type": "urltest",
+            "tag": "KR Trojan Ntls",
+            "providers": "KR Trojan Ntls",
+            "url": "https://www.gstatic.com/generate_204",
+            "interval": "1m0s"
+        },
+        /////  \\\\\
+        {
+            "type": "dns",
+            "tag": "dns"
+        },
+        {
+            "type": "direct",
+            "tag": "direct"
+        },
+        {
+            "type": "block",
+            "tag": "block"
+        }
+    ],
+    "route": {
+        "rules": [
+            {
+                "port": 53,
+                "outbound": "dns"
+            },
+            {
+                "domain_suffix": "zimperium.com",
+                "outbound": "block"
+            }
+        ],
+        "final": "server",
+        "auto_detect_interface": false
     },
     "outbound_providers": [
-      {
-        "type": "local",
-        "path": "./provider/Vmess Tls.json",
-        "tag": "Vmess Tls",
-        "healthcheck_url": "https://www.gstatic.com/generate_204",
-        "healthcheck_interval": "5m0s"
-      },
-      {
-        "type": "local",
-        "path": "./provider/Vmess Ntls.json",
-        "tag": "Vmess Ntls",
-        "healthcheck_url": "https://www.gstatic.com/generate_204",
-        "healthcheck_interval": "5m0s"
-      },
-      {
-        "type": "local",
-        "path": "./provider/Vless ID Tls.json",
-        "tag": "Vless ID Tls",
-        "healthcheck_url": "https://www.gstatic.com/generate_204",
-        "healthcheck_interval": "5m0s"
-      },
-      {
-        "type": "local",
-        "path": "./provider/Vless ID Ntls.json",
-        "tag": "Vless ID Ntls",
-        "healthcheck_url": "https://www.gstatic.com/generate_204",
-        "healthcheck_interval": "5m0s"
-      },
-      {
-        "type": "local",
-        "path": "./provider/Vless SG Tls.json",
-        "tag": "Vless SG Tls",
-        "healthcheck_url": "https://www.gstatic.com/generate_204",
-        "healthcheck_interval": "5m0s"
-      },
-      {
-        "type": "local",
-        "path": "./provider/Vless SG Ntls.json",
-        "tag": "Vless SG Ntls",
-        "healthcheck_url": "https://www.gstatic.com/generate_204",
-        "healthcheck_interval": "5m0s"
-      },
-      {
-        "type": "local",
-        "path": "./provider/Trojan ID Tls.json",
-        "tag": "Trojan ID Tls",
-        "healthcheck_url": "https://www.gstatic.com/generate_204",
-        "healthcheck_interval": "5m0s"
-      },
-      {
-        "type": "local",
-        "path": "./provider/Trojan ID Ntls.json",
-        "tag": "Trojan ID Ntls",
-        "healthcheck_url": "https://www.gstatic.com/generate_204",
-        "healthcheck_interval": "5m0s"
-      },
-      {
-        "type": "local",
-        "path": "./provider/Trojan SG Tls.json",
-        "tag": "Trojan SG Tls",
-        "healthcheck_url": "https://www.gstatic.com/generate_204",
-        "healthcheck_interval": "5m0s"
-      },
-      {
-        "type": "local",
-        "path": "./provider/Trojan SG Ntls.json",
-        "tag": "Trojan SG Ntls",
-        "healthcheck_url": "https://www.gstatic.com/generate_204",
-        "healthcheck_interval": "5m0s"
-      }
+        {
+            "type": "local",
+            "path": "./provider/Vmess Tls.json",
+            "tag": "Vmess Tls",
+            "healthcheck_url": "https://www.gstatic.com/generate_204",
+            "healthcheck_interval": "5m0s"
+        },
+        {
+            "type": "local",
+            "path": "./provider/Vmess Ntls.json",
+            "tag": "Vmess Ntls",
+            "healthcheck_url": "https://www.gstatic.com/generate_204",
+            "healthcheck_interval": "5m0s"
+        },
+        {
+            "type": "local",
+            "path": "./provider/Vless ID Tls.json",
+            "tag": "Vless ID Tls",
+            "healthcheck_url": "https://www.gstatic.com/generate_204",
+            "healthcheck_interval": "5m0s"
+        },
+        {
+            "type": "local",
+            "path": "./provider/Vless ID Ntls.json",
+            "tag": "Vless ID Ntls",
+            "healthcheck_url": "https://www.gstatic.com/generate_204",
+            "healthcheck_interval": "5m0s"
+        },
+        {
+            "type": "local",
+            "path": "./provider/Vless SG Tls.json",
+            "tag": "Vless SG Tls",
+            "healthcheck_url": "https://www.gstatic.com/generate_204",
+            "healthcheck_interval": "5m0s"
+        },
+        {
+            "type": "local",
+            "path": "./provider/Vless SG Ntls.json",
+            "tag": "Vless SG Ntls",
+            "healthcheck_url": "https://www.gstatic.com/generate_204",
+            "healthcheck_interval": "5m0s"
+        },
+        {
+            "type": "local",
+            "path": "./provider/Trojan ID Tls.json",
+            "tag": "Trojan ID Tls",
+            "healthcheck_url": "https://www.gstatic.com/generate_204",
+            "healthcheck_interval": "5m0s"
+        },
+        {
+            "type": "local",
+            "path": "./provider/Trojan ID Ntls.json",
+            "tag": "Trojan ID Ntls",
+            "healthcheck_url": "https://www.gstatic.com/generate_204",
+            "healthcheck_interval": "5m0s"
+        },
+        {
+            "type": "local",
+            "path": "./provider/Trojan SG Tls.json",
+            "tag": "Trojan SG Tls",
+            "healthcheck_url": "https://www.gstatic.com/generate_204",
+            "healthcheck_interval": "5m0s"
+        },
+        {
+            "type": "local",
+            "path": "./provider/Trojan SG Ntls.json",
+            "tag": "Trojan SG Ntls",
+            "healthcheck_url": "https://www.gstatic.com/generate_204",
+            "healthcheck_interval": "5m0s"
+        },
+        // ID
+        {
+            "type": "local",
+            "path": "./provider/ID Vless Tls.json",
+            "tag": "ID Vless Tls",
+            "healthcheck_url": "https://www.gstatic.com/generate_204",
+            "healthcheck_interval": "5m0s"
+        },
+        {
+            "type": "local",
+            "path": "./provider/ID Vless Ntls.json",
+            "tag": "ID Vless Ntls",
+            "healthcheck_url": "https://www.gstatic.com/generate_204",
+            "healthcheck_interval": "5m0s"
+        },
+        {
+            "type": "local",
+            "path": "./provider/ID Trojan Tls.json",
+            "tag": "ID Trojan Tls",
+            "healthcheck_url": "https://www.gstatic.com/generate_204",
+            "healthcheck_interval": "5m0s"
+        },
+        {
+            "type": "local",
+            "path": "./provider/ID Trojan Ntls.json",
+            "tag": "ID Trojan Ntls",
+            "healthcheck_url": "https://www.gstatic.com/generate_204",
+            "healthcheck_interval": "5m0s"
+        },
+
+        // SG
+        {
+            "type": "local",
+            "path": "./provider/SG Vless Tls.json",
+            "tag": "SG Vless Tls",
+            "healthcheck_url": "https://www.gstatic.com/generate_204",
+            "healthcheck_interval": "5m0s"
+        },
+        {
+            "type": "local",
+            "path": "./provider/SG Vless Ntls.json",
+            "tag": "SG Vless Ntls",
+            "healthcheck_url": "https://www.gstatic.com/generate_204",
+            "healthcheck_interval": "5m0s"
+        },
+        {
+            "type": "local",
+            "path": "./provider/SG Trojan Tls.json",
+            "tag": "SG Trojan Tls",
+            "healthcheck_url": "https://www.gstatic.com/generate_204",
+            "healthcheck_interval": "5m0s"
+        },
+        {
+            "type": "local",
+            "path": "./provider/SG Trojan Ntls.json",
+            "tag": "SG Trojan Ntls",
+            "healthcheck_url": "https://www.gstatic.com/generate_204",
+            "healthcheck_interval": "5m0s"
+        },
+
+        // US
+        {
+            "type": "local",
+            "path": "./provider/US Vless Tls.json",
+            "tag": "US Vless Tls",
+            "healthcheck_url": "https://www.gstatic.com/generate_204",
+            "healthcheck_interval": "5m0s"
+        },
+        {
+            "type": "local",
+            "path": "./provider/US Vless Ntls.json",
+            "tag": "US Vless Ntls",
+            "healthcheck_url": "https://www.gstatic.com/generate_204",
+            "healthcheck_interval": "5m0s"
+        },
+        {
+            "type": "local",
+            "path": "./provider/US Trojan Tls.json",
+            "tag": "US Trojan Tls",
+            "healthcheck_url": "https://www.gstatic.com/generate_204",
+            "healthcheck_interval": "5m0s"
+        },
+        {
+            "type": "local",
+            "path": "./provider/US Trojan Ntls.json",
+            "tag": "US Trojan Ntls",
+            "healthcheck_url": "https://www.gstatic.com/generate_204",
+            "healthcheck_interval": "5m0s"
+        },
+
+        // JP
+        {
+            "type": "local",
+            "path": "./provider/JP Vless Tls.json",
+            "tag": "JP Vless Tls",
+            "healthcheck_url": "https://www.gstatic.com/generate_204",
+            "healthcheck_interval": "5m0s"
+        },
+        {
+            "type": "local",
+            "path": "./provider/JP Vless Ntls.json",
+            "tag": "JP Vless Ntls",
+            "healthcheck_url": "https://www.gstatic.com/generate_204",
+            "healthcheck_interval": "5m0s"
+        },
+        {
+            "type": "local",
+            "path": "./provider/JP Trojan Tls.json",
+            "tag": "JP Trojan Tls",
+            "healthcheck_url": "https://www.gstatic.com/generate_204",
+            "healthcheck_interval": "5m0s"
+        },
+        {
+            "type": "local",
+            "path": "./provider/JP Trojan Ntls.json",
+            "tag": "JP Trojan Ntls",
+            "healthcheck_url": "https://www.gstatic.com/generate_204",
+            "healthcheck_interval": "5m0s"
+        },
+
+        // KR
+        {
+            "type": "local",
+            "path": "./provider/KR Vless Tls.json",
+            "tag": "KR Vless Tls",
+            "healthcheck_url": "https://www.gstatic.com/generate_204",
+            "healthcheck_interval": "5m0s"
+        },
+        {
+            "type": "local",
+            "path": "./provider/KR Vless Ntls.json",
+            "tag": "KR Vless Ntls",
+            "healthcheck_url": "https://www.gstatic.com/generate_204",
+            "healthcheck_interval": "5m0s"
+        },
+        {
+            "type": "local",
+            "path": "./provider/KR Trojan Tls.json",
+            "tag": "KR Trojan Tls",
+            "healthcheck_url": "https://www.gstatic.com/generate_204",
+            "healthcheck_interval": "5m0s"
+        },
+        {
+            "type": "local",
+            "path": "./provider/KR Trojan Ntls.json",
+            "tag": "KR Trojan Ntls",
+            "healthcheck_url": "https://www.gstatic.com/generate_204",
+            "healthcheck_interval": "5m0s"
+        }
+
     ],
     "experimental": {
-      "cache_file": {
-        "enabled": true,
-        "path": "cache.db"
-      },
-      "clash_api": {
-        "external_controller": "0.0.0.0:9090",
-        "external_ui": "zashboard",
-        "external_ui_download_url": "https://github.com/Zephyruso/zashboard/releases/latest/download/dist.zip",
-        "external_ui_download_detour": "server"
-      }
+        "cache_file": {
+            "enabled": true,
+            "path": "cache.db"
+        },
+        "clash_api": {
+            "external_controller": "0.0.0.0:9090",
+            "external_ui": "zashboard",
+            "external_ui_download_url": "https://github.com/Zephyruso/zashboard/releases/latest/download/dist.zip",
+            "external_ui_download_detour": "server"
+        }
     }
-  }
-  
+}
