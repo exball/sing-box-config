@@ -49,13 +49,14 @@ jobs:
           # Periksa apakah file output telah dibuat
           echo "Checking output files:"
           ls -la outbound.json || echo "outbound.json not found"
-          ls -la proxy-configs/ || echo "proxy-configs/ directory not found"
+          ls -la outbound-all.json || echo "outbound-all.json not found"
+          ls -la "ID Vless TLS.json" || echo "ID Vless TLS.json not found"
         
       - name: Commit and push if changes
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
           commit_message: "Update proxy list [automated]"
-          file_pattern: "*.json README.md proxy-configs/**/*"
+          file_pattern: "*.json README.md"
           commit_user_name: "GitHub Actions Bot"
           commit_user_email: "actions@github.com"
           commit_author: "GitHub Actions Bot <actions@github.com>"
