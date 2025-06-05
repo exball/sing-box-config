@@ -77,17 +77,15 @@ def main():
     # URL API untuk mendapatkan konfigurasi BFR
     # Kita bisa mendapatkan proxy dari beberapa negara
     countries = ["ID", "SG", "US"]  # Indonesia, Singapore, United States
-    protocols = ["vless"]
-    securities = ["tls"]
+    protocols = ["vless", "trojan"]  # Protokol yang didukung
+    securities = ["tls", "ntls"]  # Jenis keamanan yang didukung
     
-    # Dictionary untuk menyimpan outbound berdasarkan negara
-    country_outbounds = defaultdict(list)
+    # Dictionary untuk menyimpan outbound berdasarkan negara, protokol, dan keamanan
+    outbounds_by_category = defaultdict(list)
     all_outbounds = []
     
-    # Buat direktori proxies jika belum ada
-    proxies_dir = "proxies"
-    if not os.path.exists(proxies_dir):
-        os.makedirs(proxies_dir)
+    # Gunakan direktori utama untuk menyimpan file output
+    proxies_dir = ""  # Direktori utama (root)
     
     for country in countries:
         for protocol in protocols:
@@ -150,7 +148,12 @@ def main():
                             filtered_outbounds.append(outbound)
                     
                     print(f"Found {len(filtered_outbounds)} {protocol} {security} proxies from {country}")
-                    country_outbounds[country].extend(filtered_outbounds)
+                    
+                    # Simpan outbound berdasarkan kategori (negara, protokol, keamanan)
+                    category_key = f"{country}_{protocol}_{security}"
+                    outbounds_by_category[category_key].extend(filtered_outbounds)
+                    
+                    # Juga simpan semua outbound dalam satu list
                     all_outbounds.extend(filtered_outbounds)
                 
                 except Exception as e:
@@ -159,42 +162,52 @@ def main():
     # Timestamp untuk semua file
     timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S UTC")
     
-    # Simpan file untuk setiap negara
-    for country, outbounds in country_outbounds.items():
+    # Simpan file untuk setiap kategori (negara, protokol, keamanan)
+    for category_key, outbounds in outbounds_by_category.items():
         if outbounds:
-            country_result = {
+            # Parse kategori
+            country, protocol, security = category_key.split("_")
+            
+            # Buat hasil untuk kategori ini
+            category_result = {
                 "Outbound": outbounds,
                 "updated_at": timestamp,
                 "total_proxies": len(outbounds),
                 "country": country,
-                "country_name": get_country_name(country)
+                "country_name": get_country_name(country),
+                "protocol": protocol,
+                "security": security
             }
             
-            # Simpan ke file [COUNTRY_CODE].json
-            country_file = f"{proxies_dir}/{country}.json"
-            with open(country_file, "w", encoding="utf-8") as f:
-                json.dump(country_result, f, indent=4, ensure_ascii=False)
+            # Format nama file: "ID Vless Tls.json", "SG Trojan Ntls.json", dll.
+            # Simpan di direktori utama
+            category_file = f"{country} {protocol.capitalize()} {security.upper()}.json"
+            with open(category_file, "w", encoding="utf-8") as f:
+                json.dump(category_result, f, indent=4, ensure_ascii=False)
             
-            print(f"Successfully saved {len(outbounds)} proxies to {country_file}")
+            print(f"Successfully saved {len(outbounds)} {protocol} {security} proxies from {country} to {category_file}")
     
-    # Simpan juga semua proxy ke file all.json
+    # Simpan juga semua proxy ke file gabungan
     all_result = {
         "Outbound": all_outbounds,
         "updated_at": timestamp,
         "total_proxies": len(all_outbounds)
     }
     
-    all_file = f"{proxies_dir}/all.json"
+    # Simpan file gabungan di direktori utama
+    all_file = "outbound-all.json"  # File gabungan di direktori utama
     with open(all_file, "w", encoding="utf-8") as f:
         json.dump(all_result, f, indent=4, ensure_ascii=False)
     
     print(f"Successfully saved all {len(all_outbounds)} proxies to {all_file}")
     
-    # Simpan juga ke test.json untuk kompatibilitas
-    with open("test.json", "w", encoding="utf-8") as f:
+    # Simpan juga ke file utama di root direktori untuk kompatibilitas
+    # Ubah nama file utama di sini
+    main_file = "outbound.json"  # Ganti dengan nama file utama yang Anda inginkan
+    with open(main_file, "w", encoding="utf-8") as f:
         json.dump(all_result, f, indent=4, ensure_ascii=False)
     
-    print(f"Successfully saved all {len(all_outbounds)} proxies to test.json")
+    print(f"Successfully saved all {len(all_outbounds)} proxies to {main_file}")
     
     # Buat README.md dengan informasi tentang proxy
     readme_content = f"""# Proxy List
@@ -208,7 +221,13 @@ Automatically updated list of working proxies.
 ## Proxy Breakdown
 """
     
-    # Hitung jumlah proxy per negara
+    # Hitung jumlah proxy per kategori (negara, protokol, keamanan)
+    category_counts = {}
+    for category_key, outbounds in outbounds_by_category.items():
+        if outbounds:
+            category_counts[category_key] = len(outbounds)
+    
+    # Hitung jumlah proxy per negara (untuk backward compatibility)
     country_counts = {}
     for outbound in all_outbounds:
         country = outbound.get("country_code", "Unknown")
@@ -217,27 +236,42 @@ Automatically updated list of working proxies.
         else:
             country_counts[country] = 1
     
+    # Tampilkan jumlah proxy per negara
     for country, count in country_counts.items():
         flag_emoji = get_flag_emoji(country)
         country_name = get_country_name(country)
         readme_content += f"- {flag_emoji} {country} ({country_name}): {count} proxies\n"
     
-    readme_content += """
+    readme_content += f"""
+## Detailed Breakdown
+"""
+
+    # Tampilkan jumlah proxy per kategori
+    for category_key, count in category_counts.items():
+        country, protocol, security = category_key.split("_")
+        flag_emoji = get_flag_emoji(country)
+        country_name = get_country_name(country)
+        readme_content += f"- {flag_emoji} {country} {protocol.capitalize()} {security.upper()}: {count} proxies\n"
+    
+    readme_content += f"""
 ## Usage
 
 This repository is automatically updated every 6 hours with fresh proxies.
 
 ### Available Files
 
-- `proxies/all.json` - All proxies from all countries
+- `outbound-all.json` - All proxies from all countries
+- `outbound.json` - All proxies (same as outbound-all.json, for compatibility)
 """
 
-    # Tambahkan informasi tentang file per negara
-    for country in country_outbounds.keys():
-        if country_outbounds[country]:
+    # Tambahkan informasi tentang file per kategori
+    for category_key in outbounds_by_category.keys():
+        if outbounds_by_category[category_key]:
+            country, protocol, security = category_key.split("_")
             flag_emoji = get_flag_emoji(country)
             country_name = get_country_name(country)
-            readme_content += f"- `proxies/{country}.json` - Proxies from {flag_emoji} {country_name}\n"
+            file_name = f"{country} {protocol.capitalize()} {security.upper()}.json"
+            readme_content += f"- `{file_name}` - {protocol.capitalize()} {security.upper()} proxies from {flag_emoji} {country_name}\n"
 
     readme_content += """
 ### How to use
