@@ -2,11 +2,10 @@ name: Update Proxy List
 
 on:
   schedule:
-    # Jalankan setiap 6 jam
-    - cron: '0 */6 * * *'
+    # Jalankan setiap 6 jam pada jam 1, 7, 13, dan 19
+    - cron: '0 1,7,13,19 * * *'
   workflow_dispatch:  # Memungkinkan menjalankan workflow secara manual dari GitHub UI
 
-# Tambahkan izin untuk GITHUB_TOKEN
 permissions:
   contents: write  # Memberikan izin untuk menulis ke repository
 
@@ -30,27 +29,22 @@ jobs:
           python -m pip install --upgrade pip
           pip install requests
           
-          # Periksa apakah script ada
           echo "Checking if extract_outbound.py exists:"
           ls -la extract_outbound.py || echo "extract_outbound.py not found"
           
-          # Tampilkan isi direktori untuk debugging
           echo "Directory contents:"
           ls -la
           
       - name: Run proxy extraction script
         run: |
-          # Tampilkan isi direktori untuk debugging
           ls -la
           
-          # Jalankan script dengan output verbose
           python extract_outbound.py
           
-          # Periksa apakah file output telah dibuat
           echo "Checking output files:"
-          ls -la outbound.json || echo "outbound.json not found"
-          ls -la outbound-all.json || echo "outbound-all.json not found"
           ls -la "ID Vless TLS.json" || echo "ID Vless TLS.json not found"
+          ls -la "SG Trojan TLS.json" || echo "SG Trojan TLS.json not found"
+          ls -la "US Vless NTLS.json" || echo "US Vless NTLS.json not found"
         
       - name: Commit and push if changes
         uses: stefanzweifel/git-auto-commit-action@v5
