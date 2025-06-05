@@ -16,7 +16,9 @@ jobs:
     
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Ambil semua history untuk memastikan git berfungsi dengan benar
         
       - name: Set up Python
         uses: actions/setup-python@v4
@@ -28,26 +30,33 @@ jobs:
           python -m pip install --upgrade pip
           pip install requests
           
+          # Periksa apakah script ada
+          echo "Checking if extract_outbound.py exists:"
+          ls -la extract_outbound.py || echo "extract_outbound.py not found"
+          
+          # Tampilkan isi direktori untuk debugging
+          echo "Directory contents:"
+          ls -la
+          
       - name: Run proxy extraction script
-        run: python extract_outbound.py
+        run: |
+          # Tampilkan isi direktori untuk debugging
+          ls -la
+          
+          # Jalankan script dengan output verbose
+          python extract_outbound.py
+          
+          # Periksa apakah file output telah dibuat
+          echo "Checking output files:"
+          ls -la outbound.json || echo "outbound.json not found"
+          ls -la proxy-configs/ || echo "proxy-configs/ directory not found"
         
       - name: Commit and push if changes
-        run: |
-          git config --global user.name 'GitHub Actions Bot'
-          git config --global user.email 'actions@github.com'
-          
-          # Tambahkan semua file yang dihasilkan
-          git add outbound.json README.md proxy-configs/
-          
-          # Gunakan -f untuk memaksa git menambahkan file dengan spasi dalam nama
-          git add -f "proxy-configs/ID VLESS TLS.json" "proxy-configs/ID VLESS NTLS.json" "proxy-configs/ID TROJAN TLS.json" "proxy-configs/ID TROJAN NTLS.json" 2>/dev/null || true
-          git add -f "proxy-configs/SG VLESS TLS.json" "proxy-configs/SG VLESS NTLS.json" "proxy-configs/SG TROJAN TLS.json" "proxy-configs/SG TROJAN NTLS.json" 2>/dev/null || true
-          git add -f "proxy-configs/US VLESS TLS.json" "proxy-configs/US VLESS NTLS.json" "proxy-configs/US TROJAN TLS.json" "proxy-configs/US TROJAN NTLS.json" 2>/dev/null || true
-          
-          # Commit dan push dengan token autentikasi
-          if ! git diff --quiet && ! git diff --staged --quiet; then
-            git commit -m "Update proxy list [automated]"
-            
-            # Gunakan GITHUB_TOKEN untuk autentikasi (tidak perlu PAT)
-            git push
-          fi
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "Update proxy list [automated]"
+          file_pattern: "*.json README.md proxy-configs/**/*"
+          commit_user_name: "GitHub Actions Bot"
+          commit_user_email: "actions@github.com"
+          commit_author: "GitHub Actions Bot <actions@github.com>"
+          push_options: "--force"  # Gunakan --force jika diperlukan
