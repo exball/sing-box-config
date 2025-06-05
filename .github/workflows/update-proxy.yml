@@ -26,6 +26,10 @@ jobs:
           
       - name: Run proxy extraction script
         run: python extract_outbound.py
+
+      - name: Commit and push if changes
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} 
         
       - name: Commit and push if changes
         run: |
