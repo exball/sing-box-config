@@ -2,8 +2,8 @@ name: Update Proxy List
 
 on:
   schedule:
-    # Jalankan setiap 6 jam pada jam 1, 7, 13, dan 19
-    - cron: '0 1,7,13,19 * * *'
+    # Jalankan setiap 6 jam pada jam 00:30, 06:30, 12:30, dan 18:30
+    - cron: '30 0,6,12,18 * * *'
   workflow_dispatch:  # Memungkinkan menjalankan workflow secara manual dari GitHub UI
 
 permissions:
