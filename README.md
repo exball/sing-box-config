@@ -3,27 +3,37 @@
 Automatically updated list of working proxies.
 
 ## Stats
-- Last Updated: 2025-06-05 19:30:19 UTC
-- Total Proxies: 111
+- Last Updated: 2025-06-05 20:33:36 UTC
+- Total Proxies: 142
 
 ## Proxy Breakdown
 - 🇮🇩 ID (Indonesia): 29 proxies
-- 🇸🇬 SG (Singapore): 41 proxies
-- 🇺🇸 US (United States): 41 proxies
+- 🇸🇬 SG (Singapore): 32 proxies
+- 🇺🇸 US (United States): 33 proxies
+- 🇯🇵 JP (Japan): 32 proxies
+- 🇰🇷 KR (South Korea): 16 proxies
 
 ## Detailed Breakdown
 - 🇮🇩 ID Vless TLS: 7 proxies
 - 🇮🇩 ID Vless NTLS: 7 proxies
 - 🇮🇩 ID Trojan TLS: 8 proxies
 - 🇮🇩 ID Trojan NTLS: 7 proxies
-- 🇸🇬 SG Vless TLS: 10 proxies
-- 🇸🇬 SG Vless NTLS: 10 proxies
-- 🇸🇬 SG Trojan TLS: 11 proxies
-- 🇸🇬 SG Trojan NTLS: 10 proxies
-- 🇺🇸 US Vless TLS: 10 proxies
-- 🇺🇸 US Vless NTLS: 10 proxies
-- 🇺🇸 US Trojan TLS: 11 proxies
-- 🇺🇸 US Trojan NTLS: 10 proxies
+- 🇸🇬 SG Vless TLS: 8 proxies
+- 🇸🇬 SG Vless NTLS: 7 proxies
+- 🇸🇬 SG Trojan TLS: 10 proxies
+- 🇸🇬 SG Trojan NTLS: 7 proxies
+- 🇺🇸 US Vless TLS: 9 proxies
+- 🇺🇸 US Vless NTLS: 7 proxies
+- 🇺🇸 US Trojan TLS: 9 proxies
+- 🇺🇸 US Trojan NTLS: 8 proxies
+- 🇯🇵 JP Vless TLS: 8 proxies
+- 🇯🇵 JP Vless NTLS: 8 proxies
+- 🇯🇵 JP Trojan TLS: 10 proxies
+- 🇯🇵 JP Trojan NTLS: 6 proxies
+- 🇰🇷 KR Vless TLS: 5 proxies
+- 🇰🇷 KR Vless NTLS: 3 proxies
+- 🇰🇷 KR Trojan TLS: 5 proxies
+- 🇰🇷 KR Trojan NTLS: 3 proxies
 
 ## Usage
 
@@ -31,8 +41,6 @@ This repository is automatically updated every 6 hours with fresh proxies.
 
 ### Available Files
 
-- `outbound-all.json` - All proxies from all countries
-- `outbound.json` - All proxies (same as outbound-all.json, for compatibility)
 - `ID Vless TLS.json` - Vless TLS proxies from 🇮🇩 Indonesia
 - `ID Vless NTLS.json` - Vless NTLS proxies from 🇮🇩 Indonesia
 - `ID Trojan TLS.json` - Trojan TLS proxies from 🇮🇩 Indonesia
@@ -45,6 +53,14 @@ This repository is automatically updated every 6 hours with fresh proxies.
 - `US Vless NTLS.json` - Vless NTLS proxies from 🇺🇸 United States
 - `US Trojan TLS.json` - Trojan TLS proxies from 🇺🇸 United States
 - `US Trojan NTLS.json` - Trojan NTLS proxies from 🇺🇸 United States
+- `JP Vless TLS.json` - Vless TLS proxies from 🇯🇵 Japan
+- `JP Vless NTLS.json` - Vless NTLS proxies from 🇯🇵 Japan
+- `JP Trojan TLS.json` - Trojan TLS proxies from 🇯🇵 Japan
+- `JP Trojan NTLS.json` - Trojan NTLS proxies from 🇯🇵 Japan
+- `KR Vless TLS.json` - Vless TLS proxies from 🇰🇷 South Korea
+- `KR Vless NTLS.json` - Vless NTLS proxies from 🇰🇷 South Korea
+- `KR Trojan TLS.json` - Trojan TLS proxies from 🇰🇷 South Korea
+- `KR Trojan NTLS.json` - Trojan NTLS proxies from 🇰🇷 South Korea
 
 ### How to use
 
