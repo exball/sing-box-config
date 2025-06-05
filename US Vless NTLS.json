@@ -1,9 +1,26 @@
 {
-    "Outbound": [
+    "outbounds": [
         {
             "server": "quiz.int.vidio.com",
             "server_port": 80,
-            "tag": "1 🇺🇸 NetLab WS NTLS [proxy]",
+            "tag": "1 🇺🇸 CoreNET Inc. WS NTLS [proxy]",
+            "tls": {
+                "insecure": true
+            },
+            "transport": {
+                "headers": {
+                    "Host": "proxy.exbal.my.id"
+                },
+                "path": "/103.170.72.120-25122",
+                "type": "ws"
+            },
+            "type": "vless",
+            "uuid": "1fa5a454-bd82-441a-b53d-128b94ad10e7"
+        },
+        {
+            "server": "quiz.int.vidio.com",
+            "server_port": 80,
+            "tag": "2 🇺🇸 NetLab WS NTLS [proxy]",
             "tls": {
                 "insecure": true
             },
@@ -15,26 +32,7 @@
                 "type": "ws"
             },
             "type": "vless",
-            "uuid": "ea87dad5-bf3b-45ef-bbc5-d8911b165ab7",
-            "country_code": "US"
-        },
-        {
-            "server": "quiz.int.vidio.com",
-            "server_port": 80,
-            "tag": "2 🇺🇸 OVH US LLC WS NTLS [proxy]",
-            "tls": {
-                "insecure": true
-            },
-            "transport": {
-                "headers": {
-                    "Host": "proxy.exbal.my.id"
-                },
-                "path": "/15.204.10.80-49404",
-                "type": "ws"
-            },
-            "type": "vless",
-            "uuid": "ea87dad5-bf3b-45ef-bbc5-d8911b165ab7",
-            "country_code": "US"
+            "uuid": "1fa5a454-bd82-441a-b53d-128b94ad10e7"
         },
         {
             "server": "quiz.int.vidio.com",
@@ -47,17 +45,16 @@
                 "headers": {
                     "Host": "proxy.exbal.my.id"
                 },
-                "path": "/107.172.103.195-16031",
+                "path": "/107.174.228.38-23234",
                 "type": "ws"
             },
             "type": "vless",
-            "uuid": "ea87dad5-bf3b-45ef-bbc5-d8911b165ab7",
-            "country_code": "US"
+            "uuid": "1fa5a454-bd82-441a-b53d-128b94ad10e7"
         },
         {
             "server": "quiz.int.vidio.com",
             "server_port": 80,
-            "tag": "4 🇺🇸 IT7 Networks Inc WS NTLS [proxy]",
+            "tag": "4 🇺🇸 Cloudflare WS NTLS [proxy]",
             "tls": {
                 "insecure": true
             },
@@ -65,17 +62,16 @@
                 "headers": {
                     "Host": "proxy.exbal.my.id"
                 },
-                "path": "/67.209.179.237-30419",
+                "path": "/192.3.208.125-59184",
                 "type": "ws"
             },
             "type": "vless",
-            "uuid": "ea87dad5-bf3b-45ef-bbc5-d8911b165ab7",
-            "country_code": "US"
+            "uuid": "1fa5a454-bd82-441a-b53d-128b94ad10e7"
         },
         {
             "server": "quiz.int.vidio.com",
             "server_port": 80,
-            "tag": "7 🇺🇸 PEG TECH INC WS NTLS [proxy]",
+            "tag": "7 🇺🇸 IT7 Networks Inc WS NTLS [proxy]",
             "tls": {
                 "insecure": true
             },
@@ -83,17 +79,16 @@
                 "headers": {
                     "Host": "proxy.exbal.my.id"
                 },
-                "path": "/198.200.41.16-12520",
+                "path": "/107.182.187.11-57050",
                 "type": "ws"
             },
             "type": "vless",
-            "uuid": "ea87dad5-bf3b-45ef-bbc5-d8911b165ab7",
-            "country_code": "US"
+            "uuid": "1fa5a454-bd82-441a-b53d-128b94ad10e7"
         },
         {
             "server": "quiz.int.vidio.com",
             "server_port": 80,
-            "tag": "9 🇺🇸 Comcast Cable Communications WS NTLS [proxy]",
+            "tag": "8 🇺🇸 Hetzner Online GmbH WS NTLS [proxy]",
             "tls": {
                 "insecure": true
             },
@@ -101,17 +96,16 @@
                 "headers": {
                     "Host": "proxy.exbal.my.id"
                 },
-                "path": "/50.228.203.26-443",
+                "path": "/5.161.176.159-50001",
                 "type": "ws"
             },
             "type": "vless",
-            "uuid": "ea87dad5-bf3b-45ef-bbc5-d8911b165ab7",
-            "country_code": "US"
+            "uuid": "1fa5a454-bd82-441a-b53d-128b94ad10e7"
         },
         {
             "server": "quiz.int.vidio.com",
             "server_port": 80,
-            "tag": "10 🇺🇸 Brander Group Inc. WS NTLS [proxy]",
+            "tag": "9 🇺🇸 Cloudflare London WS NTLS [proxy]",
             "tls": {
                 "insecure": true
             },
@@ -119,18 +113,11 @@
                 "headers": {
                     "Host": "proxy.exbal.my.id"
                 },
-                "path": "/148.135.59.174-54824",
+                "path": "/104.168.102.163-443",
                 "type": "ws"
             },
             "type": "vless",
-            "uuid": "ea87dad5-bf3b-45ef-bbc5-d8911b165ab7",
-            "country_code": "US"
+            "uuid": "1fa5a454-bd82-441a-b53d-128b94ad10e7"
         }
-    ],
-    "updated_at": "2025-06-05 20:33:36 UTC",
-    "total_proxies": 7,
-    "country": "US",
-    "country_name": "United States",
-    "protocol": "vless",
-    "security": "ntls"
+    ]
 }

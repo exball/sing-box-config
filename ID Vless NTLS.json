@@ -1,9 +1,9 @@
 {
-    "Outbound": [
+    "outbounds": [
         {
             "server": "quiz.int.vidio.com",
             "server_port": 80,
-            "tag": "1 🇮🇩 CV. Rumahweb Indonesia WS NTLS [proxy]",
+            "tag": "1 🇮🇩 Linode WS NTLS [proxy]",
             "tls": {
                 "insecure": true
             },
@@ -11,17 +11,16 @@
                 "headers": {
                     "Host": "proxy.exbal.my.id"
                 },
-                "path": "/203.194.112.119-2053",
+                "path": "/172.232.239.151-587",
                 "type": "ws"
             },
             "type": "vless",
-            "uuid": "ba76d422-2f55-4934-af22-9f89565a3648",
-            "country_code": "ID"
+            "uuid": "e2a69481-3482-4ea3-a6dd-d2e02f7aa1c9"
         },
         {
             "server": "quiz.int.vidio.com",
             "server_port": 80,
-            "tag": "2 🇮🇩 Linode WS NTLS [proxy]",
+            "tag": "2 🇮🇩 Amazon.com WS NTLS [proxy]",
             "tls": {
                 "insecure": true
             },
@@ -29,12 +28,11 @@
                 "headers": {
                     "Host": "proxy.exbal.my.id"
                 },
-                "path": "/172.232.239.134-443",
+                "path": "/43.218.77.16-443",
                 "type": "ws"
             },
             "type": "vless",
-            "uuid": "ba76d422-2f55-4934-af22-9f89565a3648",
-            "country_code": "ID"
+            "uuid": "e2a69481-3482-4ea3-a6dd-d2e02f7aa1c9"
         },
         {
             "server": "quiz.int.vidio.com",
@@ -47,71 +45,16 @@
                 "headers": {
                     "Host": "proxy.exbal.my.id"
                 },
-                "path": "/172.232.239.151-587",
+                "path": "/172.232.239.134-443",
                 "type": "ws"
             },
             "type": "vless",
-            "uuid": "ba76d422-2f55-4934-af22-9f89565a3648",
-            "country_code": "ID"
+            "uuid": "e2a69481-3482-4ea3-a6dd-d2e02f7aa1c9"
         },
         {
             "server": "quiz.int.vidio.com",
             "server_port": 80,
-            "tag": "4 🇮🇩 Amazon.com WS NTLS [proxy]",
-            "tls": {
-                "insecure": true
-            },
-            "transport": {
-                "headers": {
-                    "Host": "proxy.exbal.my.id"
-                },
-                "path": "/43.218.77.16-1443",
-                "type": "ws"
-            },
-            "type": "vless",
-            "uuid": "ba76d422-2f55-4934-af22-9f89565a3648",
-            "country_code": "ID"
-        },
-        {
-            "server": "quiz.int.vidio.com",
-            "server_port": 80,
-            "tag": "5 🇮🇩 Amazon.com WS NTLS [proxy]",
-            "tls": {
-                "insecure": true
-            },
-            "transport": {
-                "headers": {
-                    "Host": "proxy.exbal.my.id"
-                },
-                "path": "/43.218.77.16-443",
-                "type": "ws"
-            },
-            "type": "vless",
-            "uuid": "ba76d422-2f55-4934-af22-9f89565a3648",
-            "country_code": "ID"
-        },
-        {
-            "server": "quiz.int.vidio.com",
-            "server_port": 80,
-            "tag": "6 🇮🇩 CV. Rumahweb Indonesia WS NTLS [proxy]",
-            "tls": {
-                "insecure": true
-            },
-            "transport": {
-                "headers": {
-                    "Host": "proxy.exbal.my.id"
-                },
-                "path": "/203.194.112.119-8443",
-                "type": "ws"
-            },
-            "type": "vless",
-            "uuid": "ba76d422-2f55-4934-af22-9f89565a3648",
-            "country_code": "ID"
-        },
-        {
-            "server": "quiz.int.vidio.com",
-            "server_port": 80,
-            "tag": "7 🇮🇩 PT Telekomunikasi Indonesia WS NTLS [proxy]",
+            "tag": "4 🇮🇩 PT Telekomunikasi Indonesia WS NTLS [proxy]",
             "tls": {
                 "insecure": true
             },
@@ -123,14 +66,58 @@
                 "type": "ws"
             },
             "type": "vless",
-            "uuid": "ba76d422-2f55-4934-af22-9f89565a3648",
-            "country_code": "ID"
+            "uuid": "e2a69481-3482-4ea3-a6dd-d2e02f7aa1c9"
+        },
+        {
+            "server": "quiz.int.vidio.com",
+            "server_port": 80,
+            "tag": "5 🇮🇩 CV. Rumahweb Indonesia WS NTLS [proxy]",
+            "tls": {
+                "insecure": true
+            },
+            "transport": {
+                "headers": {
+                    "Host": "proxy.exbal.my.id"
+                },
+                "path": "/203.194.112.119-8443",
+                "type": "ws"
+            },
+            "type": "vless",
+            "uuid": "e2a69481-3482-4ea3-a6dd-d2e02f7aa1c9"
+        },
+        {
+            "server": "quiz.int.vidio.com",
+            "server_port": 80,
+            "tag": "6 🇮🇩 Amazon.com WS NTLS [proxy]",
+            "tls": {
+                "insecure": true
+            },
+            "transport": {
+                "headers": {
+                    "Host": "proxy.exbal.my.id"
+                },
+                "path": "/43.218.77.16-1443",
+                "type": "ws"
+            },
+            "type": "vless",
+            "uuid": "e2a69481-3482-4ea3-a6dd-d2e02f7aa1c9"
+        },
+        {
+            "server": "quiz.int.vidio.com",
+            "server_port": 80,
+            "tag": "7 🇮🇩 CV. Rumahweb Indonesia WS NTLS [proxy]",
+            "tls": {
+                "insecure": true
+            },
+            "transport": {
+                "headers": {
+                    "Host": "proxy.exbal.my.id"
+                },
+                "path": "/203.194.112.119-2053",
+                "type": "ws"
+            },
+            "type": "vless",
+            "uuid": "e2a69481-3482-4ea3-a6dd-d2e02f7aa1c9"
         }
-    ],
-    "updated_at": "2025-06-05 20:33:36 UTC",
-    "total_proxies": 7,
-    "country": "ID",
-    "country_name": "Indonesia",
-    "protocol": "vless",
-    "security": "ntls"
+    ]
 }

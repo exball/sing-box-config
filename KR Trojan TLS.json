@@ -1,7 +1,7 @@
 {
-    "Outbound": [
+    "outbounds": [
         {
-            "password": "820e6c5f-bbbd-4cda-a160-4d50753ddc58",
+            "password": "832ad25e-248f-4188-8d60-11c61d0268c5",
             "server": "quiz.int.vidio.com",
             "server_port": 443,
             "tag": "1 🇰🇷 Korea Telecom WS TLS [proxy]",
@@ -14,17 +14,16 @@
                 "headers": {
                     "Host": "proxy.exbal.my.id"
                 },
-                "path": "/220.83.36.68-30072",
+                "path": "/211.253.196.188-30021",
                 "type": "ws"
             },
-            "type": "trojan",
-            "country_code": "KR"
+            "type": "trojan"
         },
         {
-            "password": "820e6c5f-bbbd-4cda-a160-4d50753ddc58",
+            "password": "832ad25e-248f-4188-8d60-11c61d0268c5",
             "server": "quiz.int.vidio.com",
             "server_port": 443,
-            "tag": "5 🇰🇷 AWS Asia Pacific (Seoul) Region WS TLS [proxy]",
+            "tag": "5 🇰🇷 CMB WS TLS [proxy]",
             "tls": {
                 "enabled": true,
                 "insecure": true,
@@ -34,51 +33,10 @@
                 "headers": {
                     "Host": "proxy.exbal.my.id"
                 },
-                "path": "/54.180.202.133-2053",
+                "path": "/122.252.209.48-50000",
                 "type": "ws"
             },
-            "type": "trojan",
-            "country_code": "KR"
-        },
-        {
-            "password": "820e6c5f-bbbd-4cda-a160-4d50753ddc58",
-            "server": "quiz.int.vidio.com",
-            "server_port": 443,
-            "tag": "6 🇰🇷 LG DACOM Corporation WS TLS [proxy]",
-            "tls": {
-                "enabled": true,
-                "insecure": true,
-                "server_name": "proxy.exbal.my.id"
-            },
-            "transport": {
-                "headers": {
-                    "Host": "proxy.exbal.my.id"
-                },
-                "path": "/123.143.9.5-14041",
-                "type": "ws"
-            },
-            "type": "trojan",
-            "country_code": "KR"
-        },
-        {
-            "password": "820e6c5f-bbbd-4cda-a160-4d50753ddc58",
-            "server": "quiz.int.vidio.com",
-            "server_port": 443,
-            "tag": "9 🇰🇷 Oracle Public Cloud WS TLS [proxy]",
-            "tls": {
-                "enabled": true,
-                "insecure": true,
-                "server_name": "proxy.exbal.my.id"
-            },
-            "transport": {
-                "headers": {
-                    "Host": "proxy.exbal.my.id"
-                },
-                "path": "/132.145.88.82-38066",
-                "type": "ws"
-            },
-            "type": "trojan",
-            "country_code": "KR"
+            "type": "trojan"
         },
         {
             "password": "t.me/foolvpn",
@@ -97,14 +55,7 @@
                 "path": "/trojan-udp",
                 "type": "ws"
             },
-            "type": "trojan",
-            "country_code": "KR"
+            "type": "trojan"
         }
-    ],
-    "updated_at": "2025-06-05 20:33:36 UTC",
-    "total_proxies": 5,
-    "country": "KR",
-    "country_name": "South Korea",
-    "protocol": "trojan",
-    "security": "tls"
+    ]
 }
