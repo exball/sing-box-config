@@ -154,14 +154,19 @@ def main():
                                     clean_tag = f"{number} {flag_emoji} {' '.join(provider_parts)}"
                                     outbound["tag"] = clean_tag
                             
-                            # Tambahkan metadata negara untuk memudahkan filtering
-                            outbound["country_code"] = country
+                            # Metadata negara hanya untuk proses internal, tidak disimpan ke output
+                            # outbound["country_code"] = country  # Dihapus karena menyebabkan sing-box error
+                            
+                            # Buat salinan outbound tanpa field country_code
+                            outbound_copy = outbound.copy()
+                            if "country_code" in outbound_copy:
+                                del outbound_copy["country_code"]
                             
                             # Logika untuk memfilter proxy:
                             # 1. Untuk Indonesia (ID): Ambil semua proxy
                             # 2. Untuk negara lain: Ambil hanya 1 proxy per provider
                             if country == "ID" or provider_name not in providers_seen:
-                                filtered_outbounds.append(outbound)
+                                filtered_outbounds.append(outbound_copy)
                                 
                                 # Tambahkan provider ke set untuk melacak (kecuali untuk Indonesia)
                                 if country != "ID":
@@ -191,15 +196,9 @@ def main():
             # Parse kategori
             country, protocol, security = category_key.split("_")
             
-            # Buat hasil untuk kategori ini
+            # Buat hasil untuk kategori ini - hanya berisi outbounds saja
             category_result = {
-                "Outbound": outbounds,
-                "updated_at": timestamp,
-                "total_proxies": len(outbounds),
-                "country": country,
-                "country_name": get_country_name(country),
-                "protocol": protocol,
-                "security": security
+                "outbounds": outbounds
             }
             
             # Format nama file: "ID Vless Tls.json", "SG Trojan Ntls.json", dll.
@@ -212,9 +211,7 @@ def main():
     
     # Simpan juga semua proxy ke file gabungan
     all_result = {
-        "Outbound": all_outbounds,
-        "updated_at": timestamp,
-        "total_proxies": len(all_outbounds)
+        "outbounds": all_outbounds
     }
     
     # Tidak lagi membuat file outbound-all.json dan outbound.json
