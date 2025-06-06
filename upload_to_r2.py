@@ -62,18 +62,13 @@ def upload_to_r2():
             print(f"Uploading {json_file} to R2 folder '{folder_name}'...")
             
             # Set Content-Type header
+            # Catatan: Cloudflare R2 tidak mendukung operasi PutObjectAcl
+            # Untuk membuat file publik, atur kebijakan bucket di dashboard Cloudflare
             s3_client.upload_file(
                 json_file, 
                 r2_bucket_name, 
                 object_key,
                 ExtraArgs={'ContentType': 'application/json'}
-            )
-            
-            # Buat file publik (jika diinginkan)
-            s3_client.put_object_acl(
-                Bucket=r2_bucket_name,
-                Key=object_key,
-                ACL='public-read'
             )
             
             # Dapatkan URL publik
