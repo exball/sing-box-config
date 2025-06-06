@@ -123,14 +123,6 @@
                 "best latency vmess",
                 "Vmess Tls",
                 "Vmess Ntls",
-                "Vless ID Tls",
-                "Vless ID Ntls",
-                "Vless SG Tls",
-                "Vless SG Ntls",
-                "Trojan ID Tls",
-                "Trojan ID Ntls",
-                "Trojan SG Tls",
-                "Trojan SG Ntls",
                 "ID Vless TLS",
                 "ID Vless NTLS",
                 "ID Trojan TLS",
@@ -155,14 +147,6 @@
             "providers": [
                 "Vmess Tls",
                 "Vmess Ntls",
-                "Vless ID Tls",
-                "Vless ID Ntls",
-                "Vless SG Tls",
-                "Vless SG Ntls",
-                "Trojan ID Tls",
-                "Trojan ID Ntls",
-                "Trojan SG Tls",
-                "Trojan SG Ntls",
                 "ID Vless TLS",
                 "ID Vless NTLS",
                 "ID Trojan TLS",
@@ -191,10 +175,6 @@
             "outbounds": [
                 "Vmess Tls",
                 "Vmess Ntls",
-                "Vless ID Tls",
-                "Vless ID Ntls",
-                "Vless SG Tls",
-                "Vless SG Ntls",
                 "ID Vless TLS",
                 "ID Vless NTLS",
                 "ID Trojan TLS",
@@ -241,64 +221,6 @@
         },
         {
             "type": "urltest",
-            "tag": "Vless ID Tls",
-            "providers": "Vless ID Tls",
-            "url": "https://www.gstatic.com/generate_204",
-            "interval": "1m0s"
-        },
-        {
-            "type": "urltest",
-            "tag": "Vless ID Ntls",
-            "providers": "Vless ID Ntls",
-            "url": "https://www.gstatic.com/generate_204",
-            "interval": "1m0s"
-        },
-        {
-            "type": "urltest",
-            "tag": "Vless SG Tls",
-            "providers": "Vless SG Tls",
-            "url": "https://www.gstatic.com/generate_204",
-            "interval": "1m0s"
-        },
-        {
-            "type": "urltest",
-            "tag": "Vless SG Ntls",
-            "providers": "Vless SG Ntls",
-            "url": "https://www.gstatic.com/generate_204",
-            "interval": "1m0s"
-        },
-        {
-            "type": "urltest",
-            "tag": "Trojan ID Tls",
-            "providers": "Trojan ID Tls",
-            "url": "https://www.gstatic.com/generate_204",
-            "interval": "1m0s"
-        },
-        {
-            "type": "urltest",
-            "tag": "Trojan ID Ntls",
-            "providers": "Trojan ID Ntls",
-            "url": "https://www.gstatic.com/generate_204",
-            "interval": "1m0s"
-        },
-        {
-            "type": "urltest",
-            "tag": "Trojan SG Tls",
-            "providers": "Trojan SG Tls",
-            "url": "https://www.gstatic.com/generate_204",
-            "interval": "1m0s"
-        },
-        {
-            "type": "urltest",
-            "tag": "Trojan SG Ntls",
-            "providers": "Trojan SG Ntls",
-            "url": "https://www.gstatic.com/generate_204",
-            "interval": "1m0s"
-        },
-
-        // ID
-        {
-            "type": "urltest",
             "tag": "ID Vless TLS",
             "providers": "ID Vless TLS",
             "url": "https://www.gstatic.com/generate_204",
@@ -325,8 +247,6 @@
             "url": "https://www.gstatic.com/generate_204",
             "interval": "1m0s"
         },
-
-        // SG
         {
             "type": "urltest",
             "tag": "SG Vless TLS",
@@ -355,8 +275,6 @@
             "url": "https://www.gstatic.com/generate_204",
             "interval": "1m0s"
         },
-
-        // US
         {
             "type": "urltest",
             "tag": "US Vless TLS",
@@ -385,8 +303,6 @@
             "url": "https://www.gstatic.com/generate_204",
             "interval": "1m0s"
         },
-
-        // JP
         {
             "type": "urltest",
             "tag": "JP Vless TLS",
@@ -415,8 +331,6 @@
             "url": "https://www.gstatic.com/generate_204",
             "interval": "1m0s"
         },
-
-        // KR
         {
             "type": "urltest",
             "tag": "KR Vless TLS",
@@ -445,7 +359,6 @@
             "url": "https://www.gstatic.com/generate_204",
             "interval": "1m0s"
         },
-        /////  \\\\\
         {
             "type": "dns",
             "tag": "dns"
@@ -470,8 +383,7 @@
                 "outbound": "block"
             }
         ],
-        "final": "server",
-        "auto_detect_interface": false
+        "final": "server"
     },
     "outbound_providers": [
         {
@@ -488,63 +400,7 @@
             "healthcheck_url": "https://www.gstatic.com/generate_204",
             "healthcheck_interval": "5m0s"
         },
-        {
-            "type": "local",
-            "path": "./provider/Vless ID Tls.json",
-            "tag": "Vless ID Tls",
-            "healthcheck_url": "https://www.gstatic.com/generate_204",
-            "healthcheck_interval": "5m0s"
-        },
-        {
-            "type": "local",
-            "path": "./provider/Vless ID Ntls.json",
-            "tag": "Vless ID Ntls",
-            "healthcheck_url": "https://www.gstatic.com/generate_204",
-            "healthcheck_interval": "5m0s"
-        },
-        {
-            "type": "local",
-            "path": "./provider/Vless SG Tls.json",
-            "tag": "Vless SG Tls",
-            "healthcheck_url": "https://www.gstatic.com/generate_204",
-            "healthcheck_interval": "5m0s"
-        },
-        {
-            "type": "local",
-            "path": "./provider/Vless SG Ntls.json",
-            "tag": "Vless SG Ntls",
-            "healthcheck_url": "https://www.gstatic.com/generate_204",
-            "healthcheck_interval": "5m0s"
-        },
-        {
-            "type": "local",
-            "path": "./provider/Trojan ID Tls.json",
-            "tag": "Trojan ID Tls",
-            "healthcheck_url": "https://www.gstatic.com/generate_204",
-            "healthcheck_interval": "5m0s"
-        },
-        {
-            "type": "local",
-            "path": "./provider/Trojan ID Ntls.json",
-            "tag": "Trojan ID Ntls",
-            "healthcheck_url": "https://www.gstatic.com/generate_204",
-            "healthcheck_interval": "5m0s"
-        },
-        {
-            "type": "local",
-            "path": "./provider/Trojan SG Tls.json",
-            "tag": "Trojan SG Tls",
-            "healthcheck_url": "https://www.gstatic.com/generate_204",
-            "healthcheck_interval": "5m0s"
-        },
-        {
-            "type": "local",
-            "path": "./provider/Trojan SG Ntls.json",
-            "tag": "Trojan SG Ntls",
-            "healthcheck_url": "https://www.gstatic.com/generate_204",
-            "healthcheck_interval": "5m0s"
-        },
-        // ID
+        null,
         {
             "type": "local",
             "path": "./provider/ID Vless TLS.json",
@@ -573,8 +429,6 @@
             "healthcheck_url": "https://www.gstatic.com/generate_204",
             "healthcheck_interval": "5m0s"
         },
-
-        // SG
         {
             "type": "local",
             "path": "./provider/SG Vless TLS.json",
@@ -603,8 +457,6 @@
             "healthcheck_url": "https://www.gstatic.com/generate_204",
             "healthcheck_interval": "5m0s"
         },
-
-        // US
         {
             "type": "local",
             "path": "./provider/US Vless TLS.json",
@@ -633,8 +485,6 @@
             "healthcheck_url": "https://www.gstatic.com/generate_204",
             "healthcheck_interval": "5m0s"
         },
-
-        // JP
         {
             "type": "local",
             "path": "./provider/JP Vless TLS.json",
@@ -663,8 +513,6 @@
             "healthcheck_url": "https://www.gstatic.com/generate_204",
             "healthcheck_interval": "5m0s"
         },
-
-        // KR
         {
             "type": "local",
             "path": "./provider/KR Vless TLS.json",
@@ -693,7 +541,6 @@
             "healthcheck_url": "https://www.gstatic.com/generate_204",
             "healthcheck_interval": "5m0s"
         }
-
     ],
     "experimental": {
         "cache_file": {
