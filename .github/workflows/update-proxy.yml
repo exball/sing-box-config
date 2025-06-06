@@ -27,7 +27,7 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install requests
+          pip install requests boto3
           
           echo "Checking if extract_outbound.py exists:"
           ls -la extract_outbound.py || echo "extract_outbound.py not found"
@@ -45,6 +45,15 @@ jobs:
           ls -la "ID Vless TLS.json" || echo "ID Vless TLS.json not found"
           ls -la "SG Trojan TLS.json" || echo "SG Trojan TLS.json not found"
           ls -la "US Vless NTLS.json" || echo "US Vless NTLS.json not found"
+      
+      - name: Upload to Cloudflare R2
+        env:
+          R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+          R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+          R2_ACCOUNT_ID: ${{ secrets.R2_ACCOUNT_ID }}
+          R2_BUCKET_NAME: cloud
+          R2_FOLDER_NAME: sing-box_config
+        run: python upload_to_r2.py
         
       - name: Commit and push if changes
         uses: stefanzweifel/git-auto-commit-action@v5
