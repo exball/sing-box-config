@@ -1,10 +1,48 @@
 {
     "outbounds": [
         {
-            "password": "76d5159d-205a-4aee-9852-215b37c01757",
+            "password": "2efdf571-0335-4672-991b-e88e782e4f76",
             "server": "quiz.int.vidio.com",
             "server_port": 443,
-            "tag": "1 🇯🇵 UCOM Corporation WS TLS [proxy]",
+            "tag": "1 🇯🇵 Jupiter Telecommunications Co. WS TLS [proxy]",
+            "tls": {
+                "enabled": true,
+                "insecure": true,
+                "server_name": "proxy.exbal.my.id"
+            },
+            "transport": {
+                "headers": {
+                    "Host": "proxy.exbal.my.id"
+                },
+                "path": "/219.117.2.190-57517",
+                "type": "ws"
+            },
+            "type": "trojan"
+        },
+        {
+            "password": "2efdf571-0335-4672-991b-e88e782e4f76",
+            "server": "quiz.int.vidio.com",
+            "server_port": 443,
+            "tag": "2 🇯🇵 Oracle Public Cloud WS TLS [proxy]",
+            "tls": {
+                "enabled": true,
+                "insecure": true,
+                "server_name": "proxy.exbal.my.id"
+            },
+            "transport": {
+                "headers": {
+                    "Host": "proxy.exbal.my.id"
+                },
+                "path": "/168.138.46.115-43138",
+                "type": "ws"
+            },
+            "type": "trojan"
+        },
+        {
+            "password": "2efdf571-0335-4672-991b-e88e782e4f76",
+            "server": "quiz.int.vidio.com",
+            "server_port": 443,
+            "tag": "5 🇯🇵 UCOM Corporation WS TLS [proxy]",
             "tls": {
                 "enabled": true,
                 "insecure": true,
@@ -20,67 +58,10 @@
             "type": "trojan"
         },
         {
-            "password": "76d5159d-205a-4aee-9852-215b37c01757",
+            "password": "2efdf571-0335-4672-991b-e88e782e4f76",
             "server": "quiz.int.vidio.com",
             "server_port": 443,
-            "tag": "2 🇯🇵 Oracle Corporation WS TLS [proxy]",
-            "tls": {
-                "enabled": true,
-                "insecure": true,
-                "server_name": "proxy.exbal.my.id"
-            },
-            "transport": {
-                "headers": {
-                    "Host": "proxy.exbal.my.id"
-                },
-                "path": "/217.142.250.195-587",
-                "type": "ws"
-            },
-            "type": "trojan"
-        },
-        {
-            "password": "76d5159d-205a-4aee-9852-215b37c01757",
-            "server": "quiz.int.vidio.com",
-            "server_port": 443,
-            "tag": "3 🇯🇵 Vultr Holdings WS TLS [proxy]",
-            "tls": {
-                "enabled": true,
-                "insecure": true,
-                "server_name": "proxy.exbal.my.id"
-            },
-            "transport": {
-                "headers": {
-                    "Host": "proxy.exbal.my.id"
-                },
-                "path": "/64.176.40.224-3533",
-                "type": "ws"
-            },
-            "type": "trojan"
-        },
-        {
-            "password": "76d5159d-205a-4aee-9852-215b37c01757",
-            "server": "quiz.int.vidio.com",
-            "server_port": 443,
-            "tag": "4 🇯🇵 3NT SOLUTIONS LLP WS TLS [proxy]",
-            "tls": {
-                "enabled": true,
-                "insecure": true,
-                "server_name": "proxy.exbal.my.id"
-            },
-            "transport": {
-                "headers": {
-                    "Host": "proxy.exbal.my.id"
-                },
-                "path": "/38.180.28.163-2053",
-                "type": "ws"
-            },
-            "type": "trojan"
-        },
-        {
-            "password": "76d5159d-205a-4aee-9852-215b37c01757",
-            "server": "quiz.int.vidio.com",
-            "server_port": 443,
-            "tag": "7 🇯🇵 WorkTitans B.V. WS TLS [proxy]",
+            "tag": "6 🇯🇵 WorkTitans B.V. WS TLS [proxy]",
             "tls": {
                 "enabled": true,
                 "insecure": true,
@@ -96,10 +77,10 @@
             "type": "trojan"
         },
         {
-            "password": "76d5159d-205a-4aee-9852-215b37c01757",
+            "password": "2efdf571-0335-4672-991b-e88e782e4f76",
             "server": "quiz.int.vidio.com",
             "server_port": 443,
-            "tag": "8 🇯🇵 Amazon Data Services Japan WS TLS [proxy]",
+            "tag": "7 🇯🇵 Oracle Corporation WS TLS [proxy]",
             "tls": {
                 "enabled": true,
                 "insecure": true,
@@ -109,7 +90,26 @@
                 "headers": {
                     "Host": "proxy.exbal.my.id"
                 },
-                "path": "/13.230.34.30-443",
+                "path": "/64.110.104.30-443",
+                "type": "ws"
+            },
+            "type": "trojan"
+        },
+        {
+            "password": "2efdf571-0335-4672-991b-e88e782e4f76",
+            "server": "quiz.int.vidio.com",
+            "server_port": 443,
+            "tag": "9 🇯🇵 Vultr Holdings WS TLS [proxy]",
+            "tls": {
+                "enabled": true,
+                "insecure": true,
+                "server_name": "proxy.exbal.my.id"
+            },
+            "transport": {
+                "headers": {
+                    "Host": "proxy.exbal.my.id"
+                },
+                "path": "/108.160.139.154-8443",
                 "type": "ws"
             },
             "type": "trojan"
