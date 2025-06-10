@@ -1,7 +1,7 @@
 {
     "outbounds": [
         {
-            "password": "409a22bf-a431-4568-a610-dba0c0aeb04a",
+            "password": "6cf98cbd-c73d-4206-b020-55f49b00e6a0",
             "server": "quiz.int.vidio.com",
             "server_port": 80,
             "tag": "1 🇰🇷 Korea Telecom WS NTLS [proxy]",
@@ -19,10 +19,10 @@
             "type": "trojan"
         },
         {
-            "password": "409a22bf-a431-4568-a610-dba0c0aeb04a",
+            "password": "6cf98cbd-c73d-4206-b020-55f49b00e6a0",
             "server": "quiz.int.vidio.com",
             "server_port": 80,
-            "tag": "8 🇰🇷 Oracle Corporation WS NTLS [proxy]",
+            "tag": "2 🇰🇷 LG DACOM Corporation WS NTLS [proxy]",
             "tls": {
                 "insecure": true,
                 "server_name": "proxy.exbal.my.id"
@@ -31,7 +31,61 @@
                 "headers": {
                     "Host": "proxy.exbal.my.id"
                 },
-                "path": "/152.70.89.135-587",
+                "path": "/112.222.49.250-50000",
+                "type": "ws"
+            },
+            "type": "trojan"
+        },
+        {
+            "password": "6cf98cbd-c73d-4206-b020-55f49b00e6a0",
+            "server": "quiz.int.vidio.com",
+            "server_port": 80,
+            "tag": "5 🇰🇷 Oracle Public Cloud WS NTLS [proxy]",
+            "tls": {
+                "insecure": true,
+                "server_name": "proxy.exbal.my.id"
+            },
+            "transport": {
+                "headers": {
+                    "Host": "proxy.exbal.my.id"
+                },
+                "path": "/132.145.84.148-39567",
+                "type": "ws"
+            },
+            "type": "trojan"
+        },
+        {
+            "password": "6cf98cbd-c73d-4206-b020-55f49b00e6a0",
+            "server": "quiz.int.vidio.com",
+            "server_port": 80,
+            "tag": "6 🇰🇷 LG POWERCOMM WS NTLS [proxy]",
+            "tls": {
+                "insecure": true,
+                "server_name": "proxy.exbal.my.id"
+            },
+            "transport": {
+                "headers": {
+                    "Host": "proxy.exbal.my.id"
+                },
+                "path": "/180.230.0.137-50000",
+                "type": "ws"
+            },
+            "type": "trojan"
+        },
+        {
+            "password": "6cf98cbd-c73d-4206-b020-55f49b00e6a0",
+            "server": "quiz.int.vidio.com",
+            "server_port": 80,
+            "tag": "9 🇰🇷 SK Broadband Co Ltd WS NTLS [proxy]",
+            "tls": {
+                "insecure": true,
+                "server_name": "proxy.exbal.my.id"
+            },
+            "transport": {
+                "headers": {
+                    "Host": "proxy.exbal.my.id"
+                },
+                "path": "/123.214.130.71-50003",
                 "type": "ws"
             },
             "type": "trojan"
