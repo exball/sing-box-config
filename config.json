@@ -56,6 +56,10 @@
         "detour": "direct"
       },
       {
+        "tag": "block-dns",
+        "address": "rcode://refused"
+      },
+      {
         "tag": "rcode",
         "address": "rcode://success"
       },
@@ -82,6 +86,26 @@
         "outbound": "any",
         "server": "rcode",
         "disable_cache": true
+      },
+      {
+        "domain": [
+          "zencoder.ai",
+          "api.openai.com",
+          "chat.openai.com",
+          "claude.ai",
+          "anthropic.com"
+        ],
+        "server": "remote",
+        "disable_cache": false
+      },
+      {
+        "domain_suffix": [
+          "openai.com",
+          "anthropic.com",
+          "claude.ai"
+        ],
+        "server": "remote",
+        "disable_cache": false
       },
       {
         "query_type": [
@@ -373,14 +397,27 @@
     }
   ],
   "route": {
+    "rule_set": [],
     "rules": [
       {
         "port": 53,
         "outbound": "dns"
       },
+
       {
         "domain_suffix": "zimperium.com",
         "outbound": "block"
+      },
+      {
+        "geosite": "category-ads-all",
+        "outbound": "block"
+      },
+      {
+        "geoip": [
+          "private",
+          "cn"
+        ],
+        "outbound": "direct"
       }
     ],
     "final": "server",
