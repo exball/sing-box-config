@@ -56,10 +56,6 @@
         "detour": "direct"
       },
       {
-        "tag": "block-dns",
-        "address": "rcode://refused"
-      },
-      {
         "tag": "rcode",
         "address": "rcode://success"
       },
@@ -385,48 +381,6 @@
       {
         "domain_suffix": "zimperium.com",
         "outbound": "block"
-      },
-      {
-        "domain": [
-          "api.openai.com",
-          "chat.openai.com",
-          "auth0.openai.com",
-          "platform.openai.com",
-          "ai.com",
-          "zencoder.ai",
-          "claude.ai",
-          "anthropic.com"
-        ],
-        "outbound": "direct"
-      },
-      {
-        "domain_suffix": [
-          "openai.com",
-          "ai.com",
-          "anthropic.com",
-          "claude.ai"
-        ],
-        "outbound": "direct"
-      },
-      {
-        "domain_keyword": [
-          "openai",
-          "claude",
-          "anthropic",
-          "zencoder"
-        ],
-        "outbound": "direct"
-      },
-      {
-        "geosite": "category-ads-all",
-        "outbound": "block"
-      },
-      {
-        "geoip": [
-          "private",
-          "cn"
-        ],
-        "outbound": "direct"
       }
     ],
     "final": "server",
