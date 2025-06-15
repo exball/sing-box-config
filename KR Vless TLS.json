@@ -3,7 +3,7 @@
         {
             "server": "quiz.int.vidio.com",
             "server_port": 443,
-            "tag": "1 🇰🇷 Korea Telecom WS TLS [proxy]",
+            "tag": "1 🇰🇷 Oracle Public Cloud WS TLS [proxy]",
             "network": "tcp",
             "tls": {
                 "enabled": true,
@@ -14,16 +14,16 @@
                 "headers": {
                     "Host": "proxy.exbal.my.id"
                 },
-                "path": "/61.73.36.4-20364",
+                "path": "/193.122.126.64-53777",
                 "type": "ws"
             },
             "type": "vless",
-            "uuid": "512f3dd3-1f2d-4895-a191-fc5285e5d116"
+            "uuid": "6b79dde8-6c89-4a76-b3c4-e691e1057b5b"
         },
         {
             "server": "quiz.int.vidio.com",
             "server_port": 443,
-            "tag": "5 🇰🇷 Oracle Corporation  WS TLS [proxy]",
+            "tag": "2 🇰🇷 SK Broadband Co Ltd WS TLS [proxy]",
             "network": "tcp",
             "tls": {
                 "enabled": true,
@@ -34,16 +34,16 @@
                 "headers": {
                     "Host": "proxy.exbal.my.id"
                 },
-                "path": "/146.56.182.217-54266",
+                "path": "/175.121.137.173-50003",
                 "type": "ws"
             },
             "type": "vless",
-            "uuid": "512f3dd3-1f2d-4895-a191-fc5285e5d116"
+            "uuid": "6b79dde8-6c89-4a76-b3c4-e691e1057b5b"
         },
         {
             "server": "quiz.int.vidio.com",
             "server_port": 443,
-            "tag": "10 🇰🇷 LG POWERCOMM WS TLS [proxy]",
+            "tag": "3 🇰🇷 LG POWERCOMM WS TLS [proxy]",
             "network": "tcp",
             "tls": {
                 "enabled": true,
@@ -54,11 +54,31 @@
                 "headers": {
                     "Host": "proxy.exbal.my.id"
                 },
-                "path": "/49.167.62.11-24904",
+                "path": "/49.171.243.145-50027",
                 "type": "ws"
             },
             "type": "vless",
-            "uuid": "512f3dd3-1f2d-4895-a191-fc5285e5d116"
+            "uuid": "6b79dde8-6c89-4a76-b3c4-e691e1057b5b"
+        },
+        {
+            "server": "quiz.int.vidio.com",
+            "server_port": 443,
+            "tag": "4 🇰🇷 Korea Telecom WS TLS [proxy]",
+            "network": "tcp",
+            "tls": {
+                "enabled": true,
+                "insecure": true,
+                "server_name": "proxy.exbal.my.id"
+            },
+            "transport": {
+                "headers": {
+                    "Host": "proxy.exbal.my.id"
+                },
+                "path": "/220.71.245.141-31491",
+                "type": "ws"
+            },
+            "type": "vless",
+            "uuid": "6b79dde8-6c89-4a76-b3c4-e691e1057b5b"
         }
     ]
 }
