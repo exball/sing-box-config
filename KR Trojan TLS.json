@@ -1,10 +1,11 @@
 {
     "outbounds": [
         {
-            "password": "c67a6acb-1b16-4007-8d36-796104c20c35",
             "server": "quiz.int.vidio.com",
             "server_port": 443,
-            "tag": "1 🇰🇷 Oracle Corporation WS TLS [proxy]",
+            "tag": "1 🇰🇷 LG POWERCOMM WS TLS [proxy]",
+            "network": "tcp",
+            "password": "f80a85a8-e604-4670-8374-5681fc343994",
             "tls": {
                 "enabled": true,
                 "insecure": true,
@@ -14,16 +15,17 @@
                 "headers": {
                     "Host": "proxy.exbal.my.id"
                 },
-                "path": "/193.123.236.138-27215",
+                "path": "/116.35.98.234-31159",
                 "type": "ws"
             },
             "type": "trojan"
         },
         {
-            "password": "c67a6acb-1b16-4007-8d36-796104c20c35",
             "server": "quiz.int.vidio.com",
             "server_port": 443,
-            "tag": "2 🇰🇷 LG DACOM Corporation WS TLS [proxy]",
+            "tag": "2 🇰🇷 Korea Telecom WS TLS [proxy]",
+            "network": "tcp",
+            "password": "f80a85a8-e604-4670-8374-5681fc343994",
             "tls": {
                 "enabled": true,
                 "insecure": true,
@@ -33,16 +35,17 @@
                 "headers": {
                     "Host": "proxy.exbal.my.id"
                 },
-                "path": "/61.36.58.170-30051",
+                "path": "/221.161.58.134-14696",
                 "type": "ws"
             },
             "type": "trojan"
         },
         {
-            "password": "c67a6acb-1b16-4007-8d36-796104c20c35",
             "server": "quiz.int.vidio.com",
             "server_port": 443,
-            "tag": "3 🇰🇷 Korea Telecom WS TLS [proxy]",
+            "tag": "4 🇰🇷 LG HelloVision Corp. WS TLS [proxy]",
+            "network": "tcp",
+            "password": "f80a85a8-e604-4670-8374-5681fc343994",
             "tls": {
                 "enabled": true,
                 "insecure": true,
@@ -52,16 +55,17 @@
                 "headers": {
                     "Host": "proxy.exbal.my.id"
                 },
-                "path": "/211.253.196.188-21396",
+                "path": "/115.40.244.240-11211",
                 "type": "ws"
             },
             "type": "trojan"
         },
         {
-            "password": "c67a6acb-1b16-4007-8d36-796104c20c35",
             "server": "quiz.int.vidio.com",
             "server_port": 443,
-            "tag": "8 🇰🇷 Cloudflare London WS TLS [proxy]",
+            "tag": "6 🇰🇷 LG DACOM Corporation WS TLS [proxy]",
+            "network": "tcp",
+            "password": "f80a85a8-e604-4670-8374-5681fc343994",
             "tls": {
                 "enabled": true,
                 "insecure": true,
@@ -71,16 +75,37 @@
                 "headers": {
                     "Host": "proxy.exbal.my.id"
                 },
-                "path": "/144.24.87.69-50001",
+                "path": "/211.42.255.79-50000",
                 "type": "ws"
             },
             "type": "trojan"
         },
         {
-            "password": "t.me/foolvpn",
+            "server": "quiz.int.vidio.com",
+            "server_port": 443,
+            "tag": "7 🇰🇷 Oracle Corporation WS TLS [proxy]",
+            "network": "tcp",
+            "password": "f80a85a8-e604-4670-8374-5681fc343994",
+            "tls": {
+                "enabled": true,
+                "insecure": true,
+                "server_name": "proxy.exbal.my.id"
+            },
+            "transport": {
+                "headers": {
+                    "Host": "proxy.exbal.my.id"
+                },
+                "path": "/152.70.232.251-58474",
+                "type": "ws"
+            },
+            "type": "trojan"
+        },
+        {
             "server": "quiz.int.vidio.com",
             "server_port": 443,
             "tag": "Trojan UDP",
+            "network": "tcp",
+            "password": "t.me/foolvpn",
             "tls": {
                 "enabled": true,
                 "insecure": true,

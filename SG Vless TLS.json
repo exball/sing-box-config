@@ -3,7 +3,48 @@
         {
             "server": "quiz.int.vidio.com",
             "server_port": 443,
-            "tag": "1 🇸🇬 FIRST SERVER LIMITED WS TLS [proxy]",
+            "tag": "1 🇸🇬 Oracle Corporation WS TLS [proxy]",
+            "network": "tcp",
+            "tls": {
+                "enabled": true,
+                "insecure": true,
+                "server_name": "proxy.exbal.my.id"
+            },
+            "transport": {
+                "headers": {
+                    "Host": "proxy.exbal.my.id"
+                },
+                "path": "/146.235.19.79-28983",
+                "type": "ws"
+            },
+            "type": "vless",
+            "uuid": "643da817-7e98-497f-805d-07f6f5ac3cb0"
+        },
+        {
+            "server": "quiz.int.vidio.com",
+            "server_port": 443,
+            "tag": "2 🇸🇬 Oracle Public Cloud WS TLS [proxy]",
+            "network": "tcp",
+            "tls": {
+                "enabled": true,
+                "insecure": true,
+                "server_name": "proxy.exbal.my.id"
+            },
+            "transport": {
+                "headers": {
+                    "Host": "proxy.exbal.my.id"
+                },
+                "path": "/168.138.184.142-19191",
+                "type": "ws"
+            },
+            "type": "vless",
+            "uuid": "643da817-7e98-497f-805d-07f6f5ac3cb0"
+        },
+        {
+            "server": "quiz.int.vidio.com",
+            "server_port": 443,
+            "tag": "3 🇸🇬 FIRST SERVER LIMITED WS TLS [proxy]",
+            "network": "tcp",
             "tls": {
                 "enabled": true,
                 "insecure": true,
@@ -17,12 +58,13 @@
                 "type": "ws"
             },
             "type": "vless",
-            "uuid": "b57fb1ba-84c8-465b-9146-b25ba09935dc"
+            "uuid": "643da817-7e98-497f-805d-07f6f5ac3cb0"
         },
         {
             "server": "quiz.int.vidio.com",
             "server_port": 443,
-            "tag": "2 🇸🇬 Amazon Data Services Singapore WS TLS [proxy]",
+            "tag": "6 🇸🇬 Alibaba Cloud LLC WS TLS [proxy]",
+            "network": "tcp",
             "tls": {
                 "enabled": true,
                 "insecure": true,
@@ -32,16 +74,17 @@
                 "headers": {
                     "Host": "proxy.exbal.my.id"
                 },
-                "path": "/3.1.116.161-8443",
+                "path": "/47.236.119.190-51342",
                 "type": "ws"
             },
             "type": "vless",
-            "uuid": "b57fb1ba-84c8-465b-9146-b25ba09935dc"
+            "uuid": "643da817-7e98-497f-805d-07f6f5ac3cb0"
         },
         {
             "server": "quiz.int.vidio.com",
             "server_port": 443,
-            "tag": "3 🇸🇬 Contabo GmbH WS TLS [proxy]",
+            "tag": "8 🇸🇬 Oracle Svenska AB WS TLS [proxy]",
+            "network": "tcp",
             "tls": {
                 "enabled": true,
                 "insecure": true,
@@ -51,16 +94,17 @@
                 "headers": {
                     "Host": "proxy.exbal.my.id"
                 },
-                "path": "/62.72.46.14-8443",
+                "path": "/213.35.100.31-47112",
                 "type": "ws"
             },
             "type": "vless",
-            "uuid": "b57fb1ba-84c8-465b-9146-b25ba09935dc"
+            "uuid": "643da817-7e98-497f-805d-07f6f5ac3cb0"
         },
         {
             "server": "quiz.int.vidio.com",
             "server_port": 443,
-            "tag": "4 🇸🇬 365 Group LLC WS TLS [proxy]",
+            "tag": "10 🇸🇬 Cloudflare London WS TLS [proxy]",
+            "network": "tcp",
             "tls": {
                 "enabled": true,
                 "insecure": true,
@@ -70,106 +114,11 @@
                 "headers": {
                     "Host": "proxy.exbal.my.id"
                 },
-                "path": "/167.253.158.63-2053",
+                "path": "/138.2.74.219-28616",
                 "type": "ws"
             },
             "type": "vless",
-            "uuid": "b57fb1ba-84c8-465b-9146-b25ba09935dc"
-        },
-        {
-            "server": "quiz.int.vidio.com",
-            "server_port": 443,
-            "tag": "5 🇸🇬 Internet Utilities NA LLC WS TLS [proxy]",
-            "tls": {
-                "enabled": true,
-                "insecure": true,
-                "server_name": "proxy.exbal.my.id"
-            },
-            "transport": {
-                "headers": {
-                    "Host": "proxy.exbal.my.id"
-                },
-                "path": "/64.49.14.41-8443",
-                "type": "ws"
-            },
-            "type": "vless",
-            "uuid": "b57fb1ba-84c8-465b-9146-b25ba09935dc"
-        },
-        {
-            "server": "quiz.int.vidio.com",
-            "server_port": 443,
-            "tag": "6 🇸🇬 Hetzner Online GmbH WS TLS [proxy]",
-            "tls": {
-                "enabled": true,
-                "insecure": true,
-                "server_name": "proxy.exbal.my.id"
-            },
-            "transport": {
-                "headers": {
-                    "Host": "proxy.exbal.my.id"
-                },
-                "path": "/5.223.49.4-2053",
-                "type": "ws"
-            },
-            "type": "vless",
-            "uuid": "b57fb1ba-84c8-465b-9146-b25ba09935dc"
-        },
-        {
-            "server": "quiz.int.vidio.com",
-            "server_port": 443,
-            "tag": "7 🇸🇬 Alibaba Cloud (Singapore) Private Limited WS TLS [proxy]",
-            "tls": {
-                "enabled": true,
-                "insecure": true,
-                "server_name": "proxy.exbal.my.id"
-            },
-            "transport": {
-                "headers": {
-                    "Host": "proxy.exbal.my.id"
-                },
-                "path": "/8.222.178.214-6666",
-                "type": "ws"
-            },
-            "type": "vless",
-            "uuid": "b57fb1ba-84c8-465b-9146-b25ba09935dc"
-        },
-        {
-            "server": "quiz.int.vidio.com",
-            "server_port": 443,
-            "tag": "8 🇸🇬 PDK LLC WS TLS [proxy]",
-            "tls": {
-                "enabled": true,
-                "insecure": true,
-                "server_name": "proxy.exbal.my.id"
-            },
-            "transport": {
-                "headers": {
-                    "Host": "proxy.exbal.my.id"
-                },
-                "path": "/31.192.238.71-2053",
-                "type": "ws"
-            },
-            "type": "vless",
-            "uuid": "b57fb1ba-84c8-465b-9146-b25ba09935dc"
-        },
-        {
-            "server": "quiz.int.vidio.com",
-            "server_port": 443,
-            "tag": "9 🇸🇬 Oracle Corporation WS TLS [proxy]",
-            "tls": {
-                "enabled": true,
-                "insecure": true,
-                "server_name": "proxy.exbal.my.id"
-            },
-            "transport": {
-                "headers": {
-                    "Host": "proxy.exbal.my.id"
-                },
-                "path": "/138.2.89.64-32962",
-                "type": "ws"
-            },
-            "type": "vless",
-            "uuid": "b57fb1ba-84c8-465b-9146-b25ba09935dc"
+            "uuid": "643da817-7e98-497f-805d-07f6f5ac3cb0"
         }
     ]
 }
