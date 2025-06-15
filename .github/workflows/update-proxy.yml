@@ -48,12 +48,18 @@ jobs:
       
       - name: Upload to Cloudflare R2
         env:
+          ENABLE_UPLOAD: "false"  # Ubah menjadi "true" jika ingin mengaktifkan upload
           R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
           R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
           R2_ACCOUNT_ID: ${{ secrets.R2_ACCOUNT_ID }}
           R2_BUCKET_NAME: cloud
           R2_FOLDER_NAME: sing-box_config
-        run: python upload_to_r2.py
+        run: |
+          if [ "$ENABLE_UPLOAD" = "true" ]; then
+            python upload_to_r2.py
+          else
+            echo "Upload to R2 is disabled"
+          fi
         
       - name: Commit and push if changes
         uses: stefanzweifel/git-auto-commit-action@v5
