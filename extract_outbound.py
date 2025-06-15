@@ -157,10 +157,24 @@ def main():
                             # Metadata negara hanya untuk proses internal, tidak disimpan ke output
                             # outbound["country_code"] = country  # Dihapus karena menyebabkan sing-box error
                             
+                            # Tambahkan field network dengan nilai "tcp"
+                            # Kita akan menambahkannya ke outbound_copy dengan urutan yang benar
+                            
                             # Buat salinan outbound tanpa field country_code
-                            outbound_copy = outbound.copy()
-                            if "country_code" in outbound_copy:
-                                del outbound_copy["country_code"]
+                            outbound_copy = {}
+                            
+                            # Tambahkan field dalam urutan yang diinginkan
+                            for key in ["server", "server_port", "tag"]:
+                                if key in outbound:
+                                    outbound_copy[key] = outbound[key]
+                            
+                            # Tambahkan network setelah tag
+                            outbound_copy["network"] = "tcp"
+                            
+                            # Tambahkan field lainnya
+                            for key in outbound:
+                                if key not in ["server", "server_port", "tag", "country_code"] and key not in outbound_copy:
+                                    outbound_copy[key] = outbound[key]
                             
                             # Logika untuk memfilter proxy:
                             # 1. Untuk Indonesia (ID): Ambil semua proxy
