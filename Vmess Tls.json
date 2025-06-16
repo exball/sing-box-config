@@ -75,43 +75,6 @@
             }
         },
         {
-            "type": "vmess",
-            "tag": "SG DO Vmess TLS (Prem)",
-            "server": "quiz.int.vidio.com",
-            "server_port": 443,
-            "uuid": "b0bf6247-7866-478b-93f1-ad050d1d261e",
-            "security": "",
-            "tls": {
-                "enabled": true,
-                "server_name": "sg1.foolvpn.me",
-                "insecure": true
-            },
-            "transport": {
-                "type": "ws",
-                "path": "/vmess",
-                "headers": {
-                    "Host": "sg1.foolvpn.me"
-                }
-            }
-        },
-        {
-            "type": "vmess",
-            "tag": "SG DO Vmess GRPC TLS (Prem)",
-            "server": "quiz.int.vidio.com",
-            "server_port": 443,
-            "uuid": "b0bf6247-7866-478b-93f1-ad050d1d261e",
-            "security": "",
-            "tls": {
-                "enabled": true,
-                "server_name": "sg1.foolvpn.me",
-                "insecure": true
-            },
-            "transport": {
-                "type": "grpc",
-                "service_name": "sg1.foolvpn.me"
-            }
-        },
-        {
             "security": "auto",
             "server": "quiz.int.vidio.com",
             "server_port": 443,
@@ -135,11 +98,48 @@
             "security": "",
             "server": "quiz.int.vidio.com",
             "server_port": 443,
-            "tag": "3 ✨ 🇮🇩 MEGALODON GRPC CDN TLS",
+            "tag": "3 ✨ 🇸🇬 DIGITALOCEAN LLC GRPC CDN TLS",
             "tls": {
                 "enabled": true,
                 "insecure": true,
-                "server_name": "id1.foolvpn.me"
+                "server_name": "quiz.int.vidio.com"
+            },
+            "transport": {
+                "service_name": "sg1.foolvpn.me",
+                "type": "grpc"
+            },
+            "type": "vmess",
+            "uuid": "b0bf6247-7866-478b-93f1-ad050d1d261e"
+        },
+        {
+            "security": "",
+            "server": "quiz.int.vidio.com",
+            "server_port": 443,
+            "tag": "2 ✨ 🇸🇬 DIGITALOCEAN LLC WS CDN TLS",
+            "tls": {
+                "enabled": true,
+                "insecure": true,
+                "server_name": "quiz.int.vidio.com"
+            },
+            "transport": {
+                "headers": {
+                    "Host": "sg1.foolvpn.me"
+                },
+                "path": "/vmess",
+                "type": "ws"
+            },
+            "type": "vmess",
+            "uuid": "b0bf6247-7866-478b-93f1-ad050d1d261e"
+        },
+        {
+            "security": "",
+            "server": "quiz.int.vidio.com",
+            "server_port": 443,
+            "tag": "3 ✨ 🇮🇩 ARENHOST GRPC CDN TLS",
+            "tls": {
+                "enabled": true,
+                "insecure": true,
+                "server_name": "quiz.int.vidio.com"
             },
             "transport": {
                 "service_name": "id1.foolvpn.me",
@@ -152,11 +152,11 @@
             "security": "",
             "server": "quiz.int.vidio.com",
             "server_port": 443,
-            "tag": "2 ✨ 🇮🇩 MEGALODON WS CDN TLS",
+            "tag": "2 ✨ 🇮🇩 ARENHOST WS CDN TLS",
             "tls": {
                 "enabled": true,
                 "insecure": true,
-                "server_name": "id1.foolvpn.me"
+                "server_name": "quiz.int.vidio.com"
             },
             "transport": {
                 "headers": {
@@ -176,7 +176,7 @@
             "tls": {
                 "enabled": true,
                 "insecure": true,
-                "server_name": "sgfqkqmltcy.site"
+                "server_name": "quiz.int.vidio.com"
             },
             "transport": {
                 "headers": {
@@ -191,52 +191,12 @@
         {
             "security": "",
             "server": "quiz.int.vidio.com",
-            "server_port": 443,
-            "tag": "130 🇺🇸 COLOCROSSING WS CDN TLS",
-            "tls": {
-                "enabled": true,
-                "insecure": true,
-                "server_name": "9x.938.pp.ua"
-            },
-            "transport": {
-                "headers": {
-                    "Host": "9x.938.pp.ua"
-                },
-                "path": "/DAxJddOdTd5pVam9w",
-                "type": "ws"
-            },
-            "type": "vmess",
-            "uuid": "906ba92f-ef96-4133-8eee-f33202a5a721"
-        },
-        {
-            "security": "",
-            "server": "quiz.int.vidio.com",
-            "server_port": 443,
-            "tag": "101 🇺🇸 COLOCROSSING WS CDN TLS",
-            "tls": {
-                "enabled": true,
-                "insecure": true,
-                "server_name": "7fa54343-7c0a-45c9.2031.pp.ua"
-            },
-            "transport": {
-                "headers": {
-                    "Host": "7fa54343-7c0a-45c9.2031.pp.ua"
-                },
-                "path": "/usYhm60UxQ8YJFJxz",
-                "type": "ws"
-            },
-            "type": "vmess",
-            "uuid": "15b24b56-d667-4fa8-b548-f3dc942fb461"
-        },
-        {
-            "security": "",
-            "server": "quiz.int.vidio.com",
             "server_port": 2096,
             "tag": "32 🇩🇪 CLOUDFLARE WARP WS CDN TLS",
             "tls": {
                 "enabled": true,
                 "insecure": true,
-                "server_name": "de01.sh-cloudflare.sbs"
+                "server_name": "quiz.int.vidio.com"
             },
             "transport": {
                 "headers": {
@@ -251,22 +211,42 @@
         {
             "security": "",
             "server": "quiz.int.vidio.com",
-            "server_port": 8443,
-            "tag": "105 🇺🇸 CLOUDFLARE WARP WS CDN TLS",
+            "server_port": 443,
+            "tag": "124 🇫🇷 FEELB WS CDN TLS",
             "tls": {
                 "enabled": true,
                 "insecure": true,
-                "server_name": "us01.sh-cloudflare.sbs"
+                "server_name": "quiz.int.vidio.com"
             },
             "transport": {
                 "headers": {
-                    "Host": "us01.sh-cloudflare.sbs"
+                    "Host": "beyonddsz.cfd"
                 },
-                "path": "/",
+                "path": "/linkws",
                 "type": "ws"
             },
             "type": "vmess",
-            "uuid": "2bd0c9d7-f239-437e-a1e1-6cf830af2a1a"
+            "uuid": "9b456c2a-f2c1-45e1-87a9-b7628b04bb24"
+        },
+        {
+            "security": "",
+            "server": "quiz.int.vidio.com",
+            "server_port": 2096,
+            "tag": "91 🇰🇷 ORACLE CLOUD WS CDN TLS",
+            "tls": {
+                "enabled": true,
+                "insecure": true,
+                "server_name": "quiz.int.vidio.com"
+            },
+            "transport": {
+                "headers": {
+                    "Host": "dv4.789900.xyz"
+                },
+                "path": "/0c8f3e29-4ec9-4ba6-a6ef-4487873f5d05-vm",
+                "type": "ws"
+            },
+            "type": "vmess",
+            "uuid": "0c8f3e29-4ec9-4ba6-a6ef-4487873f5d05"
         }
     ]
 }
