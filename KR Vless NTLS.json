@@ -3,7 +3,25 @@
         {
             "server": "quiz.int.vidio.com",
             "server_port": 80,
-            "tag": "1 🇰🇷 Oracle Corporation WS NTLS [proxy]",
+            "tag": "1 🇰🇷 Korea Telecom WS NTLS [proxy]",
+            "network": "tcp",
+            "tls": {
+                "insecure": true
+            },
+            "transport": {
+                "headers": {
+                    "Host": "proxy.exbal.my.id"
+                },
+                "path": "/59.15.182.92-22485",
+                "type": "ws"
+            },
+            "type": "vless",
+            "uuid": "3ecb3f66-74da-4952-91b5-afd807076699"
+        },
+        {
+            "server": "quiz.int.vidio.com",
+            "server_port": 80,
+            "tag": "5 🇰🇷 Oracle Corporation WS NTLS [proxy]",
             "network": "tcp",
             "tls": {
                 "insecure": true
@@ -16,79 +34,7 @@
                 "type": "ws"
             },
             "type": "vless",
-            "uuid": "dab12f27-673e-4387-aae4-95041ed6572d"
-        },
-        {
-            "server": "quiz.int.vidio.com",
-            "server_port": 80,
-            "tag": "2 🇰🇷 Korea Telecom WS NTLS [proxy]",
-            "network": "tcp",
-            "tls": {
-                "insecure": true
-            },
-            "transport": {
-                "headers": {
-                    "Host": "proxy.exbal.my.id"
-                },
-                "path": "/183.103.211.16-34036",
-                "type": "ws"
-            },
-            "type": "vless",
-            "uuid": "dab12f27-673e-4387-aae4-95041ed6572d"
-        },
-        {
-            "server": "quiz.int.vidio.com",
-            "server_port": 80,
-            "tag": "6 🇰🇷 Ulsan Jung-Ang Broadcasting Network WS NTLS [proxy]",
-            "network": "tcp",
-            "tls": {
-                "insecure": true
-            },
-            "transport": {
-                "headers": {
-                    "Host": "proxy.exbal.my.id"
-                },
-                "path": "/124.216.60.169-10325",
-                "type": "ws"
-            },
-            "type": "vless",
-            "uuid": "dab12f27-673e-4387-aae4-95041ed6572d"
-        },
-        {
-            "server": "quiz.int.vidio.com",
-            "server_port": 80,
-            "tag": "9 🇰🇷 HYUNDAI COMMUNICATIONS   NETWORK WS NTLS [proxy]",
-            "network": "tcp",
-            "tls": {
-                "insecure": true
-            },
-            "transport": {
-                "headers": {
-                    "Host": "proxy.exbal.my.id"
-                },
-                "path": "/119.56.175.56-12406",
-                "type": "ws"
-            },
-            "type": "vless",
-            "uuid": "dab12f27-673e-4387-aae4-95041ed6572d"
-        },
-        {
-            "server": "quiz.int.vidio.com",
-            "server_port": 80,
-            "tag": "10 🇰🇷 LG POWERCOMM WS NTLS [proxy]",
-            "network": "tcp",
-            "tls": {
-                "insecure": true
-            },
-            "transport": {
-                "headers": {
-                    "Host": "proxy.exbal.my.id"
-                },
-                "path": "/49.171.243.145-30049",
-                "type": "ws"
-            },
-            "type": "vless",
-            "uuid": "dab12f27-673e-4387-aae4-95041ed6572d"
+            "uuid": "3ecb3f66-74da-4952-91b5-afd807076699"
         }
     ]
 }
