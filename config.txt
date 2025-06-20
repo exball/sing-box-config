@@ -1,0 +1,26 @@
+# Konfigurasi untuk extract_outbound.py
+# Format: key=value
+
+# ID Vless TLS
+Country_ID= ID
+Protocol= vless
+Security= tls
+Output_Name= ID vless tls.json
+
+# ID Vless NTLS
+Country_ID= ID
+Protocol= vless
+Security= ntls
+Output_Name= ID vless ntls.json
+
+# ID, SG Trojan TLS NTLS
+Country_ID= ID, SG
+Protocol= vless
+Security= tls, ntls
+Output_Name= ID SG trojan tls ntls.json
+
+# Backup
+Country_ID= US, JP, KR, VT, TH
+Protocol= vless
+Security= tls, ntls
+Output_Name= backup.json
