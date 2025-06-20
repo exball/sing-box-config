@@ -39,12 +39,11 @@ jobs:
         run: |
           ls -la
           
-          python extract_outbound.py
+          # Jalankan script dengan file konfigurasi
+          python extract_outbound.py --config config.txt
           
           echo "Checking output files:"
-          ls -la "ID Vless TLS.json" || echo "ID Vless TLS.json not found"
-          ls -la "SG Trojan TLS.json" || echo "SG Trojan TLS.json not found"
-          ls -la "US Vless NTLS.json" || echo "US Vless NTLS.json not found"
+          ls -la *.json || echo "No JSON files found"
       
       - name: Upload to Cloudflare R2
         env:
@@ -65,7 +64,7 @@ jobs:
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
           commit_message: "Update proxy list [automated]"
-          file_pattern: "*.json README.md"
+          file_pattern: "*.json README.md config.txt"
           commit_user_name: "GitHub Actions Bot"
           commit_user_email: "actions@github.com"
           commit_author: "GitHub Actions Bot <actions@github.com>"
