@@ -3,26 +3,26 @@
 Automatically updated list of working proxies.
 
 ## Stats
-- Last Updated: 2025-06-21 02:21:53 UTC
-- Total Proxies: 195
+- Last Updated: 2025-06-21 06:48:41 UTC
+- Total Proxies: 190
 
 ## Proxy Breakdown
 - 🇮🇩 ID (Indonesia): 64 proxies
-- 🇸🇬 SG (Singapore): 50 proxies
-- 🇺🇸 US (United States): 50 proxies
-- 🇯🇵 JP (Japan): 16 proxies
+- 🇸🇬 SG (Singapore): 45 proxies
+- 🇺🇸 US (United States): 51 proxies
+- 🇯🇵 JP (Japan): 15 proxies
 - 🇰🇷 KR (South Korea): 9 proxies
 - 🇹🇭 TH (TH): 6 proxies
 
 ## Detailed Breakdown
 - 🇮🇩 ID Vless NTLS: 27 proxies
 - 🇮🇩 ID Vless TLS: 18 proxies
-- 🇸🇬 SG Vless TLS: 14 proxies
-- 🇸🇬 SG Vless NTLS: 17 proxies
-- 🇺🇸 US Vless TLS: 16 proxies
-- 🇺🇸 US Vless NTLS: 16 proxies
-- 🇯🇵 JP Vless TLS: 6 proxies
-- 🇯🇵 JP Vless NTLS: 10 proxies
+- 🇸🇬 SG Vless TLS: 15 proxies
+- 🇸🇬 SG Vless NTLS: 11 proxies
+- 🇺🇸 US Vless TLS: 17 proxies
+- 🇺🇸 US Vless NTLS: 17 proxies
+- 🇯🇵 JP Vless TLS: 8 proxies
+- 🇯🇵 JP Vless NTLS: 7 proxies
 - 🇰🇷 KR Vless TLS: 4 proxies
 - 🇰🇷 KR Vless NTLS: 5 proxies
 - 🇹🇭 TH Vless TLS: 3 proxies
@@ -31,7 +31,7 @@ Automatically updated list of working proxies.
 - 🇮🇩 ID Trojan NTLS: 9 proxies
 - 🇸🇬 SG Trojan TLS: 10 proxies
 - 🇸🇬 SG Trojan NTLS: 9 proxies
-- 🇺🇸 US Trojan TLS: 9 proxies
+- 🇺🇸 US Trojan TLS: 8 proxies
 - 🇺🇸 US Trojan NTLS: 9 proxies
 
 ## Usage
