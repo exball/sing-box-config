@@ -6,6 +6,8 @@ import sys
 import os
 import time
 import random
+import argparse
+import configparser
 from datetime import datetime
 from collections import defaultdict
 
@@ -73,25 +75,198 @@ def fetch_with_retry(url, max_retries=5, retry_delay=3):
     # Jika semua percobaan gagal
     raise Exception(f"Failed to fetch data after {max_retries} attempts")
 
-def main():
-    # URL API untuk mendapatkan konfigurasi BFR
-    # Kita bisa mendapatkan proxy dari beberapa negara
-    # Daftar kode negara yang tersedia:
-    # ID (Indonesia), SG (Singapore), US (United States), JP (Japan), KR (South Korea),
-    # HK (Hong Kong), TW (Taiwan), GB (United Kingdom), DE (Germany), FR (France),
-    # CA (Canada), AU (Australia), NL (Netherlands), RU (Russia), IN (India),
-    # BR (Brazil), IT (Italy), ES (Spain), MX (Mexico), TR (Turkey)
-    countries = ["ID", "SG", "US", "JP", "KR"]  # Contoh: menambahkan Jepang dan Korea Selatan
-    protocols = ["vless", "trojan"]  # Protokol yang didukung
-    securities = ["tls", "ntls"]  # Jenis keamanan yang didukung
+def parse_config_input(config_str):
+    """
+    Parse konfigurasi input dari string.
+    Format: key=value1, value2, value3
+    """
+    result = {}
+    if not config_str:
+        return result
+        
+    lines = config_str.strip().split('\n')
+    for line in lines:
+        if '=' in line:
+            key, values = line.split('=', 1)
+            key = key.strip()
+            # Split values by comma and strip whitespace
+            values = [v.strip() for v in values.split(',')]
+            result[key] = values
+    return result
+
+def read_config_file(file_path):
+    """
+    Membaca konfigurasi dari file.
+    Format file:
+    #Komentar (opsional)
+    Country_ID= ID, SG
+    Protocol= vless, trojan
+    Security= tls, ntls
+    Output_Name= output.json
+    
+    #Komentar untuk blok berikutnya (opsional)
+    Country_ID= JP
+    ...
+    """
+    if not os.path.exists(file_path):
+        print(f"Error: File konfigurasi '{file_path}' tidak ditemukan.")
+        return []
+    
+    try:
+        with open(file_path, 'r', encoding='utf-8') as f:
+            content = f.read()
+    except Exception as e:
+        print(f"Error: Gagal membaca file konfigurasi '{file_path}': {str(e)}")
+        return []
+    
+    # Pisahkan file menjadi blok-blok konfigurasi
+    # Blok dipisahkan oleh baris kosong atau baris yang dimulai dengan #
+    blocks = []
+    current_block = []
+    
+    lines = content.split('\n')
+    for i, line in enumerate(lines):
+        line_num = i + 1  # Line numbers start at 1
+        line = line.strip()
+        
+        # Jika baris adalah komentar atau kosong dan ada blok sebelumnya, simpan blok
+        if (line.startswith('#') or not line) and current_block:
+            blocks.append('\n'.join(current_block))
+            current_block = []
+            continue
+        
+        # Jika baris adalah komentar atau kosong, lewati
+        if line.startswith('#') or not line:
+            continue
+        
+        # Validasi format baris
+        if '=' not in line:
+            print(f"Warning: Baris {line_num} tidak mengikuti format 'key= value': '{line}'")
+            continue
+            
+        # Tambahkan baris ke blok saat ini
+        current_block.append(line)
+        
+        # Jika ini adalah baris terakhir dan ada blok, simpan blok
+        if i == len(lines) - 1 and current_block:
+            blocks.append('\n'.join(current_block))
+    
+    # Parse setiap blok menjadi dictionary
+    configs = []
+    for block_index, block in enumerate(blocks):
+        config = parse_config_input(block)
+        
+        # Validasi konfigurasi
+        if not config:
+            print(f"Warning: Blok konfigurasi #{block_index+1} kosong atau tidak valid.")
+            continue
+            
+        # Periksa apakah semua parameter yang diperlukan ada
+        missing_params = []
+        for param in ["Country_ID", "Protocol", "Security", "Output_Name"]:
+            if param not in config:
+                missing_params.append(param)
+        
+        if missing_params:
+            print(f"Warning: Blok konfigurasi #{block_index+1} tidak lengkap. Parameter yang hilang: {', '.join(missing_params)}")
+            continue
+            
+        # Periksa apakah semua parameter memiliki nilai
+        empty_params = []
+        for param in ["Country_ID", "Protocol", "Security", "Output_Name"]:
+            if not config.get(param, []):
+                empty_params.append(param)
+                
+        if empty_params:
+            print(f"Warning: Blok konfigurasi #{block_index+1} memiliki parameter kosong: {', '.join(empty_params)}")
+            continue
+            
+        configs.append(config)
+    
+    return configs
+
+def parse_args():
+    """
+    Parse command line arguments.
+    """
+    parser = argparse.ArgumentParser(description='Extract outbound configurations based on specified criteria.')
+    parser.add_argument('--config-file', '-f', type=str, help='Path to configuration file (default: config.ini)')
+    
+    return parser.parse_args()
+
+def process_single_config(config):
+    """
+    Proses satu konfigurasi dan ambil outbound berdasarkan konfigurasi tersebut.
+    """
+    # Pastikan semua parameter yang diperlukan ada dalam konfigurasi
+    missing_params = []
+    for param in ["Country_ID", "Protocol", "Security", "Output_Name"]:
+        if param not in config:
+            missing_params.append(param)
+    
+    if missing_params:
+        print(f"Error: Missing required parameters in configuration: {', '.join(missing_params)}")
+        print("Required parameters: Country_ID, Protocol, Security, Output_Name")
+        return 0
+    
+    # Parse configuration
+    countries = [c.upper() for c in config.get("Country_ID", [])]
+    protocols = [p.lower() for p in config.get("Protocol", [])]
+    securities = [s.lower() for s in config.get("Security", [])]
+    output_name = config.get("Output_Name", [""])[0]
+    
+    # Pastikan semua parameter memiliki nilai
+    empty_params = []
+    if not countries:
+        empty_params.append("Country_ID")
+    if not protocols:
+        empty_params.append("Protocol")
+    if not securities:
+        empty_params.append("Security")
+    if not output_name:
+        empty_params.append("Output_Name")
+    
+    if empty_params:
+        print(f"Error: Empty values for required parameters: {', '.join(empty_params)}")
+        print("Please provide values for all required parameters.")
+        return 0
+        
+    # Validasi nilai parameter
+    invalid_countries = [c for c in countries if c not in ["ID", "SG", "US", "JP", "KR", "HK", "TW", "GB", "DE", "FR", "CA", "AU", "NL", "RU", "IN", "BR", "IT", "ES", "MX", "TR"]]
+    invalid_protocols = [p for p in protocols if p not in ["vless", "trojan"]]
+    invalid_securities = [s for s in securities if s not in ["tls", "ntls"]]
+    
+    if invalid_countries:
+        print(f"Warning: Invalid country codes: {', '.join(invalid_countries)}")
+        print("These country codes will be ignored.")
+        countries = [c for c in countries if c not in invalid_countries]
+        
+    if invalid_protocols:
+        print(f"Warning: Invalid protocols: {', '.join(invalid_protocols)}")
+        print("These protocols will be ignored.")
+        protocols = [p for p in protocols if p not in invalid_protocols]
+        
+    if invalid_securities:
+        print(f"Warning: Invalid securities: {', '.join(invalid_securities)}")
+        print("These securities will be ignored.")
+        securities = [s for s in securities if s not in invalid_securities]
+        
+    if not countries or not protocols or not securities:
+        print("Error: No valid values left for one or more required parameters after validation.")
+        print("Please provide valid values for all required parameters.")
+        return 0
+    
+    print(f"\nMenggunakan konfigurasi:")
+    print(f"- Negara: {', '.join(countries)}")
+    print(f"- Protokol: {', '.join(protocols)}")
+    print(f"- Security: {', '.join(securities)}")
+    print(f"- Output file: {output_name}")
     
     # Dictionary untuk menyimpan outbound berdasarkan negara, protokol, dan keamanan
     outbounds_by_category = defaultdict(list)
     all_outbounds = []
     
-    # Gunakan direktori utama untuk menyimpan file output
-    proxies_dir = ""  # Direktori utama (root)
-    
+    # Ambil outbound untuk setiap kombinasi negara, protokol, dan keamanan
     for country in countries:
         for protocol in protocols:
             for security in securities:
@@ -154,12 +329,6 @@ def main():
                                     clean_tag = f"{number} {flag_emoji} {' '.join(provider_parts)}"
                                     outbound["tag"] = clean_tag
                             
-                            # Metadata negara hanya untuk proses internal, tidak disimpan ke output
-                            # outbound["country_code"] = country  # Dihapus karena menyebabkan sing-box error
-                            
-                            # Tambahkan field network dengan nilai "tcp"
-                            # Kita akan menambahkannya ke outbound_copy dengan urutan yang benar
-                            
                             # Buat salinan outbound tanpa field country_code
                             outbound_copy = {}
                             
@@ -201,47 +370,20 @@ def main():
                 except Exception as e:
                     print(f"Error processing {country} {protocol} {security}: {e}")
     
-    # Timestamp untuk semua file
-    timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S UTC")
-    
-    # Simpan file untuk setiap kategori (negara, protokol, keamanan)
-    for category_key, outbounds in outbounds_by_category.items():
-        if outbounds:
-            # Parse kategori
-            country, protocol, security = category_key.split("_")
-            
-            # Buat hasil untuk kategori ini - hanya berisi outbounds saja
-            category_result = {
-                "outbounds": outbounds
-            }
-            
-            # Format nama file: "ID Vless Tls.json", "SG Trojan Ntls.json", dll.
-            # Simpan di direktori utama
-            category_file = f"{country} {protocol.capitalize()} {security.upper()}.json"
-            with open(category_file, "w", encoding="utf-8") as f:
-                json.dump(category_result, f, indent=4, ensure_ascii=False)
-            
-            print(f"Successfully saved {len(outbounds)} {protocol} {security} proxies from {country} to {category_file}")
-    
-    # Simpan juga semua proxy ke file gabungan
+    # Simpan semua outbound ke file output yang ditentukan
     all_result = {
         "outbounds": all_outbounds
     }
     
-    # Tidak lagi membuat file outbound-all.json dan outbound.json
-    print(f"Total proxies collected: {len(all_outbounds)}")
+    # Simpan ke file output yang ditentukan
+    with open(output_name, "w", encoding="utf-8") as f:
+        json.dump(all_result, f, indent=4, ensure_ascii=False)
     
-    # Buat README.md dengan informasi tentang proxy
-    readme_content = f"""# Proxy List
-
-Automatically updated list of working proxies.
-
-## Stats
-- Last Updated: {timestamp}
-- Total Proxies: {len(all_outbounds)}
-
-## Proxy Breakdown
-"""
+    print(f"Total proxies collected: {len(all_outbounds)}")
+    print(f"Successfully saved all proxies to {output_name}")
+    
+    # Buat summary untuk ditampilkan ke pengguna
+    print("\nSummary:")
     
     # Hitung jumlah proxy per kategori (negara, protokol, keamanan)
     category_counts = {}
@@ -249,64 +391,65 @@ Automatically updated list of working proxies.
         if outbounds:
             category_counts[category_key] = len(outbounds)
     
-    # Hitung jumlah proxy per negara (untuk backward compatibility)
-    country_counts = {}
-    for outbound in all_outbounds:
-        country = outbound.get("country_code", "Unknown")
-        if country in country_counts:
-            country_counts[country] += 1
-        else:
-            country_counts[country] = 1
-    
-    # Tampilkan jumlah proxy per negara
-    for country, count in country_counts.items():
-        flag_emoji = get_flag_emoji(country)
-        country_name = get_country_name(country)
-        readme_content += f"- {flag_emoji} {country} ({country_name}): {count} proxies\n"
-    
-    readme_content += f"""
-## Detailed Breakdown
-"""
-
     # Tampilkan jumlah proxy per kategori
     for category_key, count in category_counts.items():
         country, protocol, security = category_key.split("_")
         flag_emoji = get_flag_emoji(country)
         country_name = get_country_name(country)
-        readme_content += f"- {flag_emoji} {country} {protocol.capitalize()} {security.upper()}: {count} proxies\n"
+        print(f"- {flag_emoji} {country} {protocol.capitalize()} {security.upper()}: {count} proxies")
     
-    readme_content += f"""
-## Usage
+    return len(all_outbounds)
 
-This repository is automatically updated every 6 hours with fresh proxies.
-
-### Available Files
-
-"""
-
-    # Tambahkan informasi tentang file per kategori
-    for category_key in outbounds_by_category.keys():
-        if outbounds_by_category[category_key]:
-            country, protocol, security = category_key.split("_")
-            flag_emoji = get_flag_emoji(country)
-            country_name = get_country_name(country)
-            file_name = f"{country} {protocol.capitalize()} {security.upper()}.json"
-            readme_content += f"- `{file_name}` - {protocol.capitalize()} {security.upper()} proxies from {flag_emoji} {country_name}\n"
-
-    readme_content += """
-### How to use
-
-1. Download the appropriate JSON file for your needs
-2. Import it into your proxy client that supports the Outbound format
-3. Enjoy!
-
-"""
+def main():
+    # URL API untuk mendapatkan konfigurasi BFR
+    # Kita bisa mendapatkan proxy dari beberapa negara
+    # Daftar kode negara yang tersedia:
+    # ID (Indonesia), SG (Singapore), US (United States), JP (Japan), KR (South Korea),
+    # HK (Hong Kong), TW (Taiwan), GB (United Kingdom), DE (Germany), FR (France),
+    # CA (Canada), AU (Australia), NL (Netherlands), RU (Russia), IN (India),
+    # BR (Brazil), IT (Italy), ES (Spain), MX (Mexico), TR (Turkey)
     
-    # Simpan README.md
-    with open("README.md", "w", encoding="utf-8") as f:
-        f.write(readme_content)
+    # Parse command line arguments
+    args = parse_args()
     
-    print("README.md updated with proxy information")
+    # Tentukan file konfigurasi yang akan digunakan
+    config_file = args.config_file if args.config_file else "config.ini"
+    
+    # Baca konfigurasi dari file
+    configs = read_config_file(config_file)
+    
+    if not configs:
+        print(f"Error: No valid configurations found in file '{config_file}'.")
+        print("Please create a valid config.ini file with the following format:")
+        print("#ID vless tls")
+        print("Country_ID= ID")
+        print("Protocol= vless")
+        print("Security= tls")
+        print("Output_Name= ID vless tls.json")
+        print("\nAvailable country codes:")
+        print("ID (Indonesia), SG (Singapore), US (United States), JP (Japan), KR (South Korea),")
+        print("HK (Hong Kong), TW (Taiwan), GB (United Kingdom), DE (Germany), FR (France),")
+        print("CA (Canada), AU (Australia), NL (Netherlands), RU (Russia), IN (India),")
+        print("BR (Brazil), IT (Italy), ES (Spain), MX (Mexico), TR (Turkey)")
+        print("\nAvailable protocols:")
+        print("vless, trojan")
+        print("\nAvailable securities:")
+        print("tls, ntls")
+        print("\nUsage:")
+        print("python3 extract_outbound.py                  # Use default config.ini file")
+        print("python3 extract_outbound.py -f custom.ini    # Use custom.ini file")
+        return
+    
+    print(f"Found {len(configs)} configuration(s) in file '{config_file}'.")
+    
+    # Process each configuration
+    total_proxies = 0
+    for i, config in enumerate(configs):
+        print(f"\nProcessing configuration {i+1}/{len(configs)}...")
+        proxies_count = process_single_config(config)
+        total_proxies += proxies_count
+    
+    print(f"\nTotal proxies collected from all configurations: {total_proxies}")
 
 if __name__ == "__main__":
     main()
