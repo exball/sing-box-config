@@ -3,7 +3,7 @@
         {
             "server": "quiz.int.vidio.com",
             "server_port": 80,
-            "tag": "1 🇮🇩 CV. Rumahweb Indonesia WS NTLS [proxy]",
+            "tag": "1 🇮🇩 Linode WS NTLS [proxy]",
             "network": "tcp",
             "tls": {
                 "insecure": true
@@ -12,16 +12,34 @@
                 "headers": {
                     "Host": "proxy.exbal.my.id"
                 },
-                "path": "/203.194.112.119-2053",
+                "path": "/172.232.239.134-443",
                 "type": "ws"
             },
             "type": "vless",
-            "uuid": "af6e754e-c4a1-413b-bf60-70aeaf194bb3"
+            "uuid": "5bd174a2-9368-46f4-8f82-b48a10a1a759"
         },
         {
             "server": "quiz.int.vidio.com",
             "server_port": 80,
-            "tag": "2 🇮🇩 PT Pusat Media Indonesia WS NTLS [proxy]",
+            "tag": "2 🇮🇩 Linode WS NTLS [proxy]",
+            "network": "tcp",
+            "tls": {
+                "insecure": true
+            },
+            "transport": {
+                "headers": {
+                    "Host": "proxy.exbal.my.id"
+                },
+                "path": "/172.232.239.151-587",
+                "type": "ws"
+            },
+            "type": "vless",
+            "uuid": "5bd174a2-9368-46f4-8f82-b48a10a1a759"
+        },
+        {
+            "server": "quiz.int.vidio.com",
+            "server_port": 80,
+            "tag": "3 🇮🇩 PT Pusat Media Indonesia WS NTLS [proxy]",
             "network": "tcp",
             "tls": {
                 "insecure": true
@@ -34,25 +52,7 @@
                 "type": "ws"
             },
             "type": "vless",
-            "uuid": "af6e754e-c4a1-413b-bf60-70aeaf194bb3"
-        },
-        {
-            "server": "quiz.int.vidio.com",
-            "server_port": 80,
-            "tag": "3 🇮🇩 CV. Rumahweb Indonesia WS NTLS [proxy]",
-            "network": "tcp",
-            "tls": {
-                "insecure": true
-            },
-            "transport": {
-                "headers": {
-                    "Host": "proxy.exbal.my.id"
-                },
-                "path": "/203.194.112.119-8443",
-                "type": "ws"
-            },
-            "type": "vless",
-            "uuid": "af6e754e-c4a1-413b-bf60-70aeaf194bb3"
+            "uuid": "5bd174a2-9368-46f4-8f82-b48a10a1a759"
         },
         {
             "server": "quiz.int.vidio.com",
@@ -66,11 +66,11 @@
                 "headers": {
                     "Host": "proxy.exbal.my.id"
                 },
-                "path": "/43.218.77.16-1443",
+                "path": "/43.218.77.16-443",
                 "type": "ws"
             },
             "type": "vless",
-            "uuid": "af6e754e-c4a1-413b-bf60-70aeaf194bb3"
+            "uuid": "5bd174a2-9368-46f4-8f82-b48a10a1a759"
         },
         {
             "server": "quiz.int.vidio.com",
@@ -84,70 +84,16 @@
                 "headers": {
                     "Host": "proxy.exbal.my.id"
                 },
-                "path": "/43.218.77.16-443",
+                "path": "/43.218.77.16-1443",
                 "type": "ws"
             },
             "type": "vless",
-            "uuid": "af6e754e-c4a1-413b-bf60-70aeaf194bb3"
+            "uuid": "5bd174a2-9368-46f4-8f82-b48a10a1a759"
         },
         {
             "server": "quiz.int.vidio.com",
             "server_port": 80,
-            "tag": "6 🇮🇩 PT Telekomunikasi Indonesia WS NTLS [proxy]",
-            "network": "tcp",
-            "tls": {
-                "insecure": true
-            },
-            "transport": {
-                "headers": {
-                    "Host": "proxy.exbal.my.id"
-                },
-                "path": "/36.95.152.58-12137",
-                "type": "ws"
-            },
-            "type": "vless",
-            "uuid": "af6e754e-c4a1-413b-bf60-70aeaf194bb3"
-        },
-        {
-            "server": "quiz.int.vidio.com",
-            "server_port": 80,
-            "tag": "7 🇮🇩 Linode WS NTLS [proxy]",
-            "network": "tcp",
-            "tls": {
-                "insecure": true
-            },
-            "transport": {
-                "headers": {
-                    "Host": "proxy.exbal.my.id"
-                },
-                "path": "/172.232.239.151-587",
-                "type": "ws"
-            },
-            "type": "vless",
-            "uuid": "af6e754e-c4a1-413b-bf60-70aeaf194bb3"
-        },
-        {
-            "server": "quiz.int.vidio.com",
-            "server_port": 80,
-            "tag": "8 🇮🇩 Linode WS NTLS [proxy]",
-            "network": "tcp",
-            "tls": {
-                "insecure": true
-            },
-            "transport": {
-                "headers": {
-                    "Host": "proxy.exbal.my.id"
-                },
-                "path": "/172.232.239.134-443",
-                "type": "ws"
-            },
-            "type": "vless",
-            "uuid": "af6e754e-c4a1-413b-bf60-70aeaf194bb3"
-        },
-        {
-            "server": "quiz.int.vidio.com",
-            "server_port": 80,
-            "tag": "9 🇮🇩 Linode WS NTLS [proxy]",
+            "tag": "6 🇮🇩 Linode WS NTLS [proxy]",
             "network": "tcp",
             "tls": {
                 "insecure": true
@@ -160,7 +106,25 @@
                 "type": "ws"
             },
             "type": "vless",
-            "uuid": "af6e754e-c4a1-413b-bf60-70aeaf194bb3"
+            "uuid": "5bd174a2-9368-46f4-8f82-b48a10a1a759"
+        },
+        {
+            "server": "quiz.int.vidio.com",
+            "server_port": 80,
+            "tag": "7 🇮🇩 PT Telekomunikasi Indonesia WS NTLS [proxy]",
+            "network": "tcp",
+            "tls": {
+                "insecure": true
+            },
+            "transport": {
+                "headers": {
+                    "Host": "proxy.exbal.my.id"
+                },
+                "path": "/36.95.152.58-12137",
+                "type": "ws"
+            },
+            "type": "vless",
+            "uuid": "5bd174a2-9368-46f4-8f82-b48a10a1a759"
         }
     ]
 }
