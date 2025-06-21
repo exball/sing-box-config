@@ -35,6 +35,13 @@ jobs:
           echo "Directory contents:"
           ls -la
           
+      - name: Copy config.ini
+        run: |
+          # Copy config.ini from workflows directory to working directory
+          cp .github/workflows/config.ini .
+          echo "Config file contents:"
+          cat config.ini
+          
       - name: Run proxy extraction script
         run: |
           ls -la
@@ -42,9 +49,19 @@ jobs:
           python extract_outbound.py
           
           echo "Checking output files:"
-          ls -la "ID Vless TLS.json" || echo "ID Vless TLS.json not found"
-          ls -la "SG Trojan TLS.json" || echo "SG Trojan TLS.json not found"
-          ls -la "US Vless NTLS.json" || echo "US Vless NTLS.json not found"
+          # Dynamically check all JSON files in the directory
+          echo "JSON files found:"
+          find . -maxdepth 1 -name "*.json" | sort
+          
+          # Count total number of JSON files
+          JSON_COUNT=$(find . -maxdepth 1 -name "*.json" | wc -l)
+          echo "Total JSON files: $JSON_COUNT"
+          
+          # Check if any JSON files were created
+          if [ "$JSON_COUNT" -eq 0 ]; then
+            echo "WARNING: No JSON files were created!"
+            exit 1
+          fi
       
       - name: Upload to Cloudflare R2
         env:
@@ -65,8 +82,15 @@ jobs:
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
           commit_message: "Update proxy list [automated]"
-          file_pattern: "*.json README.md"
+          file_pattern: "*.json README.md config.ini"
           commit_user_name: "GitHub Actions Bot"
           commit_user_email: "actions@github.com"
           commit_author: "GitHub Actions Bot <actions@github.com>"
           push_options: "--force"  # Gunakan --force jika diperlukan
+          
+      - name: Summary
+        run: |
+          echo "Workflow completed successfully!"
+          echo "JSON files generated:"
+          find . -maxdepth 1 -name "*.json" | sort
+          echo "Total JSON files: $(find . -maxdepth 1 -name "*.json" | wc -l)"
