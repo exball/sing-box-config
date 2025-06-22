@@ -47,7 +47,6 @@ def get_country_name(country_code):
         "IN": "India",
         "ID": "Indonesia",
         "IE": "Ireland",
-        "IL": "Israel",
         "IT": "Italy",
         "JP": "Japan",
         "KZ": "Kazakhstan",
@@ -267,7 +266,7 @@ def process_single_config(config):
         
     # Validasi nilai parameter
     valid_countries = ["AE", "AM", "AR", "AT", "AU", "BE", "BG", "BR", "CA", "CH", "CN", "CY", "CZ", "DE", "DK", 
-                      "EE", "ES", "FI", "FR", "GB", "HK", "HU", "ID", "IE", "IL", "IN", "IT", "JP", "KR", "KZ", 
+                      "EE", "ES", "FI", "FR", "GB", "HK", "HU", "ID", "IE", "IN", "IT", "JP", "KR", "KZ", 
                       "LT", "LU", "LV", "MD", "MU", "MX", "MY", "NL", "PH", "PL", "PT", "RO", "RS", "RU", "SE", 
                       "SG", "SK", "TF", "TH", "TR", "TW", "UA", "US", "VN"]
     invalid_countries = [c for c in countries if c not in valid_countries]
@@ -441,12 +440,27 @@ def process_single_config(config):
 def main():
     # URL API untuk mendapatkan konfigurasi BFR
     # Kita bisa mendapatkan proxy dari beberapa negara
-    # Daftar kode negara yang tersedia:
-    # ID (Indonesia), SG (Singapore), US (United States), JP (Japan), KR (South Korea),
-    # HK (Hong Kong), TW (Taiwan), GB (United Kingdom), DE (Germany), FR (France),
-    # CA (Canada), AU (Australia), NL (Netherlands), RU (Russia), IN (India),
-    # BR (Brazil), IT (Italy), ES (Spain), MX (Mexico), TR (Turkey)
+    # Daftar kode negara yang tersedia (diurutkan berdasarkan nama negara):
+        # AR (Argentina)       AM (Armenia)         AU (Australia)   
+        # AT (Austria)         BE (Belgium)         BR (Brazil)         
+        # BG (Bulgaria)        CA (Canada)          CN (China)       
+        # CY (Cyprus)          CZ (Czech Republic)  DK (Denmark)       
+        # EE (Estonia)         FI (Finland)         FR (France)
+        # DE (Germany)         HK (Hong Kong)       HU (Hungary)      
+        # IN (India)           ID (Indonesia)       IE (Ireland)        
+        # IT (Italy)           JP (Japan)           KZ (Kazakhstan)  
+        # KR (South Korea)     LV (Latvia)          LT (Lithuania)     
+        # LU (Luxembourg)      MY (Malaysia)        MU (Mauritius)
+        # MX (Mexico)          MD (Moldova)         NL (Netherlands) 
+        # PH (Philippines)     PL (Poland)          PT (Portugal)       
+        # RO (Romania)         RU (Russia)          RS (Serbia)      
+        # SG (Singapore)       SK (Slovakia)        ES (Spain)         
+        # SE (Sweden)          CH (Switzerland)     TW (Taiwan)
+        # TH (Thailand)        TR (Turkey)          UA (Ukraine)      
+        # AE (United Arab E)   GB (United Kingdom)  US (United States)  
+        # VN (Vietnam)         TF (French Southern Territories)
     
+
     # Parse command line arguments
     args = parse_args()
     
