@@ -26,26 +26,60 @@ def get_flag_emoji(country_code):
 # Fungsi untuk mendapatkan nama negara dari kode negara
 def get_country_name(country_code):
     country_names = {
-        "ID": "Indonesia",
-        "SG": "Singapore",
-        "US": "United States",
-        "JP": "Japan",
-        "KR": "South Korea",
-        "HK": "Hong Kong",
-        "TW": "Taiwan",
-        "GB": "United Kingdom",
-        "DE": "Germany",
-        "FR": "France",
-        "CA": "Canada",
+        "AR": "Argentina",
+        "AM": "Armenia",
         "AU": "Australia",
-        "NL": "Netherlands",
-        "RU": "Russia",
-        "IN": "India",
+        "AT": "Austria",
+        "BE": "Belgium",
         "BR": "Brazil",
+        "BG": "Bulgaria",
+        "CA": "Canada",
+        "CN": "China",
+        "CY": "Cyprus",
+        "CZ": "Czech Republic",
+        "DK": "Denmark",
+        "EE": "Estonia",
+        "FI": "Finland",
+        "FR": "France",
+        "DE": "Germany",
+        "HK": "Hong Kong",
+        "HU": "Hungary",
+        "IN": "India",
+        "ID": "Indonesia",
+        "IE": "Ireland",
+        "IL": "Israel",
         "IT": "Italy",
-        "ES": "Spain",
+        "JP": "Japan",
+        "KZ": "Kazakhstan",
+        "KR": "South Korea",
+        "LV": "Latvia",
+        "LT": "Lithuania",
+        "LU": "Luxembourg",
+        "MY": "Malaysia",
+        "MU": "Mauritius",
         "MX": "Mexico",
-        "TR": "Turkey"
+        "MD": "Moldova",
+        "NL": "Netherlands",
+        "PH": "Philippines",
+        "PL": "Poland",
+        "PT": "Portugal",
+        "RO": "Romania",
+        "RU": "Russia",
+        "RS": "Serbia",
+        "SG": "Singapore",
+        "SK": "Slovakia",
+        "ES": "Spain",
+        "SE": "Sweden",
+        "CH": "Switzerland",
+        "TW": "Taiwan",
+        "TH": "Thailand",
+        "TR": "Turkey",
+        "UA": "Ukraine",
+        "AE": "United Arab Emirates",
+        "GB": "United Kingdom",
+        "US": "United States",
+        "VN": "Vietnam",
+        "TF": "French Southern Territories"
     }
     return country_names.get(country_code, country_code)
 
@@ -232,7 +266,11 @@ def process_single_config(config):
         return 0
         
     # Validasi nilai parameter
-    invalid_countries = [c for c in countries if c not in ["ID", "SG", "US", "JP", "KR", "HK", "TW", "GB", "DE", "FR", "CA", "AU", "NL", "RU", "IN", "BR", "IT", "ES", "MX", "TR"]]
+    valid_countries = ["AE", "AM", "AR", "AT", "AU", "BE", "BG", "BR", "CA", "CH", "CN", "CY", "CZ", "DE", "DK", 
+                      "EE", "ES", "FI", "FR", "GB", "HK", "HU", "ID", "IE", "IL", "IN", "IT", "JP", "KR", "KZ", 
+                      "LT", "LU", "LV", "MD", "MU", "MX", "MY", "NL", "PH", "PL", "PT", "RO", "RS", "RU", "SE", 
+                      "SG", "SK", "TF", "TH", "TR", "TW", "UA", "US", "VN"]
+    invalid_countries = [c for c in countries if c not in valid_countries]
     invalid_protocols = [p for p in protocols if p not in ["vless", "trojan"]]
     invalid_securities = [s for s in securities if s not in ["tls", "ntls"]]
     
