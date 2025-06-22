@@ -1,0 +1,84 @@
+{
+    "outbounds": [
+        {
+            "server": "quiz.int.vidio.com",
+            "server_port": 443,
+            "tag": "1 🇮🇩 Linode WS TLS [proxy]",
+            "network": "tcp",
+            "tls": {
+                "enabled": true,
+                "insecure": true,
+                "server_name": "proxy.exbal.my.id"
+            },
+            "transport": {
+                "headers": {
+                    "Host": "proxy.exbal.my.id"
+                },
+                "path": "/172.232.249.53-443",
+                "type": "ws"
+            },
+            "type": "vless",
+            "uuid": "524dfb01-b4b7-4f64-8c4a-3c60225e0a8c"
+        },
+        {
+            "server": "quiz.int.vidio.com",
+            "server_port": 443,
+            "tag": "2 🇮🇩 Amazon.com WS TLS [proxy]",
+            "network": "tcp",
+            "tls": {
+                "enabled": true,
+                "insecure": true,
+                "server_name": "proxy.exbal.my.id"
+            },
+            "transport": {
+                "headers": {
+                    "Host": "proxy.exbal.my.id"
+                },
+                "path": "/43.218.77.16-1443",
+                "type": "ws"
+            },
+            "type": "vless",
+            "uuid": "524dfb01-b4b7-4f64-8c4a-3c60225e0a8c"
+        },
+        {
+            "server": "quiz.int.vidio.com",
+            "server_port": 443,
+            "tag": "3 🇮🇩 Amazon.com WS TLS [proxy]",
+            "network": "tcp",
+            "tls": {
+                "enabled": true,
+                "insecure": true,
+                "server_name": "proxy.exbal.my.id"
+            },
+            "transport": {
+                "headers": {
+                    "Host": "proxy.exbal.my.id"
+                },
+                "path": "/43.218.77.16-443",
+                "type": "ws"
+            },
+            "type": "vless",
+            "uuid": "524dfb01-b4b7-4f64-8c4a-3c60225e0a8c"
+        },
+        {
+            "server": "quiz.int.vidio.com",
+            "server_port": 443,
+            "tag": "4 🇮🇩 Linode WS TLS [proxy]",
+            "network": "tcp",
+            "tls": {
+                "enabled": true,
+                "insecure": true,
+                "server_name": "proxy.exbal.my.id"
+            },
+            "transport": {
+                "headers": {
+                    "Host": "proxy.exbal.my.id"
+                },
+                "path": "/172.232.239.151-587",
+                "type": "ws"
+            },
+            "type": "vless",
+            "uuid": "524dfb01-b4b7-4f64-8c4a-3c60225e0a8c"
+        }
+    ]
+}
