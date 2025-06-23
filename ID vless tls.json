@@ -3,7 +3,7 @@
         {
             "server": "quiz.int.vidio.com",
             "server_port": 443,
-            "tag": "1 🇮🇩 Amazon.com WS TLS [proxy]",
+            "tag": "1 🇮🇩 Linode WS TLS [proxy]",
             "network": "tcp",
             "tls": {
                 "enabled": true,
@@ -14,16 +14,36 @@
                 "headers": {
                     "Host": "proxy.exbal.my.id"
                 },
-                "path": "/43.218.77.16-443",
+                "path": "/172.232.249.53-443",
                 "type": "ws"
             },
             "type": "vless",
-            "uuid": "f850d61a-96cc-4308-8756-f23d9dbcf51e"
+            "uuid": "547b7bcd-b2a4-435d-a42b-96ac55927679"
         },
         {
             "server": "quiz.int.vidio.com",
             "server_port": 443,
-            "tag": "2 🇮🇩 CV. Rumahweb Indonesia WS TLS [proxy]",
+            "tag": "2 🇮🇩 PT Telekomunikasi Indonesia WS TLS [proxy]",
+            "network": "tcp",
+            "tls": {
+                "enabled": true,
+                "insecure": true,
+                "server_name": "proxy.exbal.my.id"
+            },
+            "transport": {
+                "headers": {
+                    "Host": "proxy.exbal.my.id"
+                },
+                "path": "/36.95.152.58-12137",
+                "type": "ws"
+            },
+            "type": "vless",
+            "uuid": "547b7bcd-b2a4-435d-a42b-96ac55927679"
+        },
+        {
+            "server": "quiz.int.vidio.com",
+            "server_port": 443,
+            "tag": "3 🇮🇩 CV. Rumahweb Indonesia WS TLS [proxy]",
             "network": "tcp",
             "tls": {
                 "enabled": true,
@@ -38,12 +58,12 @@
                 "type": "ws"
             },
             "type": "vless",
-            "uuid": "f850d61a-96cc-4308-8756-f23d9dbcf51e"
+            "uuid": "547b7bcd-b2a4-435d-a42b-96ac55927679"
         },
         {
             "server": "quiz.int.vidio.com",
             "server_port": 443,
-            "tag": "3 🇮🇩 Amazon.com WS TLS [proxy]",
+            "tag": "4 🇮🇩 PT MITRA VISIONER PRATAMA WS TLS [proxy]",
             "network": "tcp",
             "tls": {
                 "enabled": true,
@@ -54,31 +74,11 @@
                 "headers": {
                     "Host": "proxy.exbal.my.id"
                 },
-                "path": "/43.218.77.16-1443",
+                "path": "/172.252.8.168-443",
                 "type": "ws"
             },
             "type": "vless",
-            "uuid": "f850d61a-96cc-4308-8756-f23d9dbcf51e"
-        },
-        {
-            "server": "quiz.int.vidio.com",
-            "server_port": 443,
-            "tag": "4 🇮🇩 Linode WS TLS [proxy]",
-            "network": "tcp",
-            "tls": {
-                "enabled": true,
-                "insecure": true,
-                "server_name": "proxy.exbal.my.id"
-            },
-            "transport": {
-                "headers": {
-                    "Host": "proxy.exbal.my.id"
-                },
-                "path": "/172.232.239.151-587",
-                "type": "ws"
-            },
-            "type": "vless",
-            "uuid": "f850d61a-96cc-4308-8756-f23d9dbcf51e"
+            "uuid": "547b7bcd-b2a4-435d-a42b-96ac55927679"
         },
         {
             "server": "quiz.int.vidio.com",
@@ -94,11 +94,11 @@
                 "headers": {
                     "Host": "proxy.exbal.my.id"
                 },
-                "path": "/172.232.249.53-443",
+                "path": "/172.232.239.151-587",
                 "type": "ws"
             },
             "type": "vless",
-            "uuid": "f850d61a-96cc-4308-8756-f23d9dbcf51e"
+            "uuid": "547b7bcd-b2a4-435d-a42b-96ac55927679"
         },
         {
             "server": "quiz.int.vidio.com",
@@ -118,7 +118,47 @@
                 "type": "ws"
             },
             "type": "vless",
-            "uuid": "f850d61a-96cc-4308-8756-f23d9dbcf51e"
+            "uuid": "547b7bcd-b2a4-435d-a42b-96ac55927679"
+        },
+        {
+            "server": "quiz.int.vidio.com",
+            "server_port": 443,
+            "tag": "7 🇮🇩 PT Pusat Media Indonesia WS TLS [proxy]",
+            "network": "tcp",
+            "tls": {
+                "enabled": true,
+                "insecure": true,
+                "server_name": "proxy.exbal.my.id"
+            },
+            "transport": {
+                "headers": {
+                    "Host": "proxy.exbal.my.id"
+                },
+                "path": "/103.6.207.108-8080",
+                "type": "ws"
+            },
+            "type": "vless",
+            "uuid": "547b7bcd-b2a4-435d-a42b-96ac55927679"
+        },
+        {
+            "server": "quiz.int.vidio.com",
+            "server_port": 443,
+            "tag": "8 🇮🇩 PT MITRA VISIONER PRATAMA WS TLS [proxy]",
+            "network": "tcp",
+            "tls": {
+                "enabled": true,
+                "insecure": true,
+                "server_name": "proxy.exbal.my.id"
+            },
+            "transport": {
+                "headers": {
+                    "Host": "proxy.exbal.my.id"
+                },
+                "path": "/206.84.101.84-443",
+                "type": "ws"
+            },
+            "type": "vless",
+            "uuid": "547b7bcd-b2a4-435d-a42b-96ac55927679"
         }
     ]
 }
