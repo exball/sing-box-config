@@ -3,9 +3,29 @@
         {
             "server": "quiz.int.vidio.com",
             "server_port": 443,
-            "tag": "1 🇮🇩 CV. Rumahweb Indonesia WS TLS [proxy]",
+            "tag": "1 🇮🇩 Linode WS TLS [proxy]",
             "network": "tcp",
-            "password": "4fc70be1-95c4-4e35-a99a-9b3fa91b14e1",
+            "password": "cbc4482d-2169-4d1f-8a49-bca0e2487a84",
+            "tls": {
+                "enabled": true,
+                "insecure": true,
+                "server_name": "proxy.exbal.my.id"
+            },
+            "transport": {
+                "headers": {
+                    "Host": "proxy.exbal.my.id"
+                },
+                "path": "/172.232.249.53-443",
+                "type": "ws"
+            },
+            "type": "trojan"
+        },
+        {
+            "server": "quiz.int.vidio.com",
+            "server_port": 443,
+            "tag": "2 🇮🇩 CV. Rumahweb Indonesia WS TLS [proxy]",
+            "network": "tcp",
+            "password": "cbc4482d-2169-4d1f-8a49-bca0e2487a84",
             "tls": {
                 "enabled": true,
                 "insecure": true,
@@ -23,29 +43,9 @@
         {
             "server": "quiz.int.vidio.com",
             "server_port": 443,
-            "tag": "2 🇮🇩 Amazon.com WS TLS [proxy]",
-            "network": "tcp",
-            "password": "4fc70be1-95c4-4e35-a99a-9b3fa91b14e1",
-            "tls": {
-                "enabled": true,
-                "insecure": true,
-                "server_name": "proxy.exbal.my.id"
-            },
-            "transport": {
-                "headers": {
-                    "Host": "proxy.exbal.my.id"
-                },
-                "path": "/43.218.77.16-443",
-                "type": "ws"
-            },
-            "type": "trojan"
-        },
-        {
-            "server": "quiz.int.vidio.com",
-            "server_port": 443,
             "tag": "3 🇮🇩 PT Pusat Media Indonesia WS TLS [proxy]",
             "network": "tcp",
-            "password": "4fc70be1-95c4-4e35-a99a-9b3fa91b14e1",
+            "password": "cbc4482d-2169-4d1f-8a49-bca0e2487a84",
             "tls": {
                 "enabled": true,
                 "insecure": true,
@@ -65,67 +65,7 @@
             "server_port": 443,
             "tag": "4 🇮🇩 Linode WS TLS [proxy]",
             "network": "tcp",
-            "password": "4fc70be1-95c4-4e35-a99a-9b3fa91b14e1",
-            "tls": {
-                "enabled": true,
-                "insecure": true,
-                "server_name": "proxy.exbal.my.id"
-            },
-            "transport": {
-                "headers": {
-                    "Host": "proxy.exbal.my.id"
-                },
-                "path": "/172.232.249.53-443",
-                "type": "ws"
-            },
-            "type": "trojan"
-        },
-        {
-            "server": "quiz.int.vidio.com",
-            "server_port": 443,
-            "tag": "5 🇮🇩 Amazon.com WS TLS [proxy]",
-            "network": "tcp",
-            "password": "4fc70be1-95c4-4e35-a99a-9b3fa91b14e1",
-            "tls": {
-                "enabled": true,
-                "insecure": true,
-                "server_name": "proxy.exbal.my.id"
-            },
-            "transport": {
-                "headers": {
-                    "Host": "proxy.exbal.my.id"
-                },
-                "path": "/43.218.77.16-1443",
-                "type": "ws"
-            },
-            "type": "trojan"
-        },
-        {
-            "server": "quiz.int.vidio.com",
-            "server_port": 443,
-            "tag": "6 🇮🇩 CV. Rumahweb Indonesia WS TLS [proxy]",
-            "network": "tcp",
-            "password": "4fc70be1-95c4-4e35-a99a-9b3fa91b14e1",
-            "tls": {
-                "enabled": true,
-                "insecure": true,
-                "server_name": "proxy.exbal.my.id"
-            },
-            "transport": {
-                "headers": {
-                    "Host": "proxy.exbal.my.id"
-                },
-                "path": "/203.194.112.119-2053",
-                "type": "ws"
-            },
-            "type": "trojan"
-        },
-        {
-            "server": "quiz.int.vidio.com",
-            "server_port": 443,
-            "tag": "7 🇮🇩 Linode WS TLS [proxy]",
-            "network": "tcp",
-            "password": "4fc70be1-95c4-4e35-a99a-9b3fa91b14e1",
+            "password": "cbc4482d-2169-4d1f-8a49-bca0e2487a84",
             "tls": {
                 "enabled": true,
                 "insecure": true,
@@ -143,9 +83,49 @@
         {
             "server": "quiz.int.vidio.com",
             "server_port": 443,
-            "tag": "8 🇮🇩 PT Telekomunikasi Indonesia WS TLS [proxy]",
+            "tag": "5 🇮🇩 Amazon.com WS TLS [proxy]",
             "network": "tcp",
-            "password": "4fc70be1-95c4-4e35-a99a-9b3fa91b14e1",
+            "password": "cbc4482d-2169-4d1f-8a49-bca0e2487a84",
+            "tls": {
+                "enabled": true,
+                "insecure": true,
+                "server_name": "proxy.exbal.my.id"
+            },
+            "transport": {
+                "headers": {
+                    "Host": "proxy.exbal.my.id"
+                },
+                "path": "/43.218.77.16-1443",
+                "type": "ws"
+            },
+            "type": "trojan"
+        },
+        {
+            "server": "quiz.int.vidio.com",
+            "server_port": 443,
+            "tag": "6 🇮🇩 Amazon.com WS TLS [proxy]",
+            "network": "tcp",
+            "password": "cbc4482d-2169-4d1f-8a49-bca0e2487a84",
+            "tls": {
+                "enabled": true,
+                "insecure": true,
+                "server_name": "proxy.exbal.my.id"
+            },
+            "transport": {
+                "headers": {
+                    "Host": "proxy.exbal.my.id"
+                },
+                "path": "/43.218.77.16-443",
+                "type": "ws"
+            },
+            "type": "trojan"
+        },
+        {
+            "server": "quiz.int.vidio.com",
+            "server_port": 443,
+            "tag": "7 🇮🇩 PT Telekomunikasi Indonesia WS TLS [proxy]",
+            "network": "tcp",
+            "password": "cbc4482d-2169-4d1f-8a49-bca0e2487a84",
             "tls": {
                 "enabled": true,
                 "insecure": true,
@@ -156,6 +136,26 @@
                     "Host": "proxy.exbal.my.id"
                 },
                 "path": "/36.95.152.58-12137",
+                "type": "ws"
+            },
+            "type": "trojan"
+        },
+        {
+            "server": "quiz.int.vidio.com",
+            "server_port": 443,
+            "tag": "8 🇮🇩 CV. Rumahweb Indonesia WS TLS [proxy]",
+            "network": "tcp",
+            "password": "cbc4482d-2169-4d1f-8a49-bca0e2487a84",
+            "tls": {
+                "enabled": true,
+                "insecure": true,
+                "server_name": "proxy.exbal.my.id"
+            },
+            "transport": {
+                "headers": {
+                    "Host": "proxy.exbal.my.id"
+                },
+                "path": "/203.194.112.119-2053",
                 "type": "ws"
             },
             "type": "trojan"
@@ -183,47 +183,9 @@
         {
             "server": "quiz.int.vidio.com",
             "server_port": 80,
-            "tag": "1 🇮🇩 CV. Rumahweb Indonesia WS NTLS [proxy]",
+            "tag": "1 🇮🇩 PT Telekomunikasi Indonesia WS NTLS [proxy]",
             "network": "tcp",
-            "password": "b1e1e607-c2a6-4b81-92af-4f9f84007aa4",
-            "tls": {
-                "insecure": true,
-                "server_name": "proxy.exbal.my.id"
-            },
-            "transport": {
-                "headers": {
-                    "Host": "proxy.exbal.my.id"
-                },
-                "path": "/203.194.112.119-2053",
-                "type": "ws"
-            },
-            "type": "trojan"
-        },
-        {
-            "server": "quiz.int.vidio.com",
-            "server_port": 80,
-            "tag": "2 🇮🇩 PT Pusat Media Indonesia WS NTLS [proxy]",
-            "network": "tcp",
-            "password": "b1e1e607-c2a6-4b81-92af-4f9f84007aa4",
-            "tls": {
-                "insecure": true,
-                "server_name": "proxy.exbal.my.id"
-            },
-            "transport": {
-                "headers": {
-                    "Host": "proxy.exbal.my.id"
-                },
-                "path": "/103.6.207.108-8080",
-                "type": "ws"
-            },
-            "type": "trojan"
-        },
-        {
-            "server": "quiz.int.vidio.com",
-            "server_port": 80,
-            "tag": "3 🇮🇩 PT Telekomunikasi Indonesia WS NTLS [proxy]",
-            "network": "tcp",
-            "password": "b1e1e607-c2a6-4b81-92af-4f9f84007aa4",
+            "password": "7b05c4be-599e-40c1-ac51-703c284c680f",
             "tls": {
                 "insecure": true,
                 "server_name": "proxy.exbal.my.id"
@@ -240,9 +202,9 @@
         {
             "server": "quiz.int.vidio.com",
             "server_port": 80,
-            "tag": "4 🇮🇩 Amazon.com WS NTLS [proxy]",
+            "tag": "2 🇮🇩 CV. Rumahweb Indonesia WS NTLS [proxy]",
             "network": "tcp",
-            "password": "b1e1e607-c2a6-4b81-92af-4f9f84007aa4",
+            "password": "7b05c4be-599e-40c1-ac51-703c284c680f",
             "tls": {
                 "insecure": true,
                 "server_name": "proxy.exbal.my.id"
@@ -251,7 +213,7 @@
                 "headers": {
                     "Host": "proxy.exbal.my.id"
                 },
-                "path": "/43.218.77.16-1443",
+                "path": "/203.194.112.119-2053",
                 "type": "ws"
             },
             "type": "trojan"
@@ -259,9 +221,28 @@
         {
             "server": "quiz.int.vidio.com",
             "server_port": 80,
-            "tag": "5 🇮🇩 Amazon.com WS NTLS [proxy]",
+            "tag": "3 🇮🇩 Linode WS NTLS [proxy]",
             "network": "tcp",
-            "password": "b1e1e607-c2a6-4b81-92af-4f9f84007aa4",
+            "password": "7b05c4be-599e-40c1-ac51-703c284c680f",
+            "tls": {
+                "insecure": true,
+                "server_name": "proxy.exbal.my.id"
+            },
+            "transport": {
+                "headers": {
+                    "Host": "proxy.exbal.my.id"
+                },
+                "path": "/172.232.249.53-443",
+                "type": "ws"
+            },
+            "type": "trojan"
+        },
+        {
+            "server": "quiz.int.vidio.com",
+            "server_port": 80,
+            "tag": "4 🇮🇩 Amazon.com WS NTLS [proxy]",
+            "network": "tcp",
+            "password": "7b05c4be-599e-40c1-ac51-703c284c680f",
             "tls": {
                 "insecure": true,
                 "server_name": "proxy.exbal.my.id"
@@ -278,9 +259,28 @@
         {
             "server": "quiz.int.vidio.com",
             "server_port": 80,
+            "tag": "5 🇮🇩 PT Pusat Media Indonesia WS NTLS [proxy]",
+            "network": "tcp",
+            "password": "7b05c4be-599e-40c1-ac51-703c284c680f",
+            "tls": {
+                "insecure": true,
+                "server_name": "proxy.exbal.my.id"
+            },
+            "transport": {
+                "headers": {
+                    "Host": "proxy.exbal.my.id"
+                },
+                "path": "/103.6.207.108-8080",
+                "type": "ws"
+            },
+            "type": "trojan"
+        },
+        {
+            "server": "quiz.int.vidio.com",
+            "server_port": 80,
             "tag": "6 🇮🇩 Linode WS NTLS [proxy]",
             "network": "tcp",
-            "password": "b1e1e607-c2a6-4b81-92af-4f9f84007aa4",
+            "password": "7b05c4be-599e-40c1-ac51-703c284c680f",
             "tls": {
                 "insecure": true,
                 "server_name": "proxy.exbal.my.id"
@@ -297,9 +297,28 @@
         {
             "server": "quiz.int.vidio.com",
             "server_port": 80,
-            "tag": "7 🇮🇩 CV. Rumahweb Indonesia WS NTLS [proxy]",
+            "tag": "7 🇮🇩 Amazon.com WS NTLS [proxy]",
             "network": "tcp",
-            "password": "b1e1e607-c2a6-4b81-92af-4f9f84007aa4",
+            "password": "7b05c4be-599e-40c1-ac51-703c284c680f",
+            "tls": {
+                "insecure": true,
+                "server_name": "proxy.exbal.my.id"
+            },
+            "transport": {
+                "headers": {
+                    "Host": "proxy.exbal.my.id"
+                },
+                "path": "/43.218.77.16-1443",
+                "type": "ws"
+            },
+            "type": "trojan"
+        },
+        {
+            "server": "quiz.int.vidio.com",
+            "server_port": 80,
+            "tag": "8 🇮🇩 CV. Rumahweb Indonesia WS NTLS [proxy]",
+            "network": "tcp",
+            "password": "7b05c4be-599e-40c1-ac51-703c284c680f",
             "tls": {
                 "insecure": true,
                 "server_name": "proxy.exbal.my.id"
@@ -315,29 +334,10 @@
         },
         {
             "server": "quiz.int.vidio.com",
-            "server_port": 80,
-            "tag": "8 🇮🇩 Linode WS NTLS [proxy]",
-            "network": "tcp",
-            "password": "b1e1e607-c2a6-4b81-92af-4f9f84007aa4",
-            "tls": {
-                "insecure": true,
-                "server_name": "proxy.exbal.my.id"
-            },
-            "transport": {
-                "headers": {
-                    "Host": "proxy.exbal.my.id"
-                },
-                "path": "/172.232.249.53-443",
-                "type": "ws"
-            },
-            "type": "trojan"
-        },
-        {
-            "server": "quiz.int.vidio.com",
             "server_port": 443,
-            "tag": "1 🇸🇬 Oracle Corporation WS TLS [proxy]",
+            "tag": "1 🇸🇬 Oracle Public Cloud WS TLS [proxy]",
             "network": "tcp",
-            "password": "e3a16bf6-94b4-40f5-8bae-7bf0bf59b2f8",
+            "password": "a06a6d1a-6e29-4a2a-a966-2a837aafc728",
             "tls": {
                 "enabled": true,
                 "insecure": true,
@@ -347,7 +347,7 @@
                 "headers": {
                     "Host": "proxy.exbal.my.id"
                 },
-                "path": "/129.150.36.188-53435",
+                "path": "/168.138.170.211-53702",
                 "type": "ws"
             },
             "type": "trojan"
@@ -355,9 +355,129 @@
         {
             "server": "quiz.int.vidio.com",
             "server_port": 443,
-            "tag": "2 🇸🇬 Kaopu Cloud HK Limited WS TLS [proxy]",
+            "tag": "2 🇸🇬 Oracle Corporation WS TLS [proxy]",
             "network": "tcp",
-            "password": "e3a16bf6-94b4-40f5-8bae-7bf0bf59b2f8",
+            "password": "a06a6d1a-6e29-4a2a-a966-2a837aafc728",
+            "tls": {
+                "enabled": true,
+                "insecure": true,
+                "server_name": "proxy.exbal.my.id"
+            },
+            "transport": {
+                "headers": {
+                    "Host": "proxy.exbal.my.id"
+                },
+                "path": "/138.2.81.243-45319",
+                "type": "ws"
+            },
+            "type": "trojan"
+        },
+        {
+            "server": "quiz.int.vidio.com",
+            "server_port": 443,
+            "tag": "4 🇸🇬 PDK LLC WS TLS [proxy]",
+            "network": "tcp",
+            "password": "a06a6d1a-6e29-4a2a-a966-2a837aafc728",
+            "tls": {
+                "enabled": true,
+                "insecure": true,
+                "server_name": "proxy.exbal.my.id"
+            },
+            "transport": {
+                "headers": {
+                    "Host": "proxy.exbal.my.id"
+                },
+                "path": "/31.192.238.71-2053",
+                "type": "ws"
+            },
+            "type": "trojan"
+        },
+        {
+            "server": "quiz.int.vidio.com",
+            "server_port": 443,
+            "tag": "5 🇸🇬 Vultr Holdings WS TLS [proxy]",
+            "network": "tcp",
+            "password": "a06a6d1a-6e29-4a2a-a966-2a837aafc728",
+            "tls": {
+                "enabled": true,
+                "insecure": true,
+                "server_name": "proxy.exbal.my.id"
+            },
+            "transport": {
+                "headers": {
+                    "Host": "proxy.exbal.my.id"
+                },
+                "path": "/45.32.100.46-13802",
+                "type": "ws"
+            },
+            "type": "trojan"
+        },
+        {
+            "server": "quiz.int.vidio.com",
+            "server_port": 443,
+            "tag": "6 🇸🇬 UCUL-SG WS TLS [proxy]",
+            "network": "tcp",
+            "password": "a06a6d1a-6e29-4a2a-a966-2a837aafc728",
+            "tls": {
+                "enabled": true,
+                "insecure": true,
+                "server_name": "proxy.exbal.my.id"
+            },
+            "transport": {
+                "headers": {
+                    "Host": "proxy.exbal.my.id"
+                },
+                "path": "/164.52.2.98-443",
+                "type": "ws"
+            },
+            "type": "trojan"
+        },
+        {
+            "server": "quiz.int.vidio.com",
+            "server_port": 443,
+            "tag": "8 🇸🇬 Alibaba Cloud - SG WS TLS [proxy]",
+            "network": "tcp",
+            "password": "a06a6d1a-6e29-4a2a-a966-2a837aafc728",
+            "tls": {
+                "enabled": true,
+                "insecure": true,
+                "server_name": "proxy.exbal.my.id"
+            },
+            "transport": {
+                "headers": {
+                    "Host": "proxy.exbal.my.id"
+                },
+                "path": "/47.74.254.191-8900",
+                "type": "ws"
+            },
+            "type": "trojan"
+        },
+        {
+            "server": "quiz.int.vidio.com",
+            "server_port": 443,
+            "tag": "9 🇸🇬 Amazon Data Services Singapore WS TLS [proxy]",
+            "network": "tcp",
+            "password": "a06a6d1a-6e29-4a2a-a966-2a837aafc728",
+            "tls": {
+                "enabled": true,
+                "insecure": true,
+                "server_name": "proxy.exbal.my.id"
+            },
+            "transport": {
+                "headers": {
+                    "Host": "proxy.exbal.my.id"
+                },
+                "path": "/13.250.131.37-443",
+                "type": "ws"
+            },
+            "type": "trojan"
+        },
+        {
+            "server": "quiz.int.vidio.com",
+            "server_port": 443,
+            "tag": "10 🇸🇬 Kaopu Cloud HK Limited WS TLS [proxy]",
+            "network": "tcp",
+            "password": "a06a6d1a-6e29-4a2a-a966-2a837aafc728",
             "tls": {
                 "enabled": true,
                 "insecure": true,
@@ -368,126 +488,6 @@
                     "Host": "proxy.exbal.my.id"
                 },
                 "path": "/38.54.16.95-2053",
-                "type": "ws"
-            },
-            "type": "trojan"
-        },
-        {
-            "server": "quiz.int.vidio.com",
-            "server_port": 443,
-            "tag": "3 🇸🇬 Alibaba Cloud (Singapore) Private Limited WS TLS [proxy]",
-            "network": "tcp",
-            "password": "e3a16bf6-94b4-40f5-8bae-7bf0bf59b2f8",
-            "tls": {
-                "enabled": true,
-                "insecure": true,
-                "server_name": "proxy.exbal.my.id"
-            },
-            "transport": {
-                "headers": {
-                    "Host": "proxy.exbal.my.id"
-                },
-                "path": "/8.222.243.73-26385",
-                "type": "ws"
-            },
-            "type": "trojan"
-        },
-        {
-            "server": "quiz.int.vidio.com",
-            "server_port": 443,
-            "tag": "5 🇸🇬 Amazon Data Services Singapore WS TLS [proxy]",
-            "network": "tcp",
-            "password": "e3a16bf6-94b4-40f5-8bae-7bf0bf59b2f8",
-            "tls": {
-                "enabled": true,
-                "insecure": true,
-                "server_name": "proxy.exbal.my.id"
-            },
-            "transport": {
-                "headers": {
-                    "Host": "proxy.exbal.my.id"
-                },
-                "path": "/3.1.116.161-2053",
-                "type": "ws"
-            },
-            "type": "trojan"
-        },
-        {
-            "server": "quiz.int.vidio.com",
-            "server_port": 443,
-            "tag": "7 🇸🇬 Akamai Connected Cloud / Linode WS TLS [proxy]",
-            "network": "tcp",
-            "password": "e3a16bf6-94b4-40f5-8bae-7bf0bf59b2f8",
-            "tls": {
-                "enabled": true,
-                "insecure": true,
-                "server_name": "proxy.exbal.my.id"
-            },
-            "transport": {
-                "headers": {
-                    "Host": "proxy.exbal.my.id"
-                },
-                "path": "/139.162.33.248-587",
-                "type": "ws"
-            },
-            "type": "trojan"
-        },
-        {
-            "server": "quiz.int.vidio.com",
-            "server_port": 443,
-            "tag": "8 🇸🇬 16 COLLYER QUAY WS TLS [proxy]",
-            "network": "tcp",
-            "password": "e3a16bf6-94b4-40f5-8bae-7bf0bf59b2f8",
-            "tls": {
-                "enabled": true,
-                "insecure": true,
-                "server_name": "proxy.exbal.my.id"
-            },
-            "transport": {
-                "headers": {
-                    "Host": "proxy.exbal.my.id"
-                },
-                "path": "/150.109.94.144-8900",
-                "type": "ws"
-            },
-            "type": "trojan"
-        },
-        {
-            "server": "quiz.int.vidio.com",
-            "server_port": 443,
-            "tag": "9 🇸🇬 Greencloud LLC WS TLS [proxy]",
-            "network": "tcp",
-            "password": "e3a16bf6-94b4-40f5-8bae-7bf0bf59b2f8",
-            "tls": {
-                "enabled": true,
-                "insecure": true,
-                "server_name": "proxy.exbal.my.id"
-            },
-            "transport": {
-                "headers": {
-                    "Host": "proxy.exbal.my.id"
-                },
-                "path": "/194.127.193.240-50791",
-                "type": "ws"
-            },
-            "type": "trojan"
-        },
-        {
-            "server": "quiz.int.vidio.com",
-            "server_port": 443,
-            "tag": "10 🇸🇬 Alibaba Cloud LLC WS TLS [proxy]",
-            "network": "tcp",
-            "password": "e3a16bf6-94b4-40f5-8bae-7bf0bf59b2f8",
-            "tls": {
-                "enabled": true,
-                "insecure": true,
-                "server_name": "proxy.exbal.my.id"
-            },
-            "transport": {
-                "headers": {
-                    "Host": "proxy.exbal.my.id"
-                },
-                "path": "/47.236.181.185-8443",
                 "type": "ws"
             },
             "type": "trojan"
@@ -517,7 +517,7 @@
             "server_port": 80,
             "tag": "1 🇸🇬 Oracle Corporation WS NTLS [proxy]",
             "network": "tcp",
-            "password": "0aa584c4-fc6d-4550-857d-e2909a6b586a",
+            "password": "20ab2581-e808-46e4-8836-9c2d0bcf482b",
             "tls": {
                 "insecure": true,
                 "server_name": "proxy.exbal.my.id"
@@ -534,9 +534,9 @@
         {
             "server": "quiz.int.vidio.com",
             "server_port": 80,
-            "tag": "2 🇸🇬 DigitalOcean WS NTLS [proxy]",
+            "tag": "2 🇸🇬 OVH Singapore PTE. LTD WS NTLS [proxy]",
             "network": "tcp",
-            "password": "0aa584c4-fc6d-4550-857d-e2909a6b586a",
+            "password": "20ab2581-e808-46e4-8836-9c2d0bcf482b",
             "tls": {
                 "insecure": true,
                 "server_name": "proxy.exbal.my.id"
@@ -545,7 +545,7 @@
                 "headers": {
                     "Host": "proxy.exbal.my.id"
                 },
-                "path": "/143.198.196.196-8443",
+                "path": "/51.79.158.58-2053",
                 "type": "ws"
             },
             "type": "trojan"
@@ -553,9 +553,9 @@
         {
             "server": "quiz.int.vidio.com",
             "server_port": 80,
-            "tag": "3 🇸🇬 16 COLLYER QUAY WS NTLS [proxy]",
+            "tag": "3 🇸🇬 UCUL-SG WS NTLS [proxy]",
             "network": "tcp",
-            "password": "0aa584c4-fc6d-4550-857d-e2909a6b586a",
+            "password": "20ab2581-e808-46e4-8836-9c2d0bcf482b",
             "tls": {
                 "insecure": true,
                 "server_name": "proxy.exbal.my.id"
@@ -564,7 +564,7 @@
                 "headers": {
                     "Host": "proxy.exbal.my.id"
                 },
-                "path": "/150.109.24.233-6666",
+                "path": "/164.52.2.100-443",
                 "type": "ws"
             },
             "type": "trojan"
@@ -572,9 +572,9 @@
         {
             "server": "quiz.int.vidio.com",
             "server_port": 80,
-            "tag": "4 🇸🇬 365 Group LLC WS NTLS [proxy]",
+            "tag": "4 🇸🇬 FIRST SERVER LIMITED WS NTLS [proxy]",
             "network": "tcp",
-            "password": "0aa584c4-fc6d-4550-857d-e2909a6b586a",
+            "password": "20ab2581-e808-46e4-8836-9c2d0bcf482b",
             "tls": {
                 "insecure": true,
                 "server_name": "proxy.exbal.my.id"
@@ -583,7 +583,7 @@
                 "headers": {
                     "Host": "proxy.exbal.my.id"
                 },
-                "path": "/167.253.158.63-2053",
+                "path": "/194.36.179.17-2053",
                 "type": "ws"
             },
             "type": "trojan"
@@ -591,9 +591,9 @@
         {
             "server": "quiz.int.vidio.com",
             "server_port": 80,
-            "tag": "5 🇸🇬 Greencloud LLC WS NTLS [proxy]",
+            "tag": "5 🇸🇬 6 COLLYER QUAY WS NTLS [proxy]",
             "network": "tcp",
-            "password": "0aa584c4-fc6d-4550-857d-e2909a6b586a",
+            "password": "20ab2581-e808-46e4-8836-9c2d0bcf482b",
             "tls": {
                 "insecure": true,
                 "server_name": "proxy.exbal.my.id"
@@ -602,7 +602,7 @@
                 "headers": {
                     "Host": "proxy.exbal.my.id"
                 },
-                "path": "/194.127.193.240-50791",
+                "path": "/43.156.116.194-443",
                 "type": "ws"
             },
             "type": "trojan"
@@ -610,9 +610,9 @@
         {
             "server": "quiz.int.vidio.com",
             "server_port": 80,
-            "tag": "7 🇸🇬 Amazon Technologies Inc. WS NTLS [proxy]",
+            "tag": "7 🇸🇬 Amazon Data Services Singapore WS NTLS [proxy]",
             "network": "tcp",
-            "password": "0aa584c4-fc6d-4550-857d-e2909a6b586a",
+            "password": "20ab2581-e808-46e4-8836-9c2d0bcf482b",
             "tls": {
                 "insecure": true,
                 "server_name": "proxy.exbal.my.id"
@@ -621,7 +621,7 @@
                 "headers": {
                     "Host": "proxy.exbal.my.id"
                 },
-                "path": "/13.228.155.72-443",
+                "path": "/13.250.131.37-443",
                 "type": "ws"
             },
             "type": "trojan"
@@ -631,7 +631,7 @@
             "server_port": 80,
             "tag": "8 🇸🇬 Alibaba Cloud - SG WS NTLS [proxy]",
             "network": "tcp",
-            "password": "0aa584c4-fc6d-4550-857d-e2909a6b586a",
+            "password": "20ab2581-e808-46e4-8836-9c2d0bcf482b",
             "tls": {
                 "insecure": true,
                 "server_name": "proxy.exbal.my.id"
@@ -648,9 +648,9 @@
         {
             "server": "quiz.int.vidio.com",
             "server_port": 80,
-            "tag": "9 🇸🇬 Vultr Holdings WS NTLS [proxy]",
+            "tag": "9 🇸🇬 Green Floid LLC WS NTLS [proxy]",
             "network": "tcp",
-            "password": "0aa584c4-fc6d-4550-857d-e2909a6b586a",
+            "password": "20ab2581-e808-46e4-8836-9c2d0bcf482b",
             "tls": {
                 "insecure": true,
                 "server_name": "proxy.exbal.my.id"
@@ -659,7 +659,7 @@
                 "headers": {
                     "Host": "proxy.exbal.my.id"
                 },
-                "path": "/45.76.183.217-49292",
+                "path": "/5.34.176.119-81",
                 "type": "ws"
             },
             "type": "trojan"
@@ -667,9 +667,9 @@
         {
             "server": "quiz.int.vidio.com",
             "server_port": 80,
-            "tag": "10 🇸🇬 Melbikomas UAB WS NTLS [proxy]",
+            "tag": "10 🇸🇬 Oracle Svenska AB WS NTLS [proxy]",
             "network": "tcp",
-            "password": "0aa584c4-fc6d-4550-857d-e2909a6b586a",
+            "password": "20ab2581-e808-46e4-8836-9c2d0bcf482b",
             "tls": {
                 "insecure": true,
                 "server_name": "proxy.exbal.my.id"
@@ -678,7 +678,7 @@
                 "headers": {
                     "Host": "proxy.exbal.my.id"
                 },
-                "path": "/91.192.81.154-8443",
+                "path": "/213.35.107.73-443",
                 "type": "ws"
             },
             "type": "trojan"
