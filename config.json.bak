@@ -11,7 +11,9 @@
         "address": [
           "tls://dns.google",
           "tls://one.one.one.one",
-          "tls://dns.opendns.com"
+          "tls://dns.opendns.com",
+          "tls://dns.quad9.net",
+          "tls://dns.adguard.com"
         ],
         "address_resolver": "dns_resolver"
       },
@@ -19,8 +21,9 @@
         "tag": "dns_resolver",
         "address": [
           "1.1.1.1",
+          "1.0.0.1",
           "8.8.8.8",
-          "208.67.222.222"
+          "8.8.4.4"
         ],
         "detour": "server"
       },
@@ -49,14 +52,35 @@
         "detour": "direct"
       },
       {
+        "tag": "block-dns",
+        "address": "rcode://refused"
+      },
+      {
+        "tag": "rcode",
+        "address": "rcode://success"
+      },
+      {
         "tag": "fakedns",
         "address": "fakeip"
       }
     ],
     "rules": [
       {
+        "domain_suffix": [
+          ".arpa.",
+          ".arpa"
+        ],
+        "server": "block-dns",
+        "rewrite_ttl": 20
+      },
+      {
         "outbound": "any",
         "server": "local",
+        "disable_cache": true
+      },
+      {
+        "outbound": "any",
+        "server": "rcode",
         "disable_cache": true
       },
       {
@@ -232,16 +256,7 @@
     "rule_set": [],
     "rules": [
       {
-        "type": "logical",
-        "mode": "or",
-        "rules": [
-          {
-            "port": 53
-          },
-          {
-            "protocol": "dns"
-          }
-        ],
+        "port": 53,
         "outbound": "dns"
       },
       {
@@ -267,42 +282,58 @@
     {
       "type": "local",
       "path": "./provider/Vmess Tls.json",
-      "tag": "Vmess Tls"
+      "tag": "Vmess Tls",
+      "healthcheck_url": "https://www.gstatic.com/generate_204",
+      "healthcheck_interval": "5m0s"
     },
     {
       "type": "local",
       "path": "./provider/Vmess Ntls.json",
-      "tag": "Vmess Ntls"
+      "tag": "Vmess Ntls",
+      "healthcheck_url": "https://www.gstatic.com/generate_204",
+      "healthcheck_interval": "5m0s"
     },
     {
       "type": "local",
       "path": "./provider/ID vless tls.json",
-      "tag": "ID vless tls"
+      "tag": "ID vless tls",
+      "healthcheck_url": "https://www.gstatic.com/generate_204",
+      "healthcheck_interval": "5m0s"
     },
     {
       "type": "local",
       "path": "./provider/ID vless ntls.json",
-      "tag": "ID vless ntls"
+      "tag": "ID vless ntls",
+      "healthcheck_url": "https://www.gstatic.com/generate_204",
+      "healthcheck_interval": "5m0s"
     },
     {
       "type": "local",
       "path": "./provider/SG vless tls.json",
-      "tag": "SG vless tls"
+      "tag": "SG vless tls",
+      "healthcheck_url": "https://www.gstatic.com/generate_204",
+      "healthcheck_interval": "5m0s"
     },
     {
       "type": "local",
       "path": "./provider/SG vless ntls.json",
-      "tag": "SG vless ntls"
+      "tag": "SG vless ntls",
+      "healthcheck_url": "https://www.gstatic.com/generate_204",
+      "healthcheck_interval": "5m0s"
     },
     {
       "type": "local",
       "path": "./provider/ID SG trojan tls ntls.json",
-      "tag": "ID SG trojan tls ntls"
+      "tag": "ID SG trojan tls ntls",
+      "healthcheck_url": "https://www.gstatic.com/generate_204",
+      "healthcheck_interval": "5m0s"
     },
     {
       "type": "local",
       "path": "./provider/backup.json",
-      "tag": "backup"
+      "tag": "backup",
+      "healthcheck_url": "https://www.gstatic.com/generate_204",
+      "healthcheck_interval": "5m0s"
     }
   ],
   "experimental": {
