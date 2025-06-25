@@ -11,6 +11,9 @@ import configparser
 from datetime import datetime
 from collections import defaultdict
 
+# Variabel global untuk menyimpan format outbound
+outbound_format = None
+
 # Fungsi untuk mendapatkan emoji bendera berdasarkan kode negara
 def get_flag_emoji(country_code):
     # Konversi kode negara ke emoji bendera
@@ -218,12 +221,78 @@ def read_config_file(file_path):
     
     return configs
 
+def load_outbound_format(format_file="config_format.ini"):
+    """
+    Membaca format outbound dari file konfigurasi format.
+    Jika file tidak ada, gunakan format default.
+    """
+    if not os.path.exists(format_file):
+        print(f"Warning: Format file '{format_file}' tidak ditemukan. Menggunakan format default.")
+        return None
+    
+    try:
+        with open(format_file, 'r', encoding='utf-8') as f:
+            format_json = json.load(f)
+        print(f"Format outbound berhasil dimuat dari '{format_file}'")
+        return format_json
+    except Exception as e:
+        print(f"Error: Gagal membaca file format '{format_file}': {str(e)}")
+        print("Menggunakan format default.")
+        return None
+
+def apply_outbound_format(outbound, format_template):
+    """
+    Menerapkan format template ke outbound berdasarkan protokol.
+    - Pilih template yang sesuai berdasarkan protokol (vless atau trojan)
+    - Jika field di template kosong (""), gunakan nilai dari outbound asli
+    - Jika field di template memiliki nilai, gunakan nilai tersebut
+    - Jika field di template tidak ada di outbound asli, tambahkan field tersebut
+    """
+    if not format_template:
+        return outbound
+    
+    # Tentukan protokol outbound
+    protocol = outbound.get("type", "").lower()
+    
+    # Pilih template yang sesuai berdasarkan protokol
+    if protocol in format_template:
+        template = format_template[protocol]
+    else:
+        # Jika protokol tidak ditemukan dalam template, gunakan outbound asli
+        print(f"Warning: No format template found for protocol '{protocol}'. Using default format.")
+        return outbound
+    
+    # Buat salinan deep copy dari template
+    result = json.loads(json.dumps(template))
+    
+    # Fungsi rekursif untuk menerapkan format
+    def apply_format(target, source, template):
+        # Untuk setiap key di template
+        for key, template_value in template.items():
+            # Jika nilai template adalah dict, proses secara rekursif
+            if isinstance(template_value, dict):
+                if key not in target:
+                    target[key] = {}
+                source_value = source.get(key, {})
+                apply_format(target[key], source_value, template_value)
+            # Jika nilai template adalah string kosong, gunakan nilai dari source jika ada
+            elif template_value == "":
+                if key in source:
+                    target[key] = source[key]
+            # Jika tidak, gunakan nilai dari template
+            else:
+                target[key] = template_value
+    
+    apply_format(result, outbound, template)
+    return result
+
 def parse_args():
     """
     Parse command line arguments.
     """
     parser = argparse.ArgumentParser(description='Extract outbound configurations based on specified criteria.')
     parser.add_argument('--config-file', '-f', type=str, help='Path to configuration file (default: config.ini)')
+    parser.add_argument('--format-file', '-o', type=str, help='Path to outbound format file (default: config_format.ini)')
     
     return parser.parse_args()
 
@@ -382,6 +451,10 @@ def process_single_config(config):
                                 if key not in ["server", "server_port", "tag", "country_code"] and key not in outbound_copy:
                                     outbound_copy[key] = outbound[key]
                             
+                            # Terapkan format konfigurasi jika tersedia
+                            if outbound_format:
+                                outbound_copy = apply_outbound_format(outbound_copy, outbound_format)
+                            
                             # Logika untuk memfilter proxy:
                             # 1. Untuk Indonesia (ID): Ambil semua proxy
                             # 2. Untuk negara lain: Ambil hanya 1 proxy per provider
@@ -466,6 +539,11 @@ def main():
     
     # Tentukan file konfigurasi yang akan digunakan
     config_file = args.config_file if args.config_file else "config.ini"
+    format_file = args.format_file if args.format_file else "config_format.ini"
+    
+    # Muat format outbound
+    global outbound_format
+    outbound_format = load_outbound_format(format_file)
     
     # Baca konfigurasi dari file
     configs = read_config_file(config_file)
