@@ -35,18 +35,23 @@ jobs:
           echo "Directory contents:"
           ls -la
           
-      - name: Copy config.ini
+      - name: Copy configuration files
         run: |
           # Copy config.ini from workflows directory to working directory
           cp .github/workflows/config.ini .
           echo "Config file contents:"
           cat config.ini
           
+          # Copy config_format.ini from workflows directory to working directory
+          cp .github/workflows/config_format.ini .
+          echo "Format config file contents:"
+          cat config_format.ini
+          
       - name: Run proxy extraction script
         run: |
           ls -la
           
-          python extract_outbound.py
+          python extract_outbound.py -o config_format.ini -f config.ini
           
           echo "Checking output files:"
           # Dynamically check all JSON files in the directory
@@ -82,7 +87,7 @@ jobs:
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
           commit_message: "Update proxy list [automated]"
-          file_pattern: "*.json README.md config.ini"
+          file_pattern: "*.json README.md config.ini config_format.ini"
           commit_user_name: "GitHub Actions Bot"
           commit_user_email: "actions@github.com"
           commit_author: "GitHub Actions Bot <actions@github.com>"
