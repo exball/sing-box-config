@@ -244,9 +244,9 @@ def apply_outbound_format(outbound, format_template):
     """
     Menerapkan format template ke outbound berdasarkan protokol.
     - Pilih template yang sesuai berdasarkan protokol (vless atau trojan)
-    - Jika field di template kosong (""), gunakan nilai dari outbound asli
+    - Jika field di template kosong ("") dan field tersebut ada di outbound asli, gunakan nilai dari outbound asli
+    - Jika field di template kosong ("") dan field tersebut tidak ada di outbound asli, jangan tambahkan field tersebut
     - Jika field di template memiliki nilai, gunakan nilai tersebut
-    - Jika field di template tidak ada di outbound asli, tambahkan field tersebut
     """
     if not format_template:
         return outbound
@@ -262,8 +262,8 @@ def apply_outbound_format(outbound, format_template):
         print(f"Warning: No format template found for protocol '{protocol}'. Using default format.")
         return outbound
     
-    # Buat salinan deep copy dari template
-    result = json.loads(json.dumps(template))
+    # Buat hasil kosong yang akan diisi berdasarkan template dan source
+    result = {}
     
     # Fungsi rekursif untuk menerapkan format
     def apply_format(target, source, template):
@@ -271,10 +271,22 @@ def apply_outbound_format(outbound, format_template):
         for key, template_value in template.items():
             # Jika nilai template adalah dict, proses secara rekursif
             if isinstance(template_value, dict):
-                if key not in target:
+                # Jika key ada di source, proses secara rekursif
+                if key in source:
                     target[key] = {}
-                source_value = source.get(key, {})
-                apply_format(target[key], source_value, template_value)
+                    apply_format(target[key], source[key], template_value)
+                else:
+                    # Periksa apakah ada nilai non-empty di template
+                    has_non_empty_value = False
+                    for sub_key, sub_value in template_value.items():
+                        if sub_value != "":
+                            has_non_empty_value = True
+                            break
+                    
+                    # Jika ada nilai non-empty, tambahkan objek kosong dan proses
+                    if has_non_empty_value:
+                        target[key] = {}
+                        apply_format(target[key], {}, template_value)
             # Jika nilai template adalah string kosong, gunakan nilai dari source jika ada
             elif template_value == "":
                 if key in source:
