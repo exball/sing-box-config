@@ -398,13 +398,13 @@ def process_single_config(config):
     # Tentukan URL berdasarkan waktu saat ini
     current_hour = datetime.now().hour
     
-    # Gunakan URL pertama dari jam 00:00 sampai 11:59, URL kedua dari jam 12:00 sampai 23:59
+    # Gunakan proxy.ex-vpn.my.id dari jam 00:00 sampai 11:59, proxy.exbal.my.id dari jam 12:00 sampai 23:59
     if current_hour < 12:
-        base_url = "https://proxy.exbal.my.id/api/bfr"
-        print(f"Using primary URL (exbal.my.id) based on current time: {datetime.now().strftime('%H:%M:%S')}")
-    else:
         base_url = "https://proxy.ex-vpn.my.id/api/bfr"
-        print(f"Using secondary URL (ex-vpn.my.id) based on current time: {datetime.now().strftime('%H:%M:%S')}")
+        print(f"Using proxy.ex-vpn.my.id based on current time: {datetime.now().strftime('%H:%M:%S')}")
+    else:
+        base_url = "https://proxy.exbal.my.id/api/bfr"
+        print(f"Using proxy.exbal.my.id based on current time: {datetime.now().strftime('%H:%M:%S')}")
     
     for country in countries:
         for protocol in protocols:
