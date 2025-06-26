@@ -1,0 +1,740 @@
+2025-06-26T17:09:22.0368703Z Current runner version: '2.325.0'
+2025-06-26T17:09:22.0398399Z ##[group]Operating System
+2025-06-26T17:09:22.0399253Z Ubuntu
+2025-06-26T17:09:22.0399809Z 24.04.2
+2025-06-26T17:09:22.0400345Z LTS
+2025-06-26T17:09:22.0400847Z ##[endgroup]
+2025-06-26T17:09:22.0401394Z ##[group]Runner Image
+2025-06-26T17:09:22.0402037Z Image: ubuntu-24.04
+2025-06-26T17:09:22.0402565Z Version: 20250622.1.0
+2025-06-26T17:09:22.0403654Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20250622.1/images/ubuntu/Ubuntu2404-Readme.md
+2025-06-26T17:09:22.0405227Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20250622.1
+2025-06-26T17:09:22.0406105Z ##[endgroup]
+2025-06-26T17:09:22.0406755Z ##[group]Runner Image Provisioner
+2025-06-26T17:09:22.0407364Z 2.0.437.1
+2025-06-26T17:09:22.0407822Z ##[endgroup]
+2025-06-26T17:09:22.0408934Z ##[group]GITHUB_TOKEN Permissions
+2025-06-26T17:09:22.0411022Z Contents: write
+2025-06-26T17:09:22.0411621Z Metadata: read
+2025-06-26T17:09:22.0412361Z ##[endgroup]
+2025-06-26T17:09:22.0415043Z Secret source: Actions
+2025-06-26T17:09:22.0416072Z Prepare workflow directory
+2025-06-26T17:09:22.0752411Z Prepare all required actions
+2025-06-26T17:09:22.0795965Z Getting action download info
+2025-06-26T17:09:22.5395105Z ##[group]Download immutable action package 'actions/checkout@v4'
+2025-06-26T17:09:22.5396210Z Version: 4.2.2
+2025-06-26T17:09:22.5397174Z Digest: sha256:ccb2698953eaebd21c7bf6268a94f9c26518a7e38e27e0b83c1fe1ad049819b1
+2025-06-26T17:09:22.5398556Z Source commit SHA: 11bd71901bbe5b1630ceea73d27597364c9af683
+2025-06-26T17:09:22.5399302Z ##[endgroup]
+2025-06-26T17:09:22.6520575Z ##[group]Download immutable action package 'actions/setup-python@v4'
+2025-06-26T17:09:22.6521504Z Version: 4.9.1
+2025-06-26T17:09:22.6522292Z Digest: sha256:f03e505388af670b5a108629e0ba26befc08d5c62b41f46146a45fe29ae509a5
+2025-06-26T17:09:22.6523230Z Source commit SHA: 7f4fc3e22c37d6ff65e88745f38bd3157c663f7c
+2025-06-26T17:09:22.6523979Z ##[endgroup]
+2025-06-26T17:09:22.9528677Z Download action repository 'stefanzweifel/git-auto-commit-action@v5' (SHA:b863ae1933cb653a53c021fe36dbb774e1fb9403)
+2025-06-26T17:09:23.4093415Z Complete job name: update-proxy
+2025-06-26T17:09:23.4908396Z ##[group]Run actions/checkout@v4
+2025-06-26T17:09:23.4909735Z with:
+2025-06-26T17:09:23.4910484Z   fetch-depth: 0
+2025-06-26T17:09:23.4911339Z   repository: exball/sing-box-config
+2025-06-26T17:09:23.4912655Z   token: ***
+2025-06-26T17:09:23.4913411Z   ssh-strict: true
+2025-06-26T17:09:23.4914200Z   ssh-user: git
+2025-06-26T17:09:23.4915176Z   persist-credentials: true
+2025-06-26T17:09:23.4916074Z   clean: true
+2025-06-26T17:09:23.4916889Z   sparse-checkout-cone-mode: true
+2025-06-26T17:09:23.4917878Z   fetch-tags: false
+2025-06-26T17:09:23.4918697Z   show-progress: true
+2025-06-26T17:09:23.4919524Z   lfs: false
+2025-06-26T17:09:23.4920292Z   submodules: false
+2025-06-26T17:09:23.4921123Z   set-safe-directory: true
+2025-06-26T17:09:23.4922270Z ##[endgroup]
+2025-06-26T17:09:23.7707982Z Syncing repository: exball/sing-box-config
+2025-06-26T17:09:23.7709470Z ##[group]Getting Git version info
+2025-06-26T17:09:23.7710052Z Working directory is '/home/runner/work/sing-box-config/sing-box-config'
+2025-06-26T17:09:23.7710979Z [command]/usr/bin/git version
+2025-06-26T17:09:23.7803205Z git version 2.49.0
+2025-06-26T17:09:23.7834510Z ##[endgroup]
+2025-06-26T17:09:23.7851222Z Temporarily overriding HOME='/home/runner/work/_temp/a1a9a7ac-af60-49e5-8fc4-787c7301c0cb' before making global git config changes
+2025-06-26T17:09:23.7852424Z Adding repository directory to the temporary git global config as a safe directory
+2025-06-26T17:09:23.7868982Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/sing-box-config/sing-box-config
+2025-06-26T17:09:23.7910192Z Deleting the contents of '/home/runner/work/sing-box-config/sing-box-config'
+2025-06-26T17:09:23.7913999Z ##[group]Initializing the repository
+2025-06-26T17:09:23.7919077Z [command]/usr/bin/git init /home/runner/work/sing-box-config/sing-box-config
+2025-06-26T17:09:23.7999607Z hint: Using 'master' as the name for the initial branch. This default branch name
+2025-06-26T17:09:23.8000720Z hint: is subject to change. To configure the initial branch name to use in all
+2025-06-26T17:09:23.8001373Z hint: of your new repositories, which will suppress this warning, call:
+2025-06-26T17:09:23.8001883Z hint:
+2025-06-26T17:09:23.8002244Z hint: 	git config --global init.defaultBranch <name>
+2025-06-26T17:09:23.8002640Z hint:
+2025-06-26T17:09:23.8003014Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+2025-06-26T17:09:23.8003627Z hint: 'development'. The just-created branch can be renamed via this command:
+2025-06-26T17:09:23.8004089Z hint:
+2025-06-26T17:09:23.8004350Z hint: 	git branch -m <name>
+2025-06-26T17:09:23.8008719Z Initialized empty Git repository in /home/runner/work/sing-box-config/sing-box-config/.git/
+2025-06-26T17:09:23.8020375Z [command]/usr/bin/git remote add origin https://github.com/exball/sing-box-config
+2025-06-26T17:09:23.8058907Z ##[endgroup]
+2025-06-26T17:09:23.8059462Z ##[group]Disabling automatic garbage collection
+2025-06-26T17:09:23.8064528Z [command]/usr/bin/git config --local gc.auto 0
+2025-06-26T17:09:23.8092660Z ##[endgroup]
+2025-06-26T17:09:23.8093408Z ##[group]Setting up auth
+2025-06-26T17:09:23.8099509Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2025-06-26T17:09:23.8128580Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2025-06-26T17:09:23.8502597Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2025-06-26T17:09:23.8532033Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2025-06-26T17:09:23.8755594Z [command]/usr/bin/git config --local http.https://github.com/.extraheader AUTHORIZATION: basic ***
+2025-06-26T17:09:23.8792479Z ##[endgroup]
+2025-06-26T17:09:23.8801830Z ##[group]Fetching the repository
+2025-06-26T17:09:23.8802705Z [command]/usr/bin/git -c protocol.version=2 fetch --prune --no-recurse-submodules origin +refs/heads/*:refs/remotes/origin/* +refs/tags/*:refs/tags/*
+2025-06-26T17:09:24.6583863Z From https://github.com/exball/sing-box-config
+2025-06-26T17:09:24.6584919Z  * [new branch]      Master     -> origin/Master
+2025-06-26T17:09:24.6585651Z  * [new tag]         test       -> test
+2025-06-26T17:09:24.6622265Z [command]/usr/bin/git branch --list --remote origin/Master
+2025-06-26T17:09:24.6645998Z   origin/Master
+2025-06-26T17:09:24.6654617Z [command]/usr/bin/git rev-parse refs/remotes/origin/Master
+2025-06-26T17:09:24.6675964Z 64858cae00da7871dbab8838460dcbfa013a1243
+2025-06-26T17:09:24.6681416Z ##[endgroup]
+2025-06-26T17:09:24.6682265Z ##[group]Determining the checkout info
+2025-06-26T17:09:24.6683204Z ##[endgroup]
+2025-06-26T17:09:24.6688809Z [command]/usr/bin/git sparse-checkout disable
+2025-06-26T17:09:24.6733548Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+2025-06-26T17:09:24.6761571Z ##[group]Checking out the ref
+2025-06-26T17:09:24.6766496Z [command]/usr/bin/git checkout --progress --force -B Master refs/remotes/origin/Master
+2025-06-26T17:09:24.6827732Z Switched to a new branch 'Master'
+2025-06-26T17:09:24.6829543Z branch 'Master' set up to track 'origin/Master'.
+2025-06-26T17:09:24.6837686Z ##[endgroup]
+2025-06-26T17:09:24.6878473Z [command]/usr/bin/git log -1 --format=%H
+2025-06-26T17:09:24.6902105Z 64858cae00da7871dbab8838460dcbfa013a1243
+2025-06-26T17:09:24.7128324Z ##[group]Run actions/setup-python@v4
+2025-06-26T17:09:24.7128722Z with:
+2025-06-26T17:09:24.7128990Z   python-version: 3.10
+2025-06-26T17:09:24.7129276Z   check-latest: false
+2025-06-26T17:09:24.7129748Z   token: ***
+2025-06-26T17:09:24.7130033Z   update-environment: true
+2025-06-26T17:09:24.7130349Z   allow-prereleases: false
+2025-06-26T17:09:24.7130908Z ##[endgroup]
+2025-06-26T17:09:24.8877539Z ##[group]Installed versions
+2025-06-26T17:09:24.8953899Z Successfully set up CPython (3.10.18)
+2025-06-26T17:09:24.8955222Z ##[endgroup]
+2025-06-26T17:09:24.9074952Z ##[group]Run python -m pip install --upgrade pip
+2025-06-26T17:09:24.9075534Z [36;1mpython -m pip install --upgrade pip[0m
+2025-06-26T17:09:24.9075930Z [36;1mpip install requests boto3[0m
+2025-06-26T17:09:24.9076252Z [36;1m[0m
+2025-06-26T17:09:24.9076574Z [36;1mecho "Checking if extract_outbound.py exists:"[0m
+2025-06-26T17:09:24.9077118Z [36;1mls -la extract_outbound.py || echo "extract_outbound.py not found"[0m
+2025-06-26T17:09:24.9077563Z [36;1m[0m
+2025-06-26T17:09:24.9077830Z [36;1mecho "Directory contents:"[0m
+2025-06-26T17:09:24.9078163Z [36;1mls -la[0m
+2025-06-26T17:09:24.9182040Z shell: /usr/bin/bash -e {0}
+2025-06-26T17:09:24.9182432Z env:
+2025-06-26T17:09:24.9182815Z   pythonLocation: /opt/hostedtoolcache/Python/3.10.18/x64
+2025-06-26T17:09:24.9183423Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.10.18/x64/lib/pkgconfig
+2025-06-26T17:09:24.9183977Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.10.18/x64
+2025-06-26T17:09:24.9184533Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.10.18/x64
+2025-06-26T17:09:24.9185282Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.10.18/x64
+2025-06-26T17:09:24.9185790Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.10.18/x64/lib
+2025-06-26T17:09:24.9186215Z ##[endgroup]
+2025-06-26T17:09:25.5671794Z Requirement already satisfied: pip in /opt/hostedtoolcache/Python/3.10.18/x64/lib/python3.10/site-packages (25.1.1)
+2025-06-26T17:09:26.2528917Z Collecting requests
+2025-06-26T17:09:26.2892530Z   Downloading requests-2.32.4-py3-none-any.whl.metadata (4.9 kB)
+2025-06-26T17:09:26.6970545Z Collecting boto3
+2025-06-26T17:09:26.7008629Z   Downloading boto3-1.38.44-py3-none-any.whl.metadata (6.6 kB)
+2025-06-26T17:09:26.7977606Z Collecting charset_normalizer<4,>=2 (from requests)
+2025-06-26T17:09:26.8022530Z   Downloading charset_normalizer-3.4.2-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (35 kB)
+2025-06-26T17:09:26.8203094Z Collecting idna<4,>=2.5 (from requests)
+2025-06-26T17:09:26.8241540Z   Downloading idna-3.10-py3-none-any.whl.metadata (10 kB)
+2025-06-26T17:09:26.8649470Z Collecting urllib3<3,>=1.21.1 (from requests)
+2025-06-26T17:09:26.8690079Z   Downloading urllib3-2.5.0-py3-none-any.whl.metadata (6.5 kB)
+2025-06-26T17:09:26.8940427Z Collecting certifi>=2017.4.17 (from requests)
+2025-06-26T17:09:26.8980284Z   Downloading certifi-2025.6.15-py3-none-any.whl.metadata (2.4 kB)
+2025-06-26T17:09:27.3480288Z Collecting botocore<1.39.0,>=1.38.44 (from boto3)
+2025-06-26T17:09:27.3518948Z   Downloading botocore-1.38.44-py3-none-any.whl.metadata (5.7 kB)
+2025-06-26T17:09:27.3677874Z Collecting jmespath<2.0.0,>=0.7.1 (from boto3)
+2025-06-26T17:09:27.3708565Z   Downloading jmespath-1.0.1-py3-none-any.whl.metadata (7.6 kB)
+2025-06-26T17:09:27.3892510Z Collecting s3transfer<0.14.0,>=0.13.0 (from boto3)
+2025-06-26T17:09:27.4004324Z   Downloading s3transfer-0.13.0-py3-none-any.whl.metadata (1.7 kB)
+2025-06-26T17:09:27.4123710Z Collecting python-dateutil<3.0.0,>=2.1 (from botocore<1.39.0,>=1.38.44->boto3)
+2025-06-26T17:09:27.4154954Z   Downloading python_dateutil-2.9.0.post0-py2.py3-none-any.whl.metadata (8.4 kB)
+2025-06-26T17:09:27.4450698Z Collecting six>=1.5 (from python-dateutil<3.0.0,>=2.1->botocore<1.39.0,>=1.38.44->boto3)
+2025-06-26T17:09:27.4480581Z   Downloading six-1.17.0-py2.py3-none-any.whl.metadata (1.7 kB)
+2025-06-26T17:09:27.6270048Z Downloading requests-2.32.4-py3-none-any.whl (64 kB)
+2025-06-26T17:09:27.6329617Z Downloading charset_normalizer-3.4.2-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (149 kB)
+2025-06-26T17:09:27.6394469Z Downloading idna-3.10-py3-none-any.whl (70 kB)
+2025-06-26T17:09:27.6453571Z Downloading urllib3-2.5.0-py3-none-any.whl (129 kB)
+2025-06-26T17:09:27.6516777Z Downloading boto3-1.38.44-py3-none-any.whl (139 kB)
+2025-06-26T17:09:27.6588771Z Downloading botocore-1.38.44-py3-none-any.whl (13.7 MB)
+2025-06-26T17:09:27.7245687Z    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 13.7/13.7 MB 216.5 MB/s eta 0:00:00
+2025-06-26T17:09:27.7281972Z Downloading jmespath-1.0.1-py3-none-any.whl (20 kB)
+2025-06-26T17:09:27.7340244Z Downloading python_dateutil-2.9.0.post0-py2.py3-none-any.whl (229 kB)
+2025-06-26T17:09:27.7408943Z Downloading s3transfer-0.13.0-py3-none-any.whl (85 kB)
+2025-06-26T17:09:27.7472476Z Downloading certifi-2025.6.15-py3-none-any.whl (157 kB)
+2025-06-26T17:09:27.7534357Z Downloading six-1.17.0-py2.py3-none-any.whl (11 kB)
+2025-06-26T17:09:27.8236490Z Installing collected packages: urllib3, six, jmespath, idna, charset_normalizer, certifi, requests, python-dateutil, botocore, s3transfer, boto3
+2025-06-26T17:09:28.7986277Z 
+2025-06-26T17:09:28.8014599Z Successfully installed boto3-1.38.44 botocore-1.38.44 certifi-2025.6.15 charset_normalizer-3.4.2 idna-3.10 jmespath-1.0.1 python-dateutil-2.9.0.post0 requests-2.32.4 s3transfer-0.13.0 six-1.17.0 urllib3-2.5.0
+2025-06-26T17:09:28.9051435Z Checking if extract_outbound.py exists:
+2025-06-26T17:09:28.9067758Z -rw-r--r-- 1 runner docker 27470 Jun 26 17:09 extract_outbound.py
+2025-06-26T17:09:28.9069850Z Directory contents:
+2025-06-26T17:09:28.9086337Z total 200
+2025-06-26T17:09:28.9086836Z drwxr-xr-x 4 runner docker  4096 Jun 26 17:09 .
+2025-06-26T17:09:28.9087386Z drwxr-xr-x 3 runner docker  4096 Jun 26 17:09 ..
+2025-06-26T17:09:28.9087924Z drwxr-xr-x 7 runner docker  4096 Jun 26 17:09 .git
+2025-06-26T17:09:28.9088496Z drwxr-xr-x 3 runner docker  4096 Jun 26 17:09 .github
+2025-06-26T17:09:28.9089034Z -rw-r--r-- 1 runner docker    26 Jun 26 17:09 .gitignore
+2025-06-26T17:09:28.9089659Z -rw-r--r-- 1 runner docker 23563 Jun 26 17:09 ID SG trojan tls ntls.json
+2025-06-26T17:09:28.9090322Z -rw-r--r-- 1 runner docker  4282 Jun 26 17:09 ID vless ntls.json
+2025-06-26T17:09:28.9090948Z -rw-r--r-- 1 runner docker  4877 Jun 26 17:09 ID vless tls.json
+2025-06-26T17:09:28.9091535Z -rw-r--r-- 1 runner docker  2558 Jun 26 17:09 README.md
+2025-06-26T17:09:28.9092126Z -rw-r--r-- 1 runner docker  5470 Jun 26 17:09 SG vless ntls.json
+2025-06-26T17:09:28.9092899Z -rw-r--r-- 1 runner docker  4863 Jun 26 17:09 SG vless tls.json
+2025-06-26T17:09:28.9093528Z -rw-r--r-- 1 runner docker  6696 Jun 26 17:09 Vmess Ntls.json
+2025-06-26T17:09:28.9094109Z -rw-r--r-- 1 runner docker  8596 Jun 26 17:09 Vmess Tls.json
+2025-06-26T17:09:28.9094930Z -rw-r--r-- 1 runner docker  2812 Jun 26 17:09 auto-download.conf
+2025-06-26T17:09:28.9095565Z -rw-r--r-- 1 runner docker 29562 Jun 26 17:09 backup.json
+2025-06-26T17:09:28.9096157Z -rw-r--r-- 1 runner docker  2240 Jun 26 17:09 config.ini
+2025-06-26T17:09:28.9096702Z -rw-r--r-- 1 runner docker  6887 Jun 26 17:09 config.json
+2025-06-26T17:09:28.9097296Z -rw-r--r-- 1 runner docker  7968 Jun 26 17:09 config.json.bak
+2025-06-26T17:09:28.9097920Z -rw-r--r-- 1 runner docker  1303 Jun 26 17:09 config_format.ini
+2025-06-26T17:09:28.9098553Z -rw-r--r-- 1 runner docker 27470 Jun 26 17:09 extract_outbound.py
+2025-06-26T17:09:28.9099214Z -rw-r--r-- 1 runner docker  6318 Jun 26 17:09 upload_summary.json
+2025-06-26T17:09:28.9099906Z -rw-r--r-- 1 runner docker  3345 Jun 26 17:09 upload_to_r2.py
+2025-06-26T17:09:28.9135246Z ##[group]Run # Copy config.ini from workflows directory to working directory
+2025-06-26T17:09:28.9135795Z [36;1m# Copy config.ini from workflows directory to working directory[0m
+2025-06-26T17:09:28.9136176Z [36;1mcp .github/workflows/config.ini .[0m
+2025-06-26T17:09:28.9136450Z [36;1mecho "Config file contents:"[0m
+2025-06-26T17:09:28.9136698Z [36;1mcat config.ini[0m
+2025-06-26T17:09:28.9136898Z [36;1m[0m
+2025-06-26T17:09:28.9137184Z [36;1m# Copy config_format.ini from workflows directory to working directory[0m
+2025-06-26T17:09:28.9137565Z [36;1mcp .github/workflows/config_format.ini .[0m
+2025-06-26T17:09:28.9137856Z [36;1mecho "Format config file contents:"[0m
+2025-06-26T17:09:28.9138116Z [36;1mcat config_format.ini[0m
+2025-06-26T17:09:28.9198352Z shell: /usr/bin/bash -e {0}
+2025-06-26T17:09:28.9198758Z env:
+2025-06-26T17:09:28.9199020Z   pythonLocation: /opt/hostedtoolcache/Python/3.10.18/x64
+2025-06-26T17:09:28.9199497Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.10.18/x64/lib/pkgconfig
+2025-06-26T17:09:28.9199957Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.10.18/x64
+2025-06-26T17:09:28.9200312Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.10.18/x64
+2025-06-26T17:09:28.9200670Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.10.18/x64
+2025-06-26T17:09:28.9201028Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.10.18/x64/lib
+2025-06-26T17:09:28.9201323Z ##[endgroup]
+2025-06-26T17:09:28.9308973Z Config file contents:
+2025-06-26T17:09:28.9319524Z # Konfigurasi untuk extract_outbound.py
+2025-06-26T17:09:28.9319974Z # 
+2025-06-26T17:09:28.9320240Z # Format konfigurasi:
+2025-06-26T17:09:28.9320514Z # [Komentar/Judul konfigurasi]
+2025-06-26T17:09:28.9320844Z # Country_ID= [Kode negara, dipisahkan koma jika lebih dari satu]
+2025-06-26T17:09:28.9321199Z # Protocol= [Protokol: vless, trojan]
+2025-06-26T17:09:28.9321478Z # Security= [Keamanan: tls, ntls]
+2025-06-26T17:09:28.9321721Z # Output_Name= [Nama file output]
+2025-06-26T17:09:28.9321946Z #
+2025-06-26T17:09:28.9322231Z # Daftar kode negara yang tersedia (diurutkan berdasarkan nama negara):
+2025-06-26T17:09:28.9322638Z     # AR (Argentina)       AM (Armenia)         AU (Australia)   
+2025-06-26T17:09:28.9322976Z     # AT (Austria)         BE (Belgium)         BR (Brazil)         
+2025-06-26T17:09:28.9323314Z     # BG (Bulgaria)        CA (Canada)          CN (China)       
+2025-06-26T17:09:28.9323660Z     # CY (Cyprus)          CZ (Czech Republic)  DK (Denmark)       
+2025-06-26T17:09:28.9323990Z     # EE (Estonia)         FI (Finland)         FR (France)
+2025-06-26T17:09:28.9324304Z     # DE (Germany)         HK (Hong Kong)       HU (Hungary)      
+2025-06-26T17:09:28.9324848Z     # IN (India)           ID (Indonesia)       IE (Ireland)        
+2025-06-26T17:09:28.9325231Z     # IT (Italy)           JP (Japan)           KZ (Kazakhstan)  
+2025-06-26T17:09:28.9325587Z     # KR (South Korea)     LV (Latvia)          LT (Lithuania)     
+2025-06-26T17:09:28.9325972Z     # LU (Luxembourg)      MY (Malaysia)        MU (Mauritius)
+2025-06-26T17:09:28.9326380Z     # MX (Mexico)          MD (Moldova)         NL (Netherlands) 
+2025-06-26T17:09:28.9326746Z     # PH (Philippines)     PL (Poland)          PT (Portugal)       
+2025-06-26T17:09:28.9327105Z     # RO (Romania)         RU (Russia)          RS (Serbia)      
+2025-06-26T17:09:28.9327451Z     # SG (Singapore)       SK (Slovakia)        ES (Spain)         
+2025-06-26T17:09:28.9327786Z     # SE (Sweden)          CH (Switzerland)     TW (Taiwan)
+2025-06-26T17:09:28.9328114Z     # TH (Thailand)        TR (Turkey)          UA (Ukraine)      
+2025-06-26T17:09:28.9328471Z     # AE (United Arab E)   GB (United Kingdom)  US (United States)  
+2025-06-26T17:09:28.9328820Z     # VN (Vietnam)         TF (French Southern Territories)
+2025-06-26T17:09:28.9329098Z #
+2025-06-26T17:09:28.9329274Z # Daftar protokol yang tersedia:
+2025-06-26T17:09:28.9329517Z # vless, trojan
+2025-06-26T17:09:28.9329696Z #
+2025-06-26T17:09:28.9329865Z # Daftar keamanan yang tersedia:
+2025-06-26T17:09:28.9330357Z # tls, ntls
+2025-06-26T17:09:28.9330507Z 
+2025-06-26T17:09:28.9330578Z #ID vless tls
+2025-06-26T17:09:28.9330754Z Country_ID= ID
+2025-06-26T17:09:28.9330935Z Protocol= vless
+2025-06-26T17:09:28.9331113Z Security= tls
+2025-06-26T17:09:28.9331305Z Output_Name= ID vless tls.json
+2025-06-26T17:09:28.9331460Z 
+2025-06-26T17:09:28.9331535Z #ID vless ntls
+2025-06-26T17:09:28.9331714Z Country_ID= ID
+2025-06-26T17:09:28.9331894Z Protocol= vless
+2025-06-26T17:09:28.9332082Z Security= ntls
+2025-06-26T17:09:28.9332311Z Output_Name= ID vless ntls.json
+2025-06-26T17:09:28.9332466Z 
+2025-06-26T17:09:28.9332541Z #SG vless tls
+2025-06-26T17:09:28.9332712Z Country_ID= SG
+2025-06-26T17:09:28.9332889Z Protocol= vless
+2025-06-26T17:09:28.9333068Z Security= tls
+2025-06-26T17:09:28.9333252Z Output_Name= SG vless tls.json
+2025-06-26T17:09:28.9333573Z 
+2025-06-26T17:09:28.9333644Z #SG vless ntls
+2025-06-26T17:09:28.9333821Z Country_ID= SG
+2025-06-26T17:09:28.9334005Z Protocol= vless
+2025-06-26T17:09:28.9334189Z Security= ntls
+2025-06-26T17:09:28.9334382Z Output_Name= SG vless ntls.json
+2025-06-26T17:09:28.9334540Z 
+2025-06-26T17:09:28.9334620Z #ID SG trojan tls ntls
+2025-06-26T17:09:28.9335245Z Country_ID= ID, SG
+2025-06-26T17:09:28.9335437Z Protocol= trojan
+2025-06-26T17:09:28.9335633Z Security= tls, ntls
+2025-06-26T17:09:28.9335863Z Output_Name= ID SG trojan tls ntls.json
+2025-06-26T17:09:28.9336164Z 
+2025-06-26T17:09:28.9336300Z #KR, JP, US vless tls ntls
+2025-06-26T17:09:28.9336544Z Country_ID= KR, JP, US, CN, VT, TH
+2025-06-26T17:09:28.9336764Z Protocol= vless
+2025-06-26T17:09:28.9336939Z Security= tls, ntls
+2025-06-26T17:09:28.9337301Z Output_Name= backup.jsonFormat config file contents:
+2025-06-26T17:09:28.9346333Z {
+2025-06-26T17:09:28.9346580Z     "vless": {
+2025-06-26T17:09:28.9346778Z         "type": "vless",
+2025-06-26T17:09:28.9346993Z         "tag": "",
+2025-06-26T17:09:28.9347183Z         "server": "",
+2025-06-26T17:09:28.9347521Z         "server_port": "",
+2025-06-26T17:09:28.9347852Z         "uuid": "",
+2025-06-26T17:09:28.9348148Z         "network": "",
+2025-06-26T17:09:28.9348487Z         "packet_encoding": "xudp",
+2025-06-26T17:09:28.9348859Z         "flow": "",
+2025-06-26T17:09:28.9349147Z         "tls": {
+2025-06-26T17:09:28.9349432Z             "enabled": "",
+2025-06-26T17:09:28.9349760Z             "insecure": "",
+2025-06-26T17:09:28.9350102Z             "server_name": ""
+2025-06-26T17:09:28.9350613Z         },
+2025-06-26T17:09:28.9350869Z         "transport": {
+2025-06-26T17:09:28.9351175Z             "type": "",
+2025-06-26T17:09:28.9351455Z             "path": "",
+2025-06-26T17:09:28.9351645Z             "headers": {
+2025-06-26T17:09:28.9351852Z                 "Host": ""
+2025-06-26T17:09:28.9352037Z             }
+2025-06-26T17:09:28.9352200Z         }
+2025-06-26T17:09:28.9352351Z     },
+2025-06-26T17:09:28.9352501Z     "trojan": {
+2025-06-26T17:09:28.9352690Z         "type": "trojan",
+2025-06-26T17:09:28.9352882Z         "tag": "",
+2025-06-26T17:09:28.9353056Z         "server": "",
+2025-06-26T17:09:28.9353242Z         "server_port": "",
+2025-06-26T17:09:28.9353453Z         "password": "",
+2025-06-26T17:09:28.9353642Z         "network": "",
+2025-06-26T17:09:28.9353814Z         "tls": {
+2025-06-26T17:09:28.9353988Z             "enabled": "",
+2025-06-26T17:09:28.9354189Z             "insecure": "",
+2025-06-26T17:09:28.9354396Z             "server_name": ""
+2025-06-26T17:09:28.9354587Z         },
+2025-06-26T17:09:28.9355012Z         "transport": {
+2025-06-26T17:09:28.9355209Z             "type": "",
+2025-06-26T17:09:28.9355393Z             "path": "",
+2025-06-26T17:09:28.9355574Z             "headers": {
+2025-06-26T17:09:28.9355766Z                 "Host": ""
+2025-06-26T17:09:28.9355949Z             }
+2025-06-26T17:09:28.9356102Z         },
+2025-06-26T17:09:28.9356266Z         "multiplex": {
+2025-06-26T17:09:28.9356452Z             "enabled": false
+2025-06-26T17:09:28.9356650Z         }
+2025-06-26T17:09:28.9356794Z     },
+2025-06-26T17:09:28.9356955Z     "shadowsocks": {
+2025-06-26T17:09:28.9357336Z         "type": "shadowsocks",
+2025-06-26T17:09:28.9357551Z         "tag": "",
+2025-06-26T17:09:28.9357717Z         "server": "",
+2025-06-26T17:09:28.9357903Z         "server_port": "",
+2025-06-26T17:09:28.9358092Z         "method": "",
+2025-06-26T17:09:28.9358270Z         "password": "",
+2025-06-26T17:09:28.9358455Z         "plugin": "",
+2025-06-26T17:09:28.9358645Z         "plugin_opts": "",
+2025-06-26T17:09:28.9358848Z         "network": "tcp",
+2025-06-26T17:09:28.9359041Z         "udp_over_tcp": false,
+2025-06-26T17:09:28.9359249Z         "multiplex": {
+2025-06-26T17:09:28.9359438Z             "enabled": false
+2025-06-26T17:09:28.9359627Z         }
+2025-06-26T17:09:28.9359772Z     }
+2025-06-26T17:09:28.9359921Z }
+2025-06-26T17:09:28.9385088Z ##[group]Run ls -la
+2025-06-26T17:09:28.9385372Z [36;1mls -la[0m
+2025-06-26T17:09:28.9385726Z [36;1m[0m
+2025-06-26T17:09:28.9386010Z [36;1mpython extract_outbound.py -o config_format.ini -f config.ini[0m
+2025-06-26T17:09:28.9386350Z [36;1m[0m
+2025-06-26T17:09:28.9386541Z [36;1mecho "Checking output files:"[0m
+2025-06-26T17:09:28.9386854Z [36;1m# Dynamically check all JSON files in the directory[0m
+2025-06-26T17:09:28.9387163Z [36;1mecho "JSON files found:"[0m
+2025-06-26T17:09:28.9387434Z [36;1mfind . -maxdepth 1 -name "*.json" | sort[0m
+2025-06-26T17:09:28.9387693Z [36;1m[0m
+2025-06-26T17:09:28.9387883Z [36;1m# Count total number of JSON files[0m
+2025-06-26T17:09:28.9388202Z [36;1mJSON_COUNT=$(find . -maxdepth 1 -name "*.json" | wc -l)[0m
+2025-06-26T17:09:28.9388523Z [36;1mecho "Total JSON files: $JSON_COUNT"[0m
+2025-06-26T17:09:28.9388765Z [36;1m[0m
+2025-06-26T17:09:28.9388959Z [36;1m# Check if any JSON files were created[0m
+2025-06-26T17:09:28.9389259Z [36;1mif [ "$JSON_COUNT" -eq 0 ]; then[0m
+2025-06-26T17:09:28.9389543Z [36;1m  echo "WARNING: No JSON files were created!"[0m
+2025-06-26T17:09:28.9389815Z [36;1m  exit 1[0m
+2025-06-26T17:09:28.9389984Z [36;1mfi[0m
+2025-06-26T17:09:28.9451042Z shell: /usr/bin/bash -e {0}
+2025-06-26T17:09:28.9451281Z env:
+2025-06-26T17:09:28.9451558Z   pythonLocation: /opt/hostedtoolcache/Python/3.10.18/x64
+2025-06-26T17:09:28.9451975Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.10.18/x64/lib/pkgconfig
+2025-06-26T17:09:28.9452372Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.10.18/x64
+2025-06-26T17:09:28.9452714Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.10.18/x64
+2025-06-26T17:09:28.9453075Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.10.18/x64
+2025-06-26T17:09:28.9453434Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.10.18/x64/lib
+2025-06-26T17:09:28.9453724Z ##[endgroup]
+2025-06-26T17:09:28.9553755Z total 200
+2025-06-26T17:09:28.9554160Z drwxr-xr-x 4 runner docker  4096 Jun 26 17:09 .
+2025-06-26T17:09:28.9554903Z drwxr-xr-x 3 runner docker  4096 Jun 26 17:09 ..
+2025-06-26T17:09:28.9555398Z drwxr-xr-x 7 runner docker  4096 Jun 26 17:09 .git
+2025-06-26T17:09:28.9555733Z drwxr-xr-x 3 runner docker  4096 Jun 26 17:09 .github
+2025-06-26T17:09:28.9556062Z -rw-r--r-- 1 runner docker    26 Jun 26 17:09 .gitignore
+2025-06-26T17:09:28.9556446Z -rw-r--r-- 1 runner docker 23563 Jun 26 17:09 ID SG trojan tls ntls.json
+2025-06-26T17:09:28.9556840Z -rw-r--r-- 1 runner docker  4282 Jun 26 17:09 ID vless ntls.json
+2025-06-26T17:09:28.9557186Z -rw-r--r-- 1 runner docker  4877 Jun 26 17:09 ID vless tls.json
+2025-06-26T17:09:28.9557648Z -rw-r--r-- 1 runner docker  2558 Jun 26 17:09 README.md
+2025-06-26T17:09:28.9557998Z -rw-r--r-- 1 runner docker  5470 Jun 26 17:09 SG vless ntls.json
+2025-06-26T17:09:28.9558462Z -rw-r--r-- 1 runner docker  4863 Jun 26 17:09 SG vless tls.json
+2025-06-26T17:09:28.9558816Z -rw-r--r-- 1 runner docker  6696 Jun 26 17:09 Vmess Ntls.json
+2025-06-26T17:09:28.9559242Z -rw-r--r-- 1 runner docker  8596 Jun 26 17:09 Vmess Tls.json
+2025-06-26T17:09:28.9559606Z -rw-r--r-- 1 runner docker  2812 Jun 26 17:09 auto-download.conf
+2025-06-26T17:09:28.9560037Z -rw-r--r-- 1 runner docker 29562 Jun 26 17:09 backup.json
+2025-06-26T17:09:28.9560366Z -rw-r--r-- 1 runner docker  2240 Jun 26 17:09 config.ini
+2025-06-26T17:09:28.9560707Z -rw-r--r-- 1 runner docker  6887 Jun 26 17:09 config.json
+2025-06-26T17:09:28.9561093Z -rw-r--r-- 1 runner docker  7968 Jun 26 17:09 config.json.bak
+2025-06-26T17:09:28.9561439Z -rw-r--r-- 1 runner docker  1303 Jun 26 17:09 config_format.ini
+2025-06-26T17:09:28.9561904Z -rw-r--r-- 1 runner docker 27470 Jun 26 17:09 extract_outbound.py
+2025-06-26T17:09:28.9562278Z -rw-r--r-- 1 runner docker  6318 Jun 26 17:09 upload_summary.json
+2025-06-26T17:09:28.9562718Z -rw-r--r-- 1 runner docker  3345 Jun 26 17:09 upload_to_r2.py
+2025-06-26T17:14:30.7482179Z Format outbound berhasil dimuat dari 'config_format.ini'
+2025-06-26T17:14:30.7482799Z Found 6 configuration(s) in file 'config.ini'.
+2025-06-26T17:14:30.7483534Z 
+2025-06-26T17:14:30.7483720Z Processing configuration 1/6...
+2025-06-26T17:14:30.7484027Z 
+2025-06-26T17:14:30.7484370Z Menggunakan konfigurasi:
+2025-06-26T17:14:30.7484923Z - Negara: ID
+2025-06-26T17:14:30.7485238Z - Protokol: vless
+2025-06-26T17:14:30.7485544Z - Security: tls
+2025-06-26T17:14:30.7485850Z - Output file: ID vless tls.json
+2025-06-26T17:14:30.7486313Z Using proxy.exbal.my.id based on current time: 17:09:29
+2025-06-26T17:14:30.7487007Z Fetching vless tls proxies from ID using https://proxy.exbal.my.id/api/bfr...
+2025-06-26T17:14:30.7487662Z Attempt 1/5 failed with status code 429
+2025-06-26T17:14:30.7488198Z Attempt 2/5 failed with status code 429
+2025-06-26T17:14:30.7488581Z Attempt 3/5 failed with status code 429
+2025-06-26T17:14:30.7488907Z Attempt 4/5 failed with status code 429
+2025-06-26T17:14:30.7489226Z Attempt 5/5 failed with status code 429
+2025-06-26T17:14:30.7489660Z Error processing ID vless tls: Failed to fetch data after 5 attempts
+2025-06-26T17:14:30.7490120Z Total proxies collected: 0
+2025-06-26T17:14:30.7490455Z Successfully saved all proxies to ID vless tls.json
+2025-06-26T17:14:30.7490736Z 
+2025-06-26T17:14:30.7490820Z Summary:
+2025-06-26T17:14:30.7490945Z 
+2025-06-26T17:14:30.7491059Z Processing configuration 2/6...
+2025-06-26T17:14:30.7491263Z 
+2025-06-26T17:14:30.7491367Z Menggunakan konfigurasi:
+2025-06-26T17:14:30.7491628Z - Negara: ID
+2025-06-26T17:14:30.7491846Z - Protokol: vless
+2025-06-26T17:14:30.7492078Z - Security: ntls
+2025-06-26T17:14:30.7492329Z - Output file: ID vless ntls.json
+2025-06-26T17:14:30.7492702Z Using proxy.exbal.my.id based on current time: 17:09:46
+2025-06-26T17:14:30.7493253Z Fetching vless ntls proxies from ID using https://proxy.exbal.my.id/api/bfr...
+2025-06-26T17:14:30.7493761Z Attempt 1/5 failed with status code 429
+2025-06-26T17:14:30.7494092Z Attempt 2/5 failed with status code 429
+2025-06-26T17:14:30.7494419Z Attempt 3/5 failed with status code 429
+2025-06-26T17:14:30.7494968Z Attempt 4/5 failed with status code 429
+2025-06-26T17:14:30.7495290Z Attempt 5/5 failed with status code 429
+2025-06-26T17:14:30.7495782Z Error processing ID vless ntls: Failed to fetch data after 5 attempts
+2025-06-26T17:14:30.7496226Z Total proxies collected: 0
+2025-06-26T17:14:30.7496559Z Successfully saved all proxies to ID vless ntls.json
+2025-06-26T17:14:30.7496834Z 
+2025-06-26T17:14:30.7496922Z Summary:
+2025-06-26T17:14:30.7497037Z 
+2025-06-26T17:14:30.7497139Z Processing configuration 3/6...
+2025-06-26T17:14:30.7497323Z 
+2025-06-26T17:14:30.7497418Z Menggunakan konfigurasi:
+2025-06-26T17:14:30.7497654Z - Negara: SG
+2025-06-26T17:14:30.7497857Z - Protokol: vless
+2025-06-26T17:14:30.7498066Z - Security: tls
+2025-06-26T17:14:30.7498290Z - Output file: SG vless tls.json
+2025-06-26T17:14:30.7498619Z Using proxy.exbal.my.id based on current time: 17:10:03
+2025-06-26T17:14:30.7499115Z Fetching vless tls proxies from SG using https://proxy.exbal.my.id/api/bfr...
+2025-06-26T17:14:30.7499567Z Attempt 1/5 failed with status code 429
+2025-06-26T17:14:30.7499873Z Attempt 2/5 failed with status code 429
+2025-06-26T17:14:30.7500172Z Attempt 3/5 failed with status code 429
+2025-06-26T17:14:30.7500475Z Attempt 4/5 failed with status code 429
+2025-06-26T17:14:30.7500770Z Attempt 5/5 failed with status code 429
+2025-06-26T17:14:30.7501168Z Error processing SG vless tls: Failed to fetch data after 5 attempts
+2025-06-26T17:14:30.7501579Z Total proxies collected: 0
+2025-06-26T17:14:30.7501883Z Successfully saved all proxies to SG vless tls.json
+2025-06-26T17:14:30.7502086Z 
+2025-06-26T17:14:30.7502152Z Summary:
+2025-06-26T17:14:30.7502254Z 
+2025-06-26T17:14:30.7502346Z Processing configuration 4/6...
+2025-06-26T17:14:30.7502506Z 
+2025-06-26T17:14:30.7502586Z Menggunakan konfigurasi:
+2025-06-26T17:14:30.7502790Z - Negara: SG
+2025-06-26T17:14:30.7502955Z - Protokol: vless
+2025-06-26T17:14:30.7503131Z - Security: ntls
+2025-06-26T17:14:30.7503326Z - Output file: SG vless ntls.json
+2025-06-26T17:14:30.7503609Z Using proxy.exbal.my.id based on current time: 17:10:21
+2025-06-26T17:14:30.7504218Z Fetching vless ntls proxies from SG using https://proxy.exbal.my.id/api/bfr...
+2025-06-26T17:14:30.7504905Z Attempt 1/5 failed with status code 429
+2025-06-26T17:14:30.7505161Z Attempt 2/5 failed with status code 429
+2025-06-26T17:14:30.7505407Z Attempt 3/5 failed with status code 429
+2025-06-26T17:14:30.7505645Z Attempt 4/5 failed with status code 429
+2025-06-26T17:14:30.7505884Z Attempt 5/5 failed with status code 429
+2025-06-26T17:14:30.7506208Z Error processing SG vless ntls: Failed to fetch data after 5 attempts
+2025-06-26T17:14:30.7506539Z Total proxies collected: 0
+2025-06-26T17:14:30.7506789Z Successfully saved all proxies to SG vless ntls.json
+2025-06-26T17:14:30.7507000Z 
+2025-06-26T17:14:30.7507062Z Summary:
+2025-06-26T17:14:30.7507154Z 
+2025-06-26T17:14:30.7507244Z Processing configuration 5/6...
+2025-06-26T17:14:30.7507393Z 
+2025-06-26T17:14:30.7507477Z Menggunakan konfigurasi:
+2025-06-26T17:14:30.7507667Z - Negara: ID, SG
+2025-06-26T17:14:30.7507863Z - Protokol: trojan
+2025-06-26T17:14:30.7508064Z - Security: tls, ntls
+2025-06-26T17:14:30.7508287Z - Output file: ID SG trojan tls ntls.json
+2025-06-26T17:14:30.7508603Z Using proxy.exbal.my.id based on current time: 17:10:37
+2025-06-26T17:14:30.7509022Z Fetching trojan tls proxies from ID using https://proxy.exbal.my.id/api/bfr...
+2025-06-26T17:14:30.7509412Z Attempt 1/5 failed with status code 429
+2025-06-26T17:14:30.7509667Z Attempt 2/5 failed with status code 429
+2025-06-26T17:14:30.7509907Z Attempt 3/5 failed with status code 429
+2025-06-26T17:14:30.7510171Z Attempt 4/5 failed with status code 429
+2025-06-26T17:14:30.7510420Z Attempt 5/5 failed with status code 429
+2025-06-26T17:14:30.7510740Z Error processing ID trojan tls: Failed to fetch data after 5 attempts
+2025-06-26T17:14:30.7511205Z Fetching trojan ntls proxies from ID using https://proxy.exbal.my.id/api/bfr...
+2025-06-26T17:14:30.7511592Z Attempt 1/5 failed with status code 429
+2025-06-26T17:14:30.7511842Z Attempt 2/5 failed with status code 429
+2025-06-26T17:14:30.7512085Z Attempt 3/5 failed with status code 429
+2025-06-26T17:14:30.7512329Z Attempt 4/5 failed with status code 429
+2025-06-26T17:14:30.7512575Z Attempt 5/5 failed with status code 429
+2025-06-26T17:14:30.7512906Z Error processing ID trojan ntls: Failed to fetch data after 5 attempts
+2025-06-26T17:14:30.7513358Z Fetching trojan tls proxies from SG using https://proxy.exbal.my.id/api/bfr...
+2025-06-26T17:14:30.7513731Z Attempt 1/5 failed with status code 429
+2025-06-26T17:14:30.7513979Z Attempt 2/5 failed with status code 429
+2025-06-26T17:14:30.7514225Z Attempt 3/5 failed with status code 429
+2025-06-26T17:14:30.7514461Z Attempt 4/5 failed with status code 429
+2025-06-26T17:14:30.7514857Z Attempt 5/5 failed with status code 429
+2025-06-26T17:14:30.7515188Z Error processing SG trojan tls: Failed to fetch data after 5 attempts
+2025-06-26T17:14:30.7515645Z Fetching trojan ntls proxies from SG using https://proxy.exbal.my.id/api/bfr...
+2025-06-26T17:14:30.7516015Z Attempt 1/5 failed with status code 429
+2025-06-26T17:14:30.7516264Z Attempt 2/5 failed with status code 429
+2025-06-26T17:14:30.7516534Z Attempt 3/5 failed with status code 429
+2025-06-26T17:14:30.7516782Z Attempt 4/5 failed with status code 429
+2025-06-26T17:14:30.7517017Z Attempt 5/5 failed with status code 429
+2025-06-26T17:14:30.7517342Z Error processing SG trojan ntls: Failed to fetch data after 5 attempts
+2025-06-26T17:14:30.7517677Z Total proxies collected: 0
+2025-06-26T17:14:30.7517960Z Successfully saved all proxies to ID SG trojan tls ntls.json
+2025-06-26T17:14:30.7518195Z 
+2025-06-26T17:14:30.7518260Z Summary:
+2025-06-26T17:14:30.7518357Z 
+2025-06-26T17:14:30.7518445Z Processing configuration 6/6...
+2025-06-26T17:14:30.7518713Z Warning: Invalid country codes: VT
+2025-06-26T17:14:30.7518955Z These country codes will be ignored.
+2025-06-26T17:14:30.7519113Z 
+2025-06-26T17:14:30.7519195Z Menggunakan konfigurasi:
+2025-06-26T17:14:30.7519405Z - Negara: KR, JP, US, CN, TH
+2025-06-26T17:14:30.7519614Z - Protokol: vless
+2025-06-26T17:14:30.7519925Z - Security: tls, ntls
+2025-06-26T17:14:30.7520123Z - Output file: backup.json
+2025-06-26T17:14:30.7520387Z Using proxy.exbal.my.id based on current time: 17:11:43
+2025-06-26T17:14:30.7520896Z Fetching vless tls proxies from KR using https://proxy.exbal.my.id/api/bfr...
+2025-06-26T17:14:30.7521268Z Attempt 1/5 failed with status code 429
+2025-06-26T17:14:30.7521511Z Attempt 2/5 failed with status code 429
+2025-06-26T17:14:30.7521755Z Attempt 3/5 failed with status code 429
+2025-06-26T17:14:30.7521995Z Attempt 4/5 failed with status code 429
+2025-06-26T17:14:30.7522235Z Attempt 5/5 failed with status code 429
+2025-06-26T17:14:30.7522551Z Error processing KR vless tls: Failed to fetch data after 5 attempts
+2025-06-26T17:14:30.7522994Z Fetching vless ntls proxies from KR using https://proxy.exbal.my.id/api/bfr...
+2025-06-26T17:14:30.7523359Z Attempt 1/5 failed with status code 429
+2025-06-26T17:14:30.7523600Z Attempt 2/5 failed with status code 429
+2025-06-26T17:14:30.7523842Z Attempt 3/5 failed with status code 429
+2025-06-26T17:14:30.7524086Z Attempt 4/5 failed with status code 429
+2025-06-26T17:14:30.7524330Z Attempt 5/5 failed with status code 429
+2025-06-26T17:14:30.7524817Z Error processing KR vless ntls: Failed to fetch data after 5 attempts
+2025-06-26T17:14:30.7525271Z Fetching vless tls proxies from JP using https://proxy.exbal.my.id/api/bfr...
+2025-06-26T17:14:30.7525633Z Attempt 1/5 failed with status code 429
+2025-06-26T17:14:30.7525873Z Attempt 2/5 failed with status code 429
+2025-06-26T17:14:30.7526113Z Attempt 3/5 failed with status code 429
+2025-06-26T17:14:30.7526349Z Attempt 4/5 failed with status code 429
+2025-06-26T17:14:30.7526591Z Attempt 5/5 failed with status code 429
+2025-06-26T17:14:30.7526911Z Error processing JP vless tls: Failed to fetch data after 5 attempts
+2025-06-26T17:14:30.7527355Z Fetching vless ntls proxies from JP using https://proxy.exbal.my.id/api/bfr...
+2025-06-26T17:14:30.7527723Z Attempt 1/5 failed with status code 429
+2025-06-26T17:14:30.7527973Z Attempt 2/5 failed with status code 429
+2025-06-26T17:14:30.7528214Z Attempt 3/5 failed with status code 429
+2025-06-26T17:14:30.7528455Z Attempt 4/5 failed with status code 429
+2025-06-26T17:14:30.7528696Z Attempt 5/5 failed with status code 429
+2025-06-26T17:14:30.7529016Z Error processing JP vless ntls: Failed to fetch data after 5 attempts
+2025-06-26T17:14:30.7529457Z Fetching vless tls proxies from US using https://proxy.exbal.my.id/api/bfr...
+2025-06-26T17:14:30.7529816Z Attempt 1/5 failed with status code 429
+2025-06-26T17:14:30.7530059Z Attempt 2/5 failed with status code 429
+2025-06-26T17:14:30.7530302Z Attempt 3/5 failed with status code 429
+2025-06-26T17:14:30.7530545Z Attempt 4/5 failed with status code 429
+2025-06-26T17:14:30.7530787Z Attempt 5/5 failed with status code 429
+2025-06-26T17:14:30.7531099Z Error processing US vless tls: Failed to fetch data after 5 attempts
+2025-06-26T17:14:30.7531533Z Fetching vless ntls proxies from US using https://proxy.exbal.my.id/api/bfr...
+2025-06-26T17:14:30.7531902Z Attempt 1/5 failed with status code 429
+2025-06-26T17:14:30.7532146Z Attempt 2/5 failed with status code 429
+2025-06-26T17:14:30.7532382Z Attempt 3/5 failed with status code 429
+2025-06-26T17:14:30.7532631Z Attempt 4/5 failed with status code 429
+2025-06-26T17:14:30.7532873Z Attempt 5/5 failed with status code 429
+2025-06-26T17:14:30.7533192Z Error processing US vless ntls: Failed to fetch data after 5 attempts
+2025-06-26T17:14:30.7533623Z Fetching vless tls proxies from CN using https://proxy.exbal.my.id/api/bfr...
+2025-06-26T17:14:30.7533985Z Attempt 1/5 failed with status code 429
+2025-06-26T17:14:30.7534229Z Attempt 2/5 failed with status code 429
+2025-06-26T17:14:30.7534469Z Attempt 3/5 failed with status code 429
+2025-06-26T17:14:30.7534865Z Attempt 4/5 failed with status code 429
+2025-06-26T17:14:30.7535110Z Attempt 5/5 failed with status code 429
+2025-06-26T17:14:30.7535427Z Error processing CN vless tls: Failed to fetch data after 5 attempts
+2025-06-26T17:14:30.7535985Z Fetching vless ntls proxies from CN using https://proxy.exbal.my.id/api/bfr...
+2025-06-26T17:14:30.7536349Z Attempt 1/5 failed with status code 429
+2025-06-26T17:14:30.7537042Z Attempt 2/5 failed with status code 429
+2025-06-26T17:14:30.7537474Z Attempt 3/5 failed with status code 429
+2025-06-26T17:14:30.7537909Z Attempt 4/5 failed with status code 429
+2025-06-26T17:14:30.7538329Z Attempt 5/5 failed with status code 429
+2025-06-26T17:14:30.7538935Z Error processing CN vless ntls: Failed to fetch data after 5 attempts
+2025-06-26T17:14:30.7539447Z Fetching vless tls proxies from TH using https://proxy.exbal.my.id/api/bfr...
+2025-06-26T17:14:30.7539820Z Attempt 1/5 failed with status code 429
+2025-06-26T17:14:30.7540059Z Attempt 2/5 failed with status code 429
+2025-06-26T17:14:30.7540308Z Attempt 3/5 failed with status code 429
+2025-06-26T17:14:30.7540550Z Attempt 4/5 failed with status code 429
+2025-06-26T17:14:30.7540789Z Attempt 5/5 failed with status code 429
+2025-06-26T17:14:30.7541112Z Error processing TH vless tls: Failed to fetch data after 5 attempts
+2025-06-26T17:14:30.7541556Z Fetching vless ntls proxies from TH using https://proxy.exbal.my.id/api/bfr...
+2025-06-26T17:14:30.7541934Z Attempt 1/5 failed with status code 429
+2025-06-26T17:14:30.7542178Z Attempt 2/5 failed with status code 429
+2025-06-26T17:14:30.7542415Z Attempt 3/5 failed with status code 429
+2025-06-26T17:14:30.7542655Z Attempt 4/5 failed with status code 429
+2025-06-26T17:14:30.7542894Z Attempt 5/5 failed with status code 429
+2025-06-26T17:14:30.7543214Z Error processing TH vless ntls: Failed to fetch data after 5 attempts
+2025-06-26T17:14:30.7543538Z Total proxies collected: 0
+2025-06-26T17:14:30.7543784Z Successfully saved all proxies to backup.json
+2025-06-26T17:14:30.7543978Z 
+2025-06-26T17:14:30.7544045Z Summary:
+2025-06-26T17:14:30.7544134Z 
+2025-06-26T17:14:30.7544258Z Total proxies collected from all configurations: 0
+2025-06-26T17:14:30.7626047Z Checking output files:
+2025-06-26T17:14:30.7626421Z JSON files found:
+2025-06-26T17:14:30.7645735Z ./ID SG trojan tls ntls.json
+2025-06-26T17:14:30.7646166Z ./ID vless ntls.json
+2025-06-26T17:14:30.7646497Z ./ID vless tls.json
+2025-06-26T17:14:30.7646814Z ./SG vless ntls.json
+2025-06-26T17:14:30.7647123Z ./SG vless tls.json
+2025-06-26T17:14:30.7647432Z ./Vmess Ntls.json
+2025-06-26T17:14:30.7647616Z ./Vmess Tls.json
+2025-06-26T17:14:30.7647823Z ./backup.json
+2025-06-26T17:14:30.7648009Z ./config.json
+2025-06-26T17:14:30.7648197Z ./upload_summary.json
+2025-06-26T17:14:30.7670571Z Total JSON files: 10
+2025-06-26T17:14:30.7712381Z ##[group]Run if [ "$ENABLE_UPLOAD" = "true" ]; then
+2025-06-26T17:14:30.7712755Z [36;1mif [ "$ENABLE_UPLOAD" = "true" ]; then[0m
+2025-06-26T17:14:30.7713037Z [36;1m  python upload_to_r2.py[0m
+2025-06-26T17:14:30.7713265Z [36;1melse[0m
+2025-06-26T17:14:30.7713462Z [36;1m  echo "Upload to R2 is disabled"[0m
+2025-06-26T17:14:30.7713699Z [36;1mfi[0m
+2025-06-26T17:14:30.7771658Z shell: /usr/bin/bash -e {0}
+2025-06-26T17:14:30.7771881Z env:
+2025-06-26T17:14:30.7772127Z   pythonLocation: /opt/hostedtoolcache/Python/3.10.18/x64
+2025-06-26T17:14:30.7772538Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.10.18/x64/lib/pkgconfig
+2025-06-26T17:14:30.7772935Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.10.18/x64
+2025-06-26T17:14:30.7773282Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.10.18/x64
+2025-06-26T17:14:30.7773623Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.10.18/x64
+2025-06-26T17:14:30.7773994Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.10.18/x64/lib
+2025-06-26T17:14:30.7774284Z   ENABLE_UPLOAD: false
+2025-06-26T17:14:30.7774839Z   R2_ACCESS_KEY_ID: ***
+2025-06-26T17:14:30.7775227Z   R2_SECRET_ACCESS_KEY: ***
+2025-06-26T17:14:30.7775499Z   R2_ACCOUNT_ID: ***
+2025-06-26T17:14:30.7775685Z   R2_BUCKET_NAME: cloud
+2025-06-26T17:14:30.7775886Z   R2_FOLDER_NAME: sing-box_config
+2025-06-26T17:14:30.7776107Z ##[endgroup]
+2025-06-26T17:14:30.7866431Z Upload to R2 is disabled
+2025-06-26T17:14:30.7940829Z ##[group]Run stefanzweifel/git-auto-commit-action@v5
+2025-06-26T17:14:30.7941151Z with:
+2025-06-26T17:14:30.7941362Z   commit_message: Update proxy list [automated]
+2025-06-26T17:14:30.7941707Z   file_pattern: *.json README.md config.ini config_format.ini
+2025-06-26T17:14:30.7942180Z   commit_user_name: GitHub Actions Bot
+2025-06-26T17:14:30.7942431Z   commit_user_email: actions@github.com
+2025-06-26T17:14:30.7942735Z   commit_author: GitHub Actions Bot <actions@github.com>
+2025-06-26T17:14:30.7943030Z   push_options: --force
+2025-06-26T17:14:30.7943234Z   repository: .
+2025-06-26T17:14:30.7943421Z   skip_dirty_check: false
+2025-06-26T17:14:30.7943619Z   skip_fetch: false
+2025-06-26T17:14:30.7943802Z   skip_checkout: false
+2025-06-26T17:14:30.7943990Z   disable_globbing: false
+2025-06-26T17:14:30.7944185Z   create_branch: false
+2025-06-26T17:14:30.7944378Z   create_git_tag_only: false
+2025-06-26T17:14:30.7944586Z   internal_git_binary: git
+2025-06-26T17:14:30.7944993Z env:
+2025-06-26T17:14:30.7945254Z   pythonLocation: /opt/hostedtoolcache/Python/3.10.18/x64
+2025-06-26T17:14:30.7945657Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.10.18/x64/lib/pkgconfig
+2025-06-26T17:14:30.7946045Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.10.18/x64
+2025-06-26T17:14:30.7946403Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.10.18/x64
+2025-06-26T17:14:30.7946748Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.10.18/x64
+2025-06-26T17:14:30.7947098Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.10.18/x64/lib
+2025-06-26T17:14:30.7947382Z ##[endgroup]
+2025-06-26T17:14:30.8187118Z Started: bash /home/runner/work/_actions/stefanzweifel/git-auto-commit-action/v5/entrypoint.sh
+2025-06-26T17:14:30.8227569Z INPUT_REPOSITORY value: .
+2025-06-26T17:14:30.8227823Z INPUT_STATUS_OPTIONS: 
+2025-06-26T17:14:30.8228535Z INPUT_FILE_PATTERN: *.json README.md config.ini config_format.ini
+2025-06-26T17:14:30.8286282Z INPUT_BRANCH value: 
+2025-06-26T17:14:31.4337024Z M	ID SG trojan tls ntls.json
+2025-06-26T17:14:31.4337505Z M	ID vless ntls.json
+2025-06-26T17:14:31.4337720Z M	ID vless tls.json
+2025-06-26T17:14:31.4337910Z M	SG vless ntls.json
+2025-06-26T17:14:31.4338161Z M	SG vless tls.json
+2025-06-26T17:14:31.4338481Z M	backup.json
+2025-06-26T17:14:31.4338791Z M	config_format.ini
+2025-06-26T17:14:31.4339177Z Your branch is up to date with 'origin/Master'.
+2025-06-26T17:14:31.4339694Z INPUT_ADD_OPTIONS: 
+2025-06-26T17:14:31.4340757Z INPUT_FILE_PATTERN: *.json README.md config.ini config_format.ini
+2025-06-26T17:14:31.4406772Z INPUT_COMMIT_OPTIONS: 
+2025-06-26T17:14:31.4407594Z INPUT_COMMIT_USER_NAME: GitHub Actions Bot
+2025-06-26T17:14:31.4408036Z INPUT_COMMIT_USER_EMAIL: actions@github.com
+2025-06-26T17:14:31.4408516Z INPUT_COMMIT_MESSAGE: Update proxy list [automated]
+2025-06-26T17:14:31.4409094Z INPUT_COMMIT_AUTHOR: GitHub Actions Bot <actions@github.com>
+2025-06-26T17:14:31.4460727Z [Master 6310b29] Update proxy list [automated]
+2025-06-26T17:14:31.4461313Z  7 files changed, 9 insertions(+), 2273 deletions(-)
+2025-06-26T17:14:31.4480465Z INPUT_TAGGING_MESSAGE: 
+2025-06-26T17:14:31.4480954Z No tagging message supplied. No tag will be added.
+2025-06-26T17:14:31.4481279Z INPUT_PUSH_OPTIONS: --force
+2025-06-26T17:14:32.3000707Z To https://github.com/exball/sing-box-config
+2025-06-26T17:14:32.3001448Z    64858ca..6310b29  Master -> Master
+2025-06-26T17:14:32.3109808Z ##[group]Run echo "Workflow completed successfully!"
+2025-06-26T17:14:32.3110190Z [36;1mecho "Workflow completed successfully!"[0m
+2025-06-26T17:14:32.3110486Z [36;1mecho "JSON files generated:"[0m
+2025-06-26T17:14:32.3110761Z [36;1mfind . -maxdepth 1 -name "*.json" | sort[0m
+2025-06-26T17:14:32.3111116Z [36;1mecho "Total JSON files: $(find . -maxdepth 1 -name "*.json" | wc -l)"[0m
+2025-06-26T17:14:32.3170482Z shell: /usr/bin/bash -e {0}
+2025-06-26T17:14:32.3170828Z env:
+2025-06-26T17:14:32.3171163Z   pythonLocation: /opt/hostedtoolcache/Python/3.10.18/x64
+2025-06-26T17:14:32.3171595Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.10.18/x64/lib/pkgconfig
+2025-06-26T17:14:32.3172002Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.10.18/x64
+2025-06-26T17:14:32.3172359Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.10.18/x64
+2025-06-26T17:14:32.3172705Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.10.18/x64
+2025-06-26T17:14:32.3173301Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.10.18/x64/lib
+2025-06-26T17:14:32.3173596Z ##[endgroup]
+2025-06-26T17:14:32.3251632Z Workflow completed successfully!
+2025-06-26T17:14:32.3252047Z JSON files generated:
+2025-06-26T17:14:32.3269604Z ./ID SG trojan tls ntls.json
+2025-06-26T17:14:32.3270012Z ./ID vless ntls.json
+2025-06-26T17:14:32.3270329Z ./ID vless tls.json
+2025-06-26T17:14:32.3270650Z ./SG vless ntls.json
+2025-06-26T17:14:32.3270957Z ./SG vless tls.json
+2025-06-26T17:14:32.3271261Z ./Vmess Ntls.json
+2025-06-26T17:14:32.3271473Z ./Vmess Tls.json
+2025-06-26T17:14:32.3271658Z ./backup.json
+2025-06-26T17:14:32.3271839Z ./config.json
+2025-06-26T17:14:32.3272013Z ./upload_summary.json
+2025-06-26T17:14:32.3290642Z Total JSON files: 10
+2025-06-26T17:14:32.3331548Z Post job cleanup.
+2025-06-26T17:14:32.4956906Z Post job cleanup.
+2025-06-26T17:14:32.5905196Z [command]/usr/bin/git version
+2025-06-26T17:14:32.5942730Z git version 2.49.0
+2025-06-26T17:14:32.5986609Z Temporarily overriding HOME='/home/runner/work/_temp/dbfcaae6-66bb-4f9b-8d20-92f7331ce7ab' before making global git config changes
+2025-06-26T17:14:32.5987507Z Adding repository directory to the temporary git global config as a safe directory
+2025-06-26T17:14:32.5992666Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/sing-box-config/sing-box-config
+2025-06-26T17:14:32.6030046Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2025-06-26T17:14:32.6063057Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2025-06-26T17:14:32.6296929Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2025-06-26T17:14:32.6317738Z http.https://github.com/.extraheader
+2025-06-26T17:14:32.6330005Z [command]/usr/bin/git config --local --unset-all http.https://github.com/.extraheader
+2025-06-26T17:14:32.6360544Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2025-06-26T17:14:32.6689089Z Cleaning up orphan processes
