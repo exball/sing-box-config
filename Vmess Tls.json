@@ -126,10 +126,13 @@
                     "Host": "sg1.foolvpn.me"
                 },
                 "path": "/vmess",
-                "type": "ws"
+                "type": "ws",
+                "max_early_data": 0,
+                "early_data_header_name": "Sec-WebSocket-Protocol"
             },
             "type": "vmess",
-            "uuid": "b0bf6247-7866-478b-93f1-ad050d1d261e"
+            "uuid": "b0bf6247-7866-478b-93f1-ad050d1d261e",
+            "domain_strategy": "ipv4_only"
         },
         {
             "security": "",
@@ -163,10 +166,13 @@
                     "Host": "id1.foolvpn.me"
                 },
                 "path": "/vmess",
-                "type": "ws"
+                "type": "ws",
+                "max_early_data": 0,
+                "early_data_header_name": "Sec-WebSocket-Protocol"
             },
             "type": "vmess",
-            "uuid": "b0bf6247-7866-478b-93f1-ad050d1d261e"
+            "uuid": "b0bf6247-7866-478b-93f1-ad050d1d261e",
+            "domain_strategy": "ipv4_only"
         },
         {
             "security": "",
@@ -183,10 +189,13 @@
                     "Host": "sgfqkqmltcy.site"
                 },
                 "path": "/rbqqvws",
-                "type": "ws"
+                "type": "ws",
+                "max_early_data": 0,
+                "early_data_header_name": "Sec-WebSocket-Protocol"
             },
             "type": "vmess",
-            "uuid": "d13fc2f5-3e05-4795-81eb-44143a09e552"
+            "uuid": "d13fc2f5-3e05-4795-81eb-44143a09e552",
+            "domain_strategy": "ipv4_only"
         },
         {
             "security": "",
@@ -203,10 +212,13 @@
                     "Host": "de01.sh-cloudflare.sbs"
                 },
                 "path": "/",
-                "type": "ws"
+                "type": "ws",
+                "max_early_data": 0,
+                "early_data_header_name": "Sec-WebSocket-Protocol"
             },
             "type": "vmess",
-            "uuid": "2703867d-dd8f-4f7f-93f4-ac6e4f56c7e8"
+            "uuid": "2703867d-dd8f-4f7f-93f4-ac6e4f56c7e8",
+            "domain_strategy": "ipv4_only"
         },
         {
             "security": "",
@@ -223,10 +235,13 @@
                     "Host": "beyonddsz.cfd"
                 },
                 "path": "/linkws",
-                "type": "ws"
+                "type": "ws",
+                "max_early_data": 0,
+                "early_data_header_name": "Sec-WebSocket-Protocol"
             },
             "type": "vmess",
-            "uuid": "9b456c2a-f2c1-45e1-87a9-b7628b04bb24"
+            "uuid": "9b456c2a-f2c1-45e1-87a9-b7628b04bb24",
+            "domain_strategy": "ipv4_only"
         },
         {
             "security": "",
@@ -246,7 +261,8 @@
                 "type": "ws"
             },
             "type": "vmess",
-            "uuid": "0c8f3e29-4ec9-4ba6-a6ef-4487873f5d05"
+            "uuid": "0c8f3e29-4ec9-4ba6-a6ef-4487873f5d05",
+            "domain_strategy": "ipv4_only"
         }
     ]
 }
