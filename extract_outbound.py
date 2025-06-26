@@ -395,13 +395,24 @@ def process_single_config(config):
     all_outbounds = []
     
     # Ambil outbound untuk setiap kombinasi negara, protokol, dan keamanan
+    # Tentukan URL berdasarkan waktu saat ini
+    current_hour = datetime.now().hour
+    
+    # Gunakan URL pertama dari jam 00:00 sampai 11:59, URL kedua dari jam 12:00 sampai 23:59
+    if current_hour < 12:
+        base_url = "https://proxy.exbal.my.id/api/bfr"
+        print(f"Using primary URL (exbal.my.id) based on current time: {datetime.now().strftime('%H:%M:%S')}")
+    else:
+        base_url = "https://proxy.ex-vpn.my.id/api/bfr"
+        print(f"Using secondary URL (ex-vpn.my.id) based on current time: {datetime.now().strftime('%H:%M:%S')}")
+    
     for country in countries:
         for protocol in protocols:
             for security in securities:
-                url = f"https://proxy.exbal.my.id/api/bfr?cc={country}&protocols={protocol}&securities={security}"
+                url = f"{base_url}?cc={country}&protocols={protocol}&securities={security}"
                 
                 try:
-                    print(f"Fetching {protocol} {security} proxies from {country}...")
+                    print(f"Fetching {protocol} {security} proxies from {country} using {base_url}...")
                     
                     # Mengambil konfigurasi BFR dengan retry
                     response = fetch_with_retry(url)
