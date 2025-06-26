@@ -1,3 +1,80 @@
 {
-    "outbounds": []
+    "outbounds": [
+        {
+            "type": "vless",
+            "tag": "2 🇸🇬 Oracle Corporation WS NTLS [proxy]",
+            "server": "quiz.int.vidio.com",
+            "server_port": 80,
+            "uuid": "424e8189-2d99-4201-a9c7-66793865c3ba",
+            "network": "tcp",
+            "packet_encoding": "xudp",
+            "tls": {
+                "insecure": true
+            },
+            "transport": {
+                "type": "ws",
+                "path": "/129.150.36.188-53435",
+                "headers": {
+                    "Host": "proxy.ex-vpn.my.id"
+                }
+            }
+        },
+        {
+            "type": "vless",
+            "tag": "4 🇸🇬 Internet Utilities NA LLC WS NTLS [proxy]",
+            "server": "quiz.int.vidio.com",
+            "server_port": 80,
+            "uuid": "424e8189-2d99-4201-a9c7-66793865c3ba",
+            "network": "tcp",
+            "packet_encoding": "xudp",
+            "tls": {
+                "insecure": true
+            },
+            "transport": {
+                "type": "ws",
+                "path": "/64.49.14.41-8443",
+                "headers": {
+                    "Host": "proxy.ex-vpn.my.id"
+                }
+            }
+        },
+        {
+            "type": "vless",
+            "tag": "8 🇸🇬 Alibaba Cloud (Singapore) Private Limited WS NTLS [proxy]",
+            "server": "quiz.int.vidio.com",
+            "server_port": 80,
+            "uuid": "424e8189-2d99-4201-a9c7-66793865c3ba",
+            "network": "tcp",
+            "packet_encoding": "xudp",
+            "tls": {
+                "insecure": true
+            },
+            "transport": {
+                "type": "ws",
+                "path": "/8.222.243.73-26385",
+                "headers": {
+                    "Host": "proxy.ex-vpn.my.id"
+                }
+            }
+        },
+        {
+            "type": "vless",
+            "tag": "10 🇸🇬 Amazon Data Services Singapore WS NTLS [proxy]",
+            "server": "quiz.int.vidio.com",
+            "server_port": 80,
+            "uuid": "424e8189-2d99-4201-a9c7-66793865c3ba",
+            "network": "tcp",
+            "packet_encoding": "xudp",
+            "tls": {
+                "insecure": true
+            },
+            "transport": {
+                "type": "ws",
+                "path": "/13.250.131.37-443",
+                "headers": {
+                    "Host": "proxy.ex-vpn.my.id"
+                }
+            }
+        }
+    ]
 }
