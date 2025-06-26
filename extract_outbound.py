@@ -10,9 +10,39 @@ import argparse
 import configparser
 from datetime import datetime
 from collections import defaultdict
+import pytz
 
 # Variabel global untuk menyimpan format outbound
 outbound_format = None
+
+# URL untuk mengambil proxy
+PROXY_URL_MORNING = "https://proxy.ex-vpn.my.id"  # Digunakan dari 00:00-12:00 (UTC+8)
+PROXY_URL_EVENING = "https://proxy.exbal.my.id"   # Digunakan dari 12:00-00:00 (UTC+8)
+
+# Fungsi untuk mendapatkan URL proxy berdasarkan waktu saat ini (UTC+8)
+def get_proxy_base_url():
+    """
+    Mengembalikan URL dasar untuk mengambil proxy berdasarkan waktu saat ini.
+    - Dari jam 00:00 sampai 12:00 (UTC+8): menggunakan proxy.ex-vpn.my.id
+    - Dari jam 12:00 sampai 00:00 (UTC+8): menggunakan proxy.exbal.my.id
+    """
+    # Dapatkan waktu saat ini dalam UTC
+    utc_now = datetime.now(pytz.UTC)
+    
+    # Konversi ke zona waktu UTC+8
+    tz_utc8 = pytz.timezone('Asia/Singapore')  # Singapore menggunakan UTC+8
+    now_utc8 = utc_now.astimezone(tz_utc8)
+    
+    # Ambil jam dalam format 24 jam
+    current_hour = now_utc8.hour
+    
+    # Tentukan URL berdasarkan jam
+    if 0 <= current_hour < 12:
+        print(f"Waktu saat ini: {now_utc8.strftime('%H:%M:%S')} (UTC+8) - Menggunakan {PROXY_URL_MORNING}")
+        return PROXY_URL_MORNING
+    else:
+        print(f"Waktu saat ini: {now_utc8.strftime('%H:%M:%S')} (UTC+8) - Menggunakan {PROXY_URL_EVENING}")
+        return PROXY_URL_EVENING
 
 # Fungsi untuk mendapatkan emoji bendera berdasarkan kode negara
 def get_flag_emoji(country_code):
@@ -385,10 +415,13 @@ def process_single_config(config):
     all_outbounds = []
     
     # Ambil outbound untuk setiap kombinasi negara, protokol, dan keamanan
+    # Dapatkan URL dasar berdasarkan waktu saat ini
+    base_url = get_proxy_base_url()
+    
     for country in countries:
         for protocol in protocols:
             for security in securities:
-                url = f"https://proxy.exbal.my.id/api/bfr?cc={country}&protocols={protocol}&securities={security}"
+                url = f"{base_url}/api/bfr?cc={country}&protocols={protocol}&securities={security}"
                 
                 try:
                     print(f"Fetching {protocol} {security} proxies from {country}...")
@@ -522,7 +555,22 @@ def process_single_config(config):
     
     return len(all_outbounds)
 
+def check_dependencies():
+    """
+    Memeriksa dan menginstal dependensi yang diperlukan jika belum ada.
+    """
+    try:
+        import pytz
+    except ImportError:
+        print("Menginstal paket pytz...")
+        import subprocess
+        subprocess.check_call([sys.executable, "-m", "pip", "install", "pytz"])
+        print("Paket pytz berhasil diinstal.")
+
 def main():
+    # Periksa dependensi
+    check_dependencies()
+    
     # URL API untuk mendapatkan konfigurasi BFR
     # Kita bisa mendapatkan proxy dari beberapa negara
     # Daftar kode negara yang tersedia (diurutkan berdasarkan nama negara):
