@@ -2,10 +2,10 @@
     "outbounds": [
         {
             "type": "trojan",
-            "tag": "1 🇮🇩 PT MITRA VISIONER PRATAMA WS TLS [proxy]",
+            "tag": "1 🇮🇩 CV. Rumahweb Indonesia WS TLS [proxy]",
             "server": "quiz.int.vidio.com",
             "server_port": 443,
-            "password": "ce9fc392-2c10-4a39-95df-ec595f0ac014",
+            "password": "24cc6e64-d917-4a85-9c09-265a397cb75f",
             "network": "tcp",
             "tls": {
                 "enabled": true,
@@ -14,7 +14,7 @@
             },
             "transport": {
                 "type": "ws",
-                "path": "/206.84.101.84-443",
+                "path": "/203.194.112.119-8443",
                 "headers": {
                     "Host": "proxy.ex-vpn.my.id"
                 }
@@ -25,10 +25,56 @@
         },
         {
             "type": "trojan",
-            "tag": "3 🇮🇩 PT MITRA VISIONER PRATAMA WS TLS [proxy]",
+            "tag": "2 🇮🇩 Linode WS TLS [proxy]",
             "server": "quiz.int.vidio.com",
             "server_port": 443,
-            "password": "ce9fc392-2c10-4a39-95df-ec595f0ac014",
+            "password": "24cc6e64-d917-4a85-9c09-265a397cb75f",
+            "network": "tcp",
+            "tls": {
+                "enabled": true,
+                "insecure": true,
+                "server_name": "proxy.ex-vpn.my.id"
+            },
+            "transport": {
+                "type": "ws",
+                "path": "/172.232.249.53-443",
+                "headers": {
+                    "Host": "proxy.ex-vpn.my.id"
+                }
+            },
+            "multiplex": {
+                "enabled": false
+            }
+        },
+        {
+            "type": "trojan",
+            "tag": "3 🇮🇩 PT Pusat Media Indonesia WS TLS [proxy]",
+            "server": "quiz.int.vidio.com",
+            "server_port": 443,
+            "password": "24cc6e64-d917-4a85-9c09-265a397cb75f",
+            "network": "tcp",
+            "tls": {
+                "enabled": true,
+                "insecure": true,
+                "server_name": "proxy.ex-vpn.my.id"
+            },
+            "transport": {
+                "type": "ws",
+                "path": "/103.6.207.108-8080",
+                "headers": {
+                    "Host": "proxy.ex-vpn.my.id"
+                }
+            },
+            "multiplex": {
+                "enabled": false
+            }
+        },
+        {
+            "type": "trojan",
+            "tag": "4 🇮🇩 PT MITRA VISIONER PRATAMA WS TLS [proxy]",
+            "server": "quiz.int.vidio.com",
+            "server_port": 443,
+            "password": "24cc6e64-d917-4a85-9c09-265a397cb75f",
             "network": "tcp",
             "tls": {
                 "enabled": true,
@@ -51,7 +97,7 @@
             "tag": "5 🇮🇩 CV. Rumahweb Indonesia WS TLS [proxy]",
             "server": "quiz.int.vidio.com",
             "server_port": 443,
-            "password": "ce9fc392-2c10-4a39-95df-ec595f0ac014",
+            "password": "24cc6e64-d917-4a85-9c09-265a397cb75f",
             "network": "tcp",
             "tls": {
                 "enabled": true,
@@ -71,10 +117,10 @@
         },
         {
             "type": "trojan",
-            "tag": "7 🇮🇩 CV. Rumahweb Indonesia WS TLS [proxy]",
+            "tag": "6 🇮🇩 PT MITRA VISIONER PRATAMA WS TLS [proxy]",
             "server": "quiz.int.vidio.com",
             "server_port": 443,
-            "password": "ce9fc392-2c10-4a39-95df-ec595f0ac014",
+            "password": "24cc6e64-d917-4a85-9c09-265a397cb75f",
             "network": "tcp",
             "tls": {
                 "enabled": true,
@@ -83,30 +129,7 @@
             },
             "transport": {
                 "type": "ws",
-                "path": "/203.194.112.119-8443",
-                "headers": {
-                    "Host": "proxy.ex-vpn.my.id"
-                }
-            },
-            "multiplex": {
-                "enabled": false
-            }
-        },
-        {
-            "type": "trojan",
-            "tag": "9 🇮🇩 Linode WS TLS [proxy]",
-            "server": "quiz.int.vidio.com",
-            "server_port": 443,
-            "password": "ce9fc392-2c10-4a39-95df-ec595f0ac014",
-            "network": "tcp",
-            "tls": {
-                "enabled": true,
-                "insecure": true,
-                "server_name": "proxy.ex-vpn.my.id"
-            },
-            "transport": {
-                "type": "ws",
-                "path": "/172.232.249.53-443",
+                "path": "/206.84.101.84-443",
                 "headers": {
                     "Host": "proxy.ex-vpn.my.id"
                 }
@@ -140,10 +163,32 @@
         },
         {
             "type": "trojan",
+            "tag": "1 🇮🇩 PT Pusat Media Indonesia WS NTLS [proxy]",
+            "server": "quiz.int.vidio.com",
+            "server_port": 80,
+            "password": "c0a1c902-7236-41dd-b313-cf06bbc7caa7",
+            "network": "tcp",
+            "tls": {
+                "insecure": true,
+                "server_name": "proxy.ex-vpn.my.id"
+            },
+            "transport": {
+                "type": "ws",
+                "path": "/103.6.207.108-8080",
+                "headers": {
+                    "Host": "proxy.ex-vpn.my.id"
+                }
+            },
+            "multiplex": {
+                "enabled": false
+            }
+        },
+        {
+            "type": "trojan",
             "tag": "2 🇮🇩 PT MITRA VISIONER PRATAMA WS NTLS [proxy]",
             "server": "quiz.int.vidio.com",
             "server_port": 80,
-            "password": "1b5c41cb-4201-4799-830b-d3d05d266a9c",
+            "password": "c0a1c902-7236-41dd-b313-cf06bbc7caa7",
             "network": "tcp",
             "tls": {
                 "insecure": true,
@@ -162,10 +207,54 @@
         },
         {
             "type": "trojan",
+            "tag": "3 🇮🇩 Linode WS NTLS [proxy]",
+            "server": "quiz.int.vidio.com",
+            "server_port": 80,
+            "password": "c0a1c902-7236-41dd-b313-cf06bbc7caa7",
+            "network": "tcp",
+            "tls": {
+                "insecure": true,
+                "server_name": "proxy.ex-vpn.my.id"
+            },
+            "transport": {
+                "type": "ws",
+                "path": "/172.232.249.53-443",
+                "headers": {
+                    "Host": "proxy.ex-vpn.my.id"
+                }
+            },
+            "multiplex": {
+                "enabled": false
+            }
+        },
+        {
+            "type": "trojan",
             "tag": "4 🇮🇩 CV. Rumahweb Indonesia WS NTLS [proxy]",
             "server": "quiz.int.vidio.com",
             "server_port": 80,
-            "password": "1b5c41cb-4201-4799-830b-d3d05d266a9c",
+            "password": "c0a1c902-7236-41dd-b313-cf06bbc7caa7",
+            "network": "tcp",
+            "tls": {
+                "insecure": true,
+                "server_name": "proxy.ex-vpn.my.id"
+            },
+            "transport": {
+                "type": "ws",
+                "path": "/203.194.112.119-2053",
+                "headers": {
+                    "Host": "proxy.ex-vpn.my.id"
+                }
+            },
+            "multiplex": {
+                "enabled": false
+            }
+        },
+        {
+            "type": "trojan",
+            "tag": "5 🇮🇩 CV. Rumahweb Indonesia WS NTLS [proxy]",
+            "server": "quiz.int.vidio.com",
+            "server_port": 80,
+            "password": "c0a1c902-7236-41dd-b313-cf06bbc7caa7",
             "network": "tcp",
             "tls": {
                 "insecure": true,
@@ -187,7 +276,7 @@
             "tag": "6 🇮🇩 PT MITRA VISIONER PRATAMA WS NTLS [proxy]",
             "server": "quiz.int.vidio.com",
             "server_port": 80,
-            "password": "1b5c41cb-4201-4799-830b-d3d05d266a9c",
+            "password": "c0a1c902-7236-41dd-b313-cf06bbc7caa7",
             "network": "tcp",
             "tls": {
                 "insecure": true,
@@ -206,54 +295,10 @@
         },
         {
             "type": "trojan",
-            "tag": "8 🇮🇩 CV. Rumahweb Indonesia WS NTLS [proxy]",
-            "server": "quiz.int.vidio.com",
-            "server_port": 80,
-            "password": "1b5c41cb-4201-4799-830b-d3d05d266a9c",
-            "network": "tcp",
-            "tls": {
-                "insecure": true,
-                "server_name": "proxy.ex-vpn.my.id"
-            },
-            "transport": {
-                "type": "ws",
-                "path": "/203.194.112.119-2053",
-                "headers": {
-                    "Host": "proxy.ex-vpn.my.id"
-                }
-            },
-            "multiplex": {
-                "enabled": false
-            }
-        },
-        {
-            "type": "trojan",
-            "tag": "10 🇮🇩 PT Pusat Media Indonesia WS NTLS [proxy]",
-            "server": "quiz.int.vidio.com",
-            "server_port": 80,
-            "password": "1b5c41cb-4201-4799-830b-d3d05d266a9c",
-            "network": "tcp",
-            "tls": {
-                "insecure": true,
-                "server_name": "proxy.ex-vpn.my.id"
-            },
-            "transport": {
-                "type": "ws",
-                "path": "/103.6.207.108-8080",
-                "headers": {
-                    "Host": "proxy.ex-vpn.my.id"
-                }
-            },
-            "multiplex": {
-                "enabled": false
-            }
-        },
-        {
-            "type": "trojan",
-            "tag": "1 🇸🇬 OVH Singapore PTE. LTD WS TLS [proxy]",
+            "tag": "1 🇸🇬 DigitalOcean WS TLS [proxy]",
             "server": "quiz.int.vidio.com",
             "server_port": 443,
-            "password": "64d1433e-a91e-43d0-bdc7-d73d35a1587e",
+            "password": "c41a96c8-52df-4339-bbac-cd51451c81f1",
             "network": "tcp",
             "tls": {
                 "enabled": true,
@@ -262,7 +307,7 @@
             },
             "transport": {
                 "type": "ws",
-                "path": "/51.79.158.126-443",
+                "path": "/143.198.196.196-2053",
                 "headers": {
                     "Host": "proxy.ex-vpn.my.id"
                 }
@@ -273,10 +318,10 @@
         },
         {
             "type": "trojan",
-            "tag": "3 🇸🇬 Oracle Public Cloud WS TLS [proxy]",
+            "tag": "2 🇸🇬 Alibaba Cloud LLC WS TLS [proxy]",
             "server": "quiz.int.vidio.com",
             "server_port": 443,
-            "password": "64d1433e-a91e-43d0-bdc7-d73d35a1587e",
+            "password": "c41a96c8-52df-4339-bbac-cd51451c81f1",
             "network": "tcp",
             "tls": {
                 "enabled": true,
@@ -285,7 +330,7 @@
             },
             "transport": {
                 "type": "ws",
-                "path": "/168.138.165.174-443",
+                "path": "/47.236.119.190-51342",
                 "headers": {
                     "Host": "proxy.ex-vpn.my.id"
                 }
@@ -296,10 +341,10 @@
         },
         {
             "type": "trojan",
-            "tag": "7 🇸🇬 Oracle Svenska AB WS TLS [proxy]",
+            "tag": "3 🇸🇬 Amazon Technologies Inc. WS TLS [proxy]",
             "server": "quiz.int.vidio.com",
             "server_port": 443,
-            "password": "64d1433e-a91e-43d0-bdc7-d73d35a1587e",
+            "password": "c41a96c8-52df-4339-bbac-cd51451c81f1",
             "network": "tcp",
             "tls": {
                 "enabled": true,
@@ -308,7 +353,7 @@
             },
             "transport": {
                 "type": "ws",
-                "path": "/213.35.107.73-443",
+                "path": "/13.228.155.72-443",
                 "headers": {
                     "Host": "proxy.ex-vpn.my.id"
                 }
@@ -319,10 +364,10 @@
         },
         {
             "type": "trojan",
-            "tag": "9 🇸🇬 365 Group LLC WS TLS [proxy]",
+            "tag": "4 🇸🇬 Green Floid LLC WS TLS [proxy]",
             "server": "quiz.int.vidio.com",
             "server_port": 443,
-            "password": "64d1433e-a91e-43d0-bdc7-d73d35a1587e",
+            "password": "c41a96c8-52df-4339-bbac-cd51451c81f1",
             "network": "tcp",
             "tls": {
                 "enabled": true,
@@ -331,7 +376,122 @@
             },
             "transport": {
                 "type": "ws",
-                "path": "/167.253.158.63-8443",
+                "path": "/5.34.176.119-81",
+                "headers": {
+                    "Host": "proxy.ex-vpn.my.id"
+                }
+            },
+            "multiplex": {
+                "enabled": false
+            }
+        },
+        {
+            "type": "trojan",
+            "tag": "5 🇸🇬 Oracle Corporation WS TLS [proxy]",
+            "server": "quiz.int.vidio.com",
+            "server_port": 443,
+            "password": "c41a96c8-52df-4339-bbac-cd51451c81f1",
+            "network": "tcp",
+            "tls": {
+                "enabled": true,
+                "insecure": true,
+                "server_name": "proxy.ex-vpn.my.id"
+            },
+            "transport": {
+                "type": "ws",
+                "path": "/129.150.36.188-53435",
+                "headers": {
+                    "Host": "proxy.ex-vpn.my.id"
+                }
+            },
+            "multiplex": {
+                "enabled": false
+            }
+        },
+        {
+            "type": "trojan",
+            "tag": "7 🇸🇬 Akamai Connected Cloud / Linode WS TLS [proxy]",
+            "server": "quiz.int.vidio.com",
+            "server_port": 443,
+            "password": "c41a96c8-52df-4339-bbac-cd51451c81f1",
+            "network": "tcp",
+            "tls": {
+                "enabled": true,
+                "insecure": true,
+                "server_name": "proxy.ex-vpn.my.id"
+            },
+            "transport": {
+                "type": "ws",
+                "path": "/192.53.113.156-587",
+                "headers": {
+                    "Host": "proxy.ex-vpn.my.id"
+                }
+            },
+            "multiplex": {
+                "enabled": false
+            }
+        },
+        {
+            "type": "trojan",
+            "tag": "8 🇸🇬 Alibaba Cloud (Singapore) Private Limited WS TLS [proxy]",
+            "server": "quiz.int.vidio.com",
+            "server_port": 443,
+            "password": "c41a96c8-52df-4339-bbac-cd51451c81f1",
+            "network": "tcp",
+            "tls": {
+                "enabled": true,
+                "insecure": true,
+                "server_name": "proxy.ex-vpn.my.id"
+            },
+            "transport": {
+                "type": "ws",
+                "path": "/8.222.220.81-25435",
+                "headers": {
+                    "Host": "proxy.ex-vpn.my.id"
+                }
+            },
+            "multiplex": {
+                "enabled": false
+            }
+        },
+        {
+            "type": "trojan",
+            "tag": "9 🇸🇬 UCUL-SG WS TLS [proxy]",
+            "server": "quiz.int.vidio.com",
+            "server_port": 443,
+            "password": "c41a96c8-52df-4339-bbac-cd51451c81f1",
+            "network": "tcp",
+            "tls": {
+                "enabled": true,
+                "insecure": true,
+                "server_name": "proxy.ex-vpn.my.id"
+            },
+            "transport": {
+                "type": "ws",
+                "path": "/164.52.2.99-443",
+                "headers": {
+                    "Host": "proxy.ex-vpn.my.id"
+                }
+            },
+            "multiplex": {
+                "enabled": false
+            }
+        },
+        {
+            "type": "trojan",
+            "tag": "10 🇸🇬 Amazon Data Services Singapore WS TLS [proxy]",
+            "server": "quiz.int.vidio.com",
+            "server_port": 443,
+            "password": "c41a96c8-52df-4339-bbac-cd51451c81f1",
+            "network": "tcp",
+            "tls": {
+                "enabled": true,
+                "insecure": true,
+                "server_name": "proxy.ex-vpn.my.id"
+            },
+            "transport": {
+                "type": "ws",
+                "path": "/13.250.14.76-443",
                 "headers": {
                     "Host": "proxy.ex-vpn.my.id"
                 }
@@ -365,10 +525,10 @@
         },
         {
             "type": "trojan",
-            "tag": "2 🇸🇬 DigitalOcean WS NTLS [proxy]",
+            "tag": "1 🇸🇬 Oracle Public Cloud WS NTLS [proxy]",
             "server": "quiz.int.vidio.com",
             "server_port": 80,
-            "password": "5c70d731-c4e3-4396-a30b-0cc8e2951cc4",
+            "password": "fe4a3517-0545-4893-9258-bcd7e29d6108",
             "network": "tcp",
             "tls": {
                 "insecure": true,
@@ -376,7 +536,7 @@
             },
             "transport": {
                 "type": "ws",
-                "path": "/143.198.196.196-2053",
+                "path": "/168.138.181.188-61731",
                 "headers": {
                     "Host": "proxy.ex-vpn.my.id"
                 }
@@ -387,10 +547,32 @@
         },
         {
             "type": "trojan",
-            "tag": "4 🇸🇬 Oracle Corporation WS NTLS [proxy]",
+            "tag": "2 🇸🇬 Zappie Host LLC WS NTLS [proxy]",
             "server": "quiz.int.vidio.com",
             "server_port": 80,
-            "password": "5c70d731-c4e3-4396-a30b-0cc8e2951cc4",
+            "password": "fe4a3517-0545-4893-9258-bcd7e29d6108",
+            "network": "tcp",
+            "tls": {
+                "insecure": true,
+                "server_name": "proxy.ex-vpn.my.id"
+            },
+            "transport": {
+                "type": "ws",
+                "path": "/83.142.30.4-2096",
+                "headers": {
+                    "Host": "proxy.ex-vpn.my.id"
+                }
+            },
+            "multiplex": {
+                "enabled": false
+            }
+        },
+        {
+            "type": "trojan",
+            "tag": "3 🇸🇬 Oracle Corporation WS NTLS [proxy]",
+            "server": "quiz.int.vidio.com",
+            "server_port": 80,
+            "password": "fe4a3517-0545-4893-9258-bcd7e29d6108",
             "network": "tcp",
             "tls": {
                 "insecure": true,
@@ -409,10 +591,10 @@
         },
         {
             "type": "trojan",
-            "tag": "6 🇸🇬 6 COLLYER QUAY WS NTLS [proxy]",
+            "tag": "6 🇸🇬 365 Group LLC WS NTLS [proxy]",
             "server": "quiz.int.vidio.com",
             "server_port": 80,
-            "password": "5c70d731-c4e3-4396-a30b-0cc8e2951cc4",
+            "password": "fe4a3517-0545-4893-9258-bcd7e29d6108",
             "network": "tcp",
             "tls": {
                 "insecure": true,
@@ -420,7 +602,7 @@
             },
             "transport": {
                 "type": "ws",
-                "path": "/43.128.95.84-38091",
+                "path": "/167.253.158.63-8443",
                 "headers": {
                     "Host": "proxy.ex-vpn.my.id"
                 }
@@ -431,10 +613,10 @@
         },
         {
             "type": "trojan",
-            "tag": "10 🇸🇬 Oracle Public Cloud WS NTLS [proxy]",
+            "tag": "8 🇸🇬 OVH Singapore PTE. LTD WS NTLS [proxy]",
             "server": "quiz.int.vidio.com",
             "server_port": 80,
-            "password": "5c70d731-c4e3-4396-a30b-0cc8e2951cc4",
+            "password": "fe4a3517-0545-4893-9258-bcd7e29d6108",
             "network": "tcp",
             "tls": {
                 "insecure": true,
@@ -442,7 +624,51 @@
             },
             "transport": {
                 "type": "ws",
-                "path": "/168.138.165.174-443",
+                "path": "/51.79.158.126-443",
+                "headers": {
+                    "Host": "proxy.ex-vpn.my.id"
+                }
+            },
+            "multiplex": {
+                "enabled": false
+            }
+        },
+        {
+            "type": "trojan",
+            "tag": "9 🇸🇬 16 COLLYER QUAY WS NTLS [proxy]",
+            "server": "quiz.int.vidio.com",
+            "server_port": 80,
+            "password": "fe4a3517-0545-4893-9258-bcd7e29d6108",
+            "network": "tcp",
+            "tls": {
+                "insecure": true,
+                "server_name": "proxy.ex-vpn.my.id"
+            },
+            "transport": {
+                "type": "ws",
+                "path": "/43.156.181.203-443",
+                "headers": {
+                    "Host": "proxy.ex-vpn.my.id"
+                }
+            },
+            "multiplex": {
+                "enabled": false
+            }
+        },
+        {
+            "type": "trojan",
+            "tag": "10 🇸🇬 Alibaba Cloud (Singapore) Private Limited WS NTLS [proxy]",
+            "server": "quiz.int.vidio.com",
+            "server_port": 80,
+            "password": "fe4a3517-0545-4893-9258-bcd7e29d6108",
+            "network": "tcp",
+            "tls": {
+                "insecure": true,
+                "server_name": "proxy.ex-vpn.my.id"
+            },
+            "transport": {
+                "type": "ws",
+                "path": "/8.222.220.81-25435",
                 "headers": {
                     "Host": "proxy.ex-vpn.my.id"
                 }

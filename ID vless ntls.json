@@ -2,97 +2,116 @@
     "outbounds": [
         {
             "type": "vless",
-            "tag": "2 🇮🇩 CV. Rumahweb Indonesia WS NTLS [proxy]",
+            "tag": "1 🇮🇩 CV. Rumahweb Indonesia WS NTLS [proxy]",
             "server": "quiz.int.vidio.com",
             "server_port": 80,
-            "uuid": "59e9ee15-c066-4ac1-ba73-2727580ef692",
+            "uuid": "4e7e1fa1-a573-4057-99de-3b8ad01271e8",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
                 "insecure": true
             },
             "transport": {
-                "type": "ws",
+                "headers": {
+                    "Host": "proxy.ex-vpn.my.id"
+                },
                 "path": "/203.194.112.119-8443",
-                "headers": {
-                    "Host": "proxy.ex-vpn.my.id"
-                }
+                "type": "ws"
             }
         },
         {
             "type": "vless",
-            "tag": "4 🇮🇩 PT MITRA VISIONER PRATAMA WS NTLS [proxy]",
+            "tag": "2 🇮🇩 PT MITRA VISIONER PRATAMA WS NTLS [proxy]",
             "server": "quiz.int.vidio.com",
             "server_port": 80,
-            "uuid": "59e9ee15-c066-4ac1-ba73-2727580ef692",
+            "uuid": "4e7e1fa1-a573-4057-99de-3b8ad01271e8",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
                 "insecure": true
             },
             "transport": {
-                "type": "ws",
-                "path": "/172.252.8.168-443",
                 "headers": {
                     "Host": "proxy.ex-vpn.my.id"
-                }
-            }
-        },
-        {
-            "type": "vless",
-            "tag": "6 🇮🇩 Linode WS NTLS [proxy]",
-            "server": "quiz.int.vidio.com",
-            "server_port": 80,
-            "uuid": "59e9ee15-c066-4ac1-ba73-2727580ef692",
-            "network": "tcp",
-            "packet_encoding": "xudp",
-            "tls": {
-                "insecure": true
-            },
-            "transport": {
-                "type": "ws",
-                "path": "/172.232.249.53-443",
-                "headers": {
-                    "Host": "proxy.ex-vpn.my.id"
-                }
-            }
-        },
-        {
-            "type": "vless",
-            "tag": "8 🇮🇩 PT Pusat Media Indonesia WS NTLS [proxy]",
-            "server": "quiz.int.vidio.com",
-            "server_port": 80,
-            "uuid": "59e9ee15-c066-4ac1-ba73-2727580ef692",
-            "network": "tcp",
-            "packet_encoding": "xudp",
-            "tls": {
-                "insecure": true
-            },
-            "transport": {
-                "type": "ws",
-                "path": "/103.6.207.108-8080",
-                "headers": {
-                    "Host": "proxy.ex-vpn.my.id"
-                }
-            }
-        },
-        {
-            "type": "vless",
-            "tag": "10 🇮🇩 PT MITRA VISIONER PRATAMA WS NTLS [proxy]",
-            "server": "quiz.int.vidio.com",
-            "server_port": 80,
-            "uuid": "59e9ee15-c066-4ac1-ba73-2727580ef692",
-            "network": "tcp",
-            "packet_encoding": "xudp",
-            "tls": {
-                "insecure": true
-            },
-            "transport": {
-                "type": "ws",
+                },
                 "path": "/206.84.101.84-443",
+                "type": "ws"
+            }
+        },
+        {
+            "type": "vless",
+            "tag": "3 🇮🇩 Linode WS NTLS [proxy]",
+            "server": "quiz.int.vidio.com",
+            "server_port": 80,
+            "uuid": "4e7e1fa1-a573-4057-99de-3b8ad01271e8",
+            "network": "tcp",
+            "packet_encoding": "xudp",
+            "tls": {
+                "insecure": true
+            },
+            "transport": {
                 "headers": {
                     "Host": "proxy.ex-vpn.my.id"
-                }
+                },
+                "path": "/172.232.249.53-443",
+                "type": "ws"
+            }
+        },
+        {
+            "type": "vless",
+            "tag": "4 🇮🇩 CV. Rumahweb Indonesia WS NTLS [proxy]",
+            "server": "quiz.int.vidio.com",
+            "server_port": 80,
+            "uuid": "4e7e1fa1-a573-4057-99de-3b8ad01271e8",
+            "network": "tcp",
+            "packet_encoding": "xudp",
+            "tls": {
+                "insecure": true
+            },
+            "transport": {
+                "headers": {
+                    "Host": "proxy.ex-vpn.my.id"
+                },
+                "path": "/203.194.112.119-2053",
+                "type": "ws"
+            }
+        },
+        {
+            "type": "vless",
+            "tag": "5 🇮🇩 PT Pusat Media Indonesia WS NTLS [proxy]",
+            "server": "quiz.int.vidio.com",
+            "server_port": 80,
+            "uuid": "4e7e1fa1-a573-4057-99de-3b8ad01271e8",
+            "network": "tcp",
+            "packet_encoding": "xudp",
+            "tls": {
+                "insecure": true
+            },
+            "transport": {
+                "headers": {
+                    "Host": "proxy.ex-vpn.my.id"
+                },
+                "path": "/103.6.207.108-8080",
+                "type": "ws"
+            }
+        },
+        {
+            "type": "vless",
+            "tag": "6 🇮🇩 PT MITRA VISIONER PRATAMA WS NTLS [proxy]",
+            "server": "quiz.int.vidio.com",
+            "server_port": 80,
+            "uuid": "4e7e1fa1-a573-4057-99de-3b8ad01271e8",
+            "network": "tcp",
+            "packet_encoding": "xudp",
+            "tls": {
+                "insecure": true
+            },
+            "transport": {
+                "headers": {
+                    "Host": "proxy.ex-vpn.my.id"
+                },
+                "path": "/172.252.8.168-443",
+                "type": "ws"
             }
         }
     ]
