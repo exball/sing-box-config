@@ -361,7 +361,7 @@ def process_single_config(config):
                       "LT", "LU", "LV", "MD", "MU", "MX", "MY", "NL", "PH", "PL", "PT", "RO", "RS", "RU", "SE", 
                       "SG", "SK", "TF", "TH", "TR", "TW", "UA", "US", "VN"]
     invalid_countries = [c for c in countries if c not in valid_countries]
-    invalid_protocols = [p for p in protocols if p not in ["vless", "trojan", "ss"]]
+    invalid_protocols = [p for p in protocols if p not in ["vless", "trojan", "shadowsocks", "ss"]]
     invalid_securities = [s for s in securities if s not in ["tls", "ntls"]]
     
     if invalid_countries:
@@ -395,23 +395,13 @@ def process_single_config(config):
     all_outbounds = []
     
     # Ambil outbound untuk setiap kombinasi negara, protokol, dan keamanan
-    # Tentukan URL berdasarkan waktu saat ini
-    current_hour = datetime.now().hour
-    
-    if current_hour < 12:
-        base_url = "https://proxy.exbal.my.id/api/bfr"
-        print(f"Using proxy.exbal.my.id based on current time: {datetime.now().strftime('%H:%M:%S')}")
-    else:
-        base_url = "https://proxy.ex-vpn.my.id/api/bfr"
-        print(f"Using proxy.ex-vpn.my.id based on current time: {datetime.now().strftime('%H:%M:%S')}")
-    
     for country in countries:
         for protocol in protocols:
             for security in securities:
-                url = f"{base_url}?cc={country}&protocols={protocol}&securities={security}"
+                url = f"https://proxy.ex-vpn.my.id/api/bfr?cc={country}&protocols={protocol}&securities={security}"
                 
                 try:
-                    print(f"Fetching {protocol} {security} proxies from {country} using {base_url}...")
+                    print(f"Fetching {protocol} {security} proxies from {country}...")
                     
                     # Mengambil konfigurasi BFR dengan retry
                     response = fetch_with_retry(url)
@@ -446,11 +436,10 @@ def process_single_config(config):
                     providers_seen = set()
                     
                     for outbound in outbounds:
-                        # Untuk protokol ss, gunakan "shadowsocks" sebagai tipe outbound internal
-                        # Catatan: API hanya menerima "protocols=ss", bukan "protocols=shadowsocks"
+                        # Normalisasi protokol (ss -> shadowsocks)
                         if protocol == "ss":
                             actual_protocol = "shadowsocks"
-                            # Gunakan format "shadowsocks" untuk protokol "ss" saat menerapkan format
+                            # Gunakan format "shadowsocks" untuk protokol "ss"
                             protocol_format = "shadowsocks"
                         else:
                             actual_protocol = protocol
@@ -614,7 +603,7 @@ def main():
         print("CA (Canada), AU (Australia), NL (Netherlands), RU (Russia), IN (India),")
         print("BR (Brazil), IT (Italy), ES (Spain), MX (Mexico), TR (Turkey)")
         print("\nAvailable protocols:")
-        print("vless, trojan, ss")
+        print("vless, trojan")
         print("\nAvailable securities:")
         print("tls, ntls")
         print("\nUsage:")
