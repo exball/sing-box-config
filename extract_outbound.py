@@ -240,19 +240,29 @@ def load_outbound_format(format_file="config_format.ini"):
         print("Menggunakan format default.")
         return None
 
-def apply_outbound_format(outbound, format_template):
+def apply_outbound_format(outbound, format_template, protocol_format=None):
     """
     Menerapkan format template ke outbound berdasarkan protokol.
-    - Pilih template yang sesuai berdasarkan protokol (vless atau trojan)
+    - Pilih template yang sesuai berdasarkan protokol (vless, trojan, shadowsocks)
     - Jika field di template kosong ("") dan field tersebut ada di outbound asli, gunakan nilai dari outbound asli
     - Jika field di template kosong ("") dan field tersebut tidak ada di outbound asli, jangan tambahkan field tersebut
     - Jika field di template memiliki nilai, gunakan nilai tersebut
+    
+    Args:
+        outbound: Outbound yang akan diformat
+        format_template: Template format yang akan diterapkan
+        protocol_format: Protokol yang digunakan untuk memilih template (opsional)
     """
     if not format_template:
         return outbound
     
     # Tentukan protokol outbound
-    protocol = outbound.get("type", "").lower()
+    if protocol_format:
+        # Gunakan protocol_format jika disediakan
+        protocol = protocol_format
+    else:
+        # Jika tidak, gunakan tipe outbound
+        protocol = outbound.get("type", "").lower()
     
     # Pilih template yang sesuai berdasarkan protokol
     if protocol in format_template:
@@ -351,7 +361,7 @@ def process_single_config(config):
                       "LT", "LU", "LV", "MD", "MU", "MX", "MY", "NL", "PH", "PL", "PT", "RO", "RS", "RU", "SE", 
                       "SG", "SK", "TF", "TH", "TR", "TW", "UA", "US", "VN"]
     invalid_countries = [c for c in countries if c not in valid_countries]
-    invalid_protocols = [p for p in protocols if p not in ["vless", "trojan"]]
+    invalid_protocols = [p for p in protocols if p not in ["vless", "trojan", "shadowsocks", "ss"]]
     invalid_securities = [s for s in securities if s not in ["tls", "ntls"]]
     
     if invalid_countries:
@@ -426,9 +436,27 @@ def process_single_config(config):
                     providers_seen = set()
                     
                     for outbound in outbounds:
-                        if (outbound.get("type") == protocol and 
-                            ((security == "tls" and outbound.get("tls", {}).get("enabled") == True) or
-                             (security == "ntls" and (not outbound.get("tls") or outbound.get("tls", {}).get("enabled") != True)))):
+                        # Normalisasi protokol (ss -> shadowsocks)
+                        if protocol == "ss":
+                            actual_protocol = "shadowsocks"
+                            # Gunakan format "shadowsocks" untuk protokol "ss"
+                            protocol_format = "shadowsocks"
+                        else:
+                            actual_protocol = protocol
+                            protocol_format = protocol
+                            
+                        # Periksa apakah tipe outbound cocok dengan protokol
+                        type_match = outbound.get("type") == actual_protocol
+                        
+                        # Untuk protokol shadowsocks, tidak perlu memeriksa security (tls/ntls)
+                        if actual_protocol == "shadowsocks":
+                            security_match = True
+                        else:
+                            # Untuk protokol lain, periksa security (tls/ntls)
+                            security_match = ((security == "tls" and outbound.get("tls", {}).get("enabled") == True) or
+                                             (security == "ntls" and (not outbound.get("tls") or outbound.get("tls", {}).get("enabled") != True)))
+                        
+                        if type_match and security_match:
                             
                             # Tambahkan emoji bendera ke tag
                             provider_name = "unknown"
@@ -465,7 +493,8 @@ def process_single_config(config):
                             
                             # Terapkan format konfigurasi jika tersedia
                             if outbound_format:
-                                outbound_copy = apply_outbound_format(outbound_copy, outbound_format)
+                                # Gunakan protocol_format untuk memilih template yang sesuai
+                                outbound_copy = apply_outbound_format(outbound_copy, outbound_format, protocol_format)
                             
                             # Logika untuk memfilter proxy:
                             # 1. Untuk Indonesia (ID): Ambil semua proxy
