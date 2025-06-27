@@ -21,7 +21,7 @@ jobs:
         uses: oven-sh/setup-bun@v2
       - name: Start Scan
         run: |
-          bun install && bun run ./helper/proxyip.ts
+          cd proxy-scaner && bun install && bun run ./proxyip.ts
       - name: Publish Result
         if: ${{ success() }}
         run: |
@@ -30,7 +30,7 @@ jobs:
           if [ -n "$(git status --porcelain)" ]; then
           git add .
           git commit -m "Update proxyip"
-          git push origin main --force
+          git push origin Master --force
           else
           echo "No changes detected, skipping commit and push."
           fi
