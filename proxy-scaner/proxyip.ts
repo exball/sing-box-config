@@ -23,6 +23,7 @@ interface ProxyTestResult {
 
 let myGeoIpString: any = null;
 
+// Perubahan path file untuk menyesuaikan dengan struktur direktori baru
 const KV_PAIR_PROXY_FILE = "./kvProxyList.json";
 const RAW_PROXY_LIST_FILE = "./rawProxyList.txt";
 const PROXY_LIST_FILE = "./proxyList.txt";
