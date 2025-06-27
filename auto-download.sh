@@ -8,16 +8,17 @@
 # Parameter minimal yang diperlukan untuk memeriksa pembaruan konfigurasi
 # Parameter ini TIDAK BOLEH diubah melalui file konfigurasi eksternal
 CONF_UPDATE_URL="https://raw.githubusercontent.com/exball/sing-box-config/refs/heads/Master/auto-download.conf"
+SCRIPT_UPDATE_URL="https://raw.githubusercontent.com/exball/sing-box-config/refs/heads/Master/auto-download.sh"
+CHECK_UPDATE_SCRIPT_URL="https://raw.githubusercontent.com/exball/sing-box-config/refs/heads/Master/check-update.sh"
 CONFIG_FILE="/data/adb/auto-download/auto-download.conf"
+SCRIPT_FILE="/data/adb/auto-download/auto-download.sh"
+CHECK_UPDATE_SCRIPT="/data/adb/auto-download/check-update.sh"
 TEMP_DIR="/data/adb/auto-download/download_temp"
 NETWORK_TEST_URL="https://www.google.com"
-NETWORK_MAX_ATTEMPTS=5
+NETWORK_MAX_ATTEMPTS=15
 NETWORK_RETRY_WAIT=3
 LOG_FILE="/data/adb/auto-download/auto-download.log"
-
-# Pastikan direktori yang diperlukan ada
-mkdir -p /data/adb/auto-download
-mkdir -p "$TEMP_DIR"
+OLD_LOG_FILE="/data/adb/auto-download/auto-download_old.log"
 
 # File PID untuk melacak proses yang sedang berjalan
 PID_FILE="/data/adb/auto-download/auto-download.pid"
@@ -31,6 +32,11 @@ LAST_INTERVAL=0
 # Variabel untuk melacak jadwal terakhir yang dijalankan
 LAST_EXECUTED_SCHEDULE=""
 LAST_SCHEDULE_TIME=0
+
+# Variabel untuk melacak apakah ada file yang diperbarui
+files_updated=0
+
+# ===== FUNGSI UTILITAS =====
 
 # Fungsi untuk logging
 log_message() {
@@ -100,11 +106,34 @@ check_network_connection() {
     return 0
 }
 
-
+# Fungsi untuk rotasi log
+rotate_log() {
+    if [ -n "$LOG_FILE" ]; then
+        # Jika file log lama sudah ada, hapus terlebih dahulu
+        if [ -f "$OLD_LOG_FILE" ]; then
+            rm -f "$OLD_LOG_FILE"
+            log_message "File log lama dihapus"
+        fi
+        
+        # Jika file log saat ini ada, pindahkan ke file log lama
+        if [ -f "$LOG_FILE" ]; then
+            mv "$LOG_FILE" "$OLD_LOG_FILE"
+        fi
+        
+        # Buat file log baru (kosong)
+        touch "$LOG_FILE"
+        
+        # Reset variabel timestamp header
+        TIMESTAMP_HEADER_WRITTEN=0
+        
+        log_message "Rotasi log selesai"
+    fi
+}
 
 # Pastikan direktori yang diperlukan ada
-mkdir -p "$(dirname "$LOG_FILE")"
+mkdir -p /data/adb/auto-download
 mkdir -p "$TEMP_DIR"
+mkdir -p "$(dirname "$LOG_FILE")"
 
 # Inisialisasi file log jika belum ada
 if [ -n "$LOG_FILE" ] && [ ! -f "$LOG_FILE" ]; then
@@ -175,56 +204,18 @@ check_network_after_pid() {
     fi
 }
 
-# Fungsi untuk logging
-log_message() {
-    local message="$1"
-    local timestamp=$(date "+%Y-%m-%d %H:%M:%S")
-    
-    # Echo ke konsol dengan timestamp (hanya jika dijalankan manual)
-    echo "$timestamp: $message"
-    
-    # Tulis ke file log jika dikonfigurasi
-    if [ -n "$LOG_FILE" ]; then
-        # Jika ini adalah pesan pertama setelah log dikosongkan, tulis header timestamp
-        if [ $TIMESTAMP_HEADER_WRITTEN -eq 0 ]; then
-            echo "$timestamp:" >> "$LOG_FILE"
-            TIMESTAMP_HEADER_WRITTEN=1
-        fi
-        
-        # Tulis pesan tanpa timestamp
-        echo "$message" >> "$LOG_FILE"
-    fi
-}
-
-# Pastikan direktori auto-download ada
-mkdir -p "/data/adb/auto-download"
-
-# Pastikan direktori log ada jika LOG_FILE dikonfigurasi
-if [ -n "$LOG_FILE" ]; then
-    mkdir -p "$(dirname "$LOG_FILE")"
+# Pastikan direktori penyimpanan dan temp ada setelah memuat konfigurasi
+if [ -n "$SAVE_DIR" ]; then
+    mkdir -p "$SAVE_DIR"
 fi
 
-# Pastikan direktori penyimpanan dan temp ada
-mkdir -p "$SAVE_DIR"
-mkdir -p "$CONFIG_DIR"
-mkdir -p "$TEMP_DIR"
-
-# Fungsi untuk mendapatkan hash SHA-1 dari file lokal
-get_local_sha1() {
-    local file="$1"
-    if [ -f "$file" ]; then
-        sha1sum "$file" | awk '{print $1}'
-    else
-        echo ""
-    fi
-}
+if [ -n "$CONFIG_DIR" ]; then
+    mkdir -p "$CONFIG_DIR"
+fi
 
 # Fungsi untuk mendapatkan hash SHA-1 dari URL raw GitHub
 get_github_sha1() {
     local raw_url="$1"
-    
-    # Buat direktori temp jika belum ada
-    mkdir -p "$TEMP_DIR"
     
     # Nama file sementara untuk download
     local temp_hash_file="$TEMP_DIR/temp_hash_file"
@@ -245,41 +236,74 @@ get_github_sha1() {
     fi
 }
 
-# Fungsi untuk memeriksa koneksi jaringan
-check_network_connection() {
-    log_message "Memeriksa koneksi internet..."
+# Fungsi untuk memeriksa file
+check_file_hash() {
+    local file_url="$1"
+    local local_file="$2"
+    local file_name=$(basename "$local_file")
     
-    local attempt=1
-    local connected=0
+    log_message "-----"
+    log_message "Memeriksa hash SHA-1 $file_name..."
     
-    while [ $attempt -le $NETWORK_MAX_ATTEMPTS ]; do
-        log_message "Percobaan koneksi ke $NETWORK_TEST_URL (Percobaan $attempt dari $NETWORK_MAX_ATTEMPTS)"
+    # Nama file sementara untuk download
+    local temp_file="$TEMP_DIR/${file_name}.hash"
+    
+    # Download file dari URL raw GitHub untuk mendapatkan hash
+    if curl -s -L --connect-timeout 10 --max-time 30 "$file_url" -o "$temp_file"; then
+        # Hitung hash SHA-1 dari file yang didownload
+        local github_sha1=$(get_local_sha1 "$temp_file")
         
-        # Gunakan curl untuk memeriksa koneksi ke URL yang ditentukan
-        # -s: silent mode, -f: fail silently, -m: timeout dalam detik, -o: output ke /dev/null
-        if curl -s -f -m 10 --connect-timeout 5 -o /dev/null "$NETWORK_TEST_URL"; then
-            log_message "Koneksi internet tersedia"
-            connected=1
-            break
+        if [ -z "$github_sha1" ]; then
+            log_message "Gagal mendapatkan SHA-1 file $file_name dari GitHub"
+            rm -f "$temp_file"
+            return 1
+        else
+            log_message "SHA-1 GitHub $file_name: $github_sha1"
+            
+            # Dapatkan hash SHA-1 dari file lokal jika ada
+            local local_sha1=""
+            if [ -f "$local_file" ]; then
+                local_sha1=$(get_local_sha1 "$local_file")
+                log_message "SHA-1 lokal $file_name: $local_sha1"
+            fi
+            
+            # Bandingkan hash SHA-1
+            if [ -n "$local_sha1" ] && [ "$local_sha1" = "$github_sha1" ]; then
+                log_message "SHA-1 $file_name sama, tidak perlu diperbarui"
+                rm -f "$temp_file"
+                return 0  # Sama
+            else
+                log_message "SHA-1 $file_name berbeda atau file tidak ada, perlu diperbarui"
+                rm -f "$temp_file"
+                return 2  # Berbeda
+            fi
         fi
-        
-        # Jika tidak ada koneksi, tunggu dan coba lagi
-        log_message "Tidak ada koneksi internet, Tunggu $NETWORK_RETRY_WAIT detik."
-        
-        if [ $attempt -lt $NETWORK_MAX_ATTEMPTS ]; then
-            sleep $NETWORK_RETRY_WAIT
-        fi
-        
-        # Tambahkan jumlah percobaan
-        attempt=$((attempt + 1))
-    done
+    else
+        log_message "Gagal mendownload $file_name dari $file_url untuk pemeriksaan hash"
+        rm -f "$temp_file"
+        return 1  # Error
+    fi
+}
+
+# Fungsi untuk menjalankan check-update.sh
+run_check_update() {
+    local mode="$1"
     
-    if [ $connected -eq 0 ]; then
-        log_message "Gagal terhubung ke jaringan setelah $NETWORK_MAX_ATTEMPTS percobaan"
+    # Periksa apakah check-update.sh ada dan dapat dieksekusi
+    if [ ! -x "$CHECK_UPDATE_SCRIPT" ]; then
+        log_message "KESALAHAN: $CHECK_UPDATE_SCRIPT tidak ditemukan atau tidak dapat dieksekusi"
         return 1
     fi
     
-    return 0
+    log_message "Menjalankan $CHECK_UPDATE_SCRIPT dengan mode: $mode"
+    
+    # Jalankan check-update.sh dengan parameter yang sesuai
+    "$CHECK_UPDATE_SCRIPT" "$mode" "$CONF_UPDATE_URL" "$CONFIG_FILE" "$SCRIPT_UPDATE_URL" "$SCRIPT_FILE"
+    
+    # Script ini tidak akan pernah mencapai baris berikutnya jika check-update.sh berhasil
+    # karena check-update.sh akan menghentikan proses ini dan memulai ulang nanti
+    log_message "PERINGATAN: check-update.sh gagal menjalankan pembaruan"
+    return 1
 }
 
 # Fungsi untuk mendownload file
@@ -293,75 +317,118 @@ download_files() {
     
     log_message "Memulai proses pemeriksaan file"
     
-    # Variabel untuk melacak apakah ada file yang diperbarui
-    local files_updated=0
-    
-    # Periksa dan update file auto-download.conf
+    # Periksa file check-update.sh paling awal
     log_message "-----"
-    log_message "Memeriksa pembaruan file auto-download.conf..."
+    log_message "Memeriksa file check-update.sh..."
     
-    # Gunakan hasil pemeriksaan koneksi internet sebelumnya
-    if [ $? -eq 0 ]; then
-        # Nama file sementara untuk download
-        local temp_conf_file="$TEMP_DIR/auto-download.conf.new"
+    # Periksa apakah check-update.sh ada dan dapat dieksekusi
+    local check_update_needs_update=0
+    
+    if [ ! -x "$CHECK_UPDATE_SCRIPT" ]; then
+        log_message "File check-update.sh tidak ditemukan atau tidak dapat dieksekusi, akan didownload"
+        check_update_needs_update=1
+    else
+        # Periksa hash check-update.sh
+        check_file_hash "$CHECK_UPDATE_SCRIPT_URL" "$CHECK_UPDATE_SCRIPT"
+        local check_update_result=$?
         
-        # Download file dari URL raw GitHub untuk mendapatkan hash
-        if curl -s -L --connect-timeout 10 --max-time 30 "$CONF_UPDATE_URL" -o "$temp_conf_file"; then
-            # Hitung hash SHA-1 dari file yang didownload
-            local github_sha1=$(get_local_sha1 "$temp_conf_file")
+        if [ $check_update_result -eq 2 ]; then
+            check_update_needs_update=1
+            log_message "File check-update.sh perlu diperbarui"
+        elif [ $check_update_result -eq 0 ]; then
+            log_message "File check-update.sh tidak perlu diperbarui"
+        else
+            log_message "Gagal memeriksa file check-update.sh"
+        fi
+    fi
+    
+    # Jika check-update.sh perlu diperbarui, download langsung
+    if [ $check_update_needs_update -eq 1 ]; then
+        log_message "Mendownload file check-update.sh yang baru..."
+        
+        # Nama file sementara untuk download
+        local temp_check_update_file="$TEMP_DIR/check-update.sh.new"
+        
+        # Download file dari URL
+        if curl -s -L --connect-timeout 10 --max-time 30 "$CHECK_UPDATE_SCRIPT_URL" -o "$temp_check_update_file"; then
+            # Hapus backup lama jika ada
+            if [ -f "${CHECK_UPDATE_SCRIPT}.bak" ]; then
+                rm -f "${CHECK_UPDATE_SCRIPT}.bak"
+            fi
             
-            if [ -z "$github_sha1" ]; then
-                log_message "Gagal mendapatkan SHA-1 file konfigurasi dari GitHub"
-                rm -f "$temp_conf_file"
-            else
-                log_message "SHA-1 GitHub auto-download.conf: $github_sha1"
-                
-                # Dapatkan hash SHA-1 dari file lokal jika ada
-                local local_sha1=""
-                if [ -f "$CONFIG_FILE" ]; then
-                    local_sha1=$(get_local_sha1 "$CONFIG_FILE")
-                    log_message "SHA-1 lokal auto-download.conf: $local_sha1"
-                fi
-                
-                # Bandingkan hash SHA-1
-                if [ -n "$local_sha1" ] && [ "$local_sha1" = "$github_sha1" ]; then
-                    log_message "SHA-1 auto-download.conf sama, menggunakan konfigurasi lokal"
-                    rm -f "$temp_conf_file"
-                else
-                    log_message "SHA-1 auto-download.conf berbeda atau file tidak ada, memperbarui..."
-                    
-                    # Hapus backup lama jika ada
-                    if [ -f "$CONFIG_FILE.bak" ]; then
-                        rm -f "$CONFIG_FILE.bak"
-                    fi
-                    
-                    # Buat backup konfigurasi lama jika ada
-                    if [ -f "$CONFIG_FILE" ]; then
-                        cp "$CONFIG_FILE" "$CONFIG_FILE.bak"
-                    fi
-                    
-                    # Pindahkan file konfigurasi baru
-                    mv "$temp_conf_file" "$CONFIG_FILE"
-                    log_message "Berhasil memperbarui auto-download.conf (SHA-1 terverifikasi)"
-                    
-                    # Muat ulang konfigurasi
-                    source "$CONFIG_FILE"
-                    log_message "Konfigurasi baru dimuat dari $CONFIG_FILE"
-                    
-                    # Hapus file backup karena pembaruan berhasil
-                    if [ -f "$CONFIG_FILE.bak" ]; then
-                        rm -f "$CONFIG_FILE.bak"
-                    fi
-                    
-                    files_updated=1
-                fi
+            # Buat backup file lama jika ada
+            if [ -f "$CHECK_UPDATE_SCRIPT" ]; then
+                cp "$CHECK_UPDATE_SCRIPT" "${CHECK_UPDATE_SCRIPT}.bak"
+            fi
+            
+            # Pastikan direktori tujuan ada
+            mkdir -p "$(dirname "$CHECK_UPDATE_SCRIPT")"
+            
+            # Pindahkan file baru
+            mv "$temp_check_update_file" "$CHECK_UPDATE_SCRIPT"
+            
+            # Berikan izin eksekusi
+            chmod +x "$CHECK_UPDATE_SCRIPT"
+            
+            log_message "Berhasil memperbarui check-update.sh"
+            
+            # Hapus file backup karena pembaruan berhasil
+            if [ -f "${CHECK_UPDATE_SCRIPT}.bak" ]; then
+                rm -f "${CHECK_UPDATE_SCRIPT}.bak"
             fi
         else
-            log_message "Gagal mendownload auto-download.conf dari $CONF_UPDATE_URL"
-            rm -f "$temp_conf_file"
+            log_message "Gagal mendownload check-update.sh dari $CHECK_UPDATE_SCRIPT_URL"
+            rm -f "$temp_check_update_file"
         fi
+    fi
+    
+    # Variabel untuk melacak status pemeriksaan
+    local conf_needs_update=0
+    local script_needs_update=0
+    
+    # Periksa file auto-download.conf
+    log_message "-----"
+    log_message "Memeriksa file auto-download.conf..."
+    check_file_hash "$CONF_UPDATE_URL" "$CONFIG_FILE"
+    local conf_result=$?
+    
+    if [ $conf_result -eq 2 ]; then
+        conf_needs_update=1
+        log_message "File auto-download.conf perlu diperbarui"
+    elif [ $conf_result -eq 0 ]; then
+        log_message "File auto-download.conf tidak perlu diperbarui"
     else
-        log_message "Pemeriksaan pembaruan konfigurasi dibatalkan karena tidak ada koneksi internet"
+        log_message "Gagal memeriksa file auto-download.conf"
+    fi
+    
+    # Periksa file auto-download.sh
+    log_message "-----"
+    log_message "Memeriksa file auto-download.sh..."
+    check_file_hash "$SCRIPT_UPDATE_URL" "$SCRIPT_FILE"
+    local script_result=$?
+    
+    if [ $script_result -eq 2 ]; then
+        script_needs_update=1
+        log_message "File auto-download.sh perlu diperbarui"
+    elif [ $script_result -eq 0 ]; then
+        log_message "File auto-download.sh tidak perlu diperbarui"
+    else
+        log_message "Gagal memeriksa file auto-download.sh"
+    fi
+    
+    # Jika salah satu file perlu diperbarui, jalankan check-update.sh
+    if [ $conf_needs_update -eq 1 ] && [ $script_needs_update -eq 1 ]; then
+        log_message "Kedua file perlu diperbarui, menjalankan check-update.sh..."
+        run_check_update "both"
+        return $?
+    elif [ $conf_needs_update -eq 1 ]; then
+        log_message "File auto-download.conf perlu diperbarui, menjalankan check-update.sh..."
+        run_check_update "conf"
+        return $?
+    elif [ $script_needs_update -eq 1 ]; then
+        log_message "File auto-download.sh perlu diperbarui, menjalankan check-update.sh..."
+        run_check_update "script"
+        return $?
     fi
     
     # Loop melalui setiap URL dan download
@@ -668,26 +735,8 @@ check_schedule_and_run() {
     
     if [ $is_scheduled -eq 1 ]; then
         # Rotasi file log hanya jika ini adalah waktu yang dijadwalkan
-        if [ -n "$LOG_FILE" ]; then
-            # Jika file log lama sudah ada, hapus terlebih dahulu
-            if [ -f "$OLD_LOG_FILE" ]; then
-                rm -f "$OLD_LOG_FILE"
-                log_message "File log lama dihapus"
-            fi
-            
-            # Jika file log saat ini ada, pindahkan ke file log lama
-            if [ -f "$LOG_FILE" ]; then
-                mv "$LOG_FILE" "$OLD_LOG_FILE"
-            fi
-            
-            # Buat file log baru (kosong)
-            touch "$LOG_FILE"
-            
-            # Reset variabel timestamp header
-            TIMESTAMP_HEADER_WRITTEN=0
-            
-            log_message "Rotasi log selesai pada waktu terjadwal: $current_time"
-        fi
+        rotate_log
+        log_message "Rotasi log selesai pada waktu terjadwal: $current_time"
         
         # Jalankan download
         download_files
@@ -701,52 +750,69 @@ check_schedule_and_run() {
     fi
 }
 
-# Fungsi untuk mendapatkan informasi jadwal berikutnya
-get_next_schedule_info() {
+# Fungsi untuk menghitung detik ke jadwal berikutnya
+calculate_next_schedule_seconds() {
+    local return_schedule_time=$1  # 1 jika perlu mengembalikan waktu jadwal, 0 jika tidak
+    
     # Dapatkan waktu saat ini dalam detik sejak tengah malam
-    current_seconds=$(($(date +%H) * 3600 + $(date +%M) * 60 + $(date +%S)))
+    local current_seconds=$(($(date +%H) * 3600 + $(date +%M) * 60 + $(date +%S)))
     
     # Inisialisasi waktu ke jadwal berikutnya
-    next_schedule_seconds=86400  # Default ke 24 jam (tidak ada jadwal dalam 24 jam)
-    next_schedule_time=""
+    local next_seconds=86400  # Default ke 24 jam (tidak ada jadwal dalam 24 jam)
+    local next_time=""
     
     # Periksa semua jadwal untuk menemukan yang terdekat
     for schedule_time in $SCHEDULE_HOURS; do
         # Konversi jadwal ke detik sejak tengah malam
-        hour=$(echo $schedule_time | cut -d: -f1)
-        minute=$(echo $schedule_time | cut -d: -f2)
-        schedule_seconds=$((hour * 3600 + minute * 60))
+        local hour=$(echo $schedule_time | cut -d: -f1)
+        local minute=$(echo $schedule_time | cut -d: -f2)
+        local schedule_seconds=$((hour * 3600 + minute * 60))
         
         # Hitung selisih waktu (dalam detik)
         if [ $schedule_seconds -gt $current_seconds ]; then
             # Jadwal hari ini yang belum lewat
-            diff_seconds=$((schedule_seconds - current_seconds))
-            if [ $diff_seconds -lt $next_schedule_seconds ]; then
-                next_schedule_seconds=$diff_seconds
-                next_schedule_time=$schedule_time
+            local diff_seconds=$((schedule_seconds - current_seconds))
+            if [ $diff_seconds -lt $next_seconds ]; then
+                next_seconds=$diff_seconds
+                next_time=$schedule_time
             fi
         fi
     done
     
     # Jika tidak ada jadwal yang ditemukan untuk hari ini, cari jadwal pertama untuk besok
-    if [ $next_schedule_seconds -eq 86400 ]; then
+    if [ $next_seconds -eq 86400 ]; then
         for schedule_time in $SCHEDULE_HOURS; do
-            hour=$(echo $schedule_time | cut -d: -f1)
-            minute=$(echo $schedule_time | cut -d: -f2)
-            schedule_seconds=$((hour * 3600 + minute * 60))
+            local hour=$(echo $schedule_time | cut -d: -f1)
+            local minute=$(echo $schedule_time | cut -d: -f2)
+            local schedule_seconds=$((hour * 3600 + minute * 60))
             
             # Jadwal untuk besok = jadwal + (24 jam - waktu saat ini)
-            diff_seconds=$((schedule_seconds + 86400 - current_seconds))
-            if [ $diff_seconds -lt $next_schedule_seconds ]; then
-                next_schedule_seconds=$diff_seconds
-                next_schedule_time=$schedule_time
+            local diff_seconds=$((schedule_seconds + 86400 - current_seconds))
+            if [ $diff_seconds -lt $next_seconds ]; then
+                next_seconds=$diff_seconds
+                next_time=$schedule_time
             fi
         done
     fi
     
+    # Kembalikan hasil sesuai parameter
+    if [ $return_schedule_time -eq 1 ]; then
+        echo "$next_seconds $next_time"
+    else
+        echo "$next_seconds"
+    fi
+}
+
+# Fungsi untuk mendapatkan informasi jadwal berikutnya
+get_next_schedule_info() {
+    # Dapatkan detik dan waktu jadwal berikutnya
+    local result=$(calculate_next_schedule_seconds 1)
+    local next_schedule_seconds=$(echo $result | cut -d' ' -f1)
+    local next_schedule_time=$(echo $result | cut -d' ' -f2)
+    
     # Konversi detik ke format jam dan menit untuk tampilan yang lebih mudah dibaca
-    next_hours=$((next_schedule_seconds / 3600))
-    next_minutes=$(((next_schedule_seconds % 3600) / 60))
+    local next_hours=$((next_schedule_seconds / 3600))
+    local next_minutes=$(((next_schedule_seconds % 3600) / 60))
     
     # Kembalikan informasi jadwal berikutnya
     echo "Jadwal berikutnya: $next_schedule_time (dalam $next_hours jam $next_minutes menit)"
@@ -754,43 +820,8 @@ get_next_schedule_info() {
 
 # Fungsi untuk menghitung interval adaptif berdasarkan waktu ke jadwal berikutnya
 calculate_adaptive_interval() {
-    # Dapatkan waktu saat ini dalam detik sejak tengah malam
-    current_seconds=$(($(date +%H) * 3600 + $(date +%M) * 60 + $(date +%S)))
-    
-    # Inisialisasi waktu ke jadwal berikutnya
-    next_schedule_seconds=86400  # Default ke 24 jam (tidak ada jadwal dalam 24 jam)
-    
-    # Periksa semua jadwal untuk menemukan yang terdekat
-    for schedule_time in $SCHEDULE_HOURS; do
-        # Konversi jadwal ke detik sejak tengah malam
-        hour=$(echo $schedule_time | cut -d: -f1)
-        minute=$(echo $schedule_time | cut -d: -f2)
-        schedule_seconds=$((hour * 3600 + minute * 60))
-        
-        # Hitung selisih waktu (dalam detik)
-        if [ $schedule_seconds -gt $current_seconds ]; then
-            # Jadwal hari ini yang belum lewat
-            diff_seconds=$((schedule_seconds - current_seconds))
-            if [ $diff_seconds -lt $next_schedule_seconds ]; then
-                next_schedule_seconds=$diff_seconds
-            fi
-        fi
-    done
-    
-    # Jika tidak ada jadwal yang ditemukan untuk hari ini, cari jadwal pertama untuk besok
-    if [ $next_schedule_seconds -eq 86400 ]; then
-        for schedule_time in $SCHEDULE_HOURS; do
-            hour=$(echo $schedule_time | cut -d: -f1)
-            minute=$(echo $schedule_time | cut -d: -f2)
-            schedule_seconds=$((hour * 3600 + minute * 60))
-            
-            # Jadwal untuk besok = jadwal + (24 jam - waktu saat ini)
-            diff_seconds=$((schedule_seconds + 86400 - current_seconds))
-            if [ $diff_seconds -lt $next_schedule_seconds ]; then
-                next_schedule_seconds=$diff_seconds
-            fi
-        done
-    fi
+    # Dapatkan detik ke jadwal berikutnya
+    local next_schedule_seconds=$(calculate_next_schedule_seconds 0)
     
     # Tentukan interval adaptif berdasarkan waktu ke jadwal berikutnya
     # Daftar interval yang tersedia (dalam detik)
@@ -835,24 +866,8 @@ calculate_adaptive_interval() {
 
 # Fungsi untuk menjalankan script sebagai daemon (background)
 run_as_daemon() {
-    # Rotasi file log jika dikonfigurasi
-    if [ -n "$LOG_FILE" ]; then
-        # Jika file log lama sudah ada, hapus terlebih dahulu
-        if [ -f "$OLD_LOG_FILE" ]; then
-            rm -f "$OLD_LOG_FILE"
-        fi
-        
-        # Jika file log saat ini ada, pindahkan ke file log lama
-        if [ -f "$LOG_FILE" ]; then
-            mv "$LOG_FILE" "$OLD_LOG_FILE"
-        fi
-        
-        # Buat file log baru (kosong)
-        touch "$LOG_FILE"
-        
-        # Reset variabel timestamp header
-        TIMESTAMP_HEADER_WRITTEN=0
-    fi
+    # Rotasi file log
+    rotate_log
     
     # Jalankan download pertama kali saat boot
     log_message "Rotasi log selesai, script dijalankan sebagai daemon"
@@ -936,25 +951,7 @@ if [ "$(dirname "$0")" = "/data/adb/service.d" ] || [ -f "/data/adb/auto-downloa
 fi
 
 # Rotasi log jika diperlukan
-if [ -n "$LOG_FILE" ]; then
-    # Jika file log lama sudah ada, hapus terlebih dahulu
-    if [ -f "$OLD_LOG_FILE" ]; then
-        rm -f "$OLD_LOG_FILE"
-    fi
-    
-    # Jika file log saat ini ada, pindahkan ke file log lama
-    if [ -f "$LOG_FILE" ]; then
-        mv "$LOG_FILE" "$OLD_LOG_FILE"
-    fi
-    
-    # Buat file log baru (kosong)
-    touch "$LOG_FILE"
-    
-    # Reset variabel timestamp header
-    TIMESTAMP_HEADER_WRITTEN=0
-    
-    log_message "Rotasi log selesai"
-fi
+rotate_log
 
 # Jika dijalankan saat boot, tunggu beberapa saat
 if [ $BOOT_MODE -eq 1 ]; then
