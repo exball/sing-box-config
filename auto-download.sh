@@ -505,8 +505,10 @@ download_files() {
                 log_message "check-update.sh selesai tanpa pembaruan, melanjutkan proses"
             elif [ $update_exit_code -eq 10 ]; then
                 # Kode 10 berarti auto-download.sh telah diperbarui dan restart-auto-download.sh telah dijalankan
-                log_message "auto-download.sh telah diperbarui dan akan di-restart, menghentikan proses saat ini"
-                return 1
+                log_message "auto-download.sh telah diperbarui dan restart-auto-download.sh telah dijalankan"
+                log_message "Menghentikan proses saat ini untuk digantikan oleh proses baru"
+                # Keluar dari seluruh script dengan kode 0 (sukses)
+                exit 0
             elif [ $update_exit_code -eq 126 ]; then
                 # Kode 126 berarti tidak dapat memberikan izin eksekusi
                 log_message "PERINGATAN: Tidak dapat menjalankan check-update.sh karena masalah izin, melanjutkan proses"

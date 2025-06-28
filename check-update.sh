@@ -197,7 +197,7 @@ run_update_check() {
         files_updated=1
     fi
     
-    # Jika file diperbarui, jalankan restart-auto-download.sh
+    # Jika file diperbarui, kembalikan kode 10 terlebih dahulu, kemudian jalankan restart-auto-download.sh
     if [ $files_updated -eq 1 ]; then
         log_message "File auto-download.sh telah diperbarui, perlu me-restart layanan"
         
@@ -210,56 +210,79 @@ run_update_check() {
             # Pastikan file memiliki izin eksekusi
             chmod +x "$RESTART_SCRIPT"
             
-            if [ -x "$RESTART_SCRIPT" ]; then
-                log_message "Menjalankan restart-auto-download.sh..."
-                
-                # Jalankan script restart
-                "$RESTART_SCRIPT"
-            else
-                log_message "PERINGATAN: Tidak dapat memberikan izin eksekusi pada restart-auto-download.sh"
-                log_message "Mencoba menjalankan dengan sh..."
-                
-                # Coba jalankan dengan sh
-                sh "$RESTART_SCRIPT"
-            fi
+            # Buat script sementara untuk menjalankan restart-auto-download.sh setelah beberapa detik
+            TEMP_SCRIPT="/data/adb/auto-download/temp_restart.sh"
             
-            log_message "restart-auto-download.sh telah dijalankan"
+            # Buat script sementara
+            cat > "$TEMP_SCRIPT" << EOF
+#!/bin/bash
+# Script sementara untuk menjalankan restart-auto-download.sh setelah beberapa detik
+# Ini memastikan auto-download.sh memiliki waktu untuk keluar dengan bersih
+
+# Tunggu beberapa detik untuk memastikan auto-download.sh telah keluar
+sleep 3
+
+# Jalankan restart-auto-download.sh
+if [ -x "$RESTART_SCRIPT" ]; then
+    "$RESTART_SCRIPT"
+else
+    sh "$RESTART_SCRIPT"
+fi
+
+# Hapus script sementara ini
+rm -f "$TEMP_SCRIPT"
+EOF
+            
+            # Berikan izin eksekusi ke script sementara
+            chmod +x "$TEMP_SCRIPT"
+            
+            # Jalankan script sementara di background
+            log_message "Menjadwalkan restart-auto-download.sh untuk dijalankan setelah auto-download.sh keluar..."
+            nohup "$TEMP_SCRIPT" > /dev/null 2>&1 &
+            
             log_message "Proses pemeriksaan selesai dengan pembaruan"
             
             # Kembalikan kode 10 untuk menandakan auto-download.sh telah diperbarui
-            # dan restart-auto-download.sh telah dijalankan
+            # restart-auto-download.sh akan dijalankan setelah auto-download.sh keluar
             return 10
         else
             # Jika script restart tidak ada, lakukan restart manual
             log_message "Script restart-auto-download.sh tidak ditemukan, mencoba restart manual..."
             
-            # Jika auto-download.sh sedang berjalan, restart
-            if pgrep -f "auto-download.sh" > /dev/null; then
-                log_message "Mendeteksi auto-download.sh sedang berjalan, mencoba me-restart..."
-                
-                # Hentikan proses yang sedang berjalan
-                pkill -f "auto-download.sh"
-                sleep 2
-                
-                # Jalankan kembali auto-download.sh
-                if [ -x "$SCRIPT_FILE" ]; then
-                    log_message "Menjalankan kembali auto-download.sh..."
-                    nohup "$SCRIPT_FILE" > /dev/null 2>&1 &
-                    log_message "auto-download.sh telah di-restart dengan PID: $!"
-                    
-                    # Kembalikan kode 10 untuk menandakan auto-download.sh telah diperbarui
-                    log_message "Proses pemeriksaan selesai dengan pembaruan"
-                    return 10
-                else
-                    log_message "PERINGATAN: auto-download.sh tidak dapat dieksekusi"
-                    log_message "Proses pemeriksaan selesai dengan error"
-                    return 2
-                fi
-            else
-                log_message "auto-download.sh tidak sedang berjalan, tidak perlu di-restart"
-                log_message "Proses pemeriksaan selesai dengan pembaruan"
-                return 0
-            fi
+            # Buat script sementara untuk restart manual
+            TEMP_SCRIPT="/data/adb/auto-download/temp_manual_restart.sh"
+            
+            # Buat script sementara
+            cat > "$TEMP_SCRIPT" << EOF
+#!/bin/bash
+# Script sementara untuk restart manual setelah beberapa detik
+# Ini memastikan auto-download.sh memiliki waktu untuk keluar dengan bersih
+
+# Tunggu beberapa detik untuk memastikan auto-download.sh telah keluar
+sleep 3
+
+# Hentikan proses auto-download.sh yang mungkin masih berjalan
+pkill -f "auto-download.sh"
+sleep 2
+
+# Jalankan kembali auto-download.sh
+if [ -x "$SCRIPT_FILE" ]; then
+    nohup "$SCRIPT_FILE" > /dev/null 2>&1 &
+fi
+
+# Hapus script sementara ini
+rm -f "$TEMP_SCRIPT"
+EOF
+            
+            # Berikan izin eksekusi ke script sementara
+            chmod +x "$TEMP_SCRIPT"
+            
+            # Jalankan script sementara di background
+            log_message "Menjadwalkan restart manual untuk dijalankan setelah auto-download.sh keluar..."
+            nohup "$TEMP_SCRIPT" > /dev/null 2>&1 &
+            
+            log_message "Proses pemeriksaan selesai dengan pembaruan"
+            return 10
         fi
     else
         log_message "Tidak ada file yang diperbarui"
