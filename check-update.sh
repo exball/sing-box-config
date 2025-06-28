@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/system/bin/sh
 
 # Script untuk mengupdate file auto-download.conf dan auto-download.sh
 # Script ini hanya bertanggung jawab untuk mendownload dan memperbarui file, bukan memeriksa
@@ -222,8 +222,11 @@ run_update() {
         
         # Jalankan restart-auto-download.sh jika ada
         local restart_script="/data/adb/auto-download/restart-auto-download.sh"
-        if [ -x "$restart_script" ]; then
-            "$restart_script"
+        if [ -f "$restart_script" ]; then
+            # Pastikan script memiliki izin eksekusi
+            chmod 755 "$restart_script"
+            log_message "Menjalankan: sh $restart_script"
+            sh "$restart_script"
         else
             log_message "PERINGATAN: restart-auto-download.sh tidak ditemukan atau tidak dapat dieksekusi"
             
@@ -235,9 +238,12 @@ run_update() {
                 auto_download_script="/data/adb/auto-download/auto-download.sh"
             fi
             
-            if [ -x "$auto_download_script" ]; then
+            if [ -f "$auto_download_script" ]; then
+                # Pastikan script memiliki izin eksekusi
+                chmod 755 "$auto_download_script"
                 log_message "Menjalankan auto-download.sh langsung dari $auto_download_script..."
-                nohup "$auto_download_script" > /dev/null 2>&1 &
+                log_message "Menjalankan: nohup sh $auto_download_script > /dev/null 2>&1 &"
+                nohup sh "$auto_download_script" > /dev/null 2>&1 &
                 log_message "auto-download.sh telah dijalankan dengan PID: $!"
             else
                 log_message "KESALAHAN: Tidak dapat menjalankan auto-download.sh dari $auto_download_script"
@@ -259,14 +265,16 @@ if [ -n "$LOG_FILE" ] && [ ! -f "$LOG_FILE" ]; then
     touch "$LOG_FILE"
 fi
 
+# URL default jika tidak diberikan sebagai parameter
+DEFAULT_CONF_URL="https://raw.githubusercontent.com/exball/sing-box-config/refs/heads/Master/auto-download.conf"
+DEFAULT_CONF_FILE="/data/adb/auto-download/auto-download.conf"
+DEFAULT_SCRIPT_URL="https://raw.githubusercontent.com/exball/sing-box-config/refs/heads/Master/auto-download.sh"
+DEFAULT_SCRIPT_FILE="/data/adb/auto-download/auto-download.sh"
+
 # Periksa parameter yang diberikan
-if [ $# -lt 5 ]; then
-    log_message "KESALAHAN: Parameter tidak lengkap"
+if [ $# -lt 1 ]; then
+    log_message "KESALAHAN: Mode tidak diberikan"
     log_message "Penggunaan: $0 [conf|script|both] [conf_url] [conf_file] [script_url] [script_file]"
-    log_message "Parameter yang diberikan: $#"
-    for i in $(seq 1 $#); do
-        log_message "Parameter $i: ${!i}"
-    done
     exit 1
 fi
 
@@ -277,24 +285,22 @@ if [ "$1" != "conf" ] && [ "$1" != "script" ] && [ "$1" != "both" ]; then
     exit 1
 fi
 
-# Validasi URL
-if [ "$1" = "conf" ] || [ "$1" = "both" ]; then
-    if [ -z "$2" ]; then
-        log_message "KESALAHAN: URL konfigurasi tidak diberikan"
-        exit 1
-    fi
-fi
+# Gunakan parameter yang diberikan atau nilai default
+MODE="$1"
+CONF_URL="${2:-$DEFAULT_CONF_URL}"
+CONF_FILE="${3:-$DEFAULT_CONF_FILE}"
+SCRIPT_URL="${4:-$DEFAULT_SCRIPT_URL}"
+SCRIPT_FILE="${5:-$DEFAULT_SCRIPT_FILE}"
 
-if [ "$1" = "script" ] || [ "$1" = "both" ]; then
-    if [ -z "$4" ]; then
-        log_message "KESALAHAN: URL script tidak diberikan"
-        exit 1
-    fi
-fi
+log_message "Mode: $MODE"
+log_message "URL konfigurasi: $CONF_URL"
+log_message "File konfigurasi: $CONF_FILE"
+log_message "URL script: $SCRIPT_URL"
+log_message "File script: $SCRIPT_FILE"
 
 # Jalankan pembaruan
-log_message "Memulai check-update.sh dengan mode: $1"
-run_update "$1" "$2" "$3" "$4" "$5"
+log_message "Memulai check-update.sh dengan mode: $MODE"
+run_update "$MODE" "$CONF_URL" "$CONF_FILE" "$SCRIPT_URL" "$SCRIPT_FILE"
 exit_code=$?
 
 # Hapus file PID

@@ -319,14 +319,23 @@ run_check_update() {
     fi
     
     # Pastikan check-update.sh memiliki izin eksekusi
-    chmod +x "$CHECK_UPDATE_SCRIPT"
-    log_message "Izin eksekusi diberikan ke $CHECK_UPDATE_SCRIPT"
+    chmod 755 "$CHECK_UPDATE_SCRIPT"
+    log_message "Izin eksekusi diberikan ke $CHECK_UPDATE_SCRIPT (chmod 755)"
+    
+    # Periksa apakah file benar-benar dapat dieksekusi
+    if [ ! -x "$CHECK_UPDATE_SCRIPT" ]; then
+        log_message "PERINGATAN: $CHECK_UPDATE_SCRIPT masih tidak dapat dieksekusi setelah chmod 755"
+        # Coba cara lain
+        busybox chmod +x "$CHECK_UPDATE_SCRIPT"
+        log_message "Mencoba dengan busybox chmod +x"
+    fi
     
     log_message "Menjalankan $CHECK_UPDATE_SCRIPT dengan mode: $mode"
     
     # Jalankan check-update.sh dengan parameter yang sesuai
     # Parameter: [mode] [conf_url] [conf_file] [script_url] [script_file]
-    "$CHECK_UPDATE_SCRIPT" "$mode" "$CONF_UPDATE_URL" "$CONFIG_FILE" "$SCRIPT_UPDATE_URL" "$SCRIPT_FILE"
+    log_message "Menjalankan: sh $CHECK_UPDATE_SCRIPT $mode $CONF_UPDATE_URL $CONFIG_FILE $SCRIPT_UPDATE_URL $SCRIPT_FILE"
+    sh "$CHECK_UPDATE_SCRIPT" "$mode" "$CONF_UPDATE_URL" "$CONFIG_FILE" "$SCRIPT_UPDATE_URL" "$SCRIPT_FILE"
     local result=$?
     
     if [ $result -ne 0 ]; then
@@ -417,8 +426,16 @@ download_files() {
                 fi
                 
                 # Berikan izin eksekusi
-                chmod +x "$CHECK_UPDATE_SCRIPT"
-                log_message "Izin eksekusi diberikan ke $CHECK_UPDATE_SCRIPT"
+                chmod 755 "$CHECK_UPDATE_SCRIPT"
+                log_message "Izin eksekusi diberikan ke $CHECK_UPDATE_SCRIPT (chmod 755)"
+                
+                # Periksa apakah file benar-benar dapat dieksekusi
+                if [ ! -x "$CHECK_UPDATE_SCRIPT" ]; then
+                    log_message "PERINGATAN: $CHECK_UPDATE_SCRIPT masih tidak dapat dieksekusi setelah chmod 755"
+                    # Coba cara lain
+                    busybox chmod +x "$CHECK_UPDATE_SCRIPT"
+                    log_message "Mencoba dengan busybox chmod +x"
+                fi
                 
                 log_message "Berhasil memperbarui check-update.sh"
                 
