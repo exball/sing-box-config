@@ -242,19 +242,40 @@ check_file_hash() {
     local local_file="$2"
     local file_name=$(basename "$local_file")
     
+    # Validasi parameter
+    if [ -z "$file_url" ]; then
+        log_message "KESALAHAN: URL file tidak diberikan untuk pemeriksaan hash"
+        return 1
+    fi
+    
+    if [ -z "$local_file" ]; then
+        log_message "KESALAHAN: Path file lokal tidak diberikan untuk pemeriksaan hash"
+        return 1
+    fi
+    
     log_message "-----"
     log_message "Memeriksa hash SHA-1 $file_name..."
+    log_message "URL: $file_url"
+    log_message "File lokal: $local_file"
     
     # Nama file sementara untuk download
     local temp_file="$TEMP_DIR/${file_name}.hash"
     
     # Download file dari URL raw GitHub untuk mendapatkan hash
+    log_message "Mendownload file untuk pemeriksaan hash..."
     if curl -s -L --connect-timeout 10 --max-time 30 "$file_url" -o "$temp_file"; then
+        # Periksa apakah file berhasil didownload dan tidak kosong
+        if [ ! -s "$temp_file" ]; then
+            log_message "KESALAHAN: File yang didownload kosong"
+            rm -f "$temp_file"
+            return 1
+        fi
+        
         # Hitung hash SHA-1 dari file yang didownload
         local github_sha1=$(get_local_sha1 "$temp_file")
         
         if [ -z "$github_sha1" ]; then
-            log_message "Gagal mendapatkan SHA-1 file $file_name dari GitHub"
+            log_message "KESALAHAN: Gagal mendapatkan SHA-1 file $file_name dari GitHub"
             rm -f "$temp_file"
             return 1
         else
@@ -265,6 +286,8 @@ check_file_hash() {
             if [ -f "$local_file" ]; then
                 local_sha1=$(get_local_sha1 "$local_file")
                 log_message "SHA-1 lokal $file_name: $local_sha1"
+            else
+                log_message "File lokal $file_name tidak ditemukan"
             fi
             
             # Bandingkan hash SHA-1
@@ -279,7 +302,7 @@ check_file_hash() {
             fi
         fi
     else
-        log_message "Gagal mendownload $file_name dari $file_url untuk pemeriksaan hash"
+        log_message "KESALAHAN: Gagal mendownload $file_name dari $file_url untuk pemeriksaan hash"
         rm -f "$temp_file"
         return 1  # Error
     fi
@@ -289,21 +312,31 @@ check_file_hash() {
 run_check_update() {
     local mode="$1"
     
-    # Periksa apakah check-update.sh ada dan dapat dieksekusi
-    if [ ! -x "$CHECK_UPDATE_SCRIPT" ]; then
-        log_message "KESALAHAN: $CHECK_UPDATE_SCRIPT tidak ditemukan atau tidak dapat dieksekusi"
+    # Periksa apakah check-update.sh ada
+    if [ ! -f "$CHECK_UPDATE_SCRIPT" ]; then
+        log_message "KESALAHAN: $CHECK_UPDATE_SCRIPT tidak ditemukan"
         return 1
     fi
+    
+    # Pastikan check-update.sh memiliki izin eksekusi
+    chmod +x "$CHECK_UPDATE_SCRIPT"
+    log_message "Izin eksekusi diberikan ke $CHECK_UPDATE_SCRIPT"
     
     log_message "Menjalankan $CHECK_UPDATE_SCRIPT dengan mode: $mode"
     
     # Jalankan check-update.sh dengan parameter yang sesuai
+    # Parameter: [mode] [conf_url] [conf_file] [script_url] [script_file]
     "$CHECK_UPDATE_SCRIPT" "$mode" "$CONF_UPDATE_URL" "$CONFIG_FILE" "$SCRIPT_UPDATE_URL" "$SCRIPT_FILE"
+    local result=$?
     
-    # Script ini tidak akan pernah mencapai baris berikutnya jika check-update.sh berhasil
-    # karena check-update.sh akan menghentikan proses ini dan memulai ulang nanti
-    log_message "PERINGATAN: check-update.sh gagal menjalankan pembaruan"
-    return 1
+    if [ $result -ne 0 ]; then
+        # Script ini akan mencapai baris berikutnya jika check-update.sh gagal
+        log_message "PERINGATAN: check-update.sh gagal menjalankan pembaruan (kode: $result)"
+        return 1
+    else
+        log_message "check-update.sh berhasil menjalankan pembaruan"
+        return 0
+    fi
 }
 
 # Fungsi untuk mendownload file
@@ -324,10 +357,13 @@ download_files() {
     # Periksa apakah check-update.sh ada dan dapat dieksekusi
     local check_update_needs_update=0
     
-    if [ ! -x "$CHECK_UPDATE_SCRIPT" ]; then
-        log_message "File check-update.sh tidak ditemukan atau tidak dapat dieksekusi, akan didownload"
+    if [ ! -f "$CHECK_UPDATE_SCRIPT" ]; then
+        log_message "File check-update.sh tidak ditemukan, akan didownload"
         check_update_needs_update=1
     else
+        # Pastikan check-update.sh memiliki izin eksekusi
+        chmod +x "$CHECK_UPDATE_SCRIPT"
+        
         # Periksa hash check-update.sh
         check_file_hash "$CHECK_UPDATE_SCRIPT_URL" "$CHECK_UPDATE_SCRIPT"
         local check_update_result=$?
@@ -339,6 +375,8 @@ download_files() {
             log_message "File check-update.sh tidak perlu diperbarui"
         else
             log_message "Gagal memeriksa file check-update.sh"
+            # Jika gagal memeriksa, coba download ulang
+            check_update_needs_update=1
         fi
     fi
     
@@ -349,35 +387,52 @@ download_files() {
         # Nama file sementara untuk download
         local temp_check_update_file="$TEMP_DIR/check-update.sh.new"
         
-        # Download file dari URL
-        if curl -s -L --connect-timeout 10 --max-time 30 "$CHECK_UPDATE_SCRIPT_URL" -o "$temp_check_update_file"; then
-            # Hapus backup lama jika ada
-            if [ -f "${CHECK_UPDATE_SCRIPT}.bak" ]; then
-                rm -f "${CHECK_UPDATE_SCRIPT}.bak"
-            fi
-            
-            # Buat backup file lama jika ada
-            if [ -f "$CHECK_UPDATE_SCRIPT" ]; then
-                cp "$CHECK_UPDATE_SCRIPT" "${CHECK_UPDATE_SCRIPT}.bak"
-            fi
-            
-            # Pastikan direktori tujuan ada
-            mkdir -p "$(dirname "$CHECK_UPDATE_SCRIPT")"
-            
-            # Pindahkan file baru
-            mv "$temp_check_update_file" "$CHECK_UPDATE_SCRIPT"
-            
-            # Berikan izin eksekusi
-            chmod +x "$CHECK_UPDATE_SCRIPT"
-            
-            log_message "Berhasil memperbarui check-update.sh"
-            
-            # Hapus file backup karena pembaruan berhasil
-            if [ -f "${CHECK_UPDATE_SCRIPT}.bak" ]; then
-                rm -f "${CHECK_UPDATE_SCRIPT}.bak"
+        # Download file dari URL dengan lebih banyak informasi
+        log_message "Mendownload dari URL: $CHECK_UPDATE_SCRIPT_URL"
+        if curl -v -L --connect-timeout 10 --max-time 30 "$CHECK_UPDATE_SCRIPT_URL" -o "$temp_check_update_file" 2>&1 | grep -q "200 OK"; then
+            # Periksa apakah file berhasil didownload dan tidak kosong
+            if [ -s "$temp_check_update_file" ]; then
+                log_message "File berhasil didownload (ukuran: $(du -h "$temp_check_update_file" | cut -f1))"
+                
+                # Hapus backup lama jika ada
+                if [ -f "${CHECK_UPDATE_SCRIPT}.bak" ]; then
+                    rm -f "${CHECK_UPDATE_SCRIPT}.bak"
+                fi
+                
+                # Buat backup file lama jika ada
+                if [ -f "$CHECK_UPDATE_SCRIPT" ]; then
+                    cp "$CHECK_UPDATE_SCRIPT" "${CHECK_UPDATE_SCRIPT}.bak"
+                    log_message "Backup file lama dibuat: ${CHECK_UPDATE_SCRIPT}.bak"
+                fi
+                
+                # Pastikan direktori tujuan ada
+                mkdir -p "$(dirname "$CHECK_UPDATE_SCRIPT")"
+                
+                # Pindahkan file baru
+                if mv "$temp_check_update_file" "$CHECK_UPDATE_SCRIPT"; then
+                    log_message "File berhasil dipindahkan ke $CHECK_UPDATE_SCRIPT"
+                else
+                    log_message "KESALAHAN: Gagal memindahkan file ke $CHECK_UPDATE_SCRIPT"
+                    return 1
+                fi
+                
+                # Berikan izin eksekusi
+                chmod +x "$CHECK_UPDATE_SCRIPT"
+                log_message "Izin eksekusi diberikan ke $CHECK_UPDATE_SCRIPT"
+                
+                log_message "Berhasil memperbarui check-update.sh"
+                
+                # Hapus file backup karena pembaruan berhasil
+                if [ -f "${CHECK_UPDATE_SCRIPT}.bak" ]; then
+                    rm -f "${CHECK_UPDATE_SCRIPT}.bak"
+                fi
+            else
+                log_message "KESALAHAN: File yang didownload kosong"
+                rm -f "$temp_check_update_file"
+                return 1
             fi
         else
-            log_message "Gagal mendownload check-update.sh dari $CHECK_UPDATE_SCRIPT_URL"
+            log_message "KESALAHAN: Gagal mendownload check-update.sh dari $CHECK_UPDATE_SCRIPT_URL"
             rm -f "$temp_check_update_file"
         fi
     fi
@@ -389,44 +444,77 @@ download_files() {
     # Periksa file auto-download.conf
     log_message "-----"
     log_message "Memeriksa file auto-download.conf..."
-    check_file_hash "$CONF_UPDATE_URL" "$CONFIG_FILE"
-    local conf_result=$?
     
-    if [ $conf_result -eq 2 ]; then
-        conf_needs_update=1
-        log_message "File auto-download.conf perlu diperbarui"
-    elif [ $conf_result -eq 0 ]; then
-        log_message "File auto-download.conf tidak perlu diperbarui"
+    # Validasi URL konfigurasi
+    if [ -z "$CONF_UPDATE_URL" ]; then
+        log_message "KESALAHAN: URL konfigurasi tidak dikonfigurasi"
     else
-        log_message "Gagal memeriksa file auto-download.conf"
+        check_file_hash "$CONF_UPDATE_URL" "$CONFIG_FILE"
+        local conf_result=$?
+        
+        if [ $conf_result -eq 2 ]; then
+            conf_needs_update=1
+            log_message "File auto-download.conf perlu diperbarui"
+        elif [ $conf_result -eq 0 ]; then
+            log_message "File auto-download.conf tidak perlu diperbarui"
+        else
+            log_message "Gagal memeriksa file auto-download.conf"
+        fi
     fi
     
     # Periksa file auto-download.sh
     log_message "-----"
     log_message "Memeriksa file auto-download.sh..."
-    check_file_hash "$SCRIPT_UPDATE_URL" "$SCRIPT_FILE"
-    local script_result=$?
     
-    if [ $script_result -eq 2 ]; then
-        script_needs_update=1
-        log_message "File auto-download.sh perlu diperbarui"
-    elif [ $script_result -eq 0 ]; then
-        log_message "File auto-download.sh tidak perlu diperbarui"
+    # Validasi URL script
+    if [ -z "$SCRIPT_UPDATE_URL" ]; then
+        log_message "KESALAHAN: URL script tidak dikonfigurasi"
     else
-        log_message "Gagal memeriksa file auto-download.sh"
+        check_file_hash "$SCRIPT_UPDATE_URL" "$SCRIPT_FILE"
+        local script_result=$?
+        
+        if [ $script_result -eq 2 ]; then
+            script_needs_update=1
+            log_message "File auto-download.sh perlu diperbarui"
+        elif [ $script_result -eq 0 ]; then
+            log_message "File auto-download.sh tidak perlu diperbarui"
+        else
+            log_message "Gagal memeriksa file auto-download.sh"
+        fi
     fi
     
     # Jika salah satu file perlu diperbarui, jalankan check-update.sh
     if [ $conf_needs_update -eq 1 ] && [ $script_needs_update -eq 1 ]; then
         log_message "Kedua file perlu diperbarui, menjalankan check-update.sh..."
+        
+        # Validasi URL
+        if [ -z "$CONF_UPDATE_URL" ] || [ -z "$SCRIPT_UPDATE_URL" ]; then
+            log_message "KESALAHAN: URL konfigurasi atau script tidak dikonfigurasi"
+            return 1
+        fi
+        
         run_check_update "both"
         return $?
     elif [ $conf_needs_update -eq 1 ]; then
         log_message "File auto-download.conf perlu diperbarui, menjalankan check-update.sh..."
+        
+        # Validasi URL
+        if [ -z "$CONF_UPDATE_URL" ]; then
+            log_message "KESALAHAN: URL konfigurasi tidak dikonfigurasi"
+            return 1
+        fi
+        
         run_check_update "conf"
         return $?
     elif [ $script_needs_update -eq 1 ]; then
         log_message "File auto-download.sh perlu diperbarui, menjalankan check-update.sh..."
+        
+        # Validasi URL
+        if [ -z "$SCRIPT_UPDATE_URL" ]; then
+            log_message "KESALAHAN: URL script tidak dikonfigurasi"
+            return 1
+        fi
+        
         run_check_update "script"
         return $?
     fi
