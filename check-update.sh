@@ -202,7 +202,8 @@ run_update_check() {
         log_message "File auto-download.sh telah diperbarui, perlu me-restart layanan"
         
         # Path ke script restart-auto-download.sh dari auto-download.sh
-        RESTART_SCRIPT="/data/adb/auto-download/restart-auto-download.sh"
+        # Jika tidak ada, gunakan path default
+        RESTART_SCRIPT="${RESTART_SCRIPT_FILE:-/data/adb/auto-download/restart-auto-download.sh}"
         
         # Periksa apakah script restart ada
         if [ -f "$RESTART_SCRIPT" ]; then
