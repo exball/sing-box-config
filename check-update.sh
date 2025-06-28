@@ -1,25 +1,32 @@
-#!/system/bin/sh
+#!/bin/bash
 
-# Script untuk mengupdate file auto-download.conf dan auto-download.sh
-# Script ini hanya bertanggung jawab untuk mendownload dan memperbarui file, bukan memeriksa
+# Script untuk memeriksa dan mengupdate file auto-download.conf dan auto-download.sh
+# Script ini akan memeriksa hash SHA-1 dari file-file tersebut dan mengunduhnya jika berbeda
 
 # ===== KONFIGURASI DASAR =====
+# URL untuk file-file yang akan diperiksa
+CONF_UPDATE_URL="https://raw.githubusercontent.com/exball/sing-box-config/refs/heads/Master/auto-download.conf"
+SCRIPT_UPDATE_URL="https://raw.githubusercontent.com/exball/sing-box-config/refs/heads/Master/auto-download.sh"
+
+# Path lokal untuk file-file tersebut
+CONFIG_FILE="/data/adb/auto-download/auto-download.conf"
+SCRIPT_FILE="/data/adb/auto-download/auto-download.sh"
+
 # Direktori sementara untuk file yang didownload
 TEMP_DIR="/data/adb/auto-download/download_temp"
 
+# Pengaturan jaringan
+NETWORK_TEST_URL="https://www.google.com"
+NETWORK_MAX_ATTEMPTS=5
+NETWORK_RETRY_WAIT=3
+
 # File log
 LOG_FILE="/data/adb/auto-download/check-update.log"
-
-# File PID untuk melacak proses yang sedang berjalan
-PID_FILE="/data/adb/auto-download/check-update.pid"
 
 # ===== PERSIAPAN =====
 # Pastikan direktori yang diperlukan ada
 mkdir -p /data/adb/auto-download
 mkdir -p "$TEMP_DIR"
-
-# Simpan PID untuk proses ini
-echo $$ > "$PID_FILE"
 
 # Variabel untuk melacak apakah header timestamp sudah ditulis
 TIMESTAMP_HEADER_WRITTEN=0
@@ -50,237 +57,184 @@ log_message() {
 get_local_sha1() {
     local file="$1"
     if [ -f "$file" ]; then
-        # Coba gunakan sha1sum jika tersedia
-        if command -v sha1sum > /dev/null 2>&1; then
-            sha1sum "$file" | awk '{print $1}'
-        # Jika tidak, coba gunakan busybox sha1sum
-        elif command -v busybox > /dev/null 2>&1; then
-            busybox sha1sum "$file" | awk '{print $1}'
-        # Jika tidak ada yang tersedia, gunakan metode alternatif
-        else
-            log_message "PERINGATAN: sha1sum tidak tersedia, menggunakan md5sum sebagai alternatif"
-            if command -v md5sum > /dev/null 2>&1; then
-                md5sum "$file" | awk '{print $1}'
-            elif command -v busybox > /dev/null 2>&1; then
-                busybox md5sum "$file" | awk '{print $1}'
-            else
-                log_message "KESALAHAN: Tidak ada metode hash yang tersedia"
-                echo ""
-            fi
-        fi
+        sha1sum "$file" | awk '{print $1}'
     else
         echo ""
     fi
 }
 
-# Fungsi untuk menghentikan proses auto-download.sh
-stop_auto_download() {
-    log_message "Mencoba menghentikan proses auto-download.sh..."
+# Fungsi untuk memeriksa koneksi jaringan
+check_network_connection() {
+    log_message "Memeriksa koneksi internet..."
     
-    # Cari PID dari auto-download.sh
-    local auto_download_pid=$(pgrep -f "auto-download.sh")
+    local attempt=1
+    local connected=0
     
-    if [ -n "$auto_download_pid" ]; then
-        log_message "Menghentikan auto-download.sh dengan PID: $auto_download_pid"
-        kill -15 $auto_download_pid
-        sleep 1
+    while [ $attempt -le $NETWORK_MAX_ATTEMPTS ]; do
+        log_message "Percobaan koneksi ke $NETWORK_TEST_URL (Percobaan $attempt dari $NETWORK_MAX_ATTEMPTS)"
         
-        # Periksa apakah proses masih berjalan
-        if pgrep -f "auto-download.sh" > /dev/null; then
-            log_message "Proses auto-download.sh masih berjalan, mencoba kill -9..."
-            pkill -9 -f "auto-download.sh"
-            sleep 1
+        # Gunakan curl untuk memeriksa koneksi ke URL yang ditentukan
+        if curl -s -f -m 10 --connect-timeout 5 -o /dev/null "$NETWORK_TEST_URL"; then
+            log_message "Koneksi internet tersedia"
+            connected=1
+            break
         fi
         
-        log_message "Proses auto-download.sh telah dihentikan"
-    else
-        log_message "Tidak ada proses auto-download.sh yang berjalan"
+        # Jika tidak ada koneksi, tunggu dan coba lagi
+        log_message "Tidak ada koneksi internet, Tunggu $NETWORK_RETRY_WAIT detik."
+        
+        if [ $attempt -lt $NETWORK_MAX_ATTEMPTS ]; then
+            sleep $NETWORK_RETRY_WAIT
+        fi
+        
+        # Tambahkan jumlah percobaan
+        attempt=$((attempt + 1))
+    done
+    
+    if [ $connected -eq 0 ]; then
+        log_message "Gagal terhubung ke jaringan setelah $NETWORK_MAX_ATTEMPTS percobaan"
+        return 1
     fi
+    
+    return 0
 }
 
-# Fungsi untuk mengupdate file
-update_file() {
+# Fungsi untuk memeriksa dan mengupdate file
+check_and_update_file() {
     local file_url="$1"
     local local_file="$2"
     local file_name=$(basename "$local_file")
     
-    # Validasi parameter
-    if [ -z "$file_url" ]; then
-        log_message "KESALAHAN: URL file tidak diberikan untuk $file_name"
-        return 1
-    fi
-    
-    if [ -z "$local_file" ]; then
-        log_message "KESALAHAN: Path file lokal tidak diberikan"
-        return 1
-    fi
-    
     log_message "-----"
-    log_message "Memperbarui file $file_name..."
-    log_message "URL: $file_url"
-    log_message "File tujuan: $local_file"
+    log_message "Memeriksa pembaruan file $file_name..."
     
     # Nama file sementara untuk download
     local temp_file="$TEMP_DIR/${file_name}.new"
     
-    # Download file dari URL
-    log_message "Mendownload file dari $file_url..."
-    if curl -v -L --connect-timeout 10 --max-time 30 "$file_url" -o "$temp_file" 2>&1 | grep -q "200 OK"; then
-        # Periksa apakah file berhasil didownload dan tidak kosong
-        if [ ! -s "$temp_file" ]; then
-            log_message "KESALAHAN: File yang didownload kosong"
-            rm -f "$temp_file"
-            return 1
-        fi
-        
-        # Periksa apakah file yang didownload adalah file teks yang valid
-        if grep -q "<!DOCTYPE html>" "$temp_file" || grep -q "<html>" "$temp_file"; then
-            log_message "KESALAHAN: File yang didownload tampaknya berisi HTML, bukan konten yang diharapkan"
-            cat "$temp_file" | head -n 10 >> "$LOG_FILE"
-            rm -f "$temp_file"
-            return 1
-        fi
-        
+    # Download file dari URL untuk mendapatkan hash
+    if curl -s -L --connect-timeout 10 --max-time 30 "$file_url" -o "$temp_file"; then
         # Hitung hash SHA-1 dari file yang didownload
         local github_sha1=$(get_local_sha1 "$temp_file")
         
         if [ -z "$github_sha1" ]; then
-            log_message "KESALAHAN: Gagal mendapatkan SHA-1 file $file_name dari GitHub"
+            log_message "Gagal mendapatkan SHA-1 file $file_name dari GitHub"
             rm -f "$temp_file"
             return 1
         else
             log_message "SHA-1 GitHub $file_name: $github_sha1"
             
-            # Hapus backup lama jika ada
-            if [ -f "${local_file}.bak" ]; then
-                rm -f "${local_file}.bak"
-            fi
-            
-            # Buat backup file lama jika ada
+            # Dapatkan hash SHA-1 dari file lokal jika ada
+            local local_sha1=""
             if [ -f "$local_file" ]; then
-                cp "$local_file" "${local_file}.bak"
-                log_message "Backup file lama dibuat: ${local_file}.bak"
+                local_sha1=$(get_local_sha1 "$local_file")
+                log_message "SHA-1 lokal $file_name: $local_sha1"
             fi
             
-            # Pastikan direktori tujuan ada
-            mkdir -p "$(dirname "$local_file")"
-            
-            # Pindahkan file baru
-            if mv "$temp_file" "$local_file"; then
-                log_message "File berhasil dipindahkan ke $local_file"
+            # Bandingkan hash SHA-1
+            if [ -n "$local_sha1" ] && [ "$local_sha1" = "$github_sha1" ]; then
+                log_message "SHA-1 $file_name sama, tidak perlu diperbarui"
+                rm -f "$temp_file"
+                return 0
             else
-                log_message "KESALAHAN: Gagal memindahkan file ke $local_file"
-                return 1
+                log_message "SHA-1 $file_name berbeda atau file tidak ada, memperbarui..."
+                
+                # Hapus backup lama jika ada
+                if [ -f "${local_file}.bak" ]; then
+                    rm -f "${local_file}.bak"
+                fi
+                
+                # Buat backup file lama jika ada
+                if [ -f "$local_file" ]; then
+                    cp "$local_file" "${local_file}.bak"
+                fi
+                
+                # Pastikan direktori tujuan ada
+                mkdir -p "$(dirname "$local_file")"
+                
+                # Pindahkan file baru
+                mv "$temp_file" "$local_file"
+                
+                # Berikan izin eksekusi jika ini adalah file script
+                if [[ "$file_name" == *.sh ]]; then
+                    chmod +x "$local_file"
+                fi
+                
+                log_message "Berhasil memperbarui $file_name (SHA-1 terverifikasi)"
+                
+                # Hapus file backup karena pembaruan berhasil
+                if [ -f "${local_file}.bak" ]; then
+                    rm -f "${local_file}.bak"
+                fi
+                
+                return 2  # Kode 2 menandakan file diperbarui
             fi
-            
-            # Berikan izin eksekusi jika ini adalah file script
-            if [[ "$file_name" == *.sh ]]; then
-                chmod +x "$local_file"
-                log_message "Izin eksekusi diberikan ke $local_file"
-            fi
-            
-            log_message "Berhasil memperbarui $file_name (SHA-1 terverifikasi)"
-            
-            # Hapus file backup karena pembaruan berhasil
-            if [ -f "${local_file}.bak" ]; then
-                rm -f "${local_file}.bak"
-            fi
-            
-            return 0  # Sukses
         fi
     else
-        log_message "KESALAHAN: Gagal mendownload $file_name dari $file_url"
+        log_message "Gagal mendownload $file_name dari $file_url"
         rm -f "$temp_file"
         return 1
     fi
 }
 
 # ===== FUNGSI UTAMA =====
-# Fungsi untuk menjalankan pembaruan
-run_update() {
-    local mode="$1"
-    local conf_url="$2"
-    local conf_file="$3"
-    local script_url="$4"
-    local script_file="$5"
-    
-    log_message "Mode pembaruan: $mode"
-    log_message "URL konfigurasi: $conf_url"
-    log_message "File konfigurasi: $conf_file"
-    log_message "URL script: $script_url"
-    log_message "File script: $script_file"
-    
-    # Hentikan proses auto-download.sh terlebih dahulu
-    stop_auto_download
-    
-    # Variabel untuk melacak apakah ada file yang diperbarui
-    local update_success=0
-    
-    # Periksa parameter yang diberikan
-    if [ "$mode" = "conf" ] || [ "$mode" = "both" ]; then
-        log_message "Memperbarui file konfigurasi..."
-        # Update file auto-download.conf
-        update_file "$conf_url" "$conf_file"
-        if [ $? -eq 0 ]; then
-            update_success=1
-            log_message "File konfigurasi berhasil diperbarui"
-        else
-            log_message "KESALAHAN: Gagal memperbarui file konfigurasi"
-        fi
-    fi
-    
-    if [ "$mode" = "script" ] || [ "$mode" = "both" ]; then
-        log_message "Memperbarui file script..."
-        # Update file auto-download.sh
-        update_file "$script_url" "$script_file"
-        if [ $? -eq 0 ]; then
-            update_success=1
-            log_message "File script berhasil diperbarui"
-        else
-            log_message "KESALAHAN: Gagal memperbarui file script"
-        fi
-    fi
-    
-    # Jika pembaruan berhasil, jalankan restart-auto-download.sh
-    if [ $update_success -eq 1 ]; then
-        log_message "Pembaruan berhasil, menjalankan restart-auto-download.sh..."
-        
-        # Jalankan restart-auto-download.sh jika ada
-        local restart_script="/data/adb/auto-download/restart-auto-download.sh"
-        if [ -f "$restart_script" ]; then
-            # Pastikan script memiliki izin eksekusi
-            chmod 755 "$restart_script"
-            log_message "Menjalankan: sh $restart_script"
-            sh "$restart_script"
-        else
-            log_message "PERINGATAN: restart-auto-download.sh tidak ditemukan atau tidak dapat dieksekusi"
-            
-            # Jika restart script tidak ada, coba jalankan auto-download.sh langsung
-            # Pastikan kita memiliki path yang valid untuk auto-download.sh
-            local auto_download_script="$5"
-            if [ -z "$auto_download_script" ]; then
-                # Jika parameter $5 tidak tersedia, gunakan path default
-                auto_download_script="/data/adb/auto-download/auto-download.sh"
-            fi
-            
-            if [ -f "$auto_download_script" ]; then
-                # Pastikan script memiliki izin eksekusi
-                chmod 755 "$auto_download_script"
-                log_message "Menjalankan auto-download.sh langsung dari $auto_download_script..."
-                log_message "Menjalankan: nohup sh $auto_download_script > /dev/null 2>&1 &"
-                nohup sh "$auto_download_script" > /dev/null 2>&1 &
-                log_message "auto-download.sh telah dijalankan dengan PID: $!"
-            else
-                log_message "KESALAHAN: Tidak dapat menjalankan auto-download.sh dari $auto_download_script"
-                return 1
-            fi
-        fi
-    else
-        log_message "Tidak ada file yang berhasil diperbarui"
+# Fungsi untuk menjalankan pemeriksaan dan pembaruan
+run_update_check() {
+    # Periksa koneksi jaringan terlebih dahulu
+    check_network_connection
+    if [ $? -ne 0 ]; then
+        log_message "Proses pemeriksaan file dibatalkan karena tidak ada koneksi internet"
         return 1
     fi
     
-    log_message "Proses pembaruan selesai"
+    log_message "Memulai proses pemeriksaan file"
+    
+    # Variabel untuk melacak apakah ada file yang diperbarui
+    local files_updated=0
+    
+    # Periksa dan update file auto-download.conf
+    check_and_update_file "$CONF_UPDATE_URL" "$CONFIG_FILE"
+    local conf_result=$?
+    
+    if [ $conf_result -eq 2 ]; then
+        files_updated=1
+    fi
+    
+    # Periksa dan update file auto-download.sh
+    check_and_update_file "$SCRIPT_UPDATE_URL" "$SCRIPT_FILE"
+    local script_result=$?
+    
+    if [ $script_result -eq 2 ]; then
+        files_updated=1
+    fi
+    
+    # Jika ada file yang diperbarui, restart layanan jika diperlukan
+    if [ $files_updated -eq 1 ]; then
+        log_message "File-file telah diperbarui, mungkin perlu me-restart layanan"
+        
+        # Jika auto-download.sh sedang berjalan, restart
+        if pgrep -f "auto-download.sh" > /dev/null; then
+            log_message "Mendeteksi auto-download.sh sedang berjalan, mencoba me-restart..."
+            
+            # Hentikan proses yang sedang berjalan
+            pkill -f "auto-download.sh"
+            sleep 2
+            
+            # Jalankan kembali auto-download.sh
+            if [ -x "$SCRIPT_FILE" ]; then
+                log_message "Menjalankan kembali auto-download.sh..."
+                nohup "$SCRIPT_FILE" > /dev/null 2>&1 &
+                log_message "auto-download.sh telah di-restart dengan PID: $!"
+            else
+                log_message "PERINGATAN: auto-download.sh tidak dapat dieksekusi"
+            fi
+        else
+            log_message "auto-download.sh tidak sedang berjalan, tidak perlu di-restart"
+        fi
+    else
+        log_message "Tidak ada file yang diperbarui"
+    fi
+    
+    log_message "Proses pemeriksaan selesai"
     return 0
 }
 
@@ -290,46 +244,10 @@ if [ -n "$LOG_FILE" ] && [ ! -f "$LOG_FILE" ]; then
     touch "$LOG_FILE"
 fi
 
-# URL default jika tidak diberikan sebagai parameter
-DEFAULT_CONF_URL="https://raw.githubusercontent.com/exball/sing-box-config/refs/heads/Master/auto-download.conf"
-DEFAULT_CONF_FILE="/data/adb/auto-download/auto-download.conf"
-DEFAULT_SCRIPT_URL="https://raw.githubusercontent.com/exball/sing-box-config/refs/heads/Master/auto-download.sh"
-DEFAULT_SCRIPT_FILE="/data/adb/auto-download/auto-download.sh"
-
-# Periksa parameter yang diberikan
-if [ $# -lt 1 ]; then
-    log_message "KESALAHAN: Mode tidak diberikan"
-    log_message "Penggunaan: $0 [conf|script|both] [conf_url] [conf_file] [script_url] [script_file]"
-    exit 1
-fi
-
-# Validasi mode
-if [ "$1" != "conf" ] && [ "$1" != "script" ] && [ "$1" != "both" ]; then
-    log_message "KESALAHAN: Mode tidak valid: $1"
-    log_message "Mode yang valid: conf, script, both"
-    exit 1
-fi
-
-# Gunakan parameter yang diberikan atau nilai default
-MODE="$1"
-CONF_URL="${2:-$DEFAULT_CONF_URL}"
-CONF_FILE="${3:-$DEFAULT_CONF_FILE}"
-SCRIPT_URL="${4:-$DEFAULT_SCRIPT_URL}"
-SCRIPT_FILE="${5:-$DEFAULT_SCRIPT_FILE}"
-
-log_message "Mode: $MODE"
-log_message "URL konfigurasi: $CONF_URL"
-log_message "File konfigurasi: $CONF_FILE"
-log_message "URL script: $SCRIPT_URL"
-log_message "File script: $SCRIPT_FILE"
-
-# Jalankan pembaruan
-log_message "Memulai check-update.sh dengan mode: $MODE"
-run_update "$MODE" "$CONF_URL" "$CONF_FILE" "$SCRIPT_URL" "$SCRIPT_FILE"
+# Jalankan pemeriksaan dan pembaruan
+log_message "Memulai check-update.sh"
+run_update_check
 exit_code=$?
-
-# Hapus file PID
-rm -f "$PID_FILE"
-
 log_message "check-update.sh selesai dengan kode: $exit_code"
+
 exit $exit_code
