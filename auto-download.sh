@@ -1040,6 +1040,7 @@ run_as_daemon() {
     done
 }
 
+
 # Deteksi apakah script dijalankan oleh restart-auto-download.sh atau saat boot
 PARENT_PROCESS=$(ps -o comm= -p $PPID)
 RESTART_MODE=0
