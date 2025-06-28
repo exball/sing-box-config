@@ -434,6 +434,21 @@ download_files() {
         rm -f "$temp_conf_file"
     fi
     
+    # Periksa dan update file restart-auto-download.sh terlebih dahulu
+    log_message "-----"
+    log_message "Memeriksa pembaruan file restart-auto-download.sh..."
+    
+    if [ -n "$RESTART_SCRIPT_URL" ] && [ -n "$RESTART_SCRIPT_FILE" ]; then
+        check_update_script "$RESTART_SCRIPT_URL" "$RESTART_SCRIPT_FILE"
+        local restart_script_result=$?
+        
+        if [ $restart_script_result -eq 2 ]; then
+            log_message "File restart-auto-download.sh telah diperbarui"
+        fi
+    else
+        log_message "URL atau path file restart-auto-download.sh tidak dikonfigurasi, melewati pemeriksaan"
+    fi
+    
     # Periksa dan update file check-update.sh
     log_message "-----"
     log_message "Memeriksa pembaruan file check-update.sh..."
@@ -444,19 +459,32 @@ download_files() {
         
         if [ $check_update_result -eq 2 ]; then
             log_message "File check-update.sh telah diperbarui"
+        fi
+        
+        # Jalankan check-update.sh untuk memeriksa pembaruan file auto-download.sh
+        # Baik jika file check-update.sh diperbarui atau tidak
+        if [ -x "$CHECK_UPDATE_SCRIPT_FILE" ]; then
+            log_message "Menjalankan check-update.sh untuk memeriksa pembaruan auto-download.sh..."
             
-            # Jalankan check-update.sh jika diperbarui
-            if [ -x "$CHECK_UPDATE_SCRIPT_FILE" ]; then
-                log_message "Menjalankan check-update.sh yang baru diperbarui..."
-                "$CHECK_UPDATE_SCRIPT_FILE"
-                
-                # Jika check-update.sh mengembalikan kode 0, lanjutkan
-                # Jika tidak, keluar dari fungsi ini karena mungkin auto-download.sh telah diperbarui
-                if [ $? -ne 0 ]; then
-                    log_message "check-update.sh mengembalikan kode error, menghentikan proses"
-                    return 1
-                fi
+            # Jalankan check-update.sh dan tunggu hasilnya
+            "$CHECK_UPDATE_SCRIPT_FILE"
+            local update_exit_code=$?
+            
+            # Periksa kode keluar dari check-update.sh
+            if [ $update_exit_code -eq 0 ]; then
+                # Kode 0 berarti tidak ada pembaruan atau pembaruan berhasil tanpa perlu restart
+                log_message "check-update.sh selesai tanpa pembaruan, melanjutkan proses"
+            elif [ $update_exit_code -eq 10 ]; then
+                # Kode 10 berarti auto-download.sh telah diperbarui dan restart-auto-download.sh telah dijalankan
+                log_message "auto-download.sh telah diperbarui dan akan di-restart, menghentikan proses saat ini"
+                return 1
+            else
+                # Kode error lainnya
+                log_message "check-update.sh mengembalikan kode error: $update_exit_code, menghentikan proses"
+                return 1
             fi
+        else
+            log_message "PERINGATAN: check-update.sh tidak dapat dieksekusi, melewati pemeriksaan"
         fi
     else
         log_message "URL atau path file check-update.sh tidak dikonfigurasi, melewati pemeriksaan"
