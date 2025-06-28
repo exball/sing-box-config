@@ -368,7 +368,76 @@ download_files() {
     
     log_message "Memulai proses pemeriksaan file"
     
-    # Periksa dan update file check-update.sh terlebih dahulu
+    # Variabel untuk melacak apakah ada file yang diperbarui
+    local files_updated=0
+    
+    # Periksa dan update file auto-download.conf terlebih dahulu
+    log_message "-----"
+    log_message "Memeriksa pembaruan file auto-download.conf..."
+    
+    # Nama file sementara untuk download
+    local temp_conf_file="$TEMP_DIR/auto-download.conf.new"
+    
+    # Download file dari URL raw GitHub untuk mendapatkan hash
+    if curl -s -L --connect-timeout 10 --max-time 30 "$CONF_UPDATE_URL" -o "$temp_conf_file"; then
+        # Hitung hash SHA-1 dari file yang didownload
+        local github_sha1=$(get_local_sha1 "$temp_conf_file")
+        
+        if [ -z "$github_sha1" ]; then
+            log_message "Gagal mendapatkan SHA-1 file konfigurasi dari GitHub"
+            rm -f "$temp_conf_file"
+        else
+            log_message "SHA-1 GitHub auto-download.conf: $github_sha1"
+            
+            # Dapatkan hash SHA-1 dari file lokal jika ada
+            local local_sha1=""
+            if [ -f "$CONFIG_FILE" ]; then
+                local_sha1=$(get_local_sha1 "$CONFIG_FILE")
+                log_message "SHA-1 lokal auto-download.conf: $local_sha1"
+            fi
+            
+            # Bandingkan hash SHA-1
+            if [ -n "$local_sha1" ] && [ "$local_sha1" = "$github_sha1" ]; then
+                log_message "SHA-1 auto-download.conf sama, menggunakan konfigurasi lokal"
+                rm -f "$temp_conf_file"
+            else
+                log_message "SHA-1 auto-download.conf berbeda atau file tidak ada, memperbarui..."
+                
+                # Hapus backup lama jika ada
+                if [ -f "$CONFIG_FILE.bak" ]; then
+                    rm -f "$CONFIG_FILE.bak"
+                fi
+                
+                # Buat backup konfigurasi lama jika ada
+                if [ -f "$CONFIG_FILE" ]; then
+                    cp "$CONFIG_FILE" "$CONFIG_FILE.bak"
+                fi
+                
+                # Pindahkan file konfigurasi baru
+                mv "$temp_conf_file" "$CONFIG_FILE"
+                log_message "Berhasil memperbarui auto-download.conf (SHA-1 terverifikasi)"
+                
+                # Muat ulang konfigurasi
+                source "$CONFIG_FILE"
+                log_message "Konfigurasi baru dimuat dari $CONFIG_FILE"
+                
+                # Hapus file backup karena pembaruan berhasil
+                if [ -f "$CONFIG_FILE.bak" ]; then
+                    rm -f "$CONFIG_FILE.bak"
+                fi
+                
+                files_updated=1
+            fi
+        fi
+    else
+        log_message "Gagal mendownload auto-download.conf dari $CONF_UPDATE_URL"
+        rm -f "$temp_conf_file"
+    fi
+    
+    # Periksa dan update file check-update.sh
+    log_message "-----"
+    log_message "Memeriksa pembaruan file check-update.sh..."
+    
     if [ -n "$CHECK_UPDATE_SCRIPT_URL" ] && [ -n "$CHECK_UPDATE_SCRIPT_FILE" ]; then
         check_update_script "$CHECK_UPDATE_SCRIPT_URL" "$CHECK_UPDATE_SCRIPT_FILE"
         local check_update_result=$?
@@ -391,77 +460,6 @@ download_files() {
         fi
     else
         log_message "URL atau path file check-update.sh tidak dikonfigurasi, melewati pemeriksaan"
-    fi
-    
-    # Variabel untuk melacak apakah ada file yang diperbarui
-    local files_updated=0
-    
-    # Periksa dan update file auto-download.conf
-    log_message "-----"
-    log_message "Memeriksa pembaruan file auto-download.conf..."
-    
-    # Gunakan hasil pemeriksaan koneksi internet sebelumnya
-    if [ $? -eq 0 ]; then
-        # Nama file sementara untuk download
-        local temp_conf_file="$TEMP_DIR/auto-download.conf.new"
-        
-        # Download file dari URL raw GitHub untuk mendapatkan hash
-        if curl -s -L --connect-timeout 10 --max-time 30 "$CONF_UPDATE_URL" -o "$temp_conf_file"; then
-            # Hitung hash SHA-1 dari file yang didownload
-            local github_sha1=$(get_local_sha1 "$temp_conf_file")
-            
-            if [ -z "$github_sha1" ]; then
-                log_message "Gagal mendapatkan SHA-1 file konfigurasi dari GitHub"
-                rm -f "$temp_conf_file"
-            else
-                log_message "SHA-1 GitHub auto-download.conf: $github_sha1"
-                
-                # Dapatkan hash SHA-1 dari file lokal jika ada
-                local local_sha1=""
-                if [ -f "$CONFIG_FILE" ]; then
-                    local_sha1=$(get_local_sha1 "$CONFIG_FILE")
-                    log_message "SHA-1 lokal auto-download.conf: $local_sha1"
-                fi
-                
-                # Bandingkan hash SHA-1
-                if [ -n "$local_sha1" ] && [ "$local_sha1" = "$github_sha1" ]; then
-                    log_message "SHA-1 auto-download.conf sama, menggunakan konfigurasi lokal"
-                    rm -f "$temp_conf_file"
-                else
-                    log_message "SHA-1 auto-download.conf berbeda atau file tidak ada, memperbarui..."
-                    
-                    # Hapus backup lama jika ada
-                    if [ -f "$CONFIG_FILE.bak" ]; then
-                        rm -f "$CONFIG_FILE.bak"
-                    fi
-                    
-                    # Buat backup konfigurasi lama jika ada
-                    if [ -f "$CONFIG_FILE" ]; then
-                        cp "$CONFIG_FILE" "$CONFIG_FILE.bak"
-                    fi
-                    
-                    # Pindahkan file konfigurasi baru
-                    mv "$temp_conf_file" "$CONFIG_FILE"
-                    log_message "Berhasil memperbarui auto-download.conf (SHA-1 terverifikasi)"
-                    
-                    # Muat ulang konfigurasi
-                    source "$CONFIG_FILE"
-                    log_message "Konfigurasi baru dimuat dari $CONFIG_FILE"
-                    
-                    # Hapus file backup karena pembaruan berhasil
-                    if [ -f "$CONFIG_FILE.bak" ]; then
-                        rm -f "$CONFIG_FILE.bak"
-                    fi
-                    
-                    files_updated=1
-                fi
-            fi
-        else
-            log_message "Gagal mendownload auto-download.conf dari $CONF_UPDATE_URL"
-            rm -f "$temp_conf_file"
-        fi
-    else
-        log_message "Pemeriksaan pembaruan konfigurasi dibatalkan karena tidak ada koneksi internet"
     fi
     
     # Loop melalui setiap URL dan download
