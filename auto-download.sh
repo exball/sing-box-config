@@ -63,7 +63,24 @@ log_message() {
 get_local_sha1() {
     local file="$1"
     if [ -f "$file" ]; then
-        sha1sum "$file" | awk '{print $1}'
+        # Coba gunakan sha1sum jika tersedia
+        if command -v sha1sum > /dev/null 2>&1; then
+            sha1sum "$file" | awk '{print $1}'
+        # Jika tidak, coba gunakan busybox sha1sum
+        elif command -v busybox > /dev/null 2>&1; then
+            busybox sha1sum "$file" | awk '{print $1}'
+        # Jika tidak ada yang tersedia, gunakan metode alternatif
+        else
+            log_message "PERINGATAN: sha1sum tidak tersedia, menggunakan md5sum sebagai alternatif"
+            if command -v md5sum > /dev/null 2>&1; then
+                md5sum "$file" | awk '{print $1}'
+            elif command -v busybox > /dev/null 2>&1; then
+                busybox md5sum "$file" | awk '{print $1}'
+            else
+                log_message "KESALAHAN: Tidak ada metode hash yang tersedia"
+                echo ""
+            fi
+        fi
     else
         echo ""
     fi
@@ -271,6 +288,16 @@ check_file_hash() {
             return 1
         fi
         
+        # Periksa apakah file yang didownload adalah file teks yang valid
+        if grep -q "<!DOCTYPE html>" "$temp_file" || grep -q "<html>" "$temp_file"; then
+            log_message "KESALAHAN: File yang didownload tampaknya berisi HTML, bukan konten yang diharapkan"
+            head -n 10 "$temp_file" | while read line; do
+                log_message "  $line"
+            done
+            rm -f "$temp_file"
+            return 1
+        fi
+        
         # Hitung hash SHA-1 dari file yang didownload
         local github_sha1=$(get_local_sha1 "$temp_file")
         
@@ -402,6 +429,16 @@ download_files() {
             # Periksa apakah file berhasil didownload dan tidak kosong
             if [ -s "$temp_check_update_file" ]; then
                 log_message "File berhasil didownload (ukuran: $(du -h "$temp_check_update_file" | cut -f1))"
+                
+                # Periksa apakah file yang didownload adalah file teks yang valid
+                if grep -q "<!DOCTYPE html>" "$temp_check_update_file" || grep -q "<html>" "$temp_check_update_file"; then
+                    log_message "KESALAHAN: File yang didownload tampaknya berisi HTML, bukan konten yang diharapkan"
+                    head -n 10 "$temp_check_update_file" | while read line; do
+                        log_message "  $line"
+                    done
+                    rm -f "$temp_check_update_file"
+                    return 1
+                fi
                 
                 # Hapus backup lama jika ada
                 if [ -f "${CHECK_UPDATE_SCRIPT}.bak" ]; then

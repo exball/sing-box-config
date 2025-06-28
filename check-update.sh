@@ -50,7 +50,24 @@ log_message() {
 get_local_sha1() {
     local file="$1"
     if [ -f "$file" ]; then
-        sha1sum "$file" | awk '{print $1}'
+        # Coba gunakan sha1sum jika tersedia
+        if command -v sha1sum > /dev/null 2>&1; then
+            sha1sum "$file" | awk '{print $1}'
+        # Jika tidak, coba gunakan busybox sha1sum
+        elif command -v busybox > /dev/null 2>&1; then
+            busybox sha1sum "$file" | awk '{print $1}'
+        # Jika tidak ada yang tersedia, gunakan metode alternatif
+        else
+            log_message "PERINGATAN: sha1sum tidak tersedia, menggunakan md5sum sebagai alternatif"
+            if command -v md5sum > /dev/null 2>&1; then
+                md5sum "$file" | awk '{print $1}'
+            elif command -v busybox > /dev/null 2>&1; then
+                busybox md5sum "$file" | awk '{print $1}'
+            else
+                log_message "KESALAHAN: Tidak ada metode hash yang tersedia"
+                echo ""
+            fi
+        fi
     else
         echo ""
     fi
@@ -108,10 +125,18 @@ update_file() {
     
     # Download file dari URL
     log_message "Mendownload file dari $file_url..."
-    if curl -s -L --connect-timeout 10 --max-time 30 "$file_url" -o "$temp_file"; then
+    if curl -v -L --connect-timeout 10 --max-time 30 "$file_url" -o "$temp_file" 2>&1 | grep -q "200 OK"; then
         # Periksa apakah file berhasil didownload dan tidak kosong
         if [ ! -s "$temp_file" ]; then
             log_message "KESALAHAN: File yang didownload kosong"
+            rm -f "$temp_file"
+            return 1
+        fi
+        
+        # Periksa apakah file yang didownload adalah file teks yang valid
+        if grep -q "<!DOCTYPE html>" "$temp_file" || grep -q "<html>" "$temp_file"; then
+            log_message "KESALAHAN: File yang didownload tampaknya berisi HTML, bukan konten yang diharapkan"
+            cat "$temp_file" | head -n 10 >> "$LOG_FILE"
             rm -f "$temp_file"
             return 1
         fi
