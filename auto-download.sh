@@ -340,7 +340,19 @@ check_update_script() {
                 # Berikan izin eksekusi
                 chmod +x "$script_file"
                 
-                log_message "Berhasil memperbarui $script_name (SHA-1 terverifikasi)"
+                # Periksa apakah izin eksekusi berhasil diberikan
+                if [ -x "$script_file" ]; then
+                    log_message "Berhasil memperbarui $script_name (SHA-1 terverifikasi) dan memberikan izin eksekusi"
+                else
+                    log_message "Berhasil memperbarui $script_name (SHA-1 terverifikasi) tetapi GAGAL memberikan izin eksekusi"
+                    # Coba lagi dengan metode alternatif
+                    sh -c "chmod 755 \"$script_file\""
+                    if [ -x "$script_file" ]; then
+                        log_message "Berhasil memberikan izin eksekusi dengan metode alternatif"
+                    else
+                        log_message "PERINGATAN: Tetap gagal memberikan izin eksekusi pada $script_name"
+                    fi
+                fi
                 
                 # Hapus file backup karena pembaruan berhasil
                 if [ -f "${script_file}.bak" ]; then
@@ -463,12 +475,28 @@ download_files() {
         
         # Jalankan check-update.sh untuk memeriksa pembaruan file auto-download.sh
         # Baik jika file check-update.sh diperbarui atau tidak
-        if [ -x "$CHECK_UPDATE_SCRIPT_FILE" ]; then
-            log_message "Menjalankan check-update.sh untuk memeriksa pembaruan auto-download.sh..."
+        if [ -f "$CHECK_UPDATE_SCRIPT_FILE" ]; then
+            # Pastikan file memiliki izin eksekusi
+            chmod +x "$CHECK_UPDATE_SCRIPT_FILE"
             
-            # Jalankan check-update.sh dan tunggu hasilnya
-            "$CHECK_UPDATE_SCRIPT_FILE"
-            local update_exit_code=$?
+            if [ -x "$CHECK_UPDATE_SCRIPT_FILE" ]; then
+                log_message "Menjalankan check-update.sh untuk memeriksa pembaruan auto-download.sh..."
+                
+                # Jalankan check-update.sh dan tunggu hasilnya
+                # Coba jalankan langsung
+                "$CHECK_UPDATE_SCRIPT_FILE"
+                local update_exit_code=$?
+                
+                # Jika gagal dengan kode 126 (tidak dapat dieksekusi), coba dengan sh
+                if [ $update_exit_code -eq 126 ]; then
+                    log_message "Mencoba menjalankan check-update.sh dengan sh..."
+                    sh "$CHECK_UPDATE_SCRIPT_FILE"
+                    update_exit_code=$?
+                fi
+            else
+                log_message "PERINGATAN: Tidak dapat memberikan izin eksekusi pada check-update.sh"
+                local update_exit_code=126
+            fi
             
             # Periksa kode keluar dari check-update.sh
             if [ $update_exit_code -eq 0 ]; then
@@ -478,13 +506,17 @@ download_files() {
                 # Kode 10 berarti auto-download.sh telah diperbarui dan restart-auto-download.sh telah dijalankan
                 log_message "auto-download.sh telah diperbarui dan akan di-restart, menghentikan proses saat ini"
                 return 1
+            elif [ $update_exit_code -eq 126 ]; then
+                # Kode 126 berarti tidak dapat memberikan izin eksekusi
+                log_message "PERINGATAN: Tidak dapat menjalankan check-update.sh karena masalah izin, melanjutkan proses"
+                # Lanjutkan proses meskipun ada error izin
             else
                 # Kode error lainnya
                 log_message "check-update.sh mengembalikan kode error: $update_exit_code, menghentikan proses"
                 return 1
             fi
         else
-            log_message "PERINGATAN: check-update.sh tidak dapat dieksekusi, melewati pemeriksaan"
+            log_message "PERINGATAN: check-update.sh tidak ditemukan, melewati pemeriksaan"
         fi
     else
         log_message "URL atau path file check-update.sh tidak dikonfigurasi, melewati pemeriksaan"

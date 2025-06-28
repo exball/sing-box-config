@@ -206,11 +206,22 @@ run_update_check() {
         RESTART_SCRIPT="${RESTART_SCRIPT_FILE:-/data/adb/auto-download/restart-auto-download.sh}"
         
         # Periksa apakah script restart ada
-        if [ -f "$RESTART_SCRIPT" ] && [ -x "$RESTART_SCRIPT" ]; then
-            log_message "Menjalankan restart-auto-download.sh..."
+        if [ -f "$RESTART_SCRIPT" ]; then
+            # Pastikan file memiliki izin eksekusi
+            chmod +x "$RESTART_SCRIPT"
             
-            # Jalankan script restart
-            "$RESTART_SCRIPT"
+            if [ -x "$RESTART_SCRIPT" ]; then
+                log_message "Menjalankan restart-auto-download.sh..."
+                
+                # Jalankan script restart
+                "$RESTART_SCRIPT"
+            else
+                log_message "PERINGATAN: Tidak dapat memberikan izin eksekusi pada restart-auto-download.sh"
+                log_message "Mencoba menjalankan dengan sh..."
+                
+                # Coba jalankan dengan sh
+                sh "$RESTART_SCRIPT"
+            fi
             
             log_message "restart-auto-download.sh telah dijalankan"
             log_message "Proses pemeriksaan selesai dengan pembaruan"
