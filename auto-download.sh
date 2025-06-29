@@ -1,6 +1,5 @@
 #!/bin/bash
 
-# Test 5
 # Script untuk mendownload file konfigurasi secara otomatis
 # Dengan fitur pemeriksaan hash SHA-1 untuk menghindari download ulang
 # Versi dengan CHECK_INTERVAL adaptif dan pembaruan auto-download.conf
@@ -15,7 +14,6 @@ NETWORK_TEST_URL="https://www.google.com"
 NETWORK_MAX_ATTEMPTS=5
 NETWORK_RETRY_WAIT=3
 LOG_FILE="/data/adb/auto-download/auto-download.log"
-DEBUG_LOG_FILE="/data/adb/auto-download/debug-auto-download.log"
 
 # Pastikan direktori yang diperlukan ada
 mkdir -p /data/adb/auto-download
@@ -52,32 +50,6 @@ log_message() {
         
         # Tulis pesan tanpa timestamp
         echo "$message" >> "$LOG_FILE"
-    fi
-}
-
-# Fungsi untuk menulis log debug
-debug_log() {
-    local message="$1"
-    local timestamp=$(date '+%Y-%m-%d %H:%M:%S')
-    
-    if [ -n "$DEBUG_LOG_FILE" ]; then
-        # Pastikan direktori ada
-        mkdir -p "$(dirname "$DEBUG_LOG_FILE")" 2>/dev/null
-        
-        # Coba tulis ke file debug log
-        if echo "[$timestamp] DEBUG: $message" >> "$DEBUG_LOG_FILE" 2>/dev/null; then
-            # Berhasil menulis
-            :
-        else
-            # Jika gagal, coba di /tmp
-            DEBUG_LOG_FILE="/tmp/debug-auto-download.log"
-            echo "[$timestamp] DEBUG: $message" >> "$DEBUG_LOG_FILE" 2>/dev/null
-        fi
-    fi
-    
-    # Juga tampilkan di konsol jika dijalankan interaktif
-    if [ -t 1 ]; then
-        echo "DEBUG: $message"
     fi
 }
 
@@ -137,30 +109,6 @@ mkdir -p "$TEMP_DIR"
 # Inisialisasi file log jika belum ada
 if [ -n "$LOG_FILE" ] && [ ! -f "$LOG_FILE" ]; then
     touch "$LOG_FILE"
-fi
-
-# Inisialisasi file debug log jika belum ada
-if [ -n "$DEBUG_LOG_FILE" ]; then
-    mkdir -p "$(dirname "$DEBUG_LOG_FILE")" 2>/dev/null
-    
-    # Coba buat file debug log
-    if touch "$DEBUG_LOG_FILE" 2>/dev/null && [ -w "$DEBUG_LOG_FILE" ]; then
-        # Test write untuk memastikan file dapat ditulis
-        if echo "[$(date '+%Y-%m-%d %H:%M:%S')] DEBUG: Inisialisasi file debug log berhasil" >> "$DEBUG_LOG_FILE" 2>/dev/null; then
-            # Berhasil menulis ke file debug log
-            :
-        else
-            # Jika tidak bisa menulis, coba di /tmp
-            DEBUG_LOG_FILE="/tmp/debug-auto-download.log"
-            touch "$DEBUG_LOG_FILE" 2>/dev/null
-            echo "[$(date '+%Y-%m-%d %H:%M:%S')] DEBUG: Menggunakan file debug log di /tmp karena tidak bisa menulis ke file asli" >> "$DEBUG_LOG_FILE" 2>/dev/null
-        fi
-    else
-        # Jika tidak bisa membuat file, coba di /tmp
-        DEBUG_LOG_FILE="/tmp/debug-auto-download.log"
-        touch "$DEBUG_LOG_FILE" 2>/dev/null
-        echo "[$(date '+%Y-%m-%d %H:%M:%S')] DEBUG: Menggunakan file debug log di /tmp karena tidak bisa membuat file asli" >> "$DEBUG_LOG_FILE" 2>/dev/null
-    fi
 fi
 
 # ===== LOAD KONFIGURASI =====
@@ -420,10 +368,35 @@ download_files() {
     
     log_message "Memulai proses pemeriksaan file"
     
+    # Periksa dan update file check-update.sh terlebih dahulu
+    if [ -n "$CHECK_UPDATE_SCRIPT_URL" ] && [ -n "$CHECK_UPDATE_SCRIPT_FILE" ]; then
+        check_update_script "$CHECK_UPDATE_SCRIPT_URL" "$CHECK_UPDATE_SCRIPT_FILE"
+        local check_update_result=$?
+        
+        if [ $check_update_result -eq 2 ]; then
+            log_message "File check-update.sh telah diperbarui"
+            
+            # Jalankan check-update.sh jika diperbarui
+            if [ -x "$CHECK_UPDATE_SCRIPT_FILE" ]; then
+                log_message "Menjalankan check-update.sh yang baru diperbarui..."
+                "$CHECK_UPDATE_SCRIPT_FILE"
+                
+                # Jika check-update.sh mengembalikan kode 0, lanjutkan
+                # Jika tidak, keluar dari fungsi ini karena mungkin auto-download.sh telah diperbarui
+                if [ $? -ne 0 ]; then
+                    log_message "check-update.sh mengembalikan kode error, menghentikan proses"
+                    return 1
+                fi
+            fi
+        fi
+    else
+        log_message "URL atau path file check-update.sh tidak dikonfigurasi, melewati pemeriksaan"
+    fi
+    
     # Variabel untuk melacak apakah ada file yang diperbarui
     local files_updated=0
     
-    # Periksa dan update file auto-download.conf terlebih dahulu
+    # Periksa dan update file auto-download.conf
     log_message "-----"
     log_message "Memeriksa pembaruan file auto-download.conf..."
     
@@ -489,178 +462,6 @@ download_files() {
         fi
     else
         log_message "Pemeriksaan pembaruan konfigurasi dibatalkan karena tidak ada koneksi internet"
-    fi
-    
-    # Periksa dan update file check-update.sh
-    if [ -n "$CHECK_UPDATE_SCRIPT_URL" ] && [ -n "$CHECK_UPDATE_SCRIPT_FILE" ]; then
-        check_update_script "$CHECK_UPDATE_SCRIPT_URL" "$CHECK_UPDATE_SCRIPT_FILE"
-        local check_update_result=$?
-        
-        if [ $check_update_result -eq 2 ]; then
-            log_message "File check-update.sh telah diperbarui"
-            
-            # Jalankan check-update.sh jika diperbarui
-            # Pastikan file check-update.sh memiliki izin eksekusi
-            debug_log "Memeriksa izin eksekusi check-update.sh"
-            if [ -f "$CHECK_UPDATE_SCRIPT_FILE" ]; then
-                debug_log "File check-update.sh ada: $CHECK_UPDATE_SCRIPT_FILE"
-                
-                # Berikan izin eksekusi
-                chmod +x "$CHECK_UPDATE_SCRIPT_FILE"
-                debug_log "Izin eksekusi diberikan ke check-update.sh"
-                
-                # Periksa kembali apakah file dapat dieksekusi
-                if [ -x "$CHECK_UPDATE_SCRIPT_FILE" ]; then
-                    debug_log "File check-update.sh dapat dieksekusi"
-                    log_message "Menjalankan check-update.sh yang baru diperbarui..."
-                    
-                    debug_log "Menjalankan: $CHECK_UPDATE_SCRIPT_FILE"
-                    debug_log "Perintah lengkap: bash $CHECK_UPDATE_SCRIPT_FILE"
-                    debug_log "Izin file: $(ls -la $CHECK_UPDATE_SCRIPT_FILE)"
-                    debug_log "Isi direktori: $(ls -la $(dirname "$CHECK_UPDATE_SCRIPT_FILE"))"
-                    
-                    # Coba jalankan dengan bash eksplisit untuk menghindari masalah izin
-                    debug_log "Menjalankan check-update.sh dengan bash eksplisit"
-                    bash "$CHECK_UPDATE_SCRIPT_FILE"
-                    check_update_exit_code=$?
-                    debug_log "check-update.sh selesai dengan kode: $check_update_exit_code"
-                    
-                    # Jika ada error, coba jalankan dengan sh
-                    if [ $check_update_exit_code -ne 0 ] && [ $check_update_exit_code -ne 99 ]; then
-                        debug_log "Mencoba menjalankan dengan sh karena ada error"
-                        sh "$CHECK_UPDATE_SCRIPT_FILE"
-                        check_update_exit_code=$?
-                        debug_log "check-update.sh (dengan sh) selesai dengan kode: $check_update_exit_code"
-                    fi
-                    
-                    # Jika check-update.sh mengembalikan kode 0, lanjutkan
-                    # Jika mengembalikan kode 99, berarti ada pembaruan auto-download.sh
-                    # Jika mengembalikan kode lain, anggap sebagai error
-                    if [ $check_update_exit_code -eq 99 ]; then
-                        log_message "check-update.sh mendeteksi pembaruan auto-download.sh, menghentikan proses"
-                        debug_log "Proses dihentikan karena ada pembaruan auto-download.sh"
-                        return 1
-                    elif [ $check_update_exit_code -ne 0 ]; then
-                        log_message "check-update.sh mengembalikan kode error: $check_update_exit_code, menghentikan proses"
-                        debug_log "Proses dihentikan karena error pada check-update.sh"
-                        return 1
-                    fi
-                    debug_log "check-update.sh berhasil dijalankan tanpa error"
-                else
-                    log_message "PERINGATAN: check-update.sh tidak dapat dieksekusi setelah chmod"
-                    debug_log "ERROR: File check-update.sh tidak dapat dieksekusi meskipun sudah diberikan chmod +x"
-                fi
-            else
-                log_message "PERINGATAN: File check-update.sh tidak ditemukan"
-                debug_log "ERROR: File check-update.sh tidak ditemukan di: $CHECK_UPDATE_SCRIPT_FILE"
-            fi
-        fi
-        
-        # Jalankan check-update.sh untuk memeriksa pembaruan auto-download.sh
-        debug_log "Memeriksa apakah check-update.sh dapat dieksekusi untuk pemeriksaan auto-download.sh"
-        if [ -x "$CHECK_UPDATE_SCRIPT_FILE" ]; then
-            debug_log "check-update.sh dapat dieksekusi, memulai pemeriksaan auto-download.sh"
-            log_message "Menjalankan check-update.sh untuk memeriksa pembaruan auto-download.sh..."
-            
-            # Buat file sementara untuk komunikasi
-            FEEDBACK_FILE="/data/adb/auto-download/feedback.tmp"
-            debug_log "Membuat file feedback: $FEEDBACK_FILE"
-            if [ -e "$FEEDBACK_FILE" ]; then
-                rm -f "$FEEDBACK_FILE"
-                debug_log "File feedback lama dihapus"
-            fi
-            touch "$FEEDBACK_FILE"
-            debug_log "File feedback baru dibuat"
-            
-            # Jalankan check-update.sh dengan parameter tambahan untuk menandakan pemeriksaan dari auto-download.sh
-            debug_log "Menjalankan: $CHECK_UPDATE_SCRIPT_FILE --from-auto-download --feedback-file=$FEEDBACK_FILE"
-            debug_log "Perintah lengkap: bash $CHECK_UPDATE_SCRIPT_FILE --from-auto-download --feedback-file=$FEEDBACK_FILE"
-            debug_log "Izin file: $(ls -la $CHECK_UPDATE_SCRIPT_FILE)"
-            debug_log "Isi direktori: $(ls -la $(dirname "$CHECK_UPDATE_SCRIPT_FILE"))"
-            
-            # Pastikan file feedback dapat ditulis
-            debug_log "Memastikan file feedback dapat ditulis"
-            touch "$FEEDBACK_FILE" 2>/dev/null
-            debug_log "Status touch: $?"
-            
-            # Coba jalankan dengan bash eksplisit untuk menghindari masalah izin
-            debug_log "Menjalankan check-update.sh dengan bash eksplisit"
-            debug_log "Parameter 1: --from-auto-download"
-            debug_log "Parameter 2: --feedback-file=$FEEDBACK_FILE"
-            debug_log "Perintah yang akan dijalankan: bash \"$CHECK_UPDATE_SCRIPT_FILE\" --from-auto-download --feedback-file=\"$FEEDBACK_FILE\""
-            
-            # Jalankan dengan logging yang lebih detail
-            debug_log "Sebelum menjalankan check-update.sh:"
-            debug_log "- File check-update.sh ada: $(test -f "$CHECK_UPDATE_SCRIPT_FILE" && echo "ya" || echo "tidak")"
-            debug_log "- File check-update.sh dapat dieksekusi: $(test -x "$CHECK_UPDATE_SCRIPT_FILE" && echo "ya" || echo "tidak")"
-            debug_log "- File feedback ada: $(test -f "$FEEDBACK_FILE" && echo "ya" || echo "tidak")"
-            debug_log "- File feedback dapat ditulis: $(test -w "$FEEDBACK_FILE" && echo "ya" || echo "tidak")"
-            debug_log "- File debug check-update ada: $(test -f "/data/adb/auto-download/debug-check-update.log" && echo "ya" || echo "tidak")"
-            debug_log "- File debug check-update di /tmp ada: $(test -f "/tmp/debug-check-update.log" && echo "ya" || echo "tidak")"
-            
-            bash "$CHECK_UPDATE_SCRIPT_FILE" --from-auto-download --feedback-file="$FEEDBACK_FILE"
-            check_update_exit_code=$?
-            debug_log "check-update.sh selesai dengan kode: $check_update_exit_code"
-            
-            debug_log "Setelah menjalankan check-update.sh:"
-            debug_log "- File feedback ada: $(test -f "$FEEDBACK_FILE" && echo "ya" || echo "tidak")"
-            debug_log "- Ukuran file feedback: $(test -f "$FEEDBACK_FILE" && wc -c < "$FEEDBACK_FILE" || echo "0") bytes"
-            debug_log "- File debug check-update ada: $(test -f "/data/adb/auto-download/debug-check-update.log" && echo "ya" || echo "tidak")"
-            debug_log "- File debug check-update di /tmp ada: $(test -f "/tmp/debug-check-update.log" && echo "ya" || echo "tidak")"
-            debug_log "- File debug check-update di /data/local/tmp ada: $(test -f "/data/local/tmp/debug-check-update.log" && echo "ya" || echo "tidak")"
-            
-            # Cek ukuran file debug log jika ada
-            for debug_location in "/data/adb/auto-download/debug-check-update.log" "/tmp/debug-check-update.log" "/data/local/tmp/debug-check-update.log"; do
-                if [ -f "$debug_location" ]; then
-                    debug_log "- Ukuran $debug_location: $(wc -c < "$debug_location") bytes"
-                fi
-            done
-            
-            # Periksa apakah file feedback ada dan dapat dibaca
-            if [ -f "$FEEDBACK_FILE" ]; then
-                debug_log "File feedback ada: $(ls -la "$FEEDBACK_FILE")"
-                debug_log "Isi file feedback: $(cat "$FEEDBACK_FILE" 2>/dev/null || echo "tidak dapat dibaca")"
-            else
-                debug_log "File feedback tidak ada setelah eksekusi check-update.sh"
-            fi
-            
-            log_message "check-update.sh selesai dengan kode: $check_update_exit_code"
-            
-            # Jika check-update.sh mengembalikan kode 99, berarti ada pembaruan auto-download.sh
-            if [ $check_update_exit_code -eq 99 ]; then
-                log_message "Pembaruan auto-download.sh terdeteksi, menghentikan proses saat ini..."
-                debug_log "Menghentikan proses karena ada pembaruan auto-download.sh"
-                rm -f "$FEEDBACK_FILE"
-                return 1
-            elif [ $check_update_exit_code -ne 0 ]; then
-                log_message "check-update.sh mengembalikan kode error: $check_update_exit_code, tetapi melanjutkan proses..."
-                debug_log "Ada error pada check-update.sh tetapi melanjutkan proses"
-            fi
-            
-            # Baca feedback dari file
-            debug_log "Memeriksa file feedback"
-            if [ -f "$FEEDBACK_FILE" ]; then
-                feedback=$(cat "$FEEDBACK_FILE")
-                debug_log "Feedback diterima: $feedback"
-                rm -f "$FEEDBACK_FILE"
-                
-                # Proses feedback
-                if [ "$feedback" = "NO_UPDATE" ]; then
-                    log_message "Tidak ada pembaruan auto-download.sh, melanjutkan proses..."
-                    debug_log "Tidak ada pembaruan, melanjutkan proses"
-                else
-                    log_message "Feedback tidak dikenali: $feedback, melanjutkan proses..."
-                    debug_log "Feedback tidak dikenali: $feedback"
-                fi
-            else
-                log_message "File feedback tidak ditemukan, melanjutkan proses..."
-                debug_log "File feedback tidak ditemukan"
-            fi
-        else
-            debug_log "check-update.sh tidak dapat dieksekusi, melewati pemeriksaan auto-download.sh"
-        fi
-    else
-        log_message "URL atau path file check-update.sh tidak dikonfigurasi, melewati pemeriksaan"
     fi
     
     # Loop melalui setiap URL dan download
