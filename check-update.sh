@@ -197,16 +197,34 @@ check_and_update_file() {
 # ===== FUNGSI UTAMA =====
 # Fungsi untuk menjalankan pemeriksaan dan pembaruan
 run_update_check() {
+    debug_log "Memulai fungsi run_update_check"
+    debug_log "FROM_AUTO_DOWNLOAD=$FROM_AUTO_DOWNLOAD, FEEDBACK_FILE=$FEEDBACK_FILE"
+    
     # Periksa koneksi jaringan terlebih dahulu
+    debug_log "Memeriksa koneksi jaringan"
     check_network_connection
-    if [ $? -ne 0 ]; then
+    network_result=$?
+    debug_log "Hasil pemeriksaan koneksi jaringan: $network_result"
+    
+    if [ $network_result -ne 0 ]; then
         log_message "Proses pemeriksaan file dibatalkan karena tidak ada koneksi internet"
+        debug_log "Tidak ada koneksi internet, mengirim feedback jika diperlukan"
         
         # Jika dipanggil dari auto-download.sh, kirim feedback bahwa tidak ada pembaruan
         if [ $FROM_AUTO_DOWNLOAD -eq 1 ] && [ -n "$FEEDBACK_FILE" ]; then
             debug_log "Mengirim feedback NO_UPDATE karena tidak ada koneksi internet"
-            echo "NO_UPDATE" > "$FEEDBACK_FILE"
+            debug_log "File feedback: $FEEDBACK_FILE ($(test -f "$FEEDBACK_FILE" && echo "ada" || echo "tidak ada"))"
+            debug_log "Direktori feedback: $(dirname "$FEEDBACK_FILE") ($(test -d "$(dirname "$FEEDBACK_FILE")" && echo "ada" || echo "tidak ada"))"
+            debug_log "Izin direktori feedback: $(ls -ld "$(dirname "$FEEDBACK_FILE")" 2>/dev/null || echo "tidak dapat diakses")"
+            
+            # Pastikan direktori ada
+            mkdir -p "$(dirname "$FEEDBACK_FILE")" 2>/dev/null
+            
+            # Coba tulis feedback dengan berbagai metode
+            echo "NO_UPDATE" > "$FEEDBACK_FILE" 2>/dev/null
+            debug_log "Status penulisan feedback: $?"
             debug_log "Feedback NO_UPDATE telah ditulis ke $FEEDBACK_FILE"
+            debug_log "Isi file feedback: $(cat "$FEEDBACK_FILE" 2>/dev/null || echo "tidak dapat dibaca")"
         fi
         
         return 1
@@ -229,12 +247,23 @@ run_update_check() {
     debug_log "Memeriksa apakah perlu mengirim feedback (FROM_AUTO_DOWNLOAD=$FROM_AUTO_DOWNLOAD, FEEDBACK_FILE=$FEEDBACK_FILE)"
     if [ $FROM_AUTO_DOWNLOAD -eq 1 ] && [ -n "$FEEDBACK_FILE" ]; then
         debug_log "Kondisi feedback terpenuhi, files_updated=$files_updated"
+        debug_log "File feedback: $FEEDBACK_FILE ($(test -f "$FEEDBACK_FILE" && echo "ada" || echo "tidak ada"))"
+        debug_log "Direktori feedback: $(dirname "$FEEDBACK_FILE") ($(test -d "$(dirname "$FEEDBACK_FILE")" && echo "ada" || echo "tidak ada"))"
+        debug_log "Izin direktori feedback: $(ls -ld "$(dirname "$FEEDBACK_FILE")" 2>/dev/null || echo "tidak dapat diakses")"
+        
         if [ $files_updated -eq 0 ]; then
             # Tidak ada pembaruan, kirim feedback untuk melanjutkan
             log_message "Mengirim feedback: Tidak ada pembaruan auto-download.sh"
             debug_log "Mengirim feedback NO_UPDATE ke $FEEDBACK_FILE"
-            echo "NO_UPDATE" > "$FEEDBACK_FILE"
+            
+            # Pastikan direktori ada
+            mkdir -p "$(dirname "$FEEDBACK_FILE")" 2>/dev/null
+            
+            # Coba tulis feedback dengan berbagai metode
+            echo "NO_UPDATE" > "$FEEDBACK_FILE" 2>/dev/null
+            debug_log "Status penulisan feedback: $?"
             debug_log "Feedback NO_UPDATE berhasil ditulis"
+            debug_log "Isi file feedback: $(cat "$FEEDBACK_FILE" 2>/dev/null || echo "tidak dapat dibaca")"
         else
             # Ada pembaruan, tidak perlu kirim feedback karena auto-download.sh akan di-restart
             log_message "Tidak mengirim feedback karena auto-download.sh akan di-restart"
@@ -310,6 +339,11 @@ fi
 # Debug log awal
 debug_log "=== Memulai check-update.sh ==="
 debug_log "Parameter yang diterima: $*"
+debug_log "Direktori saat ini: $(pwd)"
+debug_log "Lingkungan shell: $SHELL"
+debug_log "PATH: $PATH"
+debug_log "Pengguna: $(whoami)"
+debug_log "Izin script ini: $(ls -la $0)"
 
 # Periksa parameter command line
 for arg in "$@"; do

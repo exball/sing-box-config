@@ -480,7 +480,12 @@ download_files() {
                     log_message "Menjalankan check-update.sh yang baru diperbarui..."
                     
                     debug_log "Menjalankan: $CHECK_UPDATE_SCRIPT_FILE"
-                    "$CHECK_UPDATE_SCRIPT_FILE"
+                    debug_log "Perintah lengkap: bash $CHECK_UPDATE_SCRIPT_FILE"
+                    debug_log "Izin file: $(ls -la $CHECK_UPDATE_SCRIPT_FILE)"
+                    debug_log "Isi direktori: $(ls -la $(dirname $CHECK_UPDATE_SCRIPT_FILE))"
+                    
+                    # Coba jalankan dengan bash eksplisit untuk menghindari masalah izin
+                    bash "$CHECK_UPDATE_SCRIPT_FILE"
                     check_update_exit_code=$?
                     debug_log "check-update.sh selesai dengan kode: $check_update_exit_code"
                     
@@ -525,7 +530,12 @@ download_files() {
             
             # Jalankan check-update.sh dengan parameter tambahan untuk menandakan pemeriksaan dari auto-download.sh
             debug_log "Menjalankan: $CHECK_UPDATE_SCRIPT_FILE --from-auto-download --feedback-file=$FEEDBACK_FILE"
-            "$CHECK_UPDATE_SCRIPT_FILE" --from-auto-download --feedback-file="$FEEDBACK_FILE"
+            debug_log "Perintah lengkap: bash $CHECK_UPDATE_SCRIPT_FILE --from-auto-download --feedback-file=$FEEDBACK_FILE"
+            debug_log "Izin file: $(ls -la $CHECK_UPDATE_SCRIPT_FILE)"
+            debug_log "Isi direktori: $(ls -la $(dirname $CHECK_UPDATE_SCRIPT_FILE))"
+            
+            # Coba jalankan dengan bash eksplisit untuk menghindari masalah izin
+            bash "$CHECK_UPDATE_SCRIPT_FILE" --from-auto-download --feedback-file="$FEEDBACK_FILE"
             check_update_exit_code=$?
             debug_log "check-update.sh selesai dengan kode: $check_update_exit_code"
             
