@@ -228,32 +228,40 @@ run_update_check() {
     if [ $files_updated -eq 1 ]; then
         log_message "File-file telah diperbarui, mungkin perlu me-restart layanan"
         
-        # Jika dipanggil dari auto-download.sh, gunakan restart-auto-download.sh
-        if [ $FROM_AUTO_DOWNLOAD -eq 1 ] && [ -x "$RESTART_SCRIPT" ]; then
-            log_message "Menjalankan restart-auto-download.sh untuk me-restart auto-download.sh..."
-            nohup "$RESTART_SCRIPT" > /dev/null 2>&1 &
-            log_message "restart-auto-download.sh telah dijalankan"
-            
-            # Keluar dengan kode 99 untuk memberi tahu auto-download.sh bahwa ada pembaruan
-            return 99
-        # Jika tidak dipanggil dari auto-download.sh, gunakan metode restart langsung
-        elif pgrep -f "auto-download.sh" > /dev/null; then
-            log_message "Mendeteksi auto-download.sh sedang berjalan, mencoba me-restart..."
-            
-            # Hentikan proses yang sedang berjalan
-            pkill -f "auto-download.sh"
-            sleep 2
-            
-            # Jalankan kembali auto-download.sh
-            if [ -x "$SCRIPT_FILE" ]; then
-                log_message "Menjalankan kembali auto-download.sh..."
-                nohup "$SCRIPT_FILE" > /dev/null 2>&1 &
-                log_message "auto-download.sh telah di-restart dengan PID: $!"
+        # Jika dipanggil dari auto-download.sh
+        if [ $FROM_AUTO_DOWNLOAD -eq 1 ]; then
+            # Jika restart script tersedia
+            if [ -x "$RESTART_SCRIPT" ]; then
+                log_message "Menjalankan restart-auto-download.sh untuk me-restart auto-download.sh..."
+                nohup "$RESTART_SCRIPT" > /dev/null 2>&1 &
+                log_message "restart-auto-download.sh telah dijalankan"
+                
+                # Keluar dengan kode 99 untuk memberi tahu auto-download.sh bahwa ada pembaruan
+                return 99
             else
-                log_message "PERINGATAN: auto-download.sh tidak dapat dieksekusi"
+                log_message "PERINGATAN: restart-auto-download.sh tidak ditemukan atau tidak dapat dieksekusi"
+                return 1
             fi
         else
-            log_message "auto-download.sh tidak sedang berjalan, tidak perlu di-restart"
+            # Jika tidak dipanggil dari auto-download.sh, gunakan metode restart langsung
+            if pgrep -f "auto-download.sh" > /dev/null; then
+                log_message "Mendeteksi auto-download.sh sedang berjalan, mencoba me-restart..."
+                
+                # Hentikan proses yang sedang berjalan
+                pkill -f "auto-download.sh"
+                sleep 2
+                
+                # Jalankan kembali auto-download.sh
+                if [ -x "$SCRIPT_FILE" ]; then
+                    log_message "Menjalankan kembali auto-download.sh..."
+                    nohup "$SCRIPT_FILE" > /dev/null 2>&1 &
+                    log_message "auto-download.sh telah di-restart dengan PID: $!"
+                else
+                    log_message "PERINGATAN: auto-download.sh tidak dapat dieksekusi"
+                fi
+            else
+                log_message "auto-download.sh tidak sedang berjalan, tidak perlu di-restart"
+            fi
         fi
     else
         log_message "Tidak ada file yang diperbarui"

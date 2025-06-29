@@ -452,11 +452,16 @@ download_files() {
             if [ -x "$CHECK_UPDATE_SCRIPT_FILE" ]; then
                 log_message "Menjalankan check-update.sh yang baru diperbarui..."
                 "$CHECK_UPDATE_SCRIPT_FILE"
+                check_update_exit_code=$?
                 
                 # Jika check-update.sh mengembalikan kode 0, lanjutkan
-                # Jika tidak, keluar dari fungsi ini karena mungkin auto-download.sh telah diperbarui
-                if [ $? -ne 0 ]; then
-                    log_message "check-update.sh mengembalikan kode error, menghentikan proses"
+                # Jika mengembalikan kode 99, berarti ada pembaruan auto-download.sh
+                # Jika mengembalikan kode lain, anggap sebagai error
+                if [ $check_update_exit_code -eq 99 ]; then
+                    log_message "check-update.sh mendeteksi pembaruan auto-download.sh, menghentikan proses"
+                    return 1
+                elif [ $check_update_exit_code -ne 0 ]; then
+                    log_message "check-update.sh mengembalikan kode error: $check_update_exit_code, menghentikan proses"
                     return 1
                 fi
             fi
@@ -484,6 +489,8 @@ download_files() {
                 log_message "Pembaruan auto-download.sh terdeteksi, menghentikan proses saat ini..."
                 rm -f "$FEEDBACK_FILE"
                 return 1
+            elif [ $check_update_exit_code -ne 0 ]; then
+                log_message "check-update.sh mengembalikan kode error: $check_update_exit_code, tetapi melanjutkan proses..."
             fi
             
             # Baca feedback dari file
