@@ -69,20 +69,29 @@ debug_log() {
     
     # Coba tulis ke file debug log jika tersedia
     if [ -n "$DEBUG_LOG_FILE" ]; then
+        # Pastikan direktori ada
+        mkdir -p "$(dirname "$DEBUG_LOG_FILE")" 2>/dev/null
+        
         # Coba tulis ke file debug log
-        if ! echo "$debug_entry" >> "$DEBUG_LOG_FILE" 2>/dev/null; then
+        if echo "$debug_entry" >> "$DEBUG_LOG_FILE" 2>/dev/null; then
+            # Berhasil menulis, tidak perlu melakukan apa-apa
+            :
+        else
             # Jika gagal, coba beberapa lokasi alternatif
             for alt_location in "/tmp/debug-check-update.log" "/data/local/tmp/debug-check-update.log"; do
+                mkdir -p "$(dirname "$alt_location")" 2>/dev/null
                 if echo "$debug_entry" >> "$alt_location" 2>/dev/null; then
                     DEBUG_LOG_FILE="$alt_location"
+                    # Tulis ulang pesan yang gagal
+                    echo "$debug_entry" >> "$DEBUG_LOG_FILE" 2>/dev/null
                     break
                 fi
             done
         fi
     fi
     
-    # Juga tulis ke log utama jika tersedia
-    if [ -n "$LOG_FILE" ] && [ -w "$LOG_FILE" ]; then
+    # Juga tulis ke log utama jika tersedia (sebagai backup)
+    if [ -n "$LOG_FILE" ]; then
         echo "$debug_entry" >> "$LOG_FILE" 2>/dev/null
     fi
     
@@ -300,6 +309,11 @@ run_update_check() {
             # Ada pembaruan, tidak perlu kirim feedback karena auto-download.sh akan di-restart
             log_message "Tidak mengirim feedback karena auto-download.sh akan di-restart"
             debug_log "Tidak mengirim feedback karena ada pembaruan (files_updated=$files_updated)"
+            
+            # Namun tetap buat file feedback kosong untuk menandakan ada aktivitas
+            debug_log "Membuat file feedback kosong untuk menandakan ada aktivitas"
+            echo "" > "$FEEDBACK_FILE" 2>/dev/null
+            debug_log "Status pembuatan file feedback: $?"
         fi
     else
         debug_log "Kondisi feedback tidak terpenuhi, tidak mengirim feedback"
@@ -337,7 +351,36 @@ run_update_check() {
             else
                 debug_log "Restart script tidak dapat dieksekusi atau tidak ditemukan"
                 log_message "PERINGATAN: restart-auto-download.sh tidak ditemukan atau tidak dapat dieksekusi"
-                return 1
+                debug_log "Mencoba restart dengan metode langsung"
+                
+                # Fallback: restart langsung tanpa restart script
+                if pgrep -f "auto-download.sh" > /dev/null; then
+                    debug_log "Mendeteksi auto-download.sh sedang berjalan, mencoba restart langsung"
+                    log_message "Mendeteksi auto-download.sh sedang berjalan, me-restart secara langsung..."
+                    
+                    # Hentikan proses yang sedang berjalan
+                    pkill -f "auto-download.sh"
+                    sleep 2
+                    
+                    # Pastikan auto-download.sh dapat dieksekusi
+                    if [ ! -x "$SCRIPT_FILE" ]; then
+                        debug_log "auto-download.sh tidak dapat dieksekusi, memberikan izin eksekusi"
+                        chmod +x "$SCRIPT_FILE"
+                        debug_log "Izin eksekusi diberikan: $(ls -la "$SCRIPT_FILE")"
+                    fi
+                    
+                    # Jalankan kembali auto-download.sh
+                    debug_log "Menjalankan kembali auto-download.sh"
+                    nohup "$SCRIPT_FILE" > /dev/null 2>&1 &
+                    log_message "auto-download.sh telah di-restart dengan PID: $!"
+                    debug_log "auto-download.sh berhasil di-restart, mengembalikan kode 99"
+                    
+                    return 99
+                else
+                    debug_log "auto-download.sh tidak sedang berjalan, tidak perlu restart"
+                    log_message "auto-download.sh tidak sedang berjalan, tidak perlu di-restart"
+                    return 1
+                fi
             fi
         else
             # Jika tidak dipanggil dari auto-download.sh, gunakan metode restart langsung
@@ -385,6 +428,11 @@ run_update_check() {
 # Inisialisasi file log jika belum ada
 if [ -n "$LOG_FILE" ] && [ ! -f "$LOG_FILE" ]; then
     touch "$LOG_FILE"
+fi
+
+# Pastikan DEBUG_LOG_FILE diset jika masih kosong
+if [ -z "$DEBUG_LOG_FILE" ]; then
+    DEBUG_LOG_FILE="/data/adb/auto-download/debug-check-update.log"
 fi
 
 # Inisialisasi file debug log jika belum ada
