@@ -20,6 +20,7 @@ NETWORK_RETRY_WAIT=3
 
 # File log
 LOG_FILE="/data/adb/auto-download/check-update.log"
+DEBUG_LOG_FILE="/data/adb/auto-download/debug-check-update.log"
 
 # Path ke script restart
 RESTART_SCRIPT="/data/adb/auto-download/restart-auto-download.sh"
@@ -57,6 +58,16 @@ log_message() {
         
         # Tulis pesan tanpa timestamp
         echo "$message" >> "$LOG_FILE"
+    fi
+}
+
+# Fungsi untuk menulis log debug
+debug_log() {
+    local message="$1"
+    local timestamp=$(date '+%Y-%m-%d %H:%M:%S')
+    
+    if [ -n "$DEBUG_LOG_FILE" ]; then
+        echo "[$timestamp] DEBUG: $message" >> "$DEBUG_LOG_FILE"
     fi
 }
 
@@ -193,7 +204,9 @@ run_update_check() {
         
         # Jika dipanggil dari auto-download.sh, kirim feedback bahwa tidak ada pembaruan
         if [ $FROM_AUTO_DOWNLOAD -eq 1 ] && [ -n "$FEEDBACK_FILE" ]; then
+            debug_log "Mengirim feedback NO_UPDATE karena tidak ada koneksi internet"
             echo "NO_UPDATE" > "$FEEDBACK_FILE"
+            debug_log "Feedback NO_UPDATE telah ditulis ke $FEEDBACK_FILE"
         fi
         
         return 1
@@ -213,15 +226,22 @@ run_update_check() {
     fi
     
     # Jika dipanggil dari auto-download.sh, kirim feedback
+    debug_log "Memeriksa apakah perlu mengirim feedback (FROM_AUTO_DOWNLOAD=$FROM_AUTO_DOWNLOAD, FEEDBACK_FILE=$FEEDBACK_FILE)"
     if [ $FROM_AUTO_DOWNLOAD -eq 1 ] && [ -n "$FEEDBACK_FILE" ]; then
+        debug_log "Kondisi feedback terpenuhi, files_updated=$files_updated"
         if [ $files_updated -eq 0 ]; then
             # Tidak ada pembaruan, kirim feedback untuk melanjutkan
             log_message "Mengirim feedback: Tidak ada pembaruan auto-download.sh"
+            debug_log "Mengirim feedback NO_UPDATE ke $FEEDBACK_FILE"
             echo "NO_UPDATE" > "$FEEDBACK_FILE"
+            debug_log "Feedback NO_UPDATE berhasil ditulis"
         else
             # Ada pembaruan, tidak perlu kirim feedback karena auto-download.sh akan di-restart
             log_message "Tidak mengirim feedback karena auto-download.sh akan di-restart"
+            debug_log "Tidak mengirim feedback karena ada pembaruan (files_updated=$files_updated)"
         fi
+    else
+        debug_log "Kondisi feedback tidak terpenuhi, tidak mengirim feedback"
     fi
     
     # Jika ada file yang diperbarui, restart layanan jika diperlukan
@@ -229,16 +249,21 @@ run_update_check() {
         log_message "File-file telah diperbarui, mungkin perlu me-restart layanan"
         
         # Jika dipanggil dari auto-download.sh
+        debug_log "Memeriksa apakah dipanggil dari auto-download.sh: FROM_AUTO_DOWNLOAD=$FROM_AUTO_DOWNLOAD"
         if [ $FROM_AUTO_DOWNLOAD -eq 1 ]; then
+            debug_log "Dipanggil dari auto-download.sh, memeriksa restart script: $RESTART_SCRIPT"
             # Jika restart script tersedia
             if [ -x "$RESTART_SCRIPT" ]; then
+                debug_log "Restart script dapat dieksekusi, menjalankan restart"
                 log_message "Menjalankan restart-auto-download.sh untuk me-restart auto-download.sh..."
                 nohup "$RESTART_SCRIPT" > /dev/null 2>&1 &
                 log_message "restart-auto-download.sh telah dijalankan"
+                debug_log "restart-auto-download.sh berhasil dijalankan, mengembalikan kode 99"
                 
                 # Keluar dengan kode 99 untuk memberi tahu auto-download.sh bahwa ada pembaruan
                 return 99
             else
+                debug_log "Restart script tidak dapat dieksekusi atau tidak ditemukan"
                 log_message "PERINGATAN: restart-auto-download.sh tidak ditemukan atau tidak dapat dieksekusi"
                 return 1
             fi
@@ -277,24 +302,42 @@ if [ -n "$LOG_FILE" ] && [ ! -f "$LOG_FILE" ]; then
     touch "$LOG_FILE"
 fi
 
+# Inisialisasi file debug log jika belum ada
+if [ -n "$DEBUG_LOG_FILE" ] && [ ! -f "$DEBUG_LOG_FILE" ]; then
+    touch "$DEBUG_LOG_FILE"
+fi
+
+# Debug log awal
+debug_log "=== Memulai check-update.sh ==="
+debug_log "Parameter yang diterima: $*"
+
 # Periksa parameter command line
 for arg in "$@"; do
+    debug_log "Memproses parameter: $arg"
     case "$arg" in
         --from-auto-download)
             FROM_AUTO_DOWNLOAD=1
             log_message "Dijalankan dari auto-download.sh"
+            debug_log "Flag FROM_AUTO_DOWNLOAD diset ke 1"
             ;;
         --feedback-file=*)
             FEEDBACK_FILE="${arg#*=}"
             log_message "File feedback: $FEEDBACK_FILE"
+            debug_log "File feedback diset ke: $FEEDBACK_FILE"
+            ;;
+        *)
+            debug_log "Parameter tidak dikenali: $arg"
             ;;
     esac
 done
 
 # Jalankan pemeriksaan dan pembaruan
 log_message "Memulai check-update.sh"
+debug_log "Memulai run_update_check"
 run_update_check
 exit_code=$?
 log_message "check-update.sh selesai dengan kode: $exit_code"
+debug_log "check-update.sh selesai dengan kode: $exit_code"
+debug_log "=== Selesai check-update.sh ==="
 
 exit $exit_code

@@ -15,6 +15,7 @@ NETWORK_TEST_URL="https://www.google.com"
 NETWORK_MAX_ATTEMPTS=5
 NETWORK_RETRY_WAIT=3
 LOG_FILE="/data/adb/auto-download/auto-download.log"
+DEBUG_LOG_FILE="/data/adb/auto-download/debug-auto-download.log"
 
 # Pastikan direktori yang diperlukan ada
 mkdir -p /data/adb/auto-download
@@ -51,6 +52,16 @@ log_message() {
         
         # Tulis pesan tanpa timestamp
         echo "$message" >> "$LOG_FILE"
+    fi
+}
+
+# Fungsi untuk menulis log debug
+debug_log() {
+    local message="$1"
+    local timestamp=$(date '+%Y-%m-%d %H:%M:%S')
+    
+    if [ -n "$DEBUG_LOG_FILE" ]; then
+        echo "[$timestamp] DEBUG: $message" >> "$DEBUG_LOG_FILE"
     fi
 }
 
@@ -110,6 +121,11 @@ mkdir -p "$TEMP_DIR"
 # Inisialisasi file log jika belum ada
 if [ -n "$LOG_FILE" ] && [ ! -f "$LOG_FILE" ]; then
     touch "$LOG_FILE"
+fi
+
+# Inisialisasi file debug log jika belum ada
+if [ -n "$DEBUG_LOG_FILE" ] && [ ! -f "$DEBUG_LOG_FILE" ]; then
+    touch "$DEBUG_LOG_FILE"
 fi
 
 # ===== LOAD KONFIGURASI =====
@@ -449,64 +465,104 @@ download_files() {
             log_message "File check-update.sh telah diperbarui"
             
             # Jalankan check-update.sh jika diperbarui
-            if [ -x "$CHECK_UPDATE_SCRIPT_FILE" ]; then
-                log_message "Menjalankan check-update.sh yang baru diperbarui..."
-                "$CHECK_UPDATE_SCRIPT_FILE"
-                check_update_exit_code=$?
+            # Pastikan file check-update.sh memiliki izin eksekusi
+            debug_log "Memeriksa izin eksekusi check-update.sh"
+            if [ -f "$CHECK_UPDATE_SCRIPT_FILE" ]; then
+                debug_log "File check-update.sh ada: $CHECK_UPDATE_SCRIPT_FILE"
                 
-                # Jika check-update.sh mengembalikan kode 0, lanjutkan
-                # Jika mengembalikan kode 99, berarti ada pembaruan auto-download.sh
-                # Jika mengembalikan kode lain, anggap sebagai error
-                if [ $check_update_exit_code -eq 99 ]; then
-                    log_message "check-update.sh mendeteksi pembaruan auto-download.sh, menghentikan proses"
-                    return 1
-                elif [ $check_update_exit_code -ne 0 ]; then
-                    log_message "check-update.sh mengembalikan kode error: $check_update_exit_code, menghentikan proses"
-                    return 1
+                # Berikan izin eksekusi
+                chmod +x "$CHECK_UPDATE_SCRIPT_FILE"
+                debug_log "Izin eksekusi diberikan ke check-update.sh"
+                
+                # Periksa kembali apakah file dapat dieksekusi
+                if [ -x "$CHECK_UPDATE_SCRIPT_FILE" ]; then
+                    debug_log "File check-update.sh dapat dieksekusi"
+                    log_message "Menjalankan check-update.sh yang baru diperbarui..."
+                    
+                    debug_log "Menjalankan: $CHECK_UPDATE_SCRIPT_FILE"
+                    "$CHECK_UPDATE_SCRIPT_FILE"
+                    check_update_exit_code=$?
+                    debug_log "check-update.sh selesai dengan kode: $check_update_exit_code"
+                    
+                    # Jika check-update.sh mengembalikan kode 0, lanjutkan
+                    # Jika mengembalikan kode 99, berarti ada pembaruan auto-download.sh
+                    # Jika mengembalikan kode lain, anggap sebagai error
+                    if [ $check_update_exit_code -eq 99 ]; then
+                        log_message "check-update.sh mendeteksi pembaruan auto-download.sh, menghentikan proses"
+                        debug_log "Proses dihentikan karena ada pembaruan auto-download.sh"
+                        return 1
+                    elif [ $check_update_exit_code -ne 0 ]; then
+                        log_message "check-update.sh mengembalikan kode error: $check_update_exit_code, menghentikan proses"
+                        debug_log "Proses dihentikan karena error pada check-update.sh"
+                        return 1
+                    fi
+                    debug_log "check-update.sh berhasil dijalankan tanpa error"
+                else
+                    log_message "PERINGATAN: check-update.sh tidak dapat dieksekusi setelah chmod"
+                    debug_log "ERROR: File check-update.sh tidak dapat dieksekusi meskipun sudah diberikan chmod +x"
                 fi
+            else
+                log_message "PERINGATAN: File check-update.sh tidak ditemukan"
+                debug_log "ERROR: File check-update.sh tidak ditemukan di: $CHECK_UPDATE_SCRIPT_FILE"
             fi
         fi
         
         # Jalankan check-update.sh untuk memeriksa pembaruan auto-download.sh
+        debug_log "Memeriksa apakah check-update.sh dapat dieksekusi untuk pemeriksaan auto-download.sh"
         if [ -x "$CHECK_UPDATE_SCRIPT_FILE" ]; then
+            debug_log "check-update.sh dapat dieksekusi, memulai pemeriksaan auto-download.sh"
             log_message "Menjalankan check-update.sh untuk memeriksa pembaruan auto-download.sh..."
             
             # Buat file sementara untuk komunikasi
             FEEDBACK_FILE="/data/adb/auto-download/feedback.tmp"
+            debug_log "Membuat file feedback: $FEEDBACK_FILE"
             if [ -e "$FEEDBACK_FILE" ]; then
                 rm -f "$FEEDBACK_FILE"
+                debug_log "File feedback lama dihapus"
             fi
             touch "$FEEDBACK_FILE"
+            debug_log "File feedback baru dibuat"
             
             # Jalankan check-update.sh dengan parameter tambahan untuk menandakan pemeriksaan dari auto-download.sh
+            debug_log "Menjalankan: $CHECK_UPDATE_SCRIPT_FILE --from-auto-download --feedback-file=$FEEDBACK_FILE"
             "$CHECK_UPDATE_SCRIPT_FILE" --from-auto-download --feedback-file="$FEEDBACK_FILE"
             check_update_exit_code=$?
+            debug_log "check-update.sh selesai dengan kode: $check_update_exit_code"
             
             log_message "check-update.sh selesai dengan kode: $check_update_exit_code"
             
             # Jika check-update.sh mengembalikan kode 99, berarti ada pembaruan auto-download.sh
             if [ $check_update_exit_code -eq 99 ]; then
                 log_message "Pembaruan auto-download.sh terdeteksi, menghentikan proses saat ini..."
+                debug_log "Menghentikan proses karena ada pembaruan auto-download.sh"
                 rm -f "$FEEDBACK_FILE"
                 return 1
             elif [ $check_update_exit_code -ne 0 ]; then
                 log_message "check-update.sh mengembalikan kode error: $check_update_exit_code, tetapi melanjutkan proses..."
+                debug_log "Ada error pada check-update.sh tetapi melanjutkan proses"
             fi
             
             # Baca feedback dari file
+            debug_log "Memeriksa file feedback"
             if [ -f "$FEEDBACK_FILE" ]; then
                 feedback=$(cat "$FEEDBACK_FILE")
+                debug_log "Feedback diterima: $feedback"
                 rm -f "$FEEDBACK_FILE"
                 
                 # Proses feedback
                 if [ "$feedback" = "NO_UPDATE" ]; then
                     log_message "Tidak ada pembaruan auto-download.sh, melanjutkan proses..."
+                    debug_log "Tidak ada pembaruan, melanjutkan proses"
                 else
                     log_message "Feedback tidak dikenali: $feedback, melanjutkan proses..."
+                    debug_log "Feedback tidak dikenali: $feedback"
                 fi
             else
                 log_message "File feedback tidak ditemukan, melanjutkan proses..."
+                debug_log "File feedback tidak ditemukan"
             fi
+        else
+            debug_log "check-update.sh tidak dapat dieksekusi, melewati pemeriksaan auto-download.sh"
         fi
     else
         log_message "URL atau path file check-update.sh tidak dikonfigurasi, melewati pemeriksaan"
