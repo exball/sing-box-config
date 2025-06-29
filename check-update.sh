@@ -67,10 +67,15 @@ debug_log() {
     local timestamp=$(date '+%Y-%m-%d %H:%M:%S')
     
     if [ -n "$DEBUG_LOG_FILE" ]; then
-        echo "[$timestamp] DEBUG: $message" >> "$DEBUG_LOG_FILE" 2>/dev/null
+        # Pastikan direktori ada
+        mkdir -p "$(dirname "$DEBUG_LOG_FILE")" 2>/dev/null
         
-        # Jika gagal menulis ke file log, coba di /tmp
-        if [ $? -ne 0 ]; then
+        # Coba tulis ke file debug log
+        if echo "[$timestamp] DEBUG: $message" >> "$DEBUG_LOG_FILE" 2>/dev/null; then
+            # Berhasil menulis
+            :
+        else
+            # Jika gagal, coba di /tmp
             DEBUG_LOG_FILE="/tmp/debug-check-update.log"
             echo "[$timestamp] DEBUG: $message" >> "$DEBUG_LOG_FILE" 2>/dev/null
         fi
@@ -380,22 +385,41 @@ fi
 # Inisialisasi file debug log jika belum ada
 if [ -n "$DEBUG_LOG_FILE" ]; then
     mkdir -p "$(dirname "$DEBUG_LOG_FILE")" 2>/dev/null
-    touch "$DEBUG_LOG_FILE" 2>/dev/null
-    # Jika tidak bisa membuat file, coba di /tmp
-    if [ ! -f "$DEBUG_LOG_FILE" ] || [ ! -w "$DEBUG_LOG_FILE" ]; then
+    
+    # Coba buat file debug log
+    if touch "$DEBUG_LOG_FILE" 2>/dev/null && [ -w "$DEBUG_LOG_FILE" ]; then
+        # Test write untuk memastikan file dapat ditulis
+        if echo "[$(date '+%Y-%m-%d %H:%M:%S')] DEBUG: Inisialisasi file debug log berhasil" >> "$DEBUG_LOG_FILE" 2>/dev/null; then
+            # Berhasil menulis ke file debug log
+            :
+        else
+            # Jika tidak bisa menulis, coba di /tmp
+            DEBUG_LOG_FILE="/tmp/debug-check-update.log"
+            touch "$DEBUG_LOG_FILE" 2>/dev/null
+            echo "[$(date '+%Y-%m-%d %H:%M:%S')] DEBUG: Menggunakan file debug log di /tmp karena tidak bisa menulis ke file asli" >> "$DEBUG_LOG_FILE" 2>/dev/null
+        fi
+    else
+        # Jika tidak bisa membuat file, coba di /tmp
         DEBUG_LOG_FILE="/tmp/debug-check-update.log"
         touch "$DEBUG_LOG_FILE" 2>/dev/null
+        echo "[$(date '+%Y-%m-%d %H:%M:%S')] DEBUG: Menggunakan file debug log di /tmp karena tidak bisa membuat file asli" >> "$DEBUG_LOG_FILE" 2>/dev/null
     fi
 fi
 
 # Debug log awal
 debug_log "=== Memulai check-update.sh ==="
+debug_log "Jumlah parameter: $#"
 debug_log "Parameter yang diterima: $*"
+debug_log "Parameter 1: $1"
+debug_log "Parameter 2: $2"
+debug_log "Parameter 3: $3"
 debug_log "Direktori saat ini: $(pwd)"
 debug_log "Lingkungan shell: $SHELL"
 debug_log "PATH: $PATH"
 debug_log "Pengguna: $(whoami)"
 debug_log "Izin script ini: $(ls -la $0)"
+debug_log "FROM_AUTO_DOWNLOAD awal: $FROM_AUTO_DOWNLOAD"
+debug_log "FEEDBACK_FILE awal: $FEEDBACK_FILE"
 
 # Periksa parameter command line
 for arg in "$@"; do
@@ -416,6 +440,10 @@ for arg in "$@"; do
             ;;
     esac
 done
+
+# Debug log setelah pemrosesan parameter
+debug_log "FROM_AUTO_DOWNLOAD setelah pemrosesan: $FROM_AUTO_DOWNLOAD"
+debug_log "FEEDBACK_FILE setelah pemrosesan: $FEEDBACK_FILE"
 
 # Jalankan pemeriksaan dan pembaruan
 log_message "Memulai check-update.sh"
