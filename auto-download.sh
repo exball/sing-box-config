@@ -368,35 +368,10 @@ download_files() {
     
     log_message "Memulai proses pemeriksaan file"
     
-    # Periksa dan update file check-update.sh terlebih dahulu
-    if [ -n "$CHECK_UPDATE_SCRIPT_URL" ] && [ -n "$CHECK_UPDATE_SCRIPT_FILE" ]; then
-        check_update_script "$CHECK_UPDATE_SCRIPT_URL" "$CHECK_UPDATE_SCRIPT_FILE"
-        local check_update_result=$?
-        
-        if [ $check_update_result -eq 2 ]; then
-            log_message "File check-update.sh telah diperbarui"
-            
-            # Jalankan check-update.sh jika diperbarui
-            if [ -x "$CHECK_UPDATE_SCRIPT_FILE" ]; then
-                log_message "Menjalankan check-update.sh yang baru diperbarui..."
-                "$CHECK_UPDATE_SCRIPT_FILE"
-                
-                # Jika check-update.sh mengembalikan kode 0, lanjutkan
-                # Jika tidak, keluar dari fungsi ini karena mungkin auto-download.sh telah diperbarui
-                if [ $? -ne 0 ]; then
-                    log_message "check-update.sh mengembalikan kode error, menghentikan proses"
-                    return 1
-                fi
-            fi
-        fi
-    else
-        log_message "URL atau path file check-update.sh tidak dikonfigurasi, melewati pemeriksaan"
-    fi
-    
     # Variabel untuk melacak apakah ada file yang diperbarui
     local files_updated=0
     
-    # Periksa dan update file auto-download.conf
+    # Periksa dan update file auto-download.conf terlebih dahulu
     log_message "-----"
     log_message "Memeriksa pembaruan file auto-download.conf..."
     
@@ -462,6 +437,61 @@ download_files() {
         fi
     else
         log_message "Pemeriksaan pembaruan konfigurasi dibatalkan karena tidak ada koneksi internet"
+    fi
+    
+    # Periksa dan update file check-update.sh
+    if [ -n "$CHECK_UPDATE_SCRIPT_URL" ] && [ -n "$CHECK_UPDATE_SCRIPT_FILE" ]; then
+        check_update_script "$CHECK_UPDATE_SCRIPT_URL" "$CHECK_UPDATE_SCRIPT_FILE"
+        local check_update_result=$?
+        
+        if [ $check_update_result -eq 2 ]; then
+            log_message "File check-update.sh telah diperbarui"
+            
+            # Jalankan check-update.sh jika diperbarui
+            if [ -x "$CHECK_UPDATE_SCRIPT_FILE" ]; then
+                log_message "Menjalankan check-update.sh yang baru diperbarui..."
+                "$CHECK_UPDATE_SCRIPT_FILE"
+                
+                # Jika check-update.sh mengembalikan kode 0, lanjutkan
+                # Jika tidak, keluar dari fungsi ini karena mungkin auto-download.sh telah diperbarui
+                if [ $? -ne 0 ]; then
+                    log_message "check-update.sh mengembalikan kode error, menghentikan proses"
+                    return 1
+                fi
+            fi
+        fi
+        
+        # Jalankan check-update.sh untuk memeriksa pembaruan auto-download.sh
+        if [ -x "$CHECK_UPDATE_SCRIPT_FILE" ]; then
+            log_message "Menjalankan check-update.sh untuk memeriksa pembaruan auto-download.sh..."
+            
+            # Buat named pipe untuk komunikasi antara auto-download.sh dan check-update.sh
+            FEEDBACK_PIPE="/data/adb/auto-download/feedback_pipe"
+            if [ -e "$FEEDBACK_PIPE" ]; then
+                rm -f "$FEEDBACK_PIPE"
+            fi
+            mkfifo "$FEEDBACK_PIPE"
+            
+            # Jalankan check-update.sh dengan parameter tambahan untuk menandakan pemeriksaan dari auto-download.sh
+            "$CHECK_UPDATE_SCRIPT_FILE" --from-auto-download &
+            
+            # Baca feedback dari check-update.sh
+            log_message "Menunggu feedback dari check-update.sh..."
+            read -r feedback < "$FEEDBACK_PIPE"
+            
+            # Hapus named pipe setelah digunakan
+            rm -f "$FEEDBACK_PIPE"
+            
+            # Proses feedback
+            if [ "$feedback" = "NO_UPDATE" ]; then
+                log_message "Tidak ada pembaruan auto-download.sh, melanjutkan proses..."
+            else
+                log_message "Pembaruan auto-download.sh terdeteksi, menghentikan proses saat ini..."
+                return 1
+            fi
+        fi
+    else
+        log_message "URL atau path file check-update.sh tidak dikonfigurasi, melewati pemeriksaan"
     fi
     
     # Loop melalui setiap URL dan download

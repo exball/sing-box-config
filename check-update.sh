@@ -1,15 +1,13 @@
 #!/bin/bash
 
-# Script untuk memeriksa dan mengupdate file auto-download.conf dan auto-download.sh
-# Script ini akan memeriksa hash SHA-1 dari file-file tersebut dan mengunduhnya jika berbeda
+# Script untuk memeriksa dan mengupdate file auto-download.sh
+# Script ini akan memeriksa hash SHA-1 dari file tersebut dan mengunduhnya jika berbeda
 
 # ===== KONFIGURASI DASAR =====
-# URL untuk file-file yang akan diperiksa
-CONF_UPDATE_URL="https://raw.githubusercontent.com/exball/sing-box-config/refs/heads/Master/auto-download.conf"
+# URL untuk file yang akan diperiksa
 SCRIPT_UPDATE_URL="https://raw.githubusercontent.com/exball/sing-box-config/refs/heads/Master/auto-download.sh"
 
-# Path lokal untuk file-file tersebut
-CONFIG_FILE="/data/adb/auto-download/auto-download.conf"
+# Path lokal untuk file tersebut
 SCRIPT_FILE="/data/adb/auto-download/auto-download.sh"
 
 # Direktori sementara untuk file yang didownload
@@ -22,6 +20,15 @@ NETWORK_RETRY_WAIT=3
 
 # File log
 LOG_FILE="/data/adb/auto-download/check-update.log"
+
+# Path ke script restart
+RESTART_SCRIPT="/data/adb/auto-download/restart-auto-download.sh"
+
+# Path untuk named pipe untuk komunikasi dengan auto-download.sh
+FEEDBACK_PIPE="/data/adb/auto-download/feedback_pipe"
+
+# Flag untuk menandakan apakah script dipanggil dari auto-download.sh
+FROM_AUTO_DOWNLOAD=0
 
 # ===== PERSIAPAN =====
 # Pastikan direktori yang diperlukan ada
@@ -183,6 +190,12 @@ run_update_check() {
     check_network_connection
     if [ $? -ne 0 ]; then
         log_message "Proses pemeriksaan file dibatalkan karena tidak ada koneksi internet"
+        
+        # Jika dipanggil dari auto-download.sh, kirim feedback bahwa tidak ada pembaruan
+        if [ $FROM_AUTO_DOWNLOAD -eq 1 ] && [ -p "$FEEDBACK_PIPE" ]; then
+            echo "NO_UPDATE" > "$FEEDBACK_PIPE"
+        fi
+        
         return 1
     fi
     
@@ -190,14 +203,6 @@ run_update_check() {
     
     # Variabel untuk melacak apakah ada file yang diperbarui
     local files_updated=0
-    
-    # Periksa dan update file auto-download.conf
-    check_and_update_file "$CONF_UPDATE_URL" "$CONFIG_FILE"
-    local conf_result=$?
-    
-    if [ $conf_result -eq 2 ]; then
-        files_updated=1
-    fi
     
     # Periksa dan update file auto-download.sh
     check_and_update_file "$SCRIPT_UPDATE_URL" "$SCRIPT_FILE"
@@ -207,12 +212,32 @@ run_update_check() {
         files_updated=1
     fi
     
+    # Jika dipanggil dari auto-download.sh, kirim feedback
+    if [ $FROM_AUTO_DOWNLOAD -eq 1 ] && [ -p "$FEEDBACK_PIPE" ]; then
+        if [ $files_updated -eq 0 ]; then
+            # Tidak ada pembaruan, kirim feedback untuk melanjutkan
+            log_message "Mengirim feedback: Tidak ada pembaruan auto-download.sh"
+            echo "NO_UPDATE" > "$FEEDBACK_PIPE"
+        else
+            # Ada pembaruan, tidak perlu kirim feedback karena auto-download.sh akan di-restart
+            log_message "Tidak mengirim feedback karena auto-download.sh akan di-restart"
+        fi
+    fi
+    
     # Jika ada file yang diperbarui, restart layanan jika diperlukan
     if [ $files_updated -eq 1 ]; then
         log_message "File-file telah diperbarui, mungkin perlu me-restart layanan"
         
-        # Jika auto-download.sh sedang berjalan, restart
-        if pgrep -f "auto-download.sh" > /dev/null; then
+        # Jika dipanggil dari auto-download.sh, gunakan restart-auto-download.sh
+        if [ $FROM_AUTO_DOWNLOAD -eq 1 ] && [ -x "$RESTART_SCRIPT" ]; then
+            log_message "Menjalankan restart-auto-download.sh untuk me-restart auto-download.sh..."
+            nohup "$RESTART_SCRIPT" > /dev/null 2>&1 &
+            log_message "restart-auto-download.sh telah dijalankan"
+            
+            # Keluar dengan kode 0 karena restart-auto-download.sh akan menangani restart
+            return 0
+        # Jika tidak dipanggil dari auto-download.sh, gunakan metode restart langsung
+        elif pgrep -f "auto-download.sh" > /dev/null; then
             log_message "Mendeteksi auto-download.sh sedang berjalan, mencoba me-restart..."
             
             # Hentikan proses yang sedang berjalan
@@ -243,6 +268,16 @@ run_update_check() {
 if [ -n "$LOG_FILE" ] && [ ! -f "$LOG_FILE" ]; then
     touch "$LOG_FILE"
 fi
+
+# Periksa parameter command line
+for arg in "$@"; do
+    case "$arg" in
+        --from-auto-download)
+            FROM_AUTO_DOWNLOAD=1
+            log_message "Dijalankan dari auto-download.sh"
+            ;;
+    esac
+done
 
 # Jalankan pemeriksaan dan pembaruan
 log_message "Memulai check-update.sh"
