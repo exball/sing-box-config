@@ -61,7 +61,18 @@ debug_log() {
     local timestamp=$(date '+%Y-%m-%d %H:%M:%S')
     
     if [ -n "$DEBUG_LOG_FILE" ]; then
-        echo "[$timestamp] DEBUG: $message" >> "$DEBUG_LOG_FILE"
+        echo "[$timestamp] DEBUG: $message" >> "$DEBUG_LOG_FILE" 2>/dev/null
+        
+        # Jika gagal menulis ke file log, coba di /tmp
+        if [ $? -ne 0 ]; then
+            DEBUG_LOG_FILE="/tmp/debug-auto-download.log"
+            echo "[$timestamp] DEBUG: $message" >> "$DEBUG_LOG_FILE" 2>/dev/null
+        fi
+    fi
+    
+    # Juga tampilkan di konsol jika dijalankan interaktif
+    if [ -t 1 ]; then
+        echo "DEBUG: $message"
     fi
 }
 
@@ -124,8 +135,14 @@ if [ -n "$LOG_FILE" ] && [ ! -f "$LOG_FILE" ]; then
 fi
 
 # Inisialisasi file debug log jika belum ada
-if [ -n "$DEBUG_LOG_FILE" ] && [ ! -f "$DEBUG_LOG_FILE" ]; then
-    touch "$DEBUG_LOG_FILE"
+if [ -n "$DEBUG_LOG_FILE" ]; then
+    mkdir -p "$(dirname "$DEBUG_LOG_FILE")" 2>/dev/null
+    touch "$DEBUG_LOG_FILE" 2>/dev/null
+    # Jika tidak bisa membuat file, coba di /tmp
+    if [ ! -f "$DEBUG_LOG_FILE" ] || [ ! -w "$DEBUG_LOG_FILE" ]; then
+        DEBUG_LOG_FILE="/tmp/debug-auto-download.log"
+        touch "$DEBUG_LOG_FILE" 2>/dev/null
+    fi
 fi
 
 # ===== LOAD KONFIGURASI =====
@@ -482,12 +499,21 @@ download_files() {
                     debug_log "Menjalankan: $CHECK_UPDATE_SCRIPT_FILE"
                     debug_log "Perintah lengkap: bash $CHECK_UPDATE_SCRIPT_FILE"
                     debug_log "Izin file: $(ls -la $CHECK_UPDATE_SCRIPT_FILE)"
-                    debug_log "Isi direktori: $(ls -la $(dirname $CHECK_UPDATE_SCRIPT_FILE))"
+                    debug_log "Isi direktori: $(ls -la $(dirname "$CHECK_UPDATE_SCRIPT_FILE"))"
                     
                     # Coba jalankan dengan bash eksplisit untuk menghindari masalah izin
+                    debug_log "Menjalankan check-update.sh dengan bash eksplisit"
                     bash "$CHECK_UPDATE_SCRIPT_FILE"
                     check_update_exit_code=$?
                     debug_log "check-update.sh selesai dengan kode: $check_update_exit_code"
+                    
+                    # Jika ada error, coba jalankan dengan sh
+                    if [ $check_update_exit_code -ne 0 ] && [ $check_update_exit_code -ne 99 ]; then
+                        debug_log "Mencoba menjalankan dengan sh karena ada error"
+                        sh "$CHECK_UPDATE_SCRIPT_FILE"
+                        check_update_exit_code=$?
+                        debug_log "check-update.sh (dengan sh) selesai dengan kode: $check_update_exit_code"
+                    fi
                     
                     # Jika check-update.sh mengembalikan kode 0, lanjutkan
                     # Jika mengembalikan kode 99, berarti ada pembaruan auto-download.sh
@@ -532,12 +558,26 @@ download_files() {
             debug_log "Menjalankan: $CHECK_UPDATE_SCRIPT_FILE --from-auto-download --feedback-file=$FEEDBACK_FILE"
             debug_log "Perintah lengkap: bash $CHECK_UPDATE_SCRIPT_FILE --from-auto-download --feedback-file=$FEEDBACK_FILE"
             debug_log "Izin file: $(ls -la $CHECK_UPDATE_SCRIPT_FILE)"
-            debug_log "Isi direktori: $(ls -la $(dirname $CHECK_UPDATE_SCRIPT_FILE))"
+            debug_log "Isi direktori: $(ls -la $(dirname "$CHECK_UPDATE_SCRIPT_FILE"))"
+            
+            # Pastikan file feedback dapat ditulis
+            debug_log "Memastikan file feedback dapat ditulis"
+            touch "$FEEDBACK_FILE" 2>/dev/null
+            debug_log "Status touch: $?"
             
             # Coba jalankan dengan bash eksplisit untuk menghindari masalah izin
+            debug_log "Menjalankan check-update.sh dengan bash eksplisit"
             bash "$CHECK_UPDATE_SCRIPT_FILE" --from-auto-download --feedback-file="$FEEDBACK_FILE"
             check_update_exit_code=$?
             debug_log "check-update.sh selesai dengan kode: $check_update_exit_code"
+            
+            # Periksa apakah file feedback ada dan dapat dibaca
+            if [ -f "$FEEDBACK_FILE" ]; then
+                debug_log "File feedback ada: $(ls -la "$FEEDBACK_FILE")"
+                debug_log "Isi file feedback: $(cat "$FEEDBACK_FILE" 2>/dev/null || echo "tidak dapat dibaca")"
+            else
+                debug_log "File feedback tidak ada setelah eksekusi check-update.sh"
+            fi
             
             log_message "check-update.sh selesai dengan kode: $check_update_exit_code"
             

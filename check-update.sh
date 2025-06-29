@@ -67,7 +67,18 @@ debug_log() {
     local timestamp=$(date '+%Y-%m-%d %H:%M:%S')
     
     if [ -n "$DEBUG_LOG_FILE" ]; then
-        echo "[$timestamp] DEBUG: $message" >> "$DEBUG_LOG_FILE"
+        echo "[$timestamp] DEBUG: $message" >> "$DEBUG_LOG_FILE" 2>/dev/null
+        
+        # Jika gagal menulis ke file log, coba di /tmp
+        if [ $? -ne 0 ]; then
+            DEBUG_LOG_FILE="/tmp/debug-check-update.log"
+            echo "[$timestamp] DEBUG: $message" >> "$DEBUG_LOG_FILE" 2>/dev/null
+        fi
+    fi
+    
+    # Juga tampilkan di konsol jika dijalankan interaktif
+    if [ -t 1 ]; then
+        echo "DEBUG: $message"
     fi
 }
 
@@ -175,6 +186,17 @@ check_and_update_file() {
                 # Berikan izin eksekusi jika ini adalah file script
                 if [[ "$file_name" == *.sh ]]; then
                     chmod +x "$local_file"
+                    debug_log "Memberikan izin eksekusi pada $file_name"
+                    
+                    # Verifikasi izin eksekusi
+                    if [ -x "$local_file" ]; then
+                        debug_log "Verifikasi: $file_name dapat dieksekusi"
+                    else
+                        debug_log "PERINGATAN: $file_name tidak dapat dieksekusi setelah chmod +x"
+                        # Coba lagi dengan izin yang lebih permisif
+                        chmod 755 "$local_file"
+                        debug_log "Mencoba memberikan izin 755 pada $file_name"
+                    fi
                 fi
                 
                 log_message "Berhasil memperbarui $file_name (SHA-1 terverifikasi)"
@@ -284,6 +306,17 @@ run_update_check() {
             # Jika restart script tersedia
             if [ -x "$RESTART_SCRIPT" ]; then
                 debug_log "Restart script dapat dieksekusi, menjalankan restart"
+                debug_log "Memastikan auto-download.sh dapat dieksekusi sebelum restart"
+                
+                # Pastikan auto-download.sh dapat dieksekusi
+                if [ ! -x "$SCRIPT_FILE" ]; then
+                    debug_log "auto-download.sh tidak dapat dieksekusi, memberikan izin eksekusi"
+                    chmod +x "$SCRIPT_FILE"
+                    debug_log "Izin eksekusi diberikan: $(ls -la "$SCRIPT_FILE")"
+                else
+                    debug_log "auto-download.sh sudah dapat dieksekusi: $(ls -la "$SCRIPT_FILE")"
+                fi
+                
                 log_message "Menjalankan restart-auto-download.sh untuk me-restart auto-download.sh..."
                 nohup "$RESTART_SCRIPT" > /dev/null 2>&1 &
                 log_message "restart-auto-download.sh telah dijalankan"
@@ -308,10 +341,23 @@ run_update_check() {
                 # Jalankan kembali auto-download.sh
                 if [ -x "$SCRIPT_FILE" ]; then
                     log_message "Menjalankan kembali auto-download.sh..."
+                    debug_log "Menjalankan kembali auto-download.sh dengan PID saat ini"
                     nohup "$SCRIPT_FILE" > /dev/null 2>&1 &
                     log_message "auto-download.sh telah di-restart dengan PID: $!"
                 else
-                    log_message "PERINGATAN: auto-download.sh tidak dapat dieksekusi"
+                    log_message "PERINGATAN: auto-download.sh tidak dapat dieksekusi, mencoba memberikan izin eksekusi"
+                    debug_log "Memberikan izin eksekusi pada $SCRIPT_FILE"
+                    chmod +x "$SCRIPT_FILE"
+                    
+                    if [ -x "$SCRIPT_FILE" ]; then
+                        debug_log "Berhasil memberikan izin eksekusi, menjalankan kembali auto-download.sh"
+                        nohup "$SCRIPT_FILE" > /dev/null 2>&1 &
+                        log_message "auto-download.sh telah di-restart dengan PID: $!"
+                    else
+                        debug_log "Gagal memberikan izin eksekusi, mencoba dengan bash eksplisit"
+                        nohup bash "$SCRIPT_FILE" > /dev/null 2>&1 &
+                        log_message "auto-download.sh telah di-restart dengan bash eksplisit"
+                    fi
                 fi
             else
                 log_message "auto-download.sh tidak sedang berjalan, tidak perlu di-restart"
@@ -332,8 +378,14 @@ if [ -n "$LOG_FILE" ] && [ ! -f "$LOG_FILE" ]; then
 fi
 
 # Inisialisasi file debug log jika belum ada
-if [ -n "$DEBUG_LOG_FILE" ] && [ ! -f "$DEBUG_LOG_FILE" ]; then
-    touch "$DEBUG_LOG_FILE"
+if [ -n "$DEBUG_LOG_FILE" ]; then
+    mkdir -p "$(dirname "$DEBUG_LOG_FILE")" 2>/dev/null
+    touch "$DEBUG_LOG_FILE" 2>/dev/null
+    # Jika tidak bisa membuat file, coba di /tmp
+    if [ ! -f "$DEBUG_LOG_FILE" ] || [ ! -w "$DEBUG_LOG_FILE" ]; then
+        DEBUG_LOG_FILE="/tmp/debug-check-update.log"
+        touch "$DEBUG_LOG_FILE" 2>/dev/null
+    fi
 fi
 
 # Debug log awal
@@ -368,10 +420,25 @@ done
 # Jalankan pemeriksaan dan pembaruan
 log_message "Memulai check-update.sh"
 debug_log "Memulai run_update_check"
+# Jalankan fungsi utama dan tangkap kode keluar
+debug_log "Menjalankan fungsi utama run_update_check"
 run_update_check
 exit_code=$?
+debug_log "Fungsi run_update_check selesai dengan kode: $exit_code"
+
+# Log hasil eksekusi
 log_message "check-update.sh selesai dengan kode: $exit_code"
 debug_log "check-update.sh selesai dengan kode: $exit_code"
 debug_log "=== Selesai check-update.sh ==="
 
+# Pastikan izin eksekusi pada auto-download.sh sebelum keluar
+if [ -f "$SCRIPT_FILE" ] && [ ! -x "$SCRIPT_FILE" ]; then
+    debug_log "Memberikan izin eksekusi pada auto-download.sh sebelum keluar"
+    chmod +x "$SCRIPT_FILE"
+    debug_log "Status chmod: $?"
+    debug_log "Izin file setelah chmod: $(ls -la "$SCRIPT_FILE" 2>/dev/null || echo "tidak dapat diakses")"
+fi
+
+# Keluar dengan kode yang sesuai
+debug_log "Keluar dengan kode: $exit_code"
 exit $exit_code
