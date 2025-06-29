@@ -24,8 +24,8 @@ LOG_FILE="/data/adb/auto-download/check-update.log"
 # Path ke script restart
 RESTART_SCRIPT="/data/adb/auto-download/restart-auto-download.sh"
 
-# Path untuk named pipe untuk komunikasi dengan auto-download.sh
-FEEDBACK_PIPE="/data/adb/auto-download/feedback_pipe"
+# Path untuk file feedback untuk komunikasi dengan auto-download.sh
+FEEDBACK_FILE=""
 
 # Flag untuk menandakan apakah script dipanggil dari auto-download.sh
 FROM_AUTO_DOWNLOAD=0
@@ -192,8 +192,8 @@ run_update_check() {
         log_message "Proses pemeriksaan file dibatalkan karena tidak ada koneksi internet"
         
         # Jika dipanggil dari auto-download.sh, kirim feedback bahwa tidak ada pembaruan
-        if [ $FROM_AUTO_DOWNLOAD -eq 1 ] && [ -p "$FEEDBACK_PIPE" ]; then
-            echo "NO_UPDATE" > "$FEEDBACK_PIPE"
+        if [ $FROM_AUTO_DOWNLOAD -eq 1 ] && [ -n "$FEEDBACK_FILE" ]; then
+            echo "NO_UPDATE" > "$FEEDBACK_FILE"
         fi
         
         return 1
@@ -213,11 +213,11 @@ run_update_check() {
     fi
     
     # Jika dipanggil dari auto-download.sh, kirim feedback
-    if [ $FROM_AUTO_DOWNLOAD -eq 1 ] && [ -p "$FEEDBACK_PIPE" ]; then
+    if [ $FROM_AUTO_DOWNLOAD -eq 1 ] && [ -n "$FEEDBACK_FILE" ]; then
         if [ $files_updated -eq 0 ]; then
             # Tidak ada pembaruan, kirim feedback untuk melanjutkan
             log_message "Mengirim feedback: Tidak ada pembaruan auto-download.sh"
-            echo "NO_UPDATE" > "$FEEDBACK_PIPE"
+            echo "NO_UPDATE" > "$FEEDBACK_FILE"
         else
             # Ada pembaruan, tidak perlu kirim feedback karena auto-download.sh akan di-restart
             log_message "Tidak mengirim feedback karena auto-download.sh akan di-restart"
@@ -234,8 +234,8 @@ run_update_check() {
             nohup "$RESTART_SCRIPT" > /dev/null 2>&1 &
             log_message "restart-auto-download.sh telah dijalankan"
             
-            # Keluar dengan kode 0 karena restart-auto-download.sh akan menangani restart
-            return 0
+            # Keluar dengan kode 99 untuk memberi tahu auto-download.sh bahwa ada pembaruan
+            return 99
         # Jika tidak dipanggil dari auto-download.sh, gunakan metode restart langsung
         elif pgrep -f "auto-download.sh" > /dev/null; then
             log_message "Mendeteksi auto-download.sh sedang berjalan, mencoba me-restart..."
@@ -275,6 +275,10 @@ for arg in "$@"; do
         --from-auto-download)
             FROM_AUTO_DOWNLOAD=1
             log_message "Dijalankan dari auto-download.sh"
+            ;;
+        --feedback-file=*)
+            FEEDBACK_FILE="${arg#*=}"
+            log_message "File feedback: $FEEDBACK_FILE"
             ;;
     esac
 done

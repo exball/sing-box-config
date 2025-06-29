@@ -1,5 +1,6 @@
 #!/bin/bash
 
+# Test
 # Script untuk mendownload file konfigurasi secara otomatis
 # Dengan fitur pemeriksaan hash SHA-1 untuk menghindari download ulang
 # Versi dengan CHECK_INTERVAL adaptif dan pembaruan auto-download.conf
@@ -465,29 +466,39 @@ download_files() {
         if [ -x "$CHECK_UPDATE_SCRIPT_FILE" ]; then
             log_message "Menjalankan check-update.sh untuk memeriksa pembaruan auto-download.sh..."
             
-            # Buat named pipe untuk komunikasi antara auto-download.sh dan check-update.sh
-            FEEDBACK_PIPE="/data/adb/auto-download/feedback_pipe"
-            if [ -e "$FEEDBACK_PIPE" ]; then
-                rm -f "$FEEDBACK_PIPE"
+            # Buat file sementara untuk komunikasi
+            FEEDBACK_FILE="/data/adb/auto-download/feedback.tmp"
+            if [ -e "$FEEDBACK_FILE" ]; then
+                rm -f "$FEEDBACK_FILE"
             fi
-            mkfifo "$FEEDBACK_PIPE"
+            touch "$FEEDBACK_FILE"
             
             # Jalankan check-update.sh dengan parameter tambahan untuk menandakan pemeriksaan dari auto-download.sh
-            "$CHECK_UPDATE_SCRIPT_FILE" --from-auto-download &
+            "$CHECK_UPDATE_SCRIPT_FILE" --from-auto-download --feedback-file="$FEEDBACK_FILE"
+            check_update_exit_code=$?
             
-            # Baca feedback dari check-update.sh
-            log_message "Menunggu feedback dari check-update.sh..."
-            read -r feedback < "$FEEDBACK_PIPE"
+            log_message "check-update.sh selesai dengan kode: $check_update_exit_code"
             
-            # Hapus named pipe setelah digunakan
-            rm -f "$FEEDBACK_PIPE"
-            
-            # Proses feedback
-            if [ "$feedback" = "NO_UPDATE" ]; then
-                log_message "Tidak ada pembaruan auto-download.sh, melanjutkan proses..."
-            else
+            # Jika check-update.sh mengembalikan kode 99, berarti ada pembaruan auto-download.sh
+            if [ $check_update_exit_code -eq 99 ]; then
                 log_message "Pembaruan auto-download.sh terdeteksi, menghentikan proses saat ini..."
+                rm -f "$FEEDBACK_FILE"
                 return 1
+            fi
+            
+            # Baca feedback dari file
+            if [ -f "$FEEDBACK_FILE" ]; then
+                feedback=$(cat "$FEEDBACK_FILE")
+                rm -f "$FEEDBACK_FILE"
+                
+                # Proses feedback
+                if [ "$feedback" = "NO_UPDATE" ]; then
+                    log_message "Tidak ada pembaruan auto-download.sh, melanjutkan proses..."
+                else
+                    log_message "Feedback tidak dikenali: $feedback, melanjutkan proses..."
+                fi
+            else
+                log_message "File feedback tidak ditemukan, melanjutkan proses..."
             fi
         fi
     else
