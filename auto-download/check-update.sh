@@ -1,15 +1,13 @@
 #!/bin/bash
 
-# Script untuk memeriksa dan mengupdate file auto-download.conf dan auto-download.sh
-# Script ini akan memeriksa hash SHA-1 dari file-file tersebut dan mengunduhnya jika berbeda
+# Script untuk memeriksa dan mengupdate file auto-download.sh
+# Script ini akan memeriksa hash SHA-1 dari file tersebut dan mengunduhnya jika berbeda
 
 # ===== KONFIGURASI DASAR =====
-# URL untuk file-file yang akan diperiksa
-CONF_UPDATE_URL="https://raw.githubusercontent.com/exball/sing-box-config/refs/heads/Master/auto-download.conf"
-SCRIPT_UPDATE_URL="https://raw.githubusercontent.com/exball/sing-box-config/refs/heads/Master/auto-download.sh"
+# URL untuk file yang akan diperiksa
+SCRIPT_UPDATE_URL="https://raw.githubusercontent.com/exball/sing-box-config/refs/heads/Master/auto-download/auto-download.sh"
 
-# Path lokal untuk file-file tersebut
-CONFIG_FILE="/data/adb/auto-download/auto-download.conf"
+# Path lokal untuk file tersebut
 SCRIPT_FILE="/data/adb/auto-download/auto-download.sh"
 
 # Direktori sementara untuk file yang didownload
@@ -191,14 +189,6 @@ run_update_check() {
     # Variabel untuk melacak apakah ada file yang diperbarui
     local files_updated=0
     
-    # Periksa dan update file auto-download.conf
-    check_and_update_file "$CONF_UPDATE_URL" "$CONFIG_FILE"
-    local conf_result=$?
-    
-    if [ $conf_result -eq 2 ]; then
-        files_updated=1
-    fi
-    
     # Periksa dan update file auto-download.sh
     check_and_update_file "$SCRIPT_UPDATE_URL" "$SCRIPT_FILE"
     local script_result=$?
@@ -209,7 +199,7 @@ run_update_check() {
     
     # Jika ada file yang diperbarui, restart layanan jika diperlukan
     if [ $files_updated -eq 1 ]; then
-        log_message "File-file telah diperbarui, mungkin perlu me-restart layanan"
+        log_message "File telah diperbarui, mungkin perlu me-restart layanan"
         
         # Jika auto-download.sh sedang berjalan, restart
         if pgrep -f "auto-download.sh" > /dev/null; then
