@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 # Script untuk memeriksa dan mengupdate file auto-download.sh
 # Script ini akan memeriksa hash SHA-1 dari file tersebut dan mengunduhnya jika berbeda
@@ -153,7 +153,7 @@ check_and_update_file() {
                 mv "$temp_file" "$local_file"
                 
                 # Berikan izin eksekusi jika ini adalah file script
-                if [[ "$file_name" == *.sh ]]; then
+                if [ "${file_name##*.}" = "sh" ]; then
                     chmod +x "$local_file"
                 fi
                 
@@ -212,7 +212,7 @@ run_update_check() {
             # Jalankan kembali auto-download.sh
             if [ -x "$SCRIPT_FILE" ]; then
                 log_message "Menjalankan kembali auto-download.sh..."
-                nohup "$SCRIPT_FILE" > /dev/null 2>&1 &
+                nohup sh "$SCRIPT_FILE" > /dev/null 2>&1 &
                 log_message "auto-download.sh telah di-restart dengan PID: $!"
             else
                 log_message "PERINGATAN: auto-download.sh tidak dapat dieksekusi"

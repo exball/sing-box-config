@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 # Script untuk mendownload file konfigurasi secara otomatis
 # Dengan fitur pemeriksaan hash SHA-1 untuk menghindari download ulang
@@ -450,7 +450,7 @@ download_files() {
             # Jalankan check-update.sh jika diperbarui
             if [ -x "$CHECK_UPDATE_SCRIPT_FILE" ]; then
                 log_message "Menjalankan check-update.sh yang baru diperbarui..."
-                "$CHECK_UPDATE_SCRIPT_FILE"
+                sh "$CHECK_UPDATE_SCRIPT_FILE"
                 
                 # Jika check-update.sh mengembalikan kode 0, lanjutkan
                 # Jika tidak, keluar dari fungsi ini karena mungkin auto-download.sh telah diperbarui
@@ -1026,7 +1026,7 @@ RESTART_MODE=0
 BOOT_MODE=0
 
 # Periksa apakah parent process adalah restart-auto-download.sh atau nohup
-if [[ "$PARENT_PROCESS" == *"restart-auto-download"* ]] || [[ "$PARENT_PROCESS" == "nohup" ]]; then
+if [ "${PARENT_PROCESS#*restart-auto-download}" != "$PARENT_PROCESS" ] || [ "$PARENT_PROCESS" = "nohup" ]; then
     RESTART_MODE=1
 fi
 

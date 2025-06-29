@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 # Script untuk me-restart auto-download.sh
 # Gunakan: sh restart-auto-download.sh
