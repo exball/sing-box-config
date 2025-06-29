@@ -1,13 +1,15 @@
 #!/bin/bash
 
-# Script untuk memeriksa dan mengupdate file auto-download.sh
-# Script ini akan memeriksa hash SHA-1 dari file tersebut dan mengunduhnya jika berbeda
+# Script untuk memeriksa dan mengupdate file auto-download.conf dan auto-download.sh
+# Script ini akan memeriksa hash SHA-1 dari file-file tersebut dan mengunduhnya jika berbeda
 
 # ===== KONFIGURASI DASAR =====
-# URL untuk file yang akan diperiksa
+# URL untuk file-file yang akan diperiksa
+CONF_UPDATE_URL="https://raw.githubusercontent.com/exball/sing-box-config/refs/heads/Master/auto-download.conf"
 SCRIPT_UPDATE_URL="https://raw.githubusercontent.com/exball/sing-box-config/refs/heads/Master/auto-download.sh"
 
-# Path lokal untuk file tersebut
+# Path lokal untuk file-file tersebut
+CONFIG_FILE="/data/adb/auto-download/auto-download.conf"
 SCRIPT_FILE="/data/adb/auto-download/auto-download.sh"
 
 # Direktori sementara untuk file yang didownload
@@ -15,7 +17,7 @@ TEMP_DIR="/data/adb/auto-download/download_temp"
 
 # Pengaturan jaringan
 NETWORK_TEST_URL="https://www.google.com"
-NETWORK_MAX_ATTEMPTS=15
+NETWORK_MAX_ATTEMPTS=5
 NETWORK_RETRY_WAIT=3
 
 # File log
@@ -189,6 +191,14 @@ run_update_check() {
     # Variabel untuk melacak apakah ada file yang diperbarui
     local files_updated=0
     
+    # Periksa dan update file auto-download.conf
+    check_and_update_file "$CONF_UPDATE_URL" "$CONFIG_FILE"
+    local conf_result=$?
+    
+    if [ $conf_result -eq 2 ]; then
+        files_updated=1
+    fi
+    
     # Periksa dan update file auto-download.sh
     check_and_update_file "$SCRIPT_UPDATE_URL" "$SCRIPT_FILE"
     local script_result=$?
@@ -197,75 +207,35 @@ run_update_check() {
         files_updated=1
     fi
     
-    # Jika file diperbarui, jalankan restart-auto-download.sh
+    # Jika ada file yang diperbarui, restart layanan jika diperlukan
     if [ $files_updated -eq 1 ]; then
-        log_message "File auto-download.sh telah diperbarui, perlu me-restart layanan"
+        log_message "File-file telah diperbarui, mungkin perlu me-restart layanan"
         
-        # Path ke script restart-auto-download.sh dari auto-download.sh
-        # Jika tidak ada, gunakan path default
-        RESTART_SCRIPT="${RESTART_SCRIPT_FILE:-/data/adb/auto-download/restart-auto-download.sh}"
-        
-        # Periksa apakah script restart ada
-        if [ -f "$RESTART_SCRIPT" ]; then
-            # Pastikan file memiliki izin eksekusi
-            chmod +x "$RESTART_SCRIPT"
+        # Jika auto-download.sh sedang berjalan, restart
+        if pgrep -f "auto-download.sh" > /dev/null; then
+            log_message "Mendeteksi auto-download.sh sedang berjalan, mencoba me-restart..."
             
-            if [ -x "$RESTART_SCRIPT" ]; then
-                log_message "Menjalankan restart-auto-download.sh..."
-                
-                # Jalankan script restart
-                "$RESTART_SCRIPT"
+            # Hentikan proses yang sedang berjalan
+            pkill -f "auto-download.sh"
+            sleep 2
+            
+            # Jalankan kembali auto-download.sh
+            if [ -x "$SCRIPT_FILE" ]; then
+                log_message "Menjalankan kembali auto-download.sh..."
+                nohup "$SCRIPT_FILE" > /dev/null 2>&1 &
+                log_message "auto-download.sh telah di-restart dengan PID: $!"
             else
-                log_message "PERINGATAN: Tidak dapat memberikan izin eksekusi pada restart-auto-download.sh"
-                log_message "Mencoba menjalankan dengan sh..."
-                
-                # Coba jalankan dengan sh
-                sh "$RESTART_SCRIPT"
+                log_message "PERINGATAN: auto-download.sh tidak dapat dieksekusi"
             fi
-            
-            log_message "restart-auto-download.sh telah dijalankan"
-            log_message "Proses pemeriksaan selesai dengan pembaruan"
-            
-            # Kembalikan kode 10 untuk menandakan auto-download.sh telah diperbarui
-            # dan restart-auto-download.sh telah dijalankan
-            return 10
         else
-            # Jika script restart tidak ada, lakukan restart manual
-            log_message "Script restart-auto-download.sh tidak ditemukan, mencoba restart manual..."
-            
-            # Jika auto-download.sh sedang berjalan, restart
-            if pgrep -f "auto-download.sh" > /dev/null; then
-                log_message "Mendeteksi auto-download.sh sedang berjalan, mencoba me-restart..."
-                
-                # Hentikan proses yang sedang berjalan
-                pkill -f "auto-download.sh"
-                sleep 2
-                
-                # Jalankan kembali auto-download.sh
-                if [ -x "$SCRIPT_FILE" ]; then
-                    log_message "Menjalankan kembali auto-download.sh..."
-                    nohup "$SCRIPT_FILE" > /dev/null 2>&1 &
-                    log_message "auto-download.sh telah di-restart dengan PID: $!"
-                    
-                    # Kembalikan kode 10 untuk menandakan auto-download.sh telah diperbarui
-                    log_message "Proses pemeriksaan selesai dengan pembaruan"
-                    return 10
-                else
-                    log_message "PERINGATAN: auto-download.sh tidak dapat dieksekusi"
-                    log_message "Proses pemeriksaan selesai dengan error"
-                    return 2
-                fi
-            else
-                log_message "auto-download.sh tidak sedang berjalan, tidak perlu di-restart"
-                log_message "Proses pemeriksaan selesai dengan pembaruan"
-                return 0
-            fi
+            log_message "auto-download.sh tidak sedang berjalan, tidak perlu di-restart"
         fi
     else
         log_message "Tidak ada file yang diperbarui"
-        log_message "Proses pemeriksaan selesai tanpa pembaruan"
-        return 0
     fi
+    
+    log_message "Proses pemeriksaan selesai"
+    return 0
 }
 
 # ===== EKSEKUSI UTAMA =====
@@ -279,10 +249,5 @@ log_message "Memulai check-update.sh"
 run_update_check
 exit_code=$?
 log_message "check-update.sh selesai dengan kode: $exit_code"
-
-# Kode keluar:
-# 0 = Tidak ada pembaruan atau pembaruan berhasil tanpa perlu restart
-# 10 = auto-download.sh telah diperbarui dan restart-auto-download.sh telah dijalankan
-# Kode lain = Error
 
 exit $exit_code

@@ -1,6 +1,5 @@
 #!/bin/bash
 
-# Test
 # Script untuk mendownload file konfigurasi secara otomatis
 # Dengan fitur pemeriksaan hash SHA-1 untuk menghindari download ulang
 # Versi dengan CHECK_INTERVAL adaptif dan pembaruan auto-download.conf
@@ -341,19 +340,7 @@ check_update_script() {
                 # Berikan izin eksekusi
                 chmod +x "$script_file"
                 
-                # Periksa apakah izin eksekusi berhasil diberikan
-                if [ -x "$script_file" ]; then
-                    log_message "Berhasil memperbarui $script_name (SHA-1 terverifikasi) dan memberikan izin eksekusi"
-                else
-                    log_message "Berhasil memperbarui $script_name (SHA-1 terverifikasi) tetapi GAGAL memberikan izin eksekusi"
-                    # Coba lagi dengan metode alternatif
-                    sh -c "chmod 755 \"$script_file\""
-                    if [ -x "$script_file" ]; then
-                        log_message "Berhasil memberikan izin eksekusi dengan metode alternatif"
-                    else
-                        log_message "PERINGATAN: Tetap gagal memberikan izin eksekusi pada $script_name"
-                    fi
-                fi
+                log_message "Berhasil memperbarui $script_name (SHA-1 terverifikasi)"
                 
                 # Hapus file backup karena pembaruan berhasil
                 if [ -f "${script_file}.bak" ]; then
@@ -381,146 +368,100 @@ download_files() {
     
     log_message "Memulai proses pemeriksaan file"
     
-    # Variabel untuk melacak apakah ada file yang diperbarui
-    local files_updated=0
-    
-    # Periksa dan update file auto-download.conf terlebih dahulu
-    log_message "-----"
-    log_message "Memeriksa pembaruan file auto-download.conf..."
-    
-    # Nama file sementara untuk download
-    local temp_conf_file="$TEMP_DIR/auto-download.conf.new"
-    
-    # Download file dari URL raw GitHub untuk mendapatkan hash
-    if curl -s -L --connect-timeout 10 --max-time 30 "$CONF_UPDATE_URL" -o "$temp_conf_file"; then
-        # Hitung hash SHA-1 dari file yang didownload
-        local github_sha1=$(get_local_sha1 "$temp_conf_file")
-        
-        if [ -z "$github_sha1" ]; then
-            log_message "Gagal mendapatkan SHA-1 file konfigurasi dari GitHub"
-            rm -f "$temp_conf_file"
-        else
-            log_message "SHA-1 GitHub auto-download.conf: $github_sha1"
-            
-            # Dapatkan hash SHA-1 dari file lokal jika ada
-            local local_sha1=""
-            if [ -f "$CONFIG_FILE" ]; then
-                local_sha1=$(get_local_sha1 "$CONFIG_FILE")
-                log_message "SHA-1 lokal auto-download.conf: $local_sha1"
-            fi
-            
-            # Bandingkan hash SHA-1
-            if [ -n "$local_sha1" ] && [ "$local_sha1" = "$github_sha1" ]; then
-                log_message "SHA-1 auto-download.conf sama, menggunakan konfigurasi lokal"
-                rm -f "$temp_conf_file"
-            else
-                log_message "SHA-1 auto-download.conf berbeda atau file tidak ada, memperbarui..."
-                
-                # Hapus backup lama jika ada
-                if [ -f "$CONFIG_FILE.bak" ]; then
-                    rm -f "$CONFIG_FILE.bak"
-                fi
-                
-                # Buat backup konfigurasi lama jika ada
-                if [ -f "$CONFIG_FILE" ]; then
-                    cp "$CONFIG_FILE" "$CONFIG_FILE.bak"
-                fi
-                
-                # Pindahkan file konfigurasi baru
-                mv "$temp_conf_file" "$CONFIG_FILE"
-                log_message "Berhasil memperbarui auto-download.conf (SHA-1 terverifikasi)"
-                
-                # Muat ulang konfigurasi
-                source "$CONFIG_FILE"
-                log_message "Konfigurasi baru dimuat dari $CONFIG_FILE"
-                
-                # Hapus file backup karena pembaruan berhasil
-                if [ -f "$CONFIG_FILE.bak" ]; then
-                    rm -f "$CONFIG_FILE.bak"
-                fi
-                
-                files_updated=1
-            fi
-        fi
-    else
-        log_message "Gagal mendownload auto-download.conf dari $CONF_UPDATE_URL"
-        rm -f "$temp_conf_file"
-    fi
-    
-    # Periksa dan update file restart-auto-download.sh terlebih dahulu
-    log_message "-----"
-    log_message "Memeriksa pembaruan file restart-auto-download.sh..."
-    
-    if [ -n "$RESTART_SCRIPT_URL" ] && [ -n "$RESTART_SCRIPT_FILE" ]; then
-        check_update_script "$RESTART_SCRIPT_URL" "$RESTART_SCRIPT_FILE"
-        local restart_script_result=$?
-        
-        if [ $restart_script_result -eq 2 ]; then
-            log_message "File restart-auto-download.sh telah diperbarui"
-        fi
-    else
-        log_message "URL atau path file restart-auto-download.sh tidak dikonfigurasi, melewati pemeriksaan"
-    fi
-    
-    # Periksa dan update file check-update.sh
-    log_message "-----"
-    log_message "Memeriksa pembaruan file check-update.sh..."
-    
+    # Periksa dan update file check-update.sh terlebih dahulu
     if [ -n "$CHECK_UPDATE_SCRIPT_URL" ] && [ -n "$CHECK_UPDATE_SCRIPT_FILE" ]; then
         check_update_script "$CHECK_UPDATE_SCRIPT_URL" "$CHECK_UPDATE_SCRIPT_FILE"
         local check_update_result=$?
         
         if [ $check_update_result -eq 2 ]; then
             log_message "File check-update.sh telah diperbarui"
-        fi
-        
-        # Jalankan check-update.sh untuk memeriksa pembaruan file auto-download.sh
-        # Baik jika file check-update.sh diperbarui atau tidak
-        if [ -f "$CHECK_UPDATE_SCRIPT_FILE" ]; then
-            # Pastikan file memiliki izin eksekusi
-            chmod +x "$CHECK_UPDATE_SCRIPT_FILE"
             
+            # Jalankan check-update.sh jika diperbarui
             if [ -x "$CHECK_UPDATE_SCRIPT_FILE" ]; then
-                log_message "Menjalankan check-update.sh untuk memeriksa pembaruan auto-download.sh..."
-                
-                # Jalankan check-update.sh dan tunggu hasilnya
-                # Coba jalankan langsung
+                log_message "Menjalankan check-update.sh yang baru diperbarui..."
                 "$CHECK_UPDATE_SCRIPT_FILE"
-                local update_exit_code=$?
                 
-                # Jika gagal dengan kode 126 (tidak dapat dieksekusi), coba dengan sh
-                if [ $update_exit_code -eq 126 ]; then
-                    log_message "Mencoba menjalankan check-update.sh dengan sh..."
-                    sh "$CHECK_UPDATE_SCRIPT_FILE"
-                    update_exit_code=$?
+                # Jika check-update.sh mengembalikan kode 0, lanjutkan
+                # Jika tidak, keluar dari fungsi ini karena mungkin auto-download.sh telah diperbarui
+                if [ $? -ne 0 ]; then
+                    log_message "check-update.sh mengembalikan kode error, menghentikan proses"
+                    return 1
                 fi
-            else
-                log_message "PERINGATAN: Tidak dapat memberikan izin eksekusi pada check-update.sh"
-                local update_exit_code=126
             fi
-            
-            # Periksa kode keluar dari check-update.sh
-            if [ $update_exit_code -eq 0 ]; then
-                # Kode 0 berarti tidak ada pembaruan atau pembaruan berhasil tanpa perlu restart
-                log_message "check-update.sh selesai tanpa pembaruan, melanjutkan proses"
-            elif [ $update_exit_code -eq 10 ]; then
-                # Kode 10 berarti auto-download.sh telah diperbarui dan restart-auto-download.sh telah dijalankan
-                log_message "auto-download.sh telah diperbarui dan akan di-restart, menghentikan proses saat ini"
-                return 1
-            elif [ $update_exit_code -eq 126 ]; then
-                # Kode 126 berarti tidak dapat memberikan izin eksekusi
-                log_message "PERINGATAN: Tidak dapat menjalankan check-update.sh karena masalah izin, melanjutkan proses"
-                # Lanjutkan proses meskipun ada error izin
-            else
-                # Kode error lainnya
-                log_message "check-update.sh mengembalikan kode error: $update_exit_code, menghentikan proses"
-                return 1
-            fi
-        else
-            log_message "PERINGATAN: check-update.sh tidak ditemukan, melewati pemeriksaan"
         fi
     else
         log_message "URL atau path file check-update.sh tidak dikonfigurasi, melewati pemeriksaan"
+    fi
+    
+    # Variabel untuk melacak apakah ada file yang diperbarui
+    local files_updated=0
+    
+    # Periksa dan update file auto-download.conf
+    log_message "-----"
+    log_message "Memeriksa pembaruan file auto-download.conf..."
+    
+    # Gunakan hasil pemeriksaan koneksi internet sebelumnya
+    if [ $? -eq 0 ]; then
+        # Nama file sementara untuk download
+        local temp_conf_file="$TEMP_DIR/auto-download.conf.new"
+        
+        # Download file dari URL raw GitHub untuk mendapatkan hash
+        if curl -s -L --connect-timeout 10 --max-time 30 "$CONF_UPDATE_URL" -o "$temp_conf_file"; then
+            # Hitung hash SHA-1 dari file yang didownload
+            local github_sha1=$(get_local_sha1 "$temp_conf_file")
+            
+            if [ -z "$github_sha1" ]; then
+                log_message "Gagal mendapatkan SHA-1 file konfigurasi dari GitHub"
+                rm -f "$temp_conf_file"
+            else
+                log_message "SHA-1 GitHub auto-download.conf: $github_sha1"
+                
+                # Dapatkan hash SHA-1 dari file lokal jika ada
+                local local_sha1=""
+                if [ -f "$CONFIG_FILE" ]; then
+                    local_sha1=$(get_local_sha1 "$CONFIG_FILE")
+                    log_message "SHA-1 lokal auto-download.conf: $local_sha1"
+                fi
+                
+                # Bandingkan hash SHA-1
+                if [ -n "$local_sha1" ] && [ "$local_sha1" = "$github_sha1" ]; then
+                    log_message "SHA-1 auto-download.conf sama, menggunakan konfigurasi lokal"
+                    rm -f "$temp_conf_file"
+                else
+                    log_message "SHA-1 auto-download.conf berbeda atau file tidak ada, memperbarui..."
+                    
+                    # Hapus backup lama jika ada
+                    if [ -f "$CONFIG_FILE.bak" ]; then
+                        rm -f "$CONFIG_FILE.bak"
+                    fi
+                    
+                    # Buat backup konfigurasi lama jika ada
+                    if [ -f "$CONFIG_FILE" ]; then
+                        cp "$CONFIG_FILE" "$CONFIG_FILE.bak"
+                    fi
+                    
+                    # Pindahkan file konfigurasi baru
+                    mv "$temp_conf_file" "$CONFIG_FILE"
+                    log_message "Berhasil memperbarui auto-download.conf (SHA-1 terverifikasi)"
+                    
+                    # Muat ulang konfigurasi
+                    source "$CONFIG_FILE"
+                    log_message "Konfigurasi baru dimuat dari $CONFIG_FILE"
+                    
+                    # Hapus file backup karena pembaruan berhasil
+                    if [ -f "$CONFIG_FILE.bak" ]; then
+                        rm -f "$CONFIG_FILE.bak"
+                    fi
+                    
+                    files_updated=1
+                fi
+            fi
+        else
+            log_message "Gagal mendownload auto-download.conf dari $CONF_UPDATE_URL"
+            rm -f "$temp_conf_file"
+        fi
+    else
+        log_message "Pemeriksaan pembaruan konfigurasi dibatalkan karena tidak ada koneksi internet"
     fi
     
     # Loop melalui setiap URL dan download
