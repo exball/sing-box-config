@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Test 3
+# Test 4
 # Script untuk mendownload file konfigurasi secara otomatis
 # Dengan fitur pemeriksaan hash SHA-1 untuk menghindari download ulang
 # Versi dengan CHECK_INTERVAL adaptif dan pembaruan auto-download.conf
@@ -590,9 +590,31 @@ download_files() {
             debug_log "Perintah yang akan dijalankan: bash \"$CHECK_UPDATE_SCRIPT_FILE\" --from-auto-download --feedback-file=\"$FEEDBACK_FILE\""
             
             # Jalankan dengan logging yang lebih detail
+            debug_log "Sebelum menjalankan check-update.sh:"
+            debug_log "- File check-update.sh ada: $(test -f "$CHECK_UPDATE_SCRIPT_FILE" && echo "ya" || echo "tidak")"
+            debug_log "- File check-update.sh dapat dieksekusi: $(test -x "$CHECK_UPDATE_SCRIPT_FILE" && echo "ya" || echo "tidak")"
+            debug_log "- File feedback ada: $(test -f "$FEEDBACK_FILE" && echo "ya" || echo "tidak")"
+            debug_log "- File feedback dapat ditulis: $(test -w "$FEEDBACK_FILE" && echo "ya" || echo "tidak")"
+            debug_log "- File debug check-update ada: $(test -f "/data/adb/auto-download/debug-check-update.log" && echo "ya" || echo "tidak")"
+            debug_log "- File debug check-update di /tmp ada: $(test -f "/tmp/debug-check-update.log" && echo "ya" || echo "tidak")"
+            
             bash "$CHECK_UPDATE_SCRIPT_FILE" --from-auto-download --feedback-file="$FEEDBACK_FILE"
             check_update_exit_code=$?
             debug_log "check-update.sh selesai dengan kode: $check_update_exit_code"
+            
+            debug_log "Setelah menjalankan check-update.sh:"
+            debug_log "- File feedback ada: $(test -f "$FEEDBACK_FILE" && echo "ya" || echo "tidak")"
+            debug_log "- Ukuran file feedback: $(test -f "$FEEDBACK_FILE" && wc -c < "$FEEDBACK_FILE" || echo "0") bytes"
+            debug_log "- File debug check-update ada: $(test -f "/data/adb/auto-download/debug-check-update.log" && echo "ya" || echo "tidak")"
+            debug_log "- File debug check-update di /tmp ada: $(test -f "/tmp/debug-check-update.log" && echo "ya" || echo "tidak")"
+            debug_log "- File debug check-update di /data/local/tmp ada: $(test -f "/data/local/tmp/debug-check-update.log" && echo "ya" || echo "tidak")"
+            
+            # Cek ukuran file debug log jika ada
+            for debug_location in "/data/adb/auto-download/debug-check-update.log" "/tmp/debug-check-update.log" "/data/local/tmp/debug-check-update.log"; do
+                if [ -f "$debug_location" ]; then
+                    debug_log "- Ukuran $debug_location: $(wc -c < "$debug_location") bytes"
+                fi
+            done
             
             # Periksa apakah file feedback ada dan dapat dibaca
             if [ -f "$FEEDBACK_FILE" ]; then

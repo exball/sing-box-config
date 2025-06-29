@@ -65,20 +65,25 @@ log_message() {
 debug_log() {
     local message="$1"
     local timestamp=$(date '+%Y-%m-%d %H:%M:%S')
+    local debug_entry="[$timestamp] DEBUG: $message"
     
+    # Coba tulis ke file debug log jika tersedia
     if [ -n "$DEBUG_LOG_FILE" ]; then
-        # Pastikan direktori ada
-        mkdir -p "$(dirname "$DEBUG_LOG_FILE")" 2>/dev/null
-        
         # Coba tulis ke file debug log
-        if echo "[$timestamp] DEBUG: $message" >> "$DEBUG_LOG_FILE" 2>/dev/null; then
-            # Berhasil menulis
-            :
-        else
-            # Jika gagal, coba di /tmp
-            DEBUG_LOG_FILE="/tmp/debug-check-update.log"
-            echo "[$timestamp] DEBUG: $message" >> "$DEBUG_LOG_FILE" 2>/dev/null
+        if ! echo "$debug_entry" >> "$DEBUG_LOG_FILE" 2>/dev/null; then
+            # Jika gagal, coba beberapa lokasi alternatif
+            for alt_location in "/tmp/debug-check-update.log" "/data/local/tmp/debug-check-update.log"; do
+                if echo "$debug_entry" >> "$alt_location" 2>/dev/null; then
+                    DEBUG_LOG_FILE="$alt_location"
+                    break
+                fi
+            done
         fi
+    fi
+    
+    # Juga tulis ke log utama jika tersedia
+    if [ -n "$LOG_FILE" ] && [ -w "$LOG_FILE" ]; then
+        echo "$debug_entry" >> "$LOG_FILE" 2>/dev/null
     fi
     
     # Juga tampilkan di konsol jika dijalankan interaktif
@@ -384,29 +389,48 @@ fi
 
 # Inisialisasi file debug log jika belum ada
 if [ -n "$DEBUG_LOG_FILE" ]; then
-    mkdir -p "$(dirname "$DEBUG_LOG_FILE")" 2>/dev/null
+    # Coba beberapa lokasi untuk file debug log
+    DEBUG_LOCATIONS="$DEBUG_LOG_FILE /tmp/debug-check-update.log /data/local/tmp/debug-check-update.log"
+    DEBUG_LOG_CREATED=0
     
-    # Coba buat file debug log
-    if touch "$DEBUG_LOG_FILE" 2>/dev/null && [ -w "$DEBUG_LOG_FILE" ]; then
-        # Test write untuk memastikan file dapat ditulis
-        if echo "[$(date '+%Y-%m-%d %H:%M:%S')] DEBUG: Inisialisasi file debug log berhasil" >> "$DEBUG_LOG_FILE" 2>/dev/null; then
-            # Berhasil menulis ke file debug log
-            :
-        else
-            # Jika tidak bisa menulis, coba di /tmp
-            DEBUG_LOG_FILE="/tmp/debug-check-update.log"
-            touch "$DEBUG_LOG_FILE" 2>/dev/null
-            echo "[$(date '+%Y-%m-%d %H:%M:%S')] DEBUG: Menggunakan file debug log di /tmp karena tidak bisa menulis ke file asli" >> "$DEBUG_LOG_FILE" 2>/dev/null
+    for location in $DEBUG_LOCATIONS; do
+        # Pastikan direktori ada
+        mkdir -p "$(dirname "$location")" 2>/dev/null
+        
+        # Coba buat dan tulis ke file
+        if touch "$location" 2>/dev/null && [ -w "$location" ]; then
+            if echo "[$(date '+%Y-%m-%d %H:%M:%S')] DEBUG: Inisialisasi file debug log berhasil di $location" >> "$location" 2>/dev/null; then
+                DEBUG_LOG_FILE="$location"
+                DEBUG_LOG_CREATED=1
+                break
+            fi
         fi
-    else
-        # Jika tidak bisa membuat file, coba di /tmp
-        DEBUG_LOG_FILE="/tmp/debug-check-update.log"
-        touch "$DEBUG_LOG_FILE" 2>/dev/null
-        echo "[$(date '+%Y-%m-%d %H:%M:%S')] DEBUG: Menggunakan file debug log di /tmp karena tidak bisa membuat file asli" >> "$DEBUG_LOG_FILE" 2>/dev/null
+    done
+    
+    # Jika semua lokasi gagal, coba tulis ke log utama
+    if [ $DEBUG_LOG_CREATED -eq 0 ]; then
+        if [ -n "$LOG_FILE" ] && [ -w "$LOG_FILE" ]; then
+            echo "[$(date '+%Y-%m-%d %H:%M:%S')] DEBUG: Tidak dapat membuat file debug log, menggunakan log utama" >> "$LOG_FILE" 2>/dev/null
+            DEBUG_LOG_FILE="$LOG_FILE"
+        else
+            # Sebagai fallback terakhir, nonaktifkan debug log
+            DEBUG_LOG_FILE=""
+        fi
     fi
 fi
 
-# Debug log awal
+# Debug log awal - juga tulis ke log utama untuk memastikan terlihat
+log_message "DEBUG: === Memulai check-update.sh ==="
+log_message "DEBUG: Jumlah parameter: $#"
+log_message "DEBUG: Parameter yang diterima: $*"
+log_message "DEBUG: Parameter 1: $1"
+log_message "DEBUG: Parameter 2: $2"
+log_message "DEBUG: Parameter 3: $3"
+log_message "DEBUG: FROM_AUTO_DOWNLOAD awal: $FROM_AUTO_DOWNLOAD"
+log_message "DEBUG: FEEDBACK_FILE awal: $FEEDBACK_FILE"
+log_message "DEBUG: DEBUG_LOG_FILE: $DEBUG_LOG_FILE"
+
+# Juga tulis ke debug log jika tersedia
 debug_log "=== Memulai check-update.sh ==="
 debug_log "Jumlah parameter: $#"
 debug_log "Parameter yang diterima: $*"
@@ -420,6 +444,7 @@ debug_log "Pengguna: $(whoami)"
 debug_log "Izin script ini: $(ls -la $0)"
 debug_log "FROM_AUTO_DOWNLOAD awal: $FROM_AUTO_DOWNLOAD"
 debug_log "FEEDBACK_FILE awal: $FEEDBACK_FILE"
+debug_log "DEBUG_LOG_FILE: $DEBUG_LOG_FILE"
 
 # Periksa parameter command line
 for arg in "$@"; do
@@ -441,7 +466,10 @@ for arg in "$@"; do
     esac
 done
 
-# Debug log setelah pemrosesan parameter
+# Debug log setelah pemrosesan parameter - tulis ke log utama juga
+log_message "DEBUG: FROM_AUTO_DOWNLOAD setelah pemrosesan: $FROM_AUTO_DOWNLOAD"
+log_message "DEBUG: FEEDBACK_FILE setelah pemrosesan: $FEEDBACK_FILE"
+
 debug_log "FROM_AUTO_DOWNLOAD setelah pemrosesan: $FROM_AUTO_DOWNLOAD"
 debug_log "FEEDBACK_FILE setelah pemrosesan: $FEEDBACK_FILE"
 
