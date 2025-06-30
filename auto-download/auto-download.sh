@@ -989,25 +989,34 @@ calculate_adaptive_interval() {
 run_as_daemon() {
     # Rotasi file log jika dikonfigurasi
     if [ -n "$LOG_FILE" ]; then
-        # Jika file log lama sudah ada, hapus terlebih dahulu
-        if [ -f "$OLD_LOG_FILE" ]; then
-            rm -f "$OLD_LOG_FILE"
+        # Jika dalam mode restart, gunakan log yang sudah ada
+        # Jika tidak dalam mode restart, lakukan rotasi log
+        if [ $RESTART_MODE -eq 0 ]; then
+            # Jika file log lama sudah ada, hapus terlebih dahulu
+            if [ -f "$OLD_LOG_FILE" ]; then
+                rm -f "$OLD_LOG_FILE"
+            fi
+            
+            # Jika file log saat ini ada, pindahkan ke file log lama
+            if [ -f "$LOG_FILE" ]; then
+                mv "$LOG_FILE" "$OLD_LOG_FILE"
+            fi
+            
+            # Buat file log baru (kosong)
+            touch "$LOG_FILE"
+            
+            # Reset variabel timestamp header
+            TIMESTAMP_HEADER_WRITTEN=0
+            
+            log_message "Rotasi log selesai, script dijalankan sebagai daemon"
+        else
+            # Dalam mode restart, hanya pastikan file log ada
+            if [ ! -f "$LOG_FILE" ]; then
+                touch "$LOG_FILE"
+                TIMESTAMP_HEADER_WRITTEN=0
+            fi
         fi
-        
-        # Jika file log saat ini ada, pindahkan ke file log lama
-        if [ -f "$LOG_FILE" ]; then
-            mv "$LOG_FILE" "$OLD_LOG_FILE"
-        fi
-        
-        # Buat file log baru (kosong)
-        touch "$LOG_FILE"
-        
-        # Reset variabel timestamp header
-        TIMESTAMP_HEADER_WRITTEN=0
     fi
-    
-    # Jalankan download pertama kali saat boot
-    log_message "Rotasi log selesai, script dijalankan sebagai daemon"
     
     # Periksa dan simpan PID
     check_and_save_pid
@@ -1096,8 +1105,8 @@ if [ "$(dirname "$0")" = "/data/adb/service.d" ] || [ -f "/data/adb/auto-downloa
     BOOT_MODE=1
 fi
 
-# Rotasi log jika diperlukan
-if [ -n "$LOG_FILE" ]; then
+# Rotasi log jika diperlukan dan tidak dalam mode restart
+if [ -n "$LOG_FILE" ] && [ $RESTART_MODE -eq 0 ]; then
     # Jika file log lama sudah ada, hapus terlebih dahulu
     if [ -f "$OLD_LOG_FILE" ]; then
         rm -f "$OLD_LOG_FILE"
@@ -1117,20 +1126,24 @@ if [ -n "$LOG_FILE" ]; then
     log_message "Rotasi log selesai"
 fi
 
+# Jika dijalankan dalam mode restart, langsung jalankan daemon tanpa log awal
+if [ $RESTART_MODE -eq 1 ]; then
+    # Langsung jalankan daemon tanpa log awal
+    run_as_daemon > /dev/null 2>&1 &
+    exit 0
+fi
+
 # Jika dijalankan saat boot, tunggu beberapa saat
 if [ $BOOT_MODE -eq 1 ]; then
     log_message "Script dijalankan saat boot, menunggu $BOOT_WAIT_TIME detik"
     sleep $BOOT_WAIT_TIME
-elif [ $RESTART_MODE -eq 1 ]; then
-    # Jika dijalankan oleh restart-auto-download.sh, langsung jalankan daemon tanpa log awal
-    run_as_daemon > /dev/null 2>&1 &
-    exit 0
 else
     log_message "Script dijalankan secara manual"
-    # Selalu jalankan sebagai daemon untuk mode manual
-    log_message "Menjalankan dalam mode daemon"
-    run_as_daemon > /dev/null 2>&1 &
 fi
+
+# Selalu jalankan sebagai daemon untuk mode boot dan manual
+log_message "Menjalankan dalam mode daemon"
+run_as_daemon > /dev/null 2>&1 &
 
 # Catatan penggunaan:
 # 1. Untuk dijalankan otomatis saat boot, letakkan di /data/adb/service.d/
