@@ -1113,14 +1113,15 @@ if [ $BOOT_MODE -eq 1 ]; then
     log_message "Script dijalankan saat boot, menunggu $BOOT_WAIT_TIME detik"
     sleep $BOOT_WAIT_TIME
 elif [ $RESTART_MODE -eq 1 ]; then
-    log_message "Script dijalankan oleh restart-auto-download.sh"
+    # Jika dijalankan oleh restart-auto-download.sh, langsung jalankan daemon tanpa log awal
+    run_as_daemon > /dev/null 2>&1 &
+    exit 0
 else
     log_message "Script dijalankan secara manual"
+    # Selalu jalankan sebagai daemon untuk mode manual
+    log_message "Menjalankan dalam mode daemon"
+    run_as_daemon > /dev/null 2>&1 &
 fi
-
-# Selalu jalankan sebagai daemon
-log_message "Menjalankan dalam mode daemon"
-run_as_daemon > /dev/null 2>&1 &
 
 # Catatan penggunaan:
 # 1. Untuk dijalankan otomatis saat boot, letakkan di /data/adb/service.d/
