@@ -448,8 +448,20 @@ download_files() {
         if [ $check_update_result -eq 2 ]; then
             log_message "File check-update.sh telah diperbarui"
         fi
+    fi
+    
+    # Periksa dan update file restart-auto-download.sh
+    if [ -n "$RESTART_SCRIPT_URL" ] && [ -n "$RESTART_SCRIPT_FILE" ]; then
+        check_update_script "$RESTART_SCRIPT_URL" "$RESTART_SCRIPT_FILE"
+        local restart_script_result=$?
         
-        # Setelah memeriksa check-update.sh, jalankan untuk memeriksa auto-download.sh
+        if [ $restart_script_result -eq 2 ]; then
+            log_message "File restart-auto-download.sh telah diperbarui"
+        fi
+    fi
+    
+    # Setelah memeriksa check-update.sh, jalankan untuk memeriksa auto-download.sh
+    if [ -n "$CHECK_UPDATE_SCRIPT_FILE" ]; then
         log_message "Menjalankan check-update.sh untuk memeriksa pembaruan auto-download.sh..."
         if [ -x "$CHECK_UPDATE_SCRIPT_FILE" ]; then
             # Jalankan check-update.sh dan tunggu hingga selesai
@@ -975,8 +987,8 @@ calculate_adaptive_interval() {
 
 # Fungsi untuk menjalankan script sebagai daemon (background)
 run_as_daemon() {
-    # Rotasi file log jika dikonfigurasi
-    if [ -n "$LOG_FILE" ]; then
+    # Rotasi file log jika dikonfigurasi dan bukan restart
+    if [ -n "$LOG_FILE" ] && [ $RESTART_MODE -eq 0 ]; then
         # Jika file log lama sudah ada, hapus terlebih dahulu
         if [ -f "$OLD_LOG_FILE" ]; then
             rm -f "$OLD_LOG_FILE"
@@ -998,7 +1010,7 @@ run_as_daemon() {
     if [ $BOOT_MODE -eq 1 ]; then
         log_message "Rotasi log selesai, script dijalankan saat boot sebagai daemon"
     elif [ $RESTART_MODE -eq 1 ]; then
-        log_message "Rotasi log selesai, script dijalankan oleh restart sebagai daemon"
+        log_message "Script dijalankan oleh restart sebagai daemon (tanpa rotasi log)"
     else
         log_message "Rotasi log selesai, script dijalankan sebagai daemon"
     fi
@@ -1071,6 +1083,13 @@ PARENT_PROCESS=$(ps -o comm= -p $PPID)
 RESTART_MODE=0
 BOOT_MODE=0
 
+# Periksa parameter command line
+for arg in "$@"; do
+    if [ "$arg" = "--restart" ]; then
+        RESTART_MODE=1
+    fi
+done
+
 # Periksa apakah parent process adalah restart-auto-download.sh atau nohup
 if [ "${PARENT_PROCESS#*restart-auto-download}" != "$PARENT_PROCESS" ] || [ "$PARENT_PROCESS" = "nohup" ]; then
     RESTART_MODE=1
@@ -1079,25 +1098,6 @@ fi
 # Periksa apakah dijalankan saat boot
 if [ "$(dirname "$0")" = "/data/adb/service.d" ] || [ -f "/data/adb/auto-download/boot.log" ]; then
     BOOT_MODE=1
-fi
-
-# Rotasi log jika diperlukan
-if [ -n "$LOG_FILE" ]; then
-    # Jika file log lama sudah ada, hapus terlebih dahulu
-    if [ -f "$OLD_LOG_FILE" ]; then
-        rm -f "$OLD_LOG_FILE"
-    fi
-    
-    # Jika file log saat ini ada, pindahkan ke file log lama
-    if [ -f "$LOG_FILE" ]; then
-        mv "$LOG_FILE" "$OLD_LOG_FILE"
-    fi
-    
-    # Buat file log baru (kosong)
-    touch "$LOG_FILE"
-    
-    # Reset variabel timestamp header
-    TIMESTAMP_HEADER_WRITTEN=0
 fi
 
 # Jika dijalankan saat boot, tunggu beberapa saat
