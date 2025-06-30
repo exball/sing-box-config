@@ -422,7 +422,7 @@ download_files() {
                     
                     # Muat ulang konfigurasi
                     source "$CONFIG_FILE"
-                    log_message "Konfigurasi baru dimuat dari $CONFIG_FILE"
+                    log_message "Menggunakan konfigurasi baru"
                     
                     # Hapus file backup karena pembaruan berhasil
                     if [ -f "$CONFIG_FILE.bak" ]; then
@@ -457,7 +457,7 @@ download_files() {
             local update_check_result=$?
             
             if [ $update_check_result -eq 0 ]; then
-                log_message "check-update.sh selesai - melanjutkan proses normal"
+                log_message "Tidak ada pembaruan, melanjutkan proses"
                 # Tidak ada update, lanjutkan ke download file provider
                 # Tidak return, lanjutkan eksekusi
             elif [ $update_check_result -eq 1 ]; then
@@ -994,8 +994,14 @@ run_as_daemon() {
         TIMESTAMP_HEADER_WRITTEN=0
     fi
     
-    # Jalankan download pertama kali saat boot
-    log_message "Rotasi log selesai, script dijalankan sebagai daemon"
+    # Tentukan mode menjalankan dan tulis log
+    if [ $BOOT_MODE -eq 1 ]; then
+        log_message "Rotasi log selesai, script dijalankan saat boot sebagai daemon"
+    elif [ $RESTART_MODE -eq 1 ]; then
+        log_message "Rotasi log selesai, script dijalankan oleh restart sebagai daemon"
+    else
+        log_message "Rotasi log selesai, script dijalankan sebagai daemon"
+    fi
     
     # Periksa dan simpan PID
     check_and_save_pid
@@ -1092,22 +1098,12 @@ if [ -n "$LOG_FILE" ]; then
     
     # Reset variabel timestamp header
     TIMESTAMP_HEADER_WRITTEN=0
-    
-    log_message "Rotasi log selesai"
 fi
 
 # Jika dijalankan saat boot, tunggu beberapa saat
 if [ $BOOT_MODE -eq 1 ]; then
-    log_message "Script dijalankan saat boot, menunggu $BOOT_WAIT_TIME detik"
     sleep $BOOT_WAIT_TIME
-elif [ $RESTART_MODE -eq 1 ]; then
-    log_message "Script dijalankan oleh restart-auto-download.sh"
-else
-    log_message "Script dijalankan secara manual"
 fi
-
-# Selalu jalankan sebagai daemon
-log_message "Menjalankan dalam mode daemon"
 run_as_daemon > /dev/null 2>&1 &
 
 # Catatan penggunaan:

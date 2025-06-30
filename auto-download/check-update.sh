@@ -26,6 +26,11 @@ LOG_FILE="/data/adb/auto-download/check-update.log"
 mkdir -p /data/adb/auto-download
 mkdir -p "$TEMP_DIR"
 
+# Kosongkan log file setiap kali script dijalankan
+if [ -n "$LOG_FILE" ]; then
+    > "$LOG_FILE"
+fi
+
 # Variabel untuk melacak apakah header timestamp sudah ditulis
 TIMESTAMP_HEADER_WRITTEN=0
 
