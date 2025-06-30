@@ -1,5 +1,6 @@
 #!/bin/sh
 
+# Test
 # Script untuk mendownload file konfigurasi secara otomatis
 # Dengan fitur pemeriksaan hash SHA-1 untuk menghindari download ulang
 # Versi dengan CHECK_INTERVAL adaptif dan pembaruan auto-download.conf
@@ -446,128 +447,167 @@ download_files() {
         
         if [ $check_update_result -eq 2 ]; then
             log_message "File check-update.sh telah diperbarui"
+        fi
+        
+        # Setelah memeriksa check-update.sh, jalankan untuk memeriksa auto-download.sh
+        log_message "Menjalankan check-update.sh untuk memeriksa pembaruan auto-download.sh..."
+        if [ -x "$CHECK_UPDATE_SCRIPT_FILE" ]; then
+            # Jalankan check-update.sh dan tunggu hingga selesai
+            sh "$CHECK_UPDATE_SCRIPT_FILE"
+            local update_check_result=$?
             
-            # Jalankan check-update.sh jika diperbarui
-            if [ -x "$CHECK_UPDATE_SCRIPT_FILE" ]; then
-                log_message "Menjalankan check-update.sh yang baru diperbarui..."
-                sh "$CHECK_UPDATE_SCRIPT_FILE"
-                
-                # Jika check-update.sh mengembalikan kode 0, lanjutkan
-                # Jika tidak, keluar dari fungsi ini karena mungkin auto-download.sh telah diperbarui
-                if [ $? -ne 0 ]; then
-                    log_message "check-update.sh mengembalikan kode error, menghentikan proses"
-                    return 1
-                fi
+            if [ $update_check_result -eq 0 ]; then
+                log_message "check-update.sh selesai - melanjutkan proses normal"
+                # Return 0 menandakan tidak ada update atau proses berhasil
+                return 0
+            elif [ $update_check_result -eq 1 ]; then
+                log_message "check-update.sh mendeteksi ada update dan telah melakukan restart"
+                # Return 1 menandakan auto-download.sh perlu berhenti karena telah di-restart
+                return 1
+            else
+                log_message "check-update.sh mengembalikan kode error $update_check_result"
+                # Return error code
+                return $update_check_result
             fi
+        else
+            log_message "PERINGATAN: check-update.sh tidak dapat dieksekusi"
+            return 0  # Lanjutkan proses meskipun tidak bisa memeriksa update
         fi
     else
         log_message "URL atau path file check-update.sh tidak dikonfigurasi, melewati pemeriksaan"
     fi
     
     # Loop melalui setiap URL dan download
-    for url in "${PROVIDER_URLS[@]}"; do
-        # Ekstrak nama file dari URL
-        filename=$(basename "$url" | sed 's/%20/ /g')
-        temp_file="$TEMP_DIR/$filename"
-        target_file="$SAVE_DIR/$filename"
-        use_content_check=0
-        
-        log_message "-----"
-        log_message "Memeriksa Hash SHA-1 $filename..."
-        
-        if [ "$USE_SHA1_CHECK" -eq 1 ] && [ "$use_content_check" -eq 0 ]; then
-            # Dapatkan hash SHA-1 dari GitHub
-            github_sha1=$(get_github_sha1 "$url")
+    # Konversi array ke string untuk kompatibilitas sh
+    if [ -n "${PROVIDER_URLS}" ]; then
+        # Jika PROVIDER_URLS adalah string (untuk kompatibilitas sh)
+        for url in $PROVIDER_URLS; do
+            # Ekstrak nama file dari URL
+            filename=$(basename "$url" | sed 's/%20/ /g')
+            temp_file="$TEMP_DIR/$filename"
+            target_file="$SAVE_DIR/$filename"
+            use_content_check=0
             
-            if [ -z "$github_sha1" ]; then
-                log_message "Gagal mendapatkan SHA-1 dari GitHub, menggunakan metode pemeriksaan konten"
-                # Jika gagal mendapatkan hash SHA-1, gunakan metode pemeriksaan konten untuk file ini saja
-                use_content_check=1
-            else
-                log_message "SHA-1 GitHub: $github_sha1"
+            log_message "-----"
+            log_message "Memeriksa Hash SHA-1 $filename..."
+            
+            if [ "$USE_SHA1_CHECK" -eq 1 ] && [ "$use_content_check" -eq 0 ]; then
+                # Dapatkan hash SHA-1 dari GitHub
+                github_sha1=$(get_github_sha1 "$url")
                 
-                # Dapatkan hash SHA-1 dari file lokal jika ada
-                local_sha1=""
-                if [ -f "$target_file" ]; then
-                    local_sha1=$(get_local_sha1 "$target_file")
-                    log_message "SHA-1 lokal: $local_sha1"
-                fi
-                
-                # Bandingkan hash SHA-1
-                if [ -n "$local_sha1" ] && [ "$local_sha1" = "$github_sha1" ]; then
-                    log_message "SHA-1 sama, melewati download"
-                    continue
+                if [ -z "$github_sha1" ]; then
+                    log_message "Gagal mendapatkan SHA-1 dari GitHub, menggunakan metode pemeriksaan konten"
+                    # Jika gagal mendapatkan hash SHA-1, gunakan metode pemeriksaan konten untuk file ini saja
+                    use_content_check=1
                 else
-                    log_message "SHA-1 berbeda atau file tidak ada, mendownload..."
-                    # Download file dari URL raw GitHub
-                    log_message "Mendownload dari URL: $url"
-                    if curl -s -L --connect-timeout 10 --max-time 30 "$url" -o "$temp_file"; then
-                        # Verifikasi hash SHA-1 file yang didownload
-                        downloaded_sha1=$(get_local_sha1 "$temp_file")
-                        log_message "SHA-1 didownload: $downloaded_sha1"
-                        log_message "SHA-1 GitHub: $github_sha1"
-                        
-                        if [ "$downloaded_sha1" = "$github_sha1" ]; then
-                            # Pindahkan file dari temp ke direktori tujuan
-                            mv "$temp_file" "$target_file"
-                            log_message "Berhasil mendownload (SHA-1 terverifikasi)"
-                            files_updated=1
-                        else
-                            log_message "SHA-1 tidak cocok, melewati update"
+                    log_message "SHA-1 GitHub: $github_sha1"
+                    
+                    # Dapatkan hash SHA-1 dari file lokal jika ada
+                    local_sha1=""
+                    if [ -f "$target_file" ]; then
+                        local_sha1=$(get_local_sha1 "$target_file")
+                        log_message "SHA-1 lokal: $local_sha1"
+                    fi
+                    
+                    # Bandingkan hash SHA-1
+                    if [ -n "$local_sha1" ] && [ "$local_sha1" = "$github_sha1" ]; then
+                        log_message "SHA-1 sama, melewati download"
+                        continue
+                    else
+                        log_message "SHA-1 berbeda atau file tidak ada, mendownload..."
+                        # Download file dari URL raw GitHub
+                        log_message "Mendownload dari URL: $url"
+                        if curl -s -L --connect-timeout 10 --max-time 30 "$url" -o "$temp_file"; then
+                            # Verifikasi hash SHA-1 file yang didownload
+                            downloaded_sha1=$(get_local_sha1 "$temp_file")
                             log_message "SHA-1 didownload: $downloaded_sha1"
                             log_message "SHA-1 GitHub: $github_sha1"
+                            
+                            if [ "$downloaded_sha1" = "$github_sha1" ]; then
+                                # Pindahkan file dari temp ke direktori tujuan
+                                mv "$temp_file" "$target_file"
+                                
+                                # Berikan izin eksekusi jika ini adalah file script
+                                if [ "${filename##*.}" = "sh" ]; then
+                                    chmod +x "$target_file"
+                                    log_message "Izin eksekusi diberikan untuk $filename"
+                                fi
+                                
+                                log_message "Berhasil mendownload (SHA-1 terverifikasi)"
+                                files_updated=1
+                            else
+                                log_message "SHA-1 tidak cocok, melewati update"
+                                log_message "SHA-1 didownload: $downloaded_sha1"
+                                log_message "SHA-1 GitHub: $github_sha1"
+                                rm -f "$temp_file"
+                            fi
+                        else
+                            log_message "Gagal mendownload file"
                             rm -f "$temp_file"
                         fi
-                    else
-                        log_message "Gagal mendownload file"
-                        rm -f "$temp_file"
                     fi
-                fi
-                
-                # Lanjutkan ke file berikutnya
-                continue
-            fi
-        fi
-        
-        # Metode pemeriksaan konten (digunakan jika pemeriksaan SHA-1 dinonaktifkan atau gagal untuk file ini)
-        # Reset variabel use_content_check untuk file berikutnya
-        use_content_check=0
-        log_message "Mendownload dari URL: $url"
-        # Download file ke direktori sementara
-        if curl -s -L --connect-timeout 10 --max-time 30 "$url" -o "$temp_file"; then
-            # Hitung hash SHA-1 file yang didownload untuk logging
-            downloaded_sha1=$(get_local_sha1 "$temp_file")
-            log_message "SHA-1 didownload: $downloaded_sha1"
-            
-            # Periksa apakah file sudah ada
-            if [ -f "$target_file" ]; then
-                # Hitung hash SHA-1 file lokal untuk logging
-                local_sha1=$(get_local_sha1 "$target_file")
-                log_message "SHA-1 lokal: $local_sha1"
-                
-                # Bandingkan konten file
-                if cmp -s "$temp_file" "$target_file"; then
-                    log_message "File tidak berubah, melewati download"
-                    log_message "SHA-1 sama: $downloaded_sha1"
-                    rm "$temp_file"
+                    
+                    # Lanjutkan ke file berikutnya
                     continue
+                fi
+            fi
+        
+            # Metode pemeriksaan konten (digunakan jika pemeriksaan SHA-1 dinonaktifkan atau gagal untuk file ini)
+            # Reset variabel use_content_check untuk file berikutnya
+            use_content_check=0
+            log_message "Mendownload dari URL: $url"
+            # Download file ke direktori sementara
+            if curl -s -L --connect-timeout 10 --max-time 30 "$url" -o "$temp_file"; then
+                # Hitung hash SHA-1 file yang didownload untuk logging
+                downloaded_sha1=$(get_local_sha1 "$temp_file")
+                log_message "SHA-1 didownload: $downloaded_sha1"
+                
+                # Periksa apakah file sudah ada
+                if [ -f "$target_file" ]; then
+                    # Hitung hash SHA-1 file lokal untuk logging
+                    local_sha1=$(get_local_sha1 "$target_file")
+                    log_message "SHA-1 lokal: $local_sha1"
+                    
+                    # Bandingkan konten file
+                    if cmp -s "$temp_file" "$target_file"; then
+                        log_message "File tidak berubah, melewati download"
+                        log_message "SHA-1 sama: $downloaded_sha1"
+                        rm "$temp_file"
+                        continue
+                    else
+                        log_message "File berubah, memperbarui..."
+                        mv "$temp_file" "$target_file"
+                        
+                        # Berikan izin eksekusi jika ini adalah file script
+                        if [ "${filename##*.}" = "sh" ]; then
+                            chmod +x "$target_file"
+                            log_message "Izin eksekusi diberikan untuk $filename"
+                        fi
+                        
+                        log_message "Berhasil memperbarui file"
+                        files_updated=1
+                    fi
                 else
-                    log_message "File berubah, memperbarui..."
+                    # File belum ada, simpan file yang didownload
                     mv "$temp_file" "$target_file"
-                    log_message "Berhasil memperbarui file"
+                    
+                    # Berikan izin eksekusi jika ini adalah file script
+                    if [ "${filename##*.}" = "sh" ]; then
+                        chmod +x "$target_file"
+                        log_message "Izin eksekusi diberikan untuk $filename"
+                    fi
+                    
+                    log_message "Berhasil mendownload file baru"
                     files_updated=1
                 fi
             else
-                # File belum ada, simpan file yang didownload
-                mv "$temp_file" "$target_file"
-                log_message "Berhasil mendownload file baru"
-                files_updated=1
+                log_message "Gagal mendownload file"
+                rm -f "$temp_file"
             fi
-        else
-            log_message "Gagal mendownload file"
-            rm -f "$temp_file"
-        fi
-    done
+        done
+    else
+        log_message "PROVIDER_URLS tidak dikonfigurasi atau kosong"
+    fi
     
     # Periksa koneksi jaringan sebelum memproses config.json
     log_message "-----"
@@ -893,8 +933,8 @@ calculate_adaptive_interval() {
     fi
     
     # Tentukan interval adaptif berdasarkan waktu ke jadwal berikutnya
-    # Daftar interval yang tersedia (dalam detik)
-    intervals=(7200 3600 3300 3000 2700 2400 2100 1800 1500 1200 900 600 300 60)
+    # Daftar interval yang tersedia (dalam detik) - menggunakan string untuk kompatibilitas sh
+    intervals_list="7200 3600 3300 3000 2700 2400 2100 1800 1500 1200 900 600 300 60"
     
     # Pilih interval yang paling sesuai
     adaptive_interval=$CHECK_INTERVAL  # Default ke interval yang dikonfigurasi
@@ -911,7 +951,7 @@ calculate_adaptive_interval() {
             # Jika waktu yang tersisa masih positif, gunakan untuk menentukan interval
             if [ $safe_schedule_seconds -gt 0 ]; then
                 # Cari interval terbesar yang tidak melebihi waktu yang sudah dikurangi margin keamanan
-                for interval in "${intervals[@]}"; do
+                for interval in $intervals_list; do
                     if [ $interval -le $safe_schedule_seconds ]; then
                         adaptive_interval=$interval
                         break

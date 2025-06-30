@@ -199,33 +199,59 @@ run_update_check() {
     
     # Jika ada file yang diperbarui, restart layanan jika diperlukan
     if [ $files_updated -eq 1 ]; then
-        log_message "File telah diperbarui, mungkin perlu me-restart layanan"
+        log_message "File auto-download.sh telah diperbarui, perlu me-restart layanan"
         
-        # Jika auto-download.sh sedang berjalan, restart
-        if pgrep -f "auto-download.sh" > /dev/null; then
-            log_message "Mendeteksi auto-download.sh sedang berjalan, mencoba me-restart..."
-            
-            # Hentikan proses yang sedang berjalan
-            pkill -f "auto-download.sh"
-            sleep 2
-            
-            # Jalankan kembali auto-download.sh
-            if [ -x "$SCRIPT_FILE" ]; then
-                log_message "Menjalankan kembali auto-download.sh..."
-                nohup sh "$SCRIPT_FILE" > /dev/null 2>&1 &
-                log_message "auto-download.sh telah di-restart dengan PID: $!"
-            else
-                log_message "PERINGATAN: auto-download.sh tidak dapat dieksekusi"
-            fi
-        else
-            log_message "auto-download.sh tidak sedang berjalan, tidak perlu di-restart"
+        # Cari script restart-auto-download.sh
+        local restart_script="/data/adb/auto-download/restart-auto-download.sh"
+        
+        # Pastikan restart script dapat dieksekusi jika ada
+        if [ -f "$restart_script" ]; then
+            chmod +x "$restart_script"
         fi
+        
+        if [ -x "$restart_script" ]; then
+            log_message "Menjalankan restart-auto-download.sh untuk me-restart dengan versi terbaru..."
+            sh "$restart_script"
+            log_message "Restart script telah dijalankan"
+        else
+            log_message "Script restart-auto-download.sh tidak ditemukan atau tidak dapat dieksekusi"
+            log_message "Mencoba restart manual..."
+            
+            # Fallback: restart manual jika restart script tidak tersedia
+            if pgrep -f "auto-download.sh" > /dev/null; then
+                log_message "Mendeteksi auto-download.sh sedang berjalan, mencoba me-restart..."
+                
+                # Hentikan proses yang sedang berjalan
+                pkill -f "auto-download.sh"
+                sleep 2
+                
+                # Pastikan auto-download.sh dapat dieksekusi
+                if [ -f "$SCRIPT_FILE" ]; then
+                    chmod +x "$SCRIPT_FILE"
+                fi
+                
+                # Jalankan kembali auto-download.sh
+                if [ -x "$SCRIPT_FILE" ]; then
+                    log_message "Menjalankan kembali auto-download.sh..."
+                    nohup sh "$SCRIPT_FILE" > /dev/null 2>&1 &
+                    log_message "auto-download.sh telah di-restart dengan PID: $!"
+                else
+                    log_message "PERINGATAN: auto-download.sh tidak dapat dieksekusi"
+                fi
+            else
+                log_message "auto-download.sh tidak sedang berjalan, tidak perlu di-restart"
+            fi
+        fi
+        
+        log_message "Proses pemeriksaan selesai - auto-download.sh telah diperbarui dan di-restart"
+        # Return 1 untuk memberi tahu auto-download.sh bahwa ada update dan telah di-restart
+        # Auto-download.sh yang memanggil script ini harus berhenti
+        exit 1
     else
-        log_message "Tidak ada file yang diperbarui"
+        log_message "Tidak ada pembaruan pada auto-download.sh"
+        log_message "Proses pemeriksaan selesai - melanjutkan proses normal"
+        return 0
     fi
-    
-    log_message "Proses pemeriksaan selesai"
-    return 0
 }
 
 # ===== EKSEKUSI UTAMA =====
