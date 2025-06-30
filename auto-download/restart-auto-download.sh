@@ -77,9 +77,9 @@ if [ -n "$RUNNING_PID" ]; then
     sleep 2
 fi
 
-# Jalankan script baru dengan parameter --restart
-echo "Memulai script auto-download.sh yang baru dengan parameter --restart..."
-nohup sh "$SCRIPT_PATH" --restart > /dev/null 2>&1 &
+# Jalankan script baru
+echo "Memulai script auto-download.sh yang baru..."
+nohup sh "$SCRIPT_PATH" > /dev/null 2>&1 &
 
 # Tunggu sebentar untuk memastikan script berjalan
 sleep 2

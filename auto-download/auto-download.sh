@@ -440,17 +440,7 @@ download_files() {
         log_message "Pemeriksaan pembaruan konfigurasi dibatalkan karena tidak ada koneksi internet"
     fi
     
-    # Periksa dan update file restart-auto-download.sh setelah auto-download.conf
-    if [ -n "$RESTART_SCRIPT_URL" ] && [ -n "$RESTART_SCRIPT_FILE" ]; then
-        check_update_script "$RESTART_SCRIPT_URL" "$RESTART_SCRIPT_FILE"
-        local restart_script_result=$?
-        
-        if [ $restart_script_result -eq 2 ]; then
-            log_message "File restart-auto-download.sh telah diperbarui"
-        fi
-    fi
-    
-    # Periksa dan update file check-update.sh setelah restart-auto-download.sh
+    # Periksa dan update file check-update.sh setelah auto-download.conf
     if [ -n "$CHECK_UPDATE_SCRIPT_URL" ] && [ -n "$CHECK_UPDATE_SCRIPT_FILE" ]; then
         check_update_script "$CHECK_UPDATE_SCRIPT_URL" "$CHECK_UPDATE_SCRIPT_FILE"
         local check_update_result=$?
@@ -458,10 +448,8 @@ download_files() {
         if [ $check_update_result -eq 2 ]; then
             log_message "File check-update.sh telah diperbarui"
         fi
-    fi
-    
-    # Setelah memeriksa check-update.sh, jalankan untuk memeriksa auto-download.sh
-    if [ -n "$CHECK_UPDATE_SCRIPT_FILE" ]; then
+        
+        # Setelah memeriksa check-update.sh, jalankan untuk memeriksa auto-download.sh
         log_message "Menjalankan check-update.sh untuk memeriksa pembaruan auto-download.sh..."
         if [ -x "$CHECK_UPDATE_SCRIPT_FILE" ]; then
             # Jalankan check-update.sh dan tunggu hingga selesai
@@ -987,8 +975,8 @@ calculate_adaptive_interval() {
 
 # Fungsi untuk menjalankan script sebagai daemon (background)
 run_as_daemon() {
-    # Rotasi file log jika dikonfigurasi dan bukan restart
-    if [ -n "$LOG_FILE" ] && [ $RESTART_MODE -eq 0 ]; then
+    # Rotasi file log jika dikonfigurasi
+    if [ -n "$LOG_FILE" ]; then
         # Jika file log lama sudah ada, hapus terlebih dahulu
         if [ -f "$OLD_LOG_FILE" ]; then
             rm -f "$OLD_LOG_FILE"
@@ -1006,14 +994,8 @@ run_as_daemon() {
         TIMESTAMP_HEADER_WRITTEN=0
     fi
     
-    # Tentukan mode menjalankan dan tulis log
-    if [ $BOOT_MODE -eq 1 ]; then
-        log_message "Rotasi log selesai, script dijalankan saat boot sebagai daemon"
-    elif [ $RESTART_MODE -eq 1 ]; then
-        log_message "Script dijalankan oleh restart sebagai daemon (tanpa rotasi log)"
-    else
-        log_message "Rotasi log selesai, script dijalankan sebagai daemon"
-    fi
+    # Jalankan download pertama kali saat boot
+    log_message "Rotasi log selesai, script dijalankan sebagai daemon"
     
     # Periksa dan simpan PID
     check_and_save_pid
@@ -1083,13 +1065,6 @@ PARENT_PROCESS=$(ps -o comm= -p $PPID)
 RESTART_MODE=0
 BOOT_MODE=0
 
-# Periksa parameter command line
-for arg in "$@"; do
-    if [ "$arg" = "--restart" ]; then
-        RESTART_MODE=1
-    fi
-done
-
 # Periksa apakah parent process adalah restart-auto-download.sh atau nohup
 if [ "${PARENT_PROCESS#*restart-auto-download}" != "$PARENT_PROCESS" ] || [ "$PARENT_PROCESS" = "nohup" ]; then
     RESTART_MODE=1
@@ -1100,10 +1075,39 @@ if [ "$(dirname "$0")" = "/data/adb/service.d" ] || [ -f "/data/adb/auto-downloa
     BOOT_MODE=1
 fi
 
+# Rotasi log jika diperlukan
+if [ -n "$LOG_FILE" ]; then
+    # Jika file log lama sudah ada, hapus terlebih dahulu
+    if [ -f "$OLD_LOG_FILE" ]; then
+        rm -f "$OLD_LOG_FILE"
+    fi
+    
+    # Jika file log saat ini ada, pindahkan ke file log lama
+    if [ -f "$LOG_FILE" ]; then
+        mv "$LOG_FILE" "$OLD_LOG_FILE"
+    fi
+    
+    # Buat file log baru (kosong)
+    touch "$LOG_FILE"
+    
+    # Reset variabel timestamp header
+    TIMESTAMP_HEADER_WRITTEN=0
+    
+    log_message "Rotasi log selesai"
+fi
+
 # Jika dijalankan saat boot, tunggu beberapa saat
 if [ $BOOT_MODE -eq 1 ]; then
+    log_message "Script dijalankan saat boot, menunggu $BOOT_WAIT_TIME detik"
     sleep $BOOT_WAIT_TIME
+elif [ $RESTART_MODE -eq 1 ]; then
+    log_message "Script dijalankan oleh restart-auto-download.sh"
+else
+    log_message "Script dijalankan secara manual"
 fi
+
+# Selalu jalankan sebagai daemon
+log_message "Menjalankan dalam mode daemon"
 run_as_daemon > /dev/null 2>&1 &
 
 # Catatan penggunaan:
