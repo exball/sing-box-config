@@ -1073,13 +1073,22 @@ run_as_daemon() {
 }
 
 # Deteksi apakah script dijalankan oleh restart-auto-download.sh atau saat boot
-PARENT_PROCESS=$(ps -o comm= -p $PPID)
+RESTART_FLAG_FILE="/data/adb/auto-download/restart_flag"
 RESTART_MODE=0
 BOOT_MODE=0
 
-# Periksa apakah parent process adalah restart-auto-download.sh atau nohup
-if [ "${PARENT_PROCESS#*restart-auto-download}" != "$PARENT_PROCESS" ] || [ "$PARENT_PROCESS" = "nohup" ]; then
-    RESTART_MODE=1
+# Periksa apakah file penanda restart ada dan baru dibuat (dalam 10 detik terakhir)
+if [ -f "$RESTART_FLAG_FILE" ]; then
+    FLAG_TIME=$(cat "$RESTART_FLAG_FILE")
+    CURRENT_TIME=$(date +%s)
+    TIME_DIFF=$((CURRENT_TIME - FLAG_TIME))
+    
+    # Jika file penanda dibuat dalam 10 detik terakhir, anggap dijalankan oleh restart-auto-download.sh
+    if [ $TIME_DIFF -le 10 ]; then
+        RESTART_MODE=1
+        # Hapus file penanda setelah digunakan
+        rm -f "$RESTART_FLAG_FILE"
+    fi
 fi
 
 # Periksa apakah dijalankan saat boot

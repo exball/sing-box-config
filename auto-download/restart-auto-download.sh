@@ -77,6 +77,10 @@ if [ -n "$RUNNING_PID" ]; then
     sleep 2
 fi
 
+# Buat file penanda untuk menandakan script dijalankan oleh restart-auto-download.sh
+RESTART_FLAG_FILE="/data/adb/auto-download/restart_flag"
+echo "$(date +%s)" > "$RESTART_FLAG_FILE"
+
 # Jalankan script baru
 echo "Memulai script auto-download.sh yang baru..."
 nohup sh "$SCRIPT_PATH" > /dev/null 2>&1 &
