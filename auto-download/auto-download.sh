@@ -440,7 +440,19 @@ download_files() {
         log_message "Pemeriksaan pembaruan konfigurasi dibatalkan karena tidak ada koneksi internet"
     fi
     
-    # Periksa dan update file check-update.sh setelah auto-download.conf
+    # Periksa dan update file restart-auto-download.sh setelah auto-download.conf
+    if [ -n "$RESTART_SCRIPT_URL" ] && [ -n "$RESTART_SCRIPT_FILE" ]; then
+        check_update_script "$RESTART_SCRIPT_URL" "$RESTART_SCRIPT_FILE"
+        local restart_script_result=$?
+        
+        if [ $restart_script_result -eq 2 ]; then
+            log_message "File restart-auto-download.sh telah diperbarui"
+        fi
+    else
+        log_message "URL atau path file restart-auto-download.sh tidak dikonfigurasi, melewati pemeriksaan"
+    fi
+    
+    # Periksa dan update file check-update.sh setelah restart-auto-download.sh
     if [ -n "$CHECK_UPDATE_SCRIPT_URL" ] && [ -n "$CHECK_UPDATE_SCRIPT_FILE" ]; then
         check_update_script "$CHECK_UPDATE_SCRIPT_URL" "$CHECK_UPDATE_SCRIPT_FILE"
         local check_update_result=$?
