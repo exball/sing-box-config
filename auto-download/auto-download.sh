@@ -458,8 +458,8 @@ download_files() {
             
             if [ $update_check_result -eq 0 ]; then
                 log_message "check-update.sh selesai - melanjutkan proses normal"
-                # Return 0 menandakan tidak ada update atau proses berhasil
-                return 0
+                # Tidak ada update, lanjutkan ke download file provider
+                # Tidak return, lanjutkan eksekusi
             elif [ $update_check_result -eq 1 ]; then
                 log_message "check-update.sh mendeteksi ada update dan telah melakukan restart"
                 # Return 1 menandakan auto-download.sh perlu berhenti karena telah di-restart
@@ -471,7 +471,7 @@ download_files() {
             fi
         else
             log_message "PERINGATAN: check-update.sh tidak dapat dieksekusi"
-            return 0  # Lanjutkan proses meskipun tidak bisa memeriksa update
+            # Lanjutkan proses meskipun tidak bisa memeriksa update
         fi
     else
         log_message "URL atau path file check-update.sh tidak dikonfigurasi, melewati pemeriksaan"
