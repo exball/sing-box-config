@@ -652,16 +652,15 @@ download_files() {
         
         # Bandingkan hash SHA-1 untuk config.json
         if [ -n "$local_sha1_config" ] && [ "$local_sha1_config" = "$github_sha1_config" ]; then
-            log_message "SHA-1 config.json sama, melewati download"
+            log_message "SHA-1 sama, melewati download"
         else
-            log_message "SHA-1 config.json berbeda atau file tidak ada, mendownload..."
+            log_message "SHA-1 berbeda atau file tidak ada, mendownload..."
             # Download config.json dari URL raw GitHub
-            log_message "Mendownload config.json dari URL: $CONFIG_URL"
             if curl -s -L --connect-timeout 10 --max-time 30 "$CONFIG_URL" -o "$TEMP_DIR/config.json"; then
                 # Verifikasi hash SHA-1 file config.json yang didownload
                 downloaded_sha1_config=$(get_local_sha1 "$TEMP_DIR/config.json")
-                log_message "SHA-1 config.json didownload: $downloaded_sha1_config"
-                log_message "SHA-1 config.json GitHub: $github_sha1_config"
+                log_message "SHA-1 didownload: $downloaded_sha1_config"
+                log_message "SHA-1 GitHub: $github_sha1_config"
                 
                 if [ "$downloaded_sha1_config" = "$github_sha1_config" ]; then
                     # Pindahkan file config.json dari temp ke direktori tujuan
