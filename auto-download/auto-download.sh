@@ -536,7 +536,6 @@ download_files() {
                             # Verifikasi hash SHA-1 file yang didownload
                             downloaded_sha1=$(get_local_sha1 "$temp_file")
                             log_message "SHA-1 didownload: $downloaded_sha1"
-                            log_message "SHA-1 GitHub: $github_sha1"
                             
                             if [ "$downloaded_sha1" = "$github_sha1" ]; then
                                 # Pindahkan file dari temp ke direktori tujuan
@@ -665,7 +664,7 @@ download_files() {
                 if [ "$downloaded_sha1_config" = "$github_sha1_config" ]; then
                     # Pindahkan file config.json dari temp ke direktori tujuan
                     mv "$TEMP_DIR/config.json" "$CONFIG_DIR/config.json"
-                    log_message "Berhasil mendownload config.json (SHA-1 terverifikasi)"
+                    log_message "Berhasil mendownload (SHA-1 terverifikasi)"
                     files_updated=1
                 else
                     log_message "SHA-1 config.json tidak cocok, melewati update"
