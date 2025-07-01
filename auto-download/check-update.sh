@@ -56,15 +56,8 @@ log_message() {
     fi
 }
 
-# Fungsi untuk mendapatkan hash SHA-1 dari file lokal
-get_local_sha1() {
-    local file="$1"
-    if [ -f "$file" ]; then
-        sha1sum "$file" | awk '{print $1}'
-    else
-        echo ""
-    fi
-}
+# Fungsi get_local_sha1 sudah didefinisikan di auto-download.sh
+# (dipanggil melalui source auto-download.sh)
 
 # Fungsi helper untuk operasi curl - pemeriksaan koneksi network
 curl_network_check() {
@@ -146,81 +139,20 @@ check_network_connection() {
     return 0
 }
 
-# Fungsi untuk memeriksa dan mengupdate file
+# Fungsi untuk memeriksa dan mengupdate file (menggunakan helper dari auto-download.sh)
 check_and_update_file() {
     local file_url="$1"
     local local_file="$2"
     local file_name=$(basename "$local_file")
     
-    log_message "-----"
-    log_message "Memeriksa pembaruan file $file_name..."
-    
-    # Nama file sementara untuk download
-    local temp_file="$TEMP_DIR/${file_name}.new"
-    
-    # Download file dari URL untuk mendapatkan hash
-    if curl_download_file "$file_url" "$temp_file"; then
-        # Hitung hash SHA-1 dari file yang didownload
-        local github_sha1=$(get_local_sha1 "$temp_file")
-        
-        if [ -z "$github_sha1" ]; then
-            log_message "Gagal mendapatkan SHA-1 file $file_name dari GitHub"
-            rm -f "$temp_file"
-            return 1
-        else
-            log_message "SHA-1 GitHub $file_name: $github_sha1"
-            
-            # Dapatkan hash SHA-1 dari file lokal jika ada
-            local local_sha1=""
-            if [ -f "$local_file" ]; then
-                local_sha1=$(get_local_sha1 "$local_file")
-                log_message "SHA-1 lokal $file_name: $local_sha1"
-            fi
-            
-            # Bandingkan hash SHA-1
-            if [ -n "$local_sha1" ] && [ "$local_sha1" = "$github_sha1" ]; then
-                log_message "SHA-1 $file_name sama, tidak perlu diperbarui"
-                rm -f "$temp_file"
-                return 0
-            else
-                log_message "SHA-1 $file_name berbeda atau file tidak ada, memperbarui..."
-                
-                # Hapus backup lama jika ada
-                if [ -f "${local_file}.bak" ]; then
-                    rm -f "${local_file}.bak"
-                fi
-                
-                # Buat backup file lama jika ada
-                if [ -f "$local_file" ]; then
-                    cp "$local_file" "${local_file}.bak"
-                fi
-                
-                # Pastikan direktori tujuan ada
-                mkdir -p "$(dirname "$local_file")"
-                
-                # Pindahkan file baru
-                mv "$temp_file" "$local_file"
-                
-                # Berikan izin eksekusi jika ini adalah file script
-                if [ "${file_name##*.}" = "sh" ]; then
-                    chmod +x "$local_file"
-                fi
-                
-                log_message "Berhasil memperbarui $file_name (SHA-1 terverifikasi)"
-                
-                # Hapus file backup karena pembaruan berhasil
-                if [ -f "${local_file}.bak" ]; then
-                    rm -f "${local_file}.bak"
-                fi
-                
-                return 2  # Kode 2 menandakan file diperbarui
-            fi
-        fi
-    else
-        log_message "Gagal mendownload $file_name dari $file_url"
-        rm -f "$temp_file"
-        return 1
+    # Tentukan apakah file perlu executable permission (untuk .sh files)
+    local set_executable=0
+    if [ "${file_name##*.}" = "sh" ]; then
+        set_executable=1
     fi
+    
+    # Gunakan helper function dari auto-download.sh
+    update_file_with_backup "$file_url" "$local_file" "$file_name" "$set_executable"
 }
 
 # ===== FUNGSI UTAMA =====
