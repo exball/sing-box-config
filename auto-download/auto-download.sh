@@ -175,27 +175,6 @@ check_network_after_pid() {
     fi
 }
 
-# Fungsi untuk logging
-log_message() {
-    local message="$1"
-    local timestamp=$(date "+%Y-%m-%d %H:%M:%S")
-    
-    # Echo ke konsol dengan timestamp (hanya jika dijalankan manual)
-    echo "$timestamp: $message"
-    
-    # Tulis ke file log jika dikonfigurasi
-    if [ -n "$LOG_FILE" ]; then
-        # Jika ini adalah pesan pertama setelah log dikosongkan, tulis header timestamp
-        if [ $TIMESTAMP_HEADER_WRITTEN -eq 0 ]; then
-            echo "$timestamp:" >> "$LOG_FILE"
-            TIMESTAMP_HEADER_WRITTEN=1
-        fi
-        
-        # Tulis pesan tanpa timestamp
-        echo "$message" >> "$LOG_FILE"
-    fi
-}
-
 # Pastikan direktori auto-download ada
 mkdir -p "/data/adb/auto-download"
 
@@ -208,16 +187,6 @@ fi
 mkdir -p "$SAVE_DIR"
 mkdir -p "$CONFIG_DIR"
 mkdir -p "$TEMP_DIR"
-
-# Fungsi untuk mendapatkan hash SHA-1 dari file lokal
-get_local_sha1() {
-    local file="$1"
-    if [ -f "$file" ]; then
-        sha1sum "$file" | awk '{print $1}'
-    else
-        echo ""
-    fi
-}
 
 # Fungsi untuk mendapatkan hash SHA-1 dari URL raw GitHub
 get_github_sha1() {
@@ -243,43 +212,6 @@ get_github_sha1() {
         log_message "Gagal mendownload file untuk pemeriksaan hash dari: $raw_url"
         echo ""
     fi
-}
-
-# Fungsi untuk memeriksa koneksi jaringan
-check_network_connection() {
-    log_message "Memeriksa koneksi internet..."
-    
-    local attempt=1
-    local connected=0
-    
-    while [ $attempt -le $NETWORK_MAX_ATTEMPTS ]; do
-        log_message "Percobaan ke $attempt dari $NETWORK_MAX_ATTEMPTS"
-        
-        # Gunakan curl untuk memeriksa koneksi ke URL yang ditentukan
-        # -s: silent mode, -f: fail silently, -m: timeout dalam detik, -o: output ke /dev/null
-        if curl -s -f -m 10 --connect-timeout 5 -o /dev/null "$NETWORK_TEST_URL"; then
-            log_message "Koneksi internet tersedia"
-            connected=1
-            break
-        fi
-        
-        # Jika tidak ada koneksi, tunggu dan coba lagi
-        log_message "Tidak ada koneksi internet, Tunggu $NETWORK_RETRY_WAIT detik."
-        
-        if [ $attempt -lt $NETWORK_MAX_ATTEMPTS ]; then
-            sleep $NETWORK_RETRY_WAIT
-        fi
-        
-        # Tambahkan jumlah percobaan
-        attempt=$((attempt + 1))
-    done
-    
-    if [ $connected -eq 0 ]; then
-        log_message "Gagal terhubung ke jaringan setelah $NETWORK_MAX_ATTEMPTS percobaan"
-        return 1
-    fi
-    
-    return 0
 }
 
 # Fungsi untuk memeriksa dan mengupdate file check-update.sh
