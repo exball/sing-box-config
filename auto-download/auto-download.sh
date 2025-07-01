@@ -17,8 +17,7 @@ NETWORK_RETRY_WAIT=3
 LOG_FILE="/data/adb/auto-download/auto-download.log"
 
 # Pastikan direktori yang diperlukan ada
-mkdir -p /data/adb/auto-download
-mkdir -p "$TEMP_DIR"
+ensure_directories "/data/adb/auto-download" "$TEMP_DIR"
 
 # File PID untuk melacak proses yang sedang berjalan
 PID_FILE="/data/adb/auto-download/auto-download.pid"
@@ -64,6 +63,28 @@ get_local_sha1() {
     fi
 }
 
+# Fungsi untuk membuat direktori yang diperlukan
+ensure_directories() {
+    local dirs_to_create="$@"
+    
+    for dir in "$@"; do
+        if [ -n "$dir" ]; then
+            mkdir -p "$dir" 2>/dev/null || {
+                log_message "Peringatan: Gagal membuat direktori: $dir"
+            }
+        fi
+    done
+}
+
+# Fungsi untuk membuat direktori dari path file
+ensure_parent_directory() {
+    local file_path="$1"
+    if [ -n "$file_path" ]; then
+        local parent_dir=$(dirname "$file_path")
+        ensure_directories "$parent_dir"
+    fi
+}
+
 # Fungsi untuk memeriksa koneksi jaringan
 check_network_connection() {
     log_message "Memeriksa koneksi internet..."
@@ -104,8 +125,8 @@ check_network_connection() {
 
 
 # Pastikan direktori yang diperlukan ada
-mkdir -p "$(dirname "$LOG_FILE")"
-mkdir -p "$TEMP_DIR"
+ensure_parent_directory "$LOG_FILE"
+ensure_directories "$TEMP_DIR"
 
 # Inisialisasi file log jika belum ada
 if [ -n "$LOG_FILE" ] && [ ! -f "$LOG_FILE" ]; then
@@ -175,25 +196,20 @@ check_network_after_pid() {
     fi
 }
 
-# Pastikan direktori auto-download ada
-mkdir -p "/data/adb/auto-download"
+# Pastikan semua direktori yang diperlukan ada
+ensure_directories "/data/adb/auto-download" "$SAVE_DIR" "$CONFIG_DIR" "$TEMP_DIR"
 
 # Pastikan direktori log ada jika LOG_FILE dikonfigurasi
 if [ -n "$LOG_FILE" ]; then
-    mkdir -p "$(dirname "$LOG_FILE")"
+    ensure_parent_directory "$LOG_FILE"
 fi
-
-# Pastikan direktori penyimpanan dan temp ada
-mkdir -p "$SAVE_DIR"
-mkdir -p "$CONFIG_DIR"
-mkdir -p "$TEMP_DIR"
 
 # Fungsi untuk mendapatkan hash SHA-1 dari URL raw GitHub
 get_github_sha1() {
     local raw_url="$1"
     
     # Buat direktori temp jika belum ada
-    mkdir -p "$TEMP_DIR"
+    ensure_directories "$TEMP_DIR"
     
     # Nama file sementara untuk download
     local temp_hash_file="$TEMP_DIR/temp_hash_file"
@@ -264,7 +280,7 @@ check_update_script() {
                 fi
                 
                 # Pastikan direktori tujuan ada
-                mkdir -p "$(dirname "$script_file")"
+                ensure_parent_directory "$script_file"
                 
                 # Pindahkan file baru
                 mv "$temp_script_file" "$script_file"
