@@ -841,26 +841,26 @@ check_schedule_and_run() {
     fi
 }
 
-# Fungsi untuk mendapatkan informasi jadwal berikutnya
-get_next_schedule_info() {
+# Fungsi helper untuk mencari jadwal berikutnya (logika core yang digabung)
+find_next_schedule() {
     # Dapatkan waktu saat ini dalam detik sejak tengah malam
-    current_seconds=$(($(date +%H) * 3600 + $(date +%M) * 60 + $(date +%S)))
+    local current_seconds=$(($(date +%H) * 3600 + $(date +%M) * 60 + $(date +%S)))
     
     # Inisialisasi waktu ke jadwal berikutnya
-    next_schedule_seconds=86400  # Default ke 24 jam (tidak ada jadwal dalam 24 jam)
-    next_schedule_time=""
+    local next_schedule_seconds=86400  # Default ke 24 jam (tidak ada jadwal dalam 24 jam)
+    local next_schedule_time=""
     
     # Periksa semua jadwal untuk menemukan yang terdekat
     for schedule_time in $SCHEDULE_HOURS; do
         # Konversi jadwal ke detik sejak tengah malam
-        hour=$(echo $schedule_time | cut -d: -f1)
-        minute=$(echo $schedule_time | cut -d: -f2)
-        schedule_seconds=$((hour * 3600 + minute * 60))
+        local hour=$(echo $schedule_time | cut -d: -f1)
+        local minute=$(echo $schedule_time | cut -d: -f2)
+        local schedule_seconds=$((hour * 3600 + minute * 60))
         
         # Hitung selisih waktu (dalam detik)
         if [ $schedule_seconds -gt $current_seconds ]; then
             # Jadwal hari ini yang belum lewat
-            diff_seconds=$((schedule_seconds - current_seconds))
+            local diff_seconds=$((schedule_seconds - current_seconds))
             if [ $diff_seconds -lt $next_schedule_seconds ]; then
                 next_schedule_seconds=$diff_seconds
                 next_schedule_time=$schedule_time
@@ -871,12 +871,12 @@ get_next_schedule_info() {
     # Jika tidak ada jadwal yang ditemukan untuk hari ini, cari jadwal pertama untuk besok
     if [ $next_schedule_seconds -eq 86400 ]; then
         for schedule_time in $SCHEDULE_HOURS; do
-            hour=$(echo $schedule_time | cut -d: -f1)
-            minute=$(echo $schedule_time | cut -d: -f2)
-            schedule_seconds=$((hour * 3600 + minute * 60))
+            local hour=$(echo $schedule_time | cut -d: -f1)
+            local minute=$(echo $schedule_time | cut -d: -f2)
+            local schedule_seconds=$((hour * 3600 + minute * 60))
             
             # Jadwal untuk besok = jadwal + (24 jam - waktu saat ini)
-            diff_seconds=$((schedule_seconds + 86400 - current_seconds))
+            local diff_seconds=$((schedule_seconds + 86400 - current_seconds))
             if [ $diff_seconds -lt $next_schedule_seconds ]; then
                 next_schedule_seconds=$diff_seconds
                 next_schedule_time=$schedule_time
@@ -884,9 +884,20 @@ get_next_schedule_info() {
         done
     fi
     
+    # Return dalam format "seconds:time"
+    echo "$next_schedule_seconds:$next_schedule_time"
+}
+
+# Fungsi untuk mendapatkan informasi jadwal berikutnya
+get_next_schedule_info() {
+    # Gunakan fungsi helper untuk mendapatkan data jadwal berikutnya
+    local schedule_result=$(find_next_schedule)
+    local next_schedule_seconds=$(echo "$schedule_result" | cut -d: -f1)
+    local next_schedule_time=$(echo "$schedule_result" | cut -d: -f2-)
+    
     # Konversi detik ke format jam dan menit untuk tampilan yang lebih mudah dibaca
-    next_hours=$((next_schedule_seconds / 3600))
-    next_minutes=$(((next_schedule_seconds % 3600) / 60))
+    local next_hours=$((next_schedule_seconds / 3600))
+    local next_minutes=$(((next_schedule_seconds % 3600) / 60))
     
     # Kembalikan informasi jadwal berikutnya
     echo "Jadwal berikutnya: $next_schedule_time (dalam $next_hours jam $next_minutes menit)"
@@ -894,50 +905,16 @@ get_next_schedule_info() {
 
 # Fungsi untuk menghitung interval adaptif berdasarkan waktu ke jadwal berikutnya
 calculate_adaptive_interval() {
-    # Dapatkan waktu saat ini dalam detik sejak tengah malam
-    current_seconds=$(($(date +%H) * 3600 + $(date +%M) * 60 + $(date +%S)))
-    
-    # Inisialisasi waktu ke jadwal berikutnya
-    next_schedule_seconds=86400  # Default ke 24 jam (tidak ada jadwal dalam 24 jam)
-    
-    # Periksa semua jadwal untuk menemukan yang terdekat
-    for schedule_time in $SCHEDULE_HOURS; do
-        # Konversi jadwal ke detik sejak tengah malam
-        hour=$(echo $schedule_time | cut -d: -f1)
-        minute=$(echo $schedule_time | cut -d: -f2)
-        schedule_seconds=$((hour * 3600 + minute * 60))
-        
-        # Hitung selisih waktu (dalam detik)
-        if [ $schedule_seconds -gt $current_seconds ]; then
-            # Jadwal hari ini yang belum lewat
-            diff_seconds=$((schedule_seconds - current_seconds))
-            if [ $diff_seconds -lt $next_schedule_seconds ]; then
-                next_schedule_seconds=$diff_seconds
-            fi
-        fi
-    done
-    
-    # Jika tidak ada jadwal yang ditemukan untuk hari ini, cari jadwal pertama untuk besok
-    if [ $next_schedule_seconds -eq 86400 ]; then
-        for schedule_time in $SCHEDULE_HOURS; do
-            hour=$(echo $schedule_time | cut -d: -f1)
-            minute=$(echo $schedule_time | cut -d: -f2)
-            schedule_seconds=$((hour * 3600 + minute * 60))
-            
-            # Jadwal untuk besok = jadwal + (24 jam - waktu saat ini)
-            diff_seconds=$((schedule_seconds + 86400 - current_seconds))
-            if [ $diff_seconds -lt $next_schedule_seconds ]; then
-                next_schedule_seconds=$diff_seconds
-            fi
-        done
-    fi
+    # Gunakan fungsi helper untuk mendapatkan data jadwal berikutnya
+    local schedule_result=$(find_next_schedule)
+    local next_schedule_seconds=$(echo "$schedule_result" | cut -d: -f1)
     
     # Tentukan interval adaptif berdasarkan waktu ke jadwal berikutnya
     # Daftar interval yang tersedia (dalam detik) - menggunakan string untuk kompatibilitas sh
-    intervals_list="7200 3600 3300 3000 2700 2400 2100 1800 1500 1200 900 600 300 60"
+    local intervals_list="7200 3600 3300 3000 2700 2400 2100 1800 1500 1200 900 600 300 60"
     
     # Pilih interval yang paling sesuai
-    adaptive_interval=$CHECK_INTERVAL  # Default ke interval yang dikonfigurasi
+    local adaptive_interval=$CHECK_INTERVAL  # Default ke interval yang dikonfigurasi
     
     # Jika waktu ke jadwal berikutnya kurang dari interval default
     if [ $next_schedule_seconds -lt $CHECK_INTERVAL ]; then
@@ -946,7 +923,7 @@ calculate_adaptive_interval() {
             adaptive_interval=60
         else
             # Kurangi waktu ke jadwal berikutnya dengan margin keamanan tetap (60 detik)
-            safe_schedule_seconds=$((next_schedule_seconds - 60))
+            local safe_schedule_seconds=$((next_schedule_seconds - 60))
             
             # Jika waktu yang tersisa masih positif, gunakan untuk menentukan interval
             if [ $safe_schedule_seconds -gt 0 ]; then
