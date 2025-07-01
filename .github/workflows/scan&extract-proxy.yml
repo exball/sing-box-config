@@ -60,29 +60,26 @@ jobs:
           python -m pip install --upgrade pip
           pip install requests boto3 pytz
           
-          echo "Checking if extract_outbound.py exists:"
-          ls -la extract_outbound.py || echo "extract_outbound.py not found"
+          echo "Checking if extract_outbound.py exists in extract-outbound directory:"
+          ls -la extract-outbound/extract_outbound.py || echo "extract_outbound.py not found"
           
           echo "Directory contents:"
           ls -la
       
-      - name: Copy configuration files
+      - name: Check configuration files
         run: |
-          # Copy config.ini from workflows directory to working directory
-          cp .github/workflows/config.ini .
           echo "Config file contents:"
-          cat config.ini
+          cat ./extract-outbound/config.ini
           
-          # Copy config_format.ini from workflows directory to working directory
-          cp .github/workflows/config_format.ini .
           echo "Format config file contents:"
-          cat config_format.ini
+          cat ./extract-outbound/config_format.ini
       
       - name: Run proxy extraction script
         run: |
-          ls -la
+          ls -la ./extract-outbound/
           
-          python extract_outbound.py -o config_format.ini -f config.ini
+          cd extract-outbound && python extract_outbound.py -o config_format.ini -f config.ini
+          cd ..
           
           echo "Checking output files:"
           # Check JSON files in outbound-provider directory
@@ -109,7 +106,7 @@ jobs:
           R2_FOLDER_NAME: sing-box_config
         run: |
           if [ "$ENABLE_UPLOAD" = "true" ]; then
-            python upload_to_r2.py
+            cd extract-outbound && python upload_to_r2.py
           else
             echo "Upload to R2 is disabled"
           fi
