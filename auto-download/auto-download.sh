@@ -205,7 +205,6 @@ verify_downloaded_sha1() {
     
     # Verifikasi hash SHA-1 file yang didownload
     local downloaded_sha1=$(get_local_sha1 "$temp_file")
-    log_message "SHA-1 didownload $file_description: $downloaded_sha1"
     
     if [ "$downloaded_sha1" = "$expected_sha1" ]; then
         # Pastikan direktori target ada
@@ -219,7 +218,7 @@ verify_downloaded_sha1() {
             chmod +x "$target_file"
         fi
         
-        log_message "Berhasil memperbarui $file_description (SHA-1 terverifikasi)"
+        log_message "Berhasil memperbarui (SHA-1 terverifikasi)"
         return 0
     else
         log_message "SHA-1 $file_description tidak cocok, gagal verifikasi"
