@@ -446,8 +446,10 @@ download_files() {
         local restart_script_result=$?
         
         # Kode untuk restart-auto-download.sh telah diperbarui (log dihapus)
-        if [ $restart_script_result -eq 2 ]; then
-        fi
+        # Kondisi tetap diperiksa tapi tidak ada log yang ditampilkan
+        # if [ $restart_script_result -eq 2 ]; then
+        #     log_message "File restart-auto-download.sh telah diperbarui"
+        # fi
     else
         log_message "URL atau path file restart-auto-download.sh tidak dikonfigurasi, melewati pemeriksaan"
     fi
@@ -458,8 +460,10 @@ download_files() {
         local check_update_result=$?
         
         # Kode untuk check-update.sh telah diperbarui (log dihapus)
-        if [ $check_update_result -eq 2 ]; then
-        fi
+        # Kondisi tetap diperiksa tapi tidak ada log yang ditampilkan
+        # if [ $check_update_result -eq 2 ]; then
+        #     log_message "File check-update.sh telah diperbarui"
+        # fi
         
         # Setelah memeriksa check-update.sh, jalankan untuk memeriksa auto-download.sh
         log_message "Menjalankan check-update.sh untuk memeriksa pembaruan auto-download.sh..."
