@@ -290,7 +290,7 @@ check_update_script() {
     local script_name=$(basename "$script_file")
     
     log_message "-----"
-    log_message "Memeriksa pembaruan file $script_name..."
+    log_message "Memeriksa $script_name..."
     
     # Nama file sementara untuk download
     local temp_script_file="$TEMP_DIR/${script_name}.new"
@@ -305,18 +305,18 @@ check_update_script() {
             rm -f "$temp_script_file"
             return 1
         else
-            log_message "SHA-1 GitHub $script_name: $github_sha1"
+            log_message "SHA-1 GitHub: $github_sha1"
             
             # Dapatkan hash SHA-1 dari file lokal jika ada
             local local_sha1=""
             if [ -f "$script_file" ]; then
                 local_sha1=$(get_local_sha1 "$script_file")
-                log_message "SHA-1 lokal $script_name: $local_sha1"
+                log_message "SHA-1 lokal: $local_sha1"
             fi
             
             # Bandingkan hash SHA-1
             if [ -n "$local_sha1" ] && [ "$local_sha1" = "$github_sha1" ]; then
-                log_message "SHA-1 $script_name sama, tidak perlu diperbarui"
+                log_message "SHA-1 sama, tidak perlu diperbarui"
                 rm -f "$temp_script_file"
                 return 0
             else
@@ -374,7 +374,7 @@ download_files() {
     
     # Periksa dan update file auto-download.conf terlebih dahulu
     log_message "-----"
-    log_message "Memeriksa pembaruan file auto-download.conf..."
+    log_message "Memeriksa auto-download.conf..."
     
     # Gunakan hasil pemeriksaan koneksi internet sebelumnya
     if [ $? -eq 0 ]; then
@@ -390,18 +390,18 @@ download_files() {
                 log_message "Gagal mendapatkan SHA-1 file konfigurasi dari GitHub"
                 rm -f "$temp_conf_file"
             else
-                log_message "SHA-1 GitHub auto-download.conf: $github_sha1"
+                log_message "SHA-1 GitHub: $github_sha1"
                 
                 # Dapatkan hash SHA-1 dari file lokal jika ada
                 local local_sha1=""
                 if [ -f "$CONFIG_FILE" ]; then
                     local_sha1=$(get_local_sha1 "$CONFIG_FILE")
-                    log_message "SHA-1 lokal auto-download.conf: $local_sha1"
+                    log_message "SHA-1 lokal: $local_sha1"
                 fi
                 
                 # Bandingkan hash SHA-1
                 if [ -n "$local_sha1" ] && [ "$local_sha1" = "$github_sha1" ]; then
-                    log_message "SHA-1 auto-download.conf sama, menggunakan konfigurasi lokal"
+                    log_message "SHA-1 sama, menggunakan konfigurasi lokal"
                     rm -f "$temp_conf_file"
                 else
                     log_message "SHA-1 auto-download.conf berbeda atau file tidak ada, memperbarui..."
@@ -466,7 +466,7 @@ download_files() {
         # fi
         
         # Setelah memeriksa check-update.sh, jalankan untuk memeriksa auto-download.sh
-        log_message "Menjalankan check-update.sh untuk memeriksa pembaruan auto-download.sh..."
+        log_message "Menjalankan check-update.sh untuk memeriksa auto-download.sh..."
         if [ -x "$CHECK_UPDATE_SCRIPT_FILE" ]; then
             # Jalankan check-update.sh dan tunggu hingga selesai
             sh "$CHECK_UPDATE_SCRIPT_FILE"
@@ -505,7 +505,7 @@ download_files() {
             use_content_check=0
             
             log_message "-----"
-            log_message "Memeriksa Hash SHA-1 $filename..."
+            log_message "Memeriksa $filename..."
             
             if [ "$USE_SHA1_CHECK" -eq 1 ] && [ "$use_content_check" -eq 0 ]; then
                 # Dapatkan hash SHA-1 dari GitHub
@@ -530,7 +530,7 @@ download_files() {
                         log_message "SHA-1 sama, melewati download"
                         continue
                     else
-                        log_message "SHA-1 berbeda atau file tidak ada, Mendownload dari Source"
+                        log_message "SHA-1 berbeda atau file tidak ada, Mendownload..."
                         # Download file dari URL raw GitHub
                         if curl -s -L --connect-timeout 10 --max-time 30 "$url" -o "$temp_file"; then
                             # Verifikasi hash SHA-1 file yang didownload
@@ -570,7 +570,7 @@ download_files() {
             # Metode pemeriksaan konten (digunakan jika pemeriksaan SHA-1 dinonaktifkan atau gagal untuk file ini)
             # Reset variabel use_content_check untuk file berikutnya
             use_content_check=0
-            log_message "Mendownload dari Source"
+            log_message "Mendownload..."
             # Download file ke direktori sementara
             if curl -s -L --connect-timeout 10 --max-time 30 "$url" -o "$temp_file"; then
                 # Hitung hash SHA-1 file yang didownload untuk logging
@@ -633,7 +633,7 @@ download_files() {
     fi
     
     # Proses config.json
-    log_message "Memeriksa Hash SHA-1 config.json..."
+    log_message "Memeriksa config.json..."
     
     # Dapatkan hash SHA-1 dari GitHub untuk config.json
     github_sha1_config=$(get_github_sha1 "$CONFIG_URL")
@@ -641,13 +641,13 @@ download_files() {
     if [ -z "$github_sha1_config" ]; then
         log_message "Gagal mendapatkan SHA-1 config.json dari GitHub"
     else
-        log_message "SHA-1 GitHub config.json: $github_sha1_config"
+        log_message "SHA-1 GitHub: $github_sha1_config"
         
         # Dapatkan hash SHA-1 dari file lokal config.json jika ada
         local_sha1_config=""
         if [ -f "$CONFIG_DIR/config.json" ]; then
             local_sha1_config=$(get_local_sha1 "$CONFIG_DIR/config.json")
-            log_message "SHA-1 lokal config.json: $local_sha1_config"
+            log_message "SHA-1 lokal: $local_sha1_config"
         fi
         
         # Bandingkan hash SHA-1 untuk config.json
