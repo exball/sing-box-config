@@ -72,7 +72,7 @@ check_network_connection() {
     local connected=0
     
     while [ $attempt -le $NETWORK_MAX_ATTEMPTS ]; do
-        log_message "Percobaan koneksi ke $NETWORK_TEST_URL (Percobaan $attempt dari $NETWORK_MAX_ATTEMPTS)"
+        log_message "Percobaan ke $attempt dari $NETWORK_MAX_ATTEMPTS"
         
         # Gunakan curl untuk memeriksa koneksi ke URL yang ditentukan
         # -s: silent mode, -f: fail silently, -m: timeout dalam detik, -o: output ke /dev/null
@@ -987,34 +987,28 @@ calculate_adaptive_interval() {
 
 # Fungsi untuk menjalankan script sebagai daemon (background)
 run_as_daemon() {
-    # Rotasi file log jika dikonfigurasi
+    # Rotasi file log jika dikonfigurasi (untuk semua mode termasuk restart)
     if [ -n "$LOG_FILE" ]; then
-        # Jika dalam mode restart, gunakan log yang sudah ada
-        # Jika tidak dalam mode restart, lakukan rotasi log
-        if [ $RESTART_MODE -eq 0 ]; then
-            # Jika file log lama sudah ada, hapus terlebih dahulu
-            if [ -f "$OLD_LOG_FILE" ]; then
-                rm -f "$OLD_LOG_FILE"
-            fi
-            
-            # Jika file log saat ini ada, pindahkan ke file log lama
-            if [ -f "$LOG_FILE" ]; then
-                mv "$LOG_FILE" "$OLD_LOG_FILE"
-            fi
-            
-            # Buat file log baru (kosong)
-            touch "$LOG_FILE"
-            
-            # Reset variabel timestamp header
-            TIMESTAMP_HEADER_WRITTEN=0
-            
-            log_message "Rotasi log selesai, script dijalankan sebagai daemon"
+        # Jika file log lama sudah ada, hapus terlebih dahulu
+        if [ -f "$OLD_LOG_FILE" ]; then
+            rm -f "$OLD_LOG_FILE"
+        fi
+        
+        # Jika file log saat ini ada, pindahkan ke file log lama
+        if [ -f "$LOG_FILE" ]; then
+            mv "$LOG_FILE" "$OLD_LOG_FILE"
+        fi
+        
+        # Buat file log baru (kosong)
+        touch "$LOG_FILE"
+        
+        # Reset variabel timestamp header
+        TIMESTAMP_HEADER_WRITTEN=0
+        
+        if [ $RESTART_MODE -eq 1 ]; then
+            log_message "Rotasi log selesai (mode restart)"
         else
-            # Dalam mode restart, hanya pastikan file log ada
-            if [ ! -f "$LOG_FILE" ]; then
-                touch "$LOG_FILE"
-                TIMESTAMP_HEADER_WRITTEN=0
-            fi
+            log_message "Rotasi log selesai"
         fi
     fi
     
@@ -1105,26 +1099,7 @@ if [ "$(dirname "$0")" = "/data/adb/service.d" ] || [ -f "/data/adb/auto-downloa
     BOOT_MODE=1
 fi
 
-# Rotasi log jika diperlukan dan tidak dalam mode restart
-if [ -n "$LOG_FILE" ] && [ $RESTART_MODE -eq 0 ]; then
-    # Jika file log lama sudah ada, hapus terlebih dahulu
-    if [ -f "$OLD_LOG_FILE" ]; then
-        rm -f "$OLD_LOG_FILE"
-    fi
-    
-    # Jika file log saat ini ada, pindahkan ke file log lama
-    if [ -f "$LOG_FILE" ]; then
-        mv "$LOG_FILE" "$OLD_LOG_FILE"
-    fi
-    
-    # Buat file log baru (kosong)
-    touch "$LOG_FILE"
-    
-    # Reset variabel timestamp header
-    TIMESTAMP_HEADER_WRITTEN=0
-    
-    log_message "Rotasi log selesai"
-fi
+# Rotasi log akan dilakukan di dalam fungsi run_as_daemon() untuk konsistensi
 
 # Jika dijalankan dalam mode restart, langsung jalankan daemon tanpa log awal
 if [ $RESTART_MODE -eq 1 ]; then
