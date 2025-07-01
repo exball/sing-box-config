@@ -445,8 +445,8 @@ download_files() {
         check_update_script "$RESTART_SCRIPT_URL" "$RESTART_SCRIPT_FILE"
         local restart_script_result=$?
         
+        # Kode untuk restart-auto-download.sh telah diperbarui (log dihapus)
         if [ $restart_script_result -eq 2 ]; then
-            log_message "File restart-auto-download.sh telah diperbarui"
         fi
     else
         log_message "URL atau path file restart-auto-download.sh tidak dikonfigurasi, melewati pemeriksaan"
@@ -457,8 +457,8 @@ download_files() {
         check_update_script "$CHECK_UPDATE_SCRIPT_URL" "$CHECK_UPDATE_SCRIPT_FILE"
         local check_update_result=$?
         
+        # Kode untuk check-update.sh telah diperbarui (log dihapus)
         if [ $check_update_result -eq 2 ]; then
-            log_message "File check-update.sh telah diperbarui"
         fi
         
         # Setelah memeriksa check-update.sh, jalankan untuk memeriksa auto-download.sh
@@ -526,9 +526,8 @@ download_files() {
                         log_message "SHA-1 sama, melewati download"
                         continue
                     else
-                        log_message "SHA-1 berbeda atau file tidak ada, mendownload..."
+                        log_message "SHA-1 berbeda atau file tidak ada, Mendownload dari Source"
                         # Download file dari URL raw GitHub
-                        log_message "Mendownload dari URL: $url"
                         if curl -s -L --connect-timeout 10 --max-time 30 "$url" -o "$temp_file"; then
                             # Verifikasi hash SHA-1 file yang didownload
                             downloaded_sha1=$(get_local_sha1 "$temp_file")
@@ -567,7 +566,7 @@ download_files() {
             # Metode pemeriksaan konten (digunakan jika pemeriksaan SHA-1 dinonaktifkan atau gagal untuk file ini)
             # Reset variabel use_content_check untuk file berikutnya
             use_content_check=0
-            log_message "Mendownload dari URL: $url"
+            log_message "Mendownload dari Source"
             # Download file ke direktori sementara
             if curl -s -L --connect-timeout 10 --max-time 30 "$url" -o "$temp_file"; then
                 # Hitung hash SHA-1 file yang didownload untuk logging
