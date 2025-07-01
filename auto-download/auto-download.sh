@@ -1,6 +1,6 @@
 #!/bin/sh
 
-# Test
+# Test 1
 # Script untuk mendownload file konfigurasi secara otomatis
 # Dengan fitur pemeriksaan hash SHA-1 untuk menghindari download ulang
 # Versi dengan CHECK_INTERVAL adaptif dan pembaruan auto-download.conf
