@@ -530,12 +530,19 @@ def process_single_config(config):
         "outbounds": all_outbounds
     }
     
-    # Simpan ke file output yang ditentukan
-    with open(output_name, "w", encoding="utf-8") as f:
+    # Buat direktori outbound-provider jika belum ada
+    output_dir = "outbound-provider"
+    if not os.path.exists(output_dir):
+        os.makedirs(output_dir)
+        print(f"Created directory: {output_dir}")
+    
+    # Simpan ke file output yang ditentukan di dalam direktori outbound-provider
+    output_path = os.path.join(output_dir, output_name)
+    with open(output_path, "w", encoding="utf-8") as f:
         json.dump(all_result, f, indent=4, ensure_ascii=False)
     
     print(f"Total proxies collected: {len(all_outbounds)}")
-    print(f"Successfully saved all proxies to {output_name}")
+    print(f"Successfully saved all proxies to {output_path}")
     
     # Buat summary untuk ditampilkan ke pengguna
     print("\nSummary:")

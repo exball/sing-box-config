@@ -38,11 +38,11 @@ def upload_to_r2():
         config=s3_config
     )
     
-    # Cari semua file JSON di direktori saat ini
-    json_files = glob.glob('*.json')
+    # Cari semua file JSON di direktori outbound-provider
+    json_files = glob.glob('outbound-provider/*.json')
     
     if not json_files:
-        print("No JSON files found to upload")
+        print("No JSON files found in outbound-provider directory to upload")
         return False
     
     # Ambil nama folder dari environment variable (default: "sing-box_config")
@@ -56,8 +56,11 @@ def upload_to_r2():
     uploaded_files = []
     for json_file in json_files:
         try:
+            # Ambil hanya nama file tanpa path
+            file_name = os.path.basename(json_file)
+            
             # Buat key dengan format: folder_name/file_name
-            object_key = f"{folder_name}/{json_file}"
+            object_key = f"{folder_name}/{file_name}"
             
             print(f"Uploading {json_file} to R2 folder '{folder_name}'...")
             
@@ -73,7 +76,7 @@ def upload_to_r2():
             
             # Dapatkan URL publik
             file_url = f'https://{r2_bucket_name}.{r2_account_id}.r2.cloudflarestorage.com/{object_key}'
-            uploaded_files.append({"file": json_file, "url": file_url})
+            uploaded_files.append({"file": file_name, "url": file_url})
             
             print(f"Successfully uploaded {json_file} to R2")
             print(f"Public URL: {file_url}")

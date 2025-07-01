@@ -85,17 +85,17 @@ jobs:
           python extract_outbound.py -o config_format.ini -f config.ini
           
           echo "Checking output files:"
-          # Dynamically check all JSON files in the directory
-          echo "JSON files found:"
-          find . -maxdepth 1 -name "*.json" | sort
+          # Check JSON files in outbound-provider directory
+          echo "JSON files found in outbound-provider directory:"
+          find ./outbound-provider -name "*.json" 2>/dev/null | sort || echo "outbound-provider directory not found"
           
-          # Count total number of JSON files
-          JSON_COUNT=$(find . -maxdepth 1 -name "*.json" | wc -l)
-          echo "Total JSON files: $JSON_COUNT"
+          # Count total number of JSON files in outbound-provider directory
+          JSON_COUNT=$(find ./outbound-provider -name "*.json" 2>/dev/null | wc -l)
+          echo "Total JSON files in outbound-provider: $JSON_COUNT"
           
           # Check if any JSON files were created
           if [ "$JSON_COUNT" -eq 0 ]; then
-            echo "WARNING: No JSON files were created!"
+            echo "WARNING: No JSON files were created in outbound-provider directory!"
             exit 1
           fi
       
@@ -118,7 +118,7 @@ jobs:
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
           commit_message: "Update proxy list [automated]"
-          file_pattern: "*.json README.md config.ini config_format.ini"
+          file_pattern: "*.json README.md config.ini config_format.ini outbound-provider/"
           commit_user_name: "GitHub Actions Bot"
           commit_user_email: "actions@github.com"
           commit_author: "GitHub Actions Bot <actions@github.com>"
@@ -127,6 +127,6 @@ jobs:
       - name: Summary
         run: |
           echo "Workflow completed successfully!"
-          echo "JSON files generated:"
-          find . -maxdepth 1 -name "*.json" | sort
-          echo "Total JSON files: $(find . -maxdepth 1 -name "*.json" | wc -l)"
+          echo "JSON files generated in outbound-provider directory:"
+          find ./outbound-provider -name "*.json" 2>/dev/null | sort || echo "No JSON files found"
+          echo "Total JSON files: $(find ./outbound-provider -name "*.json" 2>/dev/null | wc -l)"
