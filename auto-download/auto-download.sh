@@ -85,6 +85,48 @@ ensure_parent_directory() {
     fi
 }
 
+# Fungsi helper untuk operasi curl - pemeriksaan koneksi network
+curl_network_check() {
+    local test_url="$1"
+    local timeout_connect="${2:-5}"
+    local timeout_max="${3:-10}"
+    
+    if [ -z "$test_url" ]; then
+        log_message "Error: URL test tidak boleh kosong"
+        return 1
+    fi
+    
+    curl -s -f -m "$timeout_max" --connect-timeout "$timeout_connect" -o /dev/null "$test_url"
+    return $?
+}
+
+# Fungsi helper untuk operasi curl - download file
+curl_download_file() {
+    local source_url="$1"
+    local output_file="$2"
+    local timeout_connect="${3:-10}"
+    local timeout_max="${4:-30}"
+    
+    if [ -z "$source_url" ] || [ -z "$output_file" ]; then
+        log_message "Error: URL sumber dan file output tidak boleh kosong"
+        return 1
+    fi
+    
+    # Pastikan direktori output ada
+    ensure_parent_directory "$output_file"
+    
+    # Download file dengan follow redirects
+    curl -s -L --connect-timeout "$timeout_connect" --max-time "$timeout_max" "$source_url" -o "$output_file"
+    local curl_exit_code=$?
+    
+    # Jika gagal, hapus file yang mungkin sudah dibuat (partial download)
+    if [ $curl_exit_code -ne 0 ]; then
+        rm -f "$output_file" 2>/dev/null
+    fi
+    
+    return $curl_exit_code
+}
+
 # Fungsi untuk memeriksa koneksi jaringan
 check_network_connection() {
     log_message "Memeriksa koneksi internet..."
@@ -96,8 +138,7 @@ check_network_connection() {
         log_message "Percobaan ke $attempt dari $NETWORK_MAX_ATTEMPTS"
         
         # Gunakan curl untuk memeriksa koneksi ke URL yang ditentukan
-        # -s: silent mode, -f: fail silently, -m: timeout dalam detik, -o: output ke /dev/null
-        if curl -s -f -m 10 --connect-timeout 5 -o /dev/null "$NETWORK_TEST_URL"; then
+        if curl_network_check "$NETWORK_TEST_URL"; then
             log_message "Koneksi internet tersedia"
             connected=1
             break
@@ -172,7 +213,7 @@ check_network_after_pid() {
     log_message "Memeriksa koneksi internet setelah me-restart Sing-Box..."
     
     # Gunakan curl untuk memeriksa koneksi ke URL yang ditentukan
-    if curl -s -f -m 10 --connect-timeout 5 -o /dev/null "$NETWORK_TEST_URL"; then
+    if curl_network_check "$NETWORK_TEST_URL"; then
         log_message "Koneksi internet tersedia"
         return 0
     else
@@ -186,7 +227,7 @@ check_network_after_pid() {
         
         # Periksa lagi koneksi
         log_message "Memeriksa koneksi internet setelah memulai ulang layanan..."
-        if curl -s -f -m 10 --connect-timeout 5 -o /dev/null "$NETWORK_TEST_URL"; then
+        if curl_network_check "$NETWORK_TEST_URL"; then
             log_message "Koneksi internet berhasil dipulihkan setelah memulai ulang layanan"
             return 0
         else
@@ -215,7 +256,7 @@ get_github_sha1() {
     local temp_hash_file="$TEMP_DIR/temp_hash_file"
     
     # Download file dari URL raw GitHub
-    if curl -s -L --connect-timeout 10 --max-time 30 "$raw_url" -o "$temp_hash_file"; then
+    if curl_download_file "$raw_url" "$temp_hash_file"; then
         # Hitung hash SHA-1 dari file yang didownload
         local sha1=$(get_local_sha1 "$temp_hash_file")
         
@@ -243,7 +284,7 @@ check_update_script() {
     local temp_script_file="$TEMP_DIR/${script_name}.new"
     
     # Download file dari URL untuk mendapatkan hash
-    if curl -s -L --connect-timeout 10 --max-time 30 "$script_url" -o "$temp_script_file"; then
+    if curl_download_file "$script_url" "$temp_script_file"; then
         # Hitung hash SHA-1 dari file yang didownload
         local github_sha1=$(get_local_sha1 "$temp_script_file")
         
@@ -329,7 +370,7 @@ download_files() {
         local temp_conf_file="$TEMP_DIR/auto-download.conf.new"
         
         # Download file dari URL raw GitHub untuk mendapatkan hash
-        if curl -s -L --connect-timeout 10 --max-time 30 "$CONF_UPDATE_URL" -o "$temp_conf_file"; then
+        if curl_download_file "$CONF_UPDATE_URL" "$temp_conf_file"; then
             # Hitung hash SHA-1 dari file yang didownload
             local github_sha1=$(get_local_sha1 "$temp_conf_file")
             
@@ -479,7 +520,7 @@ download_files() {
                     else
                         log_message "SHA-1 berbeda atau file tidak ada, Mendownload..."
                         # Download file dari URL raw GitHub
-                        if curl -s -L --connect-timeout 10 --max-time 30 "$url" -o "$temp_file"; then
+                        if curl_download_file "$url" "$temp_file"; then
                             # Verifikasi hash SHA-1 file yang didownload
                             downloaded_sha1=$(get_local_sha1 "$temp_file")
                             log_message "SHA-1 didownload: $downloaded_sha1"
@@ -518,7 +559,7 @@ download_files() {
             use_content_check=0
             log_message "Mendownload..."
             # Download file ke direktori sementara
-            if curl -s -L --connect-timeout 10 --max-time 30 "$url" -o "$temp_file"; then
+            if curl_download_file "$url" "$temp_file"; then
                 # Hitung hash SHA-1 file yang didownload untuk logging
                 downloaded_sha1=$(get_local_sha1 "$temp_file")
                 log_message "SHA-1 didownload: $downloaded_sha1"
@@ -602,7 +643,7 @@ download_files() {
         else
             log_message "SHA-1 berbeda atau file tidak ada, mendownload..."
             # Download config.json dari URL raw GitHub
-            if curl -s -L --connect-timeout 10 --max-time 30 "$CONFIG_URL" -o "$TEMP_DIR/config.json"; then
+            if curl_download_file "$CONFIG_URL" "$TEMP_DIR/config.json"; then
                 # Verifikasi hash SHA-1 file config.json yang didownload
                 downloaded_sha1_config=$(get_local_sha1 "$TEMP_DIR/config.json")
                 log_message "SHA-1 didownload: $downloaded_sha1_config"

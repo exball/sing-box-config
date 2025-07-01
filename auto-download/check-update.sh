@@ -66,6 +66,50 @@ get_local_sha1() {
     fi
 }
 
+# Fungsi helper untuk operasi curl - pemeriksaan koneksi network
+curl_network_check() {
+    local test_url="$1"
+    local timeout_connect="${2:-5}"
+    local timeout_max="${3:-10}"
+    
+    if [ -z "$test_url" ]; then
+        log_message "Error: URL test tidak boleh kosong"
+        return 1
+    fi
+    
+    curl -s -f -m "$timeout_max" --connect-timeout "$timeout_connect" -o /dev/null "$test_url"
+    return $?
+}
+
+# Fungsi helper untuk operasi curl - download file
+curl_download_file() {
+    local source_url="$1"
+    local output_file="$2"
+    local timeout_connect="${3:-10}"
+    local timeout_max="${4:-30}"
+    
+    if [ -z "$source_url" ] || [ -z "$output_file" ]; then
+        log_message "Error: URL sumber dan file output tidak boleh kosong"
+        return 1
+    fi
+    
+    # Pastikan direktori output ada
+    mkdir -p "$(dirname "$output_file")" 2>/dev/null || {
+        log_message "Peringatan: Gagal membuat direktori: $(dirname "$output_file")"
+    }
+    
+    # Download file dengan follow redirects
+    curl -s -L --connect-timeout "$timeout_connect" --max-time "$timeout_max" "$source_url" -o "$output_file"
+    local curl_exit_code=$?
+    
+    # Jika gagal, hapus file yang mungkin sudah dibuat (partial download)
+    if [ $curl_exit_code -ne 0 ]; then
+        rm -f "$output_file" 2>/dev/null
+    fi
+    
+    return $curl_exit_code
+}
+
 # Fungsi untuk memeriksa koneksi jaringan
 check_network_connection() {
     log_message "Memeriksa koneksi internet..."
@@ -77,7 +121,7 @@ check_network_connection() {
         log_message "Percobaan koneksi ke $NETWORK_TEST_URL (Percobaan $attempt dari $NETWORK_MAX_ATTEMPTS)"
         
         # Gunakan curl untuk memeriksa koneksi ke URL yang ditentukan
-        if curl -s -f -m 10 --connect-timeout 5 -o /dev/null "$NETWORK_TEST_URL"; then
+        if curl_network_check "$NETWORK_TEST_URL"; then
             log_message "Koneksi internet tersedia"
             connected=1
             break
@@ -115,7 +159,7 @@ check_and_update_file() {
     local temp_file="$TEMP_DIR/${file_name}.new"
     
     # Download file dari URL untuk mendapatkan hash
-    if curl -s -L --connect-timeout 10 --max-time 30 "$file_url" -o "$temp_file"; then
+    if curl_download_file "$file_url" "$temp_file"; then
         # Hitung hash SHA-1 dari file yang didownload
         local github_sha1=$(get_local_sha1 "$temp_file")
         
