@@ -151,7 +151,6 @@ check_network_after_pid() {
     log_message "Memeriksa koneksi internet setelah me-restart Sing-Box..."
     
     # Gunakan curl untuk memeriksa koneksi ke URL yang ditentukan
-    log_message "Percobaan koneksi ke $NETWORK_TEST_URL"
     if curl -s -f -m 10 --connect-timeout 5 -o /dev/null "$NETWORK_TEST_URL"; then
         log_message "Koneksi internet tersedia"
         return 0
@@ -254,7 +253,7 @@ check_network_connection() {
     local connected=0
     
     while [ $attempt -le $NETWORK_MAX_ATTEMPTS ]; do
-        log_message "Percobaan koneksi ke $NETWORK_TEST_URL (Percobaan $attempt dari $NETWORK_MAX_ATTEMPTS)"
+        log_message "Percobaan ke $attempt dari $NETWORK_MAX_ATTEMPTS"
         
         # Gunakan curl untuk memeriksa koneksi ke URL yang ditentukan
         # -s: silent mode, -f: fail silently, -m: timeout dalam detik, -o: output ke /dev/null
