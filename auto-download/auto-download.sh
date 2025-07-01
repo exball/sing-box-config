@@ -659,7 +659,6 @@ download_files() {
                 # Verifikasi hash SHA-1 file config.json yang didownload
                 downloaded_sha1_config=$(get_local_sha1 "$TEMP_DIR/config.json")
                 log_message "SHA-1 didownload: $downloaded_sha1_config"
-                log_message "SHA-1 GitHub: $github_sha1_config"
                 
                 if [ "$downloaded_sha1_config" = "$github_sha1_config" ]; then
                     # Pindahkan file config.json dari temp ke direktori tujuan
