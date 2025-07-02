@@ -185,7 +185,6 @@ compare_sha1_and_decide() {
         log_message "SHA-1 sama, tidak perlu diperbarui"
         return 0  # Same, no update needed
     else
-        log_message "SHA-1 $file_description berbeda atau file tidak ada"
         return 1  # Different, update needed
     fi
 }
