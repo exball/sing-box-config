@@ -182,7 +182,7 @@ compare_sha1_and_decide() {
     
     # Bandingkan hash SHA-1
     if [ -n "$local_sha1" ] && [ "$local_sha1" = "$github_sha1" ]; then
-        log_message "SHA-1 $file_description sama, tidak perlu diperbarui"
+        log_message "SHA-1 sama, tidak perlu diperbarui"
         return 0  # Same, no update needed
     else
         log_message "SHA-1 $file_description berbeda atau file tidak ada"
@@ -505,7 +505,6 @@ download_provider_file_with_sha1() {
     
     case $compare_result in
         0)  # Same SHA-1, skip download
-            log_message "SHA-1 sama, melewati download"
             return 0
             ;;
         2)  # Empty GitHub SHA-1 (should not happen due to check above)
