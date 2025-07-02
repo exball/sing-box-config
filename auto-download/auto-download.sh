@@ -1,6 +1,6 @@
 #!/bin/sh
 
-# Test - Modified for debugging SHA-1 comparison issue 
+# Test 
 # Script untuk mendownload file konfigurasi secara otomatis
 # Dengan fitur pemeriksaan hash SHA-1 untuk menghindari download ulang
 # Versi dengan CHECK_INTERVAL adaptif dan pembaruan auto-download.conf
@@ -171,13 +171,13 @@ compare_sha1_and_decide() {
         return 2  # Indicate fallback needed
     fi
     
-    log_message "SHA-1 GitHub $file_description: $github_sha1"
+    log_message "SHA-1 GitHub: $github_sha1"
     
     # Dapatkan hash SHA-1 dari file lokal jika ada
     local local_sha1=""
     if [ -f "$local_file" ]; then
         local_sha1=$(get_local_sha1 "$local_file")
-        log_message "SHA-1 lokal $file_description: $local_sha1"
+        log_message "SHA-1 lokal: $local_sha1"
     fi
     
     # Bandingkan hash SHA-1
