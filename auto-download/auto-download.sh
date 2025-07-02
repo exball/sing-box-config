@@ -182,7 +182,7 @@ compare_sha1_and_decide() {
     
     # Bandingkan hash SHA-1
     if [ -n "$local_sha1" ] && [ "$local_sha1" = "$github_sha1" ]; then
-        log_message "SHA-1 sama, tidak perlu diperbarui"
+        log_message "SHA-1 sama, Skip..."
         return 0  # Same, no update needed
     else
         return 1  # Different, update needed
@@ -383,7 +383,7 @@ unified_update_with_security() {
             return 3  # Skip for security
             ;;
         1)  # Different SHA-1, download needed
-            log_message "$file_description berbeda atau file tidak ada, memperbarui..."
+            log_message "SHA-1 berbeda atau file tidak ada, memperbarui..."
             
             # Download file ke temporary directory (security: tidak langsung overwrite)
             local temp_file="$TEMP_DIR/${file_description}.new"
@@ -395,10 +395,9 @@ unified_update_with_security() {
                 if verify_downloaded_sha1 "$temp_file" "$github_sha1" "$target_file" "$file_description" "$set_executable"; then
                     # Reload konfigurasi jika diperlukan
                     if [ "$reload_config" = "1" ]; then
-                        log_message "Mereload konfigurasi dari $file_description"
                         if [ -f "$target_file" ]; then
                             source "$target_file"
-                            log_message "Menggunakan konfigurasi baru"
+                            log_message "Reload config. Menggunakan konfigurasi baru"
                         fi
                     fi
                     return 1  # File updated
