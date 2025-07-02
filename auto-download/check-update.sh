@@ -139,20 +139,143 @@ check_network_connection() {
     return 0
 }
 
-# Fungsi untuk memeriksa dan mengupdate file (menggunakan helper dari auto-download.sh)
+# Fungsi helper untuk mendapatkan SHA-1 dari file lokal
+get_local_sha1() {
+    local file="$1"
+    if [ -f "$file" ]; then
+        sha1sum "$file" | awk '{print $1}'
+    else
+        echo ""
+    fi
+}
+
+# Fungsi helper untuk download dan mendapatkan SHA-1
+download_and_get_sha1() {
+    local source_url="$1"
+    local temp_file_prefix="${2:-temp_sha1_file}"
+    
+    if [ -z "$source_url" ]; then
+        log_message "Error: URL sumber tidak boleh kosong"
+        return 1
+    fi
+    
+    # Pastikan temp directory ada
+    if [ ! -d "$TEMP_DIR" ]; then
+        mkdir -p "$TEMP_DIR" 2>/dev/null || {
+            log_message "Warning: Tidak dapat membuat direktori temp, menggunakan /tmp"
+            TEMP_DIR="/tmp"
+        }
+    fi
+    
+    # Buat temporary file
+    local temp_hash_file="$TEMP_DIR/${temp_file_prefix}"
+    
+    # Download file dari URL
+    if curl_download_file "$source_url" "$temp_hash_file"; then
+        # Hitung hash SHA-1 dari file yang didownload
+        local sha1=$(get_local_sha1 "$temp_hash_file")
+        
+        rm -f "$temp_hash_file"   # Hapus file sementara
+        
+        if [ -n "$sha1" ]; then
+            echo "$sha1"
+            return 0
+        else
+            log_message "Error: Gagal menghitung SHA-1 dari file yang didownload"
+            return 1
+        fi
+    else
+        log_message "Error: Gagal mendownload file dari $source_url"
+        return 1
+    fi
+}
+
+# Fungsi untuk memeriksa dan mengupdate file
 check_and_update_file() {
     local file_url="$1"
     local local_file="$2"
     local file_name=$(basename "$local_file")
     
-    # Tentukan apakah file perlu executable permission (untuk .sh files)
-    local set_executable=0
-    if [ "${file_name##*.}" = "sh" ]; then
-        set_executable=1
+    log_message "-----"
+    log_message "Memeriksa $file_name..."
+    
+    # Download file dan dapatkan SHA-1 dari GitHub
+    local github_sha1=$(download_and_get_sha1 "$file_url" "${file_name}.check")
+    
+    if [ -z "$github_sha1" ]; then
+        log_message "Gagal mendapatkan SHA-1 file $file_name dari GitHub"
+        return 1
     fi
     
-    # Gunakan helper function dari auto-download.sh
-    update_file_with_backup "$file_url" "$local_file" "$file_name" "$set_executable"
+    log_message "SHA-1 GitHub $file_name: $github_sha1"
+    
+    # Dapatkan hash SHA-1 dari file lokal jika ada
+    local local_sha1=""
+    if [ -f "$local_file" ]; then
+        local_sha1=$(get_local_sha1 "$local_file")
+        log_message "SHA-1 lokal $file_name: $local_sha1"
+    fi
+    
+    # Bandingkan hash SHA-1
+    if [ -n "$local_sha1" ] && [ "$local_sha1" = "$github_sha1" ]; then
+        log_message "SHA-1 $file_name sama, tidak perlu diperbarui"
+        return 0  # Same, no update needed
+    else
+        log_message "SHA-1 $file_name berbeda atau file tidak ada, memperbarui..."
+        
+        # Pastikan direktori parent ada
+        local parent_dir=$(dirname "$local_file")
+        if [ ! -d "$parent_dir" ]; then
+            mkdir -p "$parent_dir" 2>/dev/null || {
+                log_message "Error: Tidak dapat membuat direktori $parent_dir"
+                return 1
+            }
+        fi
+        
+        # Download file untuk update
+        local temp_file="$TEMP_DIR/${file_name}.new"
+        if curl_download_file "$file_url" "$temp_file"; then
+            # Verifikasi hash SHA-1 file yang didownload
+            local downloaded_sha1=$(get_local_sha1 "$temp_file")
+            log_message "SHA-1 didownload $file_name: $downloaded_sha1"
+            
+            if [ "$downloaded_sha1" = "$github_sha1" ]; then
+                # Hapus backup lama jika ada
+                if [ -f "${local_file}.bak" ]; then
+                    rm -f "${local_file}.bak"
+                fi
+                
+                # Buat backup file lama jika ada
+                if [ -f "$local_file" ]; then
+                    cp "$local_file" "${local_file}.bak"
+                fi
+                
+                # Pindahkan file baru ke lokasi target
+                mv "$temp_file" "$local_file"
+                
+                # Set executable permission untuk file .sh
+                if [ "${file_name##*.}" = "sh" ]; then
+                    chmod +x "$local_file"
+                fi
+                
+                log_message "$file_name berhasil diperbarui"
+                
+                # Hapus file backup karena pembaruan berhasil
+                if [ -f "${local_file}.bak" ]; then
+                    rm -f "${local_file}.bak"
+                fi
+                
+                return 2  # File updated
+            else
+                log_message "Error: SHA-1 file yang didownload tidak cocok"
+                rm -f "$temp_file"
+                return 1
+            fi
+        else
+            log_message "Gagal mendownload $file_name dari $file_url"
+            return 1
+        fi
+    fi
 }
 
 # ===== FUNGSI UTAMA =====
