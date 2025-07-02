@@ -358,7 +358,7 @@ unified_update_with_security() {
             return 3  # Skip for security
             ;;
         1)  # Different SHA-1, download needed
-            log_message "SHA-1 berbeda atau file tidak ada, memperbarui..."
+            log_message "SHA-1 berbeda atau file tidak ada, Update..."
             
             # Download file ke temporary directory (security: tidak langsung overwrite)
             local temp_file="$TEMP_DIR/${file_description}.new"
@@ -457,7 +457,7 @@ download_files() {
         esac
         
         # Setelah memeriksa check-update.sh, jalankan untuk memeriksa auto-download.sh
-        log_message "Menjalankan check-update.sh untuk memeriksa auto-download.sh..."
+        log_message "Run check-update.sh untuk memeriksa auto-download.sh..."
         if [ -x "$CHECK_UPDATE_SCRIPT_FILE" ]; then
             # Jalankan check-update.sh dan tunggu hingga selesai
             sh "$CHECK_UPDATE_SCRIPT_FILE"
@@ -900,9 +900,8 @@ if [ "$(dirname "$0")" = "/data/adb/service.d" ] || [ -f "/data/adb/auto-downloa
     BOOT_MODE=1
 fi
 
-# Jika dijalankan dalam mode restart, langsung jalankan daemon tanpa log awal
+# Jika dijalankan dalam mode restart, langsung jalankan daemon
 if [ $RESTART_MODE -eq 1 ]; then
-    # Langsung jalankan daemon tanpa log awal
     run_as_daemon > /dev/null 2>&1 &
     exit 0
 fi
