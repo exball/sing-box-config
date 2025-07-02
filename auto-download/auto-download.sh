@@ -880,14 +880,14 @@ run_as_daemon() {
     
     # Kemudian jalankan loop untuk memeriksa jadwal sesuai interval yang dikonfigurasi
     log_message "-------------------------------------"
-    log_message "Memulai loop pemeriksaan jadwal dengan interval $adaptive_interval detik..."
+    log_message "Memulai loop pemeriksaan jadwal"
     current_hour=$(date +"%H:%M")
     next_schedule_time=$(echo "$next_schedule_info" | grep -o "[0-9][0-9]:[0-9][0-9]")
     next_schedule_diff=$(echo "$next_schedule_info" | grep -o "dalam [0-9]* jam [0-9]* menit" | sed 's/dalam //')
     
     # Log interval yang dipilih untuk loop pertama
-    log_message "Menunggu $adaptive_interval detik sampai pemeriksaan berikutnya..."
-    log_message "Waktu saat ini: $current_hour, Jadwal berikutnya: $next_schedule_time ($next_schedule_diff)"
+    log_message "Waktu saat ini: $current_hour"
+    log_message "Jadwal berikutnya: $next_schedule_time ($next_schedule_diff)"
     
     # Loop utama
     while true; do
@@ -901,7 +901,10 @@ run_as_daemon() {
         next_adaptive_interval=$(calculate_adaptive_interval)
         
         # Log informasi pemeriksaan jadwal dengan interval yang benar
-        log_message "Pemeriksaan jadwal dengan Interval ($next_adaptive_interval detik)"
+        log_message "Pemeriksaan jadwal"
+
+        # Jalankan pemeriksaan jadwal
+        check_schedule_and_run
         
         # Dapatkan waktu ke jadwal berikutnya untuk log
         next_schedule_info=$(get_next_schedule_info)
@@ -912,11 +915,9 @@ run_as_daemon() {
         next_schedule_diff=$(echo "$next_schedule_info" | grep -o "dalam [0-9]* jam [0-9]* menit" | sed 's/dalam //')
         
         # Log waktu tunggu untuk siklus berikutnya
-        log_message "Menunggu $next_adaptive_interval detik sampai pemeriksaan berikutnya..."
-        log_message "Waktu saat ini: $current_hour, Jadwal berikutnya: $next_schedule_time ($next_schedule_diff)"
-        
-        # Jalankan pemeriksaan jadwal
-        check_schedule_and_run
+        log_message "Waktu saat ini: $current_hour"
+        log_message "Jadwal berikutnya: $next_schedule_time ($next_schedule_diff)"
+        log_message "Periksa jadwal berikutnya "
         
         # Simpan interval saat ini untuk perbandingan berikutnya
         LAST_INTERVAL=$next_adaptive_interval
@@ -969,9 +970,3 @@ fi
 log_message "Menjalankan dalam mode daemon"
 run_as_daemon > /dev/null 2>&1 &
 
-# Catatan penggunaan:
-# 1. Untuk dijalankan otomatis saat boot, letakkan di /data/adb/service.d/
-#    dan pastikan file memiliki permission eksekusi (chmod +x)
-# 2. Untuk dijalankan manual: sh /path/to/auto-download.sh
-# 3. Untuk melihat log saat ini: cat /data/adb/auto-download/auto-download.log
-# 4. Untuk melihat log sebelumnya: cat /data/adb/auto-download/auto-download_old.log
