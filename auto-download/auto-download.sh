@@ -639,10 +639,6 @@ download_files() {
         return 1
     fi
     
-    # Proses config.json menggunakan helper
-    log_message "-----"
-    log_message "Memeriksa config.json..."
-    
     # Gunakan helper untuk download config.json dengan SHA-1 check (selalu aktif)
     download_provider_file_with_sha1 "$CONFIG_URL" "$CONFIG_DIR/config.json" "config.json"
     local config_result=$?
