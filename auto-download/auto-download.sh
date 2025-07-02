@@ -368,15 +368,12 @@ update_file_with_backup() {
     local compare_result=$?
     
     case $compare_result in
-        0)  # Same SHA-1, no update needed
-            return 0
+        0)  return 0
             ;;
-        2)  # Empty GitHub SHA-1, fallback needed  
-            log_message "Gagal mendapatkan SHA-1 file $file_description dari GitHub"
+        2)  log_message "Gagal mendapatkan SHA-1 file $file_description dari GitHub"
             return 1
             ;;
-        1)  # Different SHA-1, update needed
-            log_message "$file_description berbeda atau file tidak ada, memperbarui..."
+        1)  log_message "$file_description berbeda atau file tidak ada, memperbarui..."
             
             # Download file untuk update
             local temp_file="$TEMP_DIR/${file_description}.new"
@@ -431,16 +428,13 @@ update_config_with_reload() {
     local compare_result=$?
     
     case $compare_result in
-        0)  # Same SHA-1, no update needed
-            log_message "SHA-1 sama, menggunakan konfigurasi lokal"
+        0)  log_message "SHA-1 sama, menggunakan konfigurasi lokal"
             return 0
             ;;
-        2)  # Empty GitHub SHA-1, fallback needed  
-            log_message "Gagal mendapatkan SHA-1 file konfigurasi dari GitHub"
+        2)  log_message "Gagal mendapatkan SHA-1 file konfigurasi dari GitHub"
             return 1
             ;;
-        1)  # Different SHA-1, update needed
-            log_message "SHA-1 $file_description berbeda atau file tidak ada, memperbarui..."
+        1)  log_message "SHA-1 $file_description berbeda atau file tidak ada, memperbarui..."
             
             # Download file untuk update
             local temp_file="$TEMP_DIR/${file_description}.new"
@@ -468,8 +462,7 @@ update_config_with_reload() {
                     log_message "Menggunakan konfigurasi baru"
                 fi
                 
-                # Hapus file backup karena pembaruan berhasil
-                if [ -f "${target_file}.bak" ]; then
+                if [ -f "${target_file}.bak" ]; then   # Hapus file backup karena pembaruan berhasil
                     rm -f "${target_file}.bak"
                 fi
                 
@@ -909,7 +902,6 @@ calculate_adaptive_interval() {
     # Daftar interval yang tersedia (dalam detik) - menggunakan string untuk kompatibilitas sh
     local intervals_list="7200 3600 3300 3000 2700 2400 2100 1800 1500 1200 900 600 300 60"
     
-    # Pilih interval yang paling sesuai
     local adaptive_interval=$CHECK_INTERVAL  # Default ke interval yang dikonfigurasi
     
     # Jika waktu ke jadwal berikutnya kurang dari interval default
@@ -975,7 +967,6 @@ run_as_daemon() {
     
     # Periksa dan simpan PID
     check_and_save_pid
-    
     download_files
     
     # Reset variabel untuk melacak interval dan jadwal terakhir
@@ -1004,7 +995,6 @@ run_as_daemon() {
         # Tunggu sesuai interval adaptif
         sleep $adaptive_interval
         
-        # Log pemeriksaan jadwal
         log_message "-------------------------------------"
         
         # Hitung interval adaptif untuk siklus berikutnya
