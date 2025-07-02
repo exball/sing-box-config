@@ -306,32 +306,7 @@ check_and_save_pid() {
     fi
 }
 
-# Fungsi untuk memeriksa jaringan setelah pemeriksaan PID
-check_network_after_pid() {
-    log_message "Memeriksa koneksi internet setelah me-restart Sing-Box..."
-    
-    # Gunakan curl untuk memeriksa koneksi ke URL yang ditentukan
-    if curl_network_check "$NETWORK_TEST_URL"; then
-        log_message "Koneksi internet tersedia"
-        return 0
-    else
-        log_message "Koneksi internet tidak berfungsi, mencoba memulai ulang layanan sing-box..."
-        
-        # Jalankan perintah untuk memulai ulang layanan dan mengaktifkan iptables
-        /data/adb/box/scripts/box.service start && /data/adb/box/scripts/box.iptables enable
-        
-        sleep 5
-        
-        log_message "Memeriksa koneksi internet setelah memulai ulang layanan..."
-        if curl_network_check "$NETWORK_TEST_URL"; then
-            log_message "Koneksi internet berhasil dipulihkan setelah memulai ulang layanan"
-            return 0
-        else
-            log_message "Koneksi internet masih bermasalah setelah memulai ulang layanan"
-            return 1
-        fi
-    fi
-}
+
 
 # Pastikan semua direktori yang diperlukan ada
 ensure_directories "/data/adb/auto-download" "$SAVE_DIR" "$CONFIG_DIR" "$TEMP_DIR"
@@ -567,20 +542,33 @@ download_files() {
     if [ $files_updated -eq 1 ]; then
         log_message "-----"
         
-        local BOX_PID=""    # Dapatkan PID layanan box sebelum restart
+        # Deteksi PID lama dari /data/adb/box/run/box.pid
+        local BOX_PID=""
         if [ -f "/data/adb/box/run/box.pid" ]; then
             BOX_PID=$(cat "/data/adb/box/run/box.pid")
-            log_message "Ada file yang diperbarui, restart Sing-Box (PID: $BOX_PID)"
+            log_message "Ada file yang diperbarui, restart Sing-Box (PID lama: $BOX_PID)"
         else
-            log_message "Ada file yang diperbarui, restart Sing-Box (PID: tidak ditemukan)"
+            log_message "Ada file yang diperbarui, restart Sing-Box (PID lama: tidak ditemukan)"
         fi
         
-        # Restart layanan Sing-Box
-        /data/adb/box/scripts/box.service restart
+        # Stop layanan sing-box dengan disable iptables dan stop service
+        log_message "Menghentikan layanan Sing-Box..."
+        /data/adb/box/scripts/box.iptables disable && /data/adb/box/scripts/box.service stop
         
-        sleep $SERVICE_RESTART_WAIT
+        # Kill PID jika masih ada
+        if [ -n "$BOX_PID" ] && kill -0 "$BOX_PID" 2>/dev/null; then
+            log_message "Menghentikan proses dengan PID: $BOX_PID"
+            kill "$BOX_PID" 2>/dev/null
+        fi
         
-        # Baca log runs.log untuk melihat status restart
+        # Tunggu 2 detik
+        sleep 2
+        
+        # Mulai kembali layanan sing-box dengan start service dan enable iptables
+        log_message "Memulai kembali layanan Sing-Box..."
+        /data/adb/box/scripts/box.service start && /data/adb/box/scripts/box.iptables enable
+        
+        # Baca log dari /data/adb/box/run/runs.log
         if [ -f "/data/adb/box/run/runs.log" ]; then
             RUNS_LOG=$(tail -n 10 "/data/adb/box/run/runs.log")
             log_message "$RUNS_LOG"
@@ -588,65 +576,18 @@ download_files() {
             log_message "File runs.log tidak ditemukan setelah restart"
         fi
         
-        # Periksa apakah layanan box berhasil di-restart
+        # Deteksi PID baru dari /data/adb/box/run/box.pid
         if [ -f "/data/adb/box/run/box.pid" ]; then
             NEW_PID=$(cat "/data/adb/box/run/box.pid")
-            
-            # Periksa apakah PID berubah
-            if [ -n "$BOX_PID" ] && [ "$NEW_PID" != "$BOX_PID" ]; then
-                log_message "Sing-Box berhasil di-restart (PID berubah dari $BOX_PID ke $NEW_PID)"
-            else
-                log_message "PID layanan box setelah restart: $NEW_PID"
-            fi
-            
-            # Periksa apakah proses dengan PID tersebut benar-benar berjalan
-            if kill -0 "$NEW_PID" 2>/dev/null; then
-                :
-            else
-                log_message "PERINGATAN: PID $NEW_PID ada di file, tetapi proses tidak berjalan"
-                log_message "Mencoba memulai layanan box secara manual..."
-                /data/adb/box/scripts/box.service start && /data/adb/box/scripts/box.iptables enable
-                
-                # Periksa lagi setelah mencoba memulai secara manual
-                sleep $SERVICE_RESTART_WAIT
-                if [ -f "/data/adb/box/run/box.pid" ]; then
-                    MANUAL_PID=$(cat "/data/adb/box/run/box.pid")
-                    if kill -0 "$MANUAL_PID" 2>/dev/null; then
-                        log_message "Layanan box berhasil dimulai secara manual dengan PID: $MANUAL_PID"
-                    else
-                        log_message "PERINGATAN: Layanan box masih tidak berjalan setelah percobaan manual"
-                    fi
-                else
-                    log_message "PERINGATAN: File PID tidak ditemukan setelah percobaan manual"
-                fi
-            fi
+            log_message "Sing-Box berhasil di-restart (PID baru: $NEW_PID)"
         else
             log_message "PERINGATAN: File PID tidak ditemukan setelah restart"
-            log_message "Mencoba memulai layanan box secara manual..."
-            /data/adb/box/scripts/box.service start && /data/adb/box/scripts/box.iptables enable
-            
-            # Periksa setelah mencoba memulai secara manual
-            sleep $SERVICE_RESTART_WAIT
-            if [ -f "/data/adb/box/run/box.pid" ]; then
-                MANUAL_PID=$(cat "/data/adb/box/run/box.pid")
-                if kill -0 "$MANUAL_PID" 2>/dev/null; then
-                    log_message "Layanan box berhasil dimulai secara manual dengan PID: $MANUAL_PID"
-                else
-                    log_message "PERINGATAN: Layanan box masih tidak berjalan setelah percobaan manual"
-                fi
-            else
-                log_message "PERINGATAN: File PID tidak ditemukan setelah percobaan manual"
-            fi
         fi
     fi
     
     log_message "Proses pemeriksaan file selesai"
     
     check_and_save_pid   # Check and save PID
-
-    if [ $files_updated -eq 1 ]; then
-        check_network_after_pid   # Connection test
-    fi
 }
 
 # Fungsi untuk memeriksa SCHEDULE_HOURS
