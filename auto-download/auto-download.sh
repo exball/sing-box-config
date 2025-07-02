@@ -546,13 +546,14 @@ download_files() {
         local BOX_PID=""
         if [ -f "/data/adb/box/run/box.pid" ]; then
             BOX_PID=$(cat "/data/adb/box/run/box.pid")
-            log_message "Ada file yang diperbarui, restart Sing-Box (PID lama: $BOX_PID)"
+            log_message "Ada file yang diperbarui"
+            log_message "Restart Sing-Box (PID lama: $BOX_PID)"
         else
-            log_message "Ada file yang diperbarui, restart Sing-Box (PID lama: tidak ditemukan)"
+            log_message "Ada file yang diperbarui"
+            log_message "Restart Sing-Box (PID lama: tidak ditemukan)"
         fi
         
         # Stop layanan sing-box dengan disable iptables dan stop service
-        log_message "Menghentikan layanan Sing-Box..."
         /data/adb/box/scripts/box.iptables disable && /data/adb/box/scripts/box.service stop
         
         # Kill PID jika masih ada
@@ -561,20 +562,10 @@ download_files() {
             kill "$BOX_PID" 2>/dev/null
         fi
         
-        # Tunggu 2 detik
         sleep 2
         
         # Mulai kembali layanan sing-box dengan start service dan enable iptables
-        log_message "Memulai kembali layanan Sing-Box..."
         /data/adb/box/scripts/box.service start && /data/adb/box/scripts/box.iptables enable
-        
-        # Baca log dari /data/adb/box/run/runs.log
-        if [ -f "/data/adb/box/run/runs.log" ]; then
-            RUNS_LOG=$(tail -n 10 "/data/adb/box/run/runs.log")
-            log_message "$RUNS_LOG"
-        else
-            log_message "File runs.log tidak ditemukan setelah restart"
-        fi
         
         # Deteksi PID baru dari /data/adb/box/run/box.pid
         if [ -f "/data/adb/box/run/box.pid" ]; then
