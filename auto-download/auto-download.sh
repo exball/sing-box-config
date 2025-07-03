@@ -1,9 +1,6 @@
 #!/bin/sh
 
-# Test 
 # Script untuk mendownload file konfigurasi secara otomatis
-# Dengan fitur pemeriksaan hash SHA-1 untuk menghindari download ulang
-# Versi dengan CHECK_INTERVAL adaptif dan pembaruan auto-download.conf
 
 # ===== KONFIGURASI BOOTSTRAP =====
 # Parameter minimal yang diperlukan untuk memeriksa pembaruan konfigurasi
@@ -842,15 +839,13 @@ run_as_daemon() {
         sleep $adaptive_interval
         
         log_message "-------------------------------------"
+        log_message "Schedule check"
+        
+        # Jalankan pemeriksaan jadwal
+        check_schedule_and_run
         
         # Hitung interval adaptif untuk siklus berikutnya
         next_adaptive_interval=$(calculate_adaptive_interval)
-        
-        # Log informasi pemeriksaan jadwal dengan interval yang benar
-        log_message "Schedule check"
-
-        # Jalankan pemeriksaan jadwal
-        check_schedule_and_run
         
         # Dapatkan waktu ke jadwal berikutnya untuk log
         next_schedule_info=$(get_next_schedule_info)
