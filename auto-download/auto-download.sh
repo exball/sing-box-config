@@ -174,12 +174,12 @@ compare_sha1_and_decide() {
     local local_sha1=""
     if [ -f "$local_file" ]; then
         local_sha1=$(get_local_sha1 "$local_file")
-        log_message "SHA-1 lokal: $local_sha1"
+        log_message "SHA-1 Local: $local_sha1"
     fi
     
     # Bandingkan hash SHA-1
     if [ -n "$local_sha1" ] && [ "$local_sha1" = "$github_sha1" ]; then
-        log_message "SHA-1 sama, Skip..."
+        log_message "SHA-1 Same, Skip..."
         return 0  # Same, no update needed
     else
         return 1  # Different, update needed
@@ -214,7 +214,7 @@ verify_downloaded_sha1() {
             chmod +x "$target_file"
         fi
         
-        log_message "Berhasil memperbarui (SHA-1 terverifikasi)"
+        log_message "Successfully updated (SHA1 verified)"
         return 0
     else
         log_message "SHA-1 $file_description tidak cocok, gagal verifikasi"
@@ -330,15 +330,15 @@ unified_update_with_security() {
     local reload_config="${5:-0}"
     
     log_message "-----"
-    log_message "Memeriksa $file_description..."
+    log_message "Checking $file_description..."
     
     # Download SHA-1 dari GitHub untuk verifikasi
     local github_sha1=$(download_and_get_sha1 "$source_url" "${file_description}.sha1")
     
     # Security check: Skip jika gagal mendapat SHA-1 dari GitHub
     if [ -z "$github_sha1" ]; then
-        log_message "PERINGATAN: Gagal mendapatkan SHA-1 dari GitHub untuk $file_description"
-        log_message "File dilewati untuk keamanan (tidak ada verifikasi integritas)"
+        log_message "WARNING: Failed to get SHA-1 from GitHub for $file_description"
+        log_message "File skipped for security (no integrity verification)"
         return 3  # Skip file - no fallback for security
     fi
     
@@ -355,7 +355,7 @@ unified_update_with_security() {
             return 3  # Skip for security
             ;;
         1)  # Different SHA-1, download needed
-            log_message "SHA-1 berbeda atau file tidak ada, Update..."
+            log_message "SHA-1 different or file not exist, Update..."
             
             # Download file ke temporary directory (security: tidak langsung overwrite)
             local temp_file="$TEMP_DIR/${file_description}.new"
@@ -454,21 +454,21 @@ download_files() {
         esac
         
         # Setelah memeriksa check-update.sh, jalankan untuk memeriksa auto-download.sh
-        log_message "Run check-update.sh untuk memeriksa auto-download.sh..."
+        log_message "Run check-update.sh to check auto-download.sh..."
         if [ -x "$CHECK_UPDATE_SCRIPT_FILE" ]; then
             # Jalankan check-update.sh dan tunggu hingga selesai
             sh "$CHECK_UPDATE_SCRIPT_FILE"
             local update_check_result=$?
             
             if [ $update_check_result -eq 0 ]; then
-                log_message "Tidak ada pembaruan, melanjutkan proses"
+                log_message "No updates, continue checking process"
 
             elif [ $update_check_result -eq 1 ]; then
-                log_message "check-update.sh mendeteksi ada update dan telah melakukan restart"
+                log_message "check-update.sh detected an update and has restarted"
                 # Return 1 menandakan auto-download.sh perlu berhenti karena telah di-restart
                 return 1
             else
-                log_message "check-update.sh mengembalikan kode error $update_check_result"
+                log_message "check-update.sh returned error code $update_check_result"
                 # Return error code
                 return $update_check_result
             fi
@@ -543,11 +543,11 @@ download_files() {
         local BOX_PID=""
         if [ -f "/data/adb/box/run/box.pid" ]; then
             BOX_PID=$(cat "/data/adb/box/run/box.pid")
-            log_message "Ada file yang diperbarui"
-            log_message "Restart Sing-Box (PID lama: $BOX_PID)"
+            log_message "There is an updated file"
+            log_message "Restart Sing-Box (old PID: $BOX_PID)"
         else
-            log_message "Ada file yang diperbarui"
-            log_message "Restart Sing-Box (PID lama: tidak ditemukan)"
+            log_message "There is an updated file"
+            log_message "Restart Sing-Box (old PID: not found)"
         fi
         
         # Stop layanan sing-box dengan disable iptables dan stop service
@@ -567,13 +567,13 @@ download_files() {
         # Deteksi PID baru dari /data/adb/box/run/box.pid
         if [ -f "/data/adb/box/run/box.pid" ]; then
             NEW_PID=$(cat "/data/adb/box/run/box.pid")
-            log_message "Sing-Box berhasil di-restart (PID baru: $NEW_PID)"
+            log_message "Sing-Box successfully restarted (new PID: $NEW_PID)"
         else
-            log_message "PERINGATAN: File PID tidak ditemukan setelah restart"
+            log_message "WARNING: PID file not found after restart"
         fi
     fi
     
-    log_message "Proses pemeriksaan file selesai"
+    log_message "Update check process complete"
     
     check_and_save_pid   # Check and save PID
 }
