@@ -303,8 +303,6 @@ check_and_save_pid() {
     fi
 }
 
-
-
 # Pastikan semua direktori yang diperlukan ada
 ensure_directories "/data/adb/auto-download" "$SAVE_DIR" "$CONFIG_DIR" "$TEMP_DIR"
 
@@ -339,7 +337,7 @@ unified_update_with_security() {
     if [ -z "$github_sha1" ]; then
         log_message "WARNING: Failed to get SHA-1 from GitHub for $file_description"
         log_message "File skipped for security (no integrity verification)"
-        return 3  # Skip file - no fallback for security
+        return 3
     fi
     
     # Gunakan helper untuk membandingkan SHA-1
@@ -347,39 +345,36 @@ unified_update_with_security() {
     local compare_result=$?
     
     case $compare_result in
-        0)  # Same SHA-1, skip download
-            return 0
+        0)  return 0
             ;;
-        2)  # Empty GitHub SHA-1 (should not happen due to check above)
-            log_message "ERROR: SHA-1 is empty after successful download"
-            return 3  # Skip for security
+        2)  log_message "ERROR: SHA-1 is empty after successful download"
+            return 3
             ;;
-        1)  # Different SHA-1, download needed
-            log_message "SHA-1 different or file not exist, Update..."
+        1)  log_message "SHA-1 different or file not exist, Update..."
             
             # Download file ke temporary directory (security: tidak langsung overwrite)
             local temp_file="$TEMP_DIR/${file_description}.new"
             if curl_download_file "$source_url" "$temp_file"; then
-                # Pastikan direktori target ada
+
                 ensure_parent_directory "$target_file"
                 
                 # Verifikasi SHA-1 sebelum replace (security-first)
                 if verify_downloaded_sha1 "$temp_file" "$github_sha1" "$target_file" "$file_description" "$set_executable"; then
-                    # Reload konfigurasi jika diperlukan
+
                     if [ "$reload_config" = "1" ]; then
                         if [ -f "$target_file" ]; then
                             source "$target_file"
                             log_message "Config reloaded. Using new configuration"
                         fi
                     fi
-                    return 1  # File updated
+                    return 1  
                 else
                     log_message "SECURITY: SHA-1 mismatch for $file_description, file rejected"
-                    return 3  # Verification failed - security
+                    return 3  
                 fi
             else
                 log_message "Failed to download $file_description from $source_url"
-                return 3  # Download failed
+                return 3  
             fi
             ;;
     esac
@@ -397,7 +392,7 @@ check_update_script() {
 
 # Fungsi untuk mendownload file
 download_files() {
-    # Periksa koneksi jaringan terlebih dahulu
+
     check_network_connection
     if [ $? -ne 0 ]; then
         log_message "File checking process cancelled due to no internet connection"
@@ -413,13 +408,10 @@ download_files() {
     unified_update_with_security "$CONF_UPDATE_URL" "$CONFIG_FILE" "auto-download.conf" 0 1
     local config_result=$?
     case $config_result in
-        1)  # File updated
-            files_updated=1
+        1)  files_updated=1
             ;;
-        3)  # Download/verification failed
-            log_message "WARNING: auto-download.conf skipped due to SHA-1 verification failure"
+        3)  log_message "WARNING: auto-download.conf skipped due to SHA-1 verification failure"
             ;;
-        # 0 = no update needed, tidak perlu action
     esac
     
     # Periksa dan update file restart-auto-download.sh setelah auto-download.conf
@@ -427,13 +419,10 @@ download_files() {
         check_update_script "$RESTART_SCRIPT_URL" "$RESTART_SCRIPT_FILE"
         local restart_script_result=$?
         case $restart_script_result in
-            1)  # File updated
-                files_updated=1
+            1)  files_updated=1
                 ;;
-            3)  # Download/verification failed
-                log_message "WARNING: restart-auto-download.sh skipped due to SHA-1 verification failure"
+            3)  log_message "WARNING: restart-auto-download.sh skipped due to SHA-1 verification failure"
                 ;;
-            # 0 = no update needed, tidak perlu action
         esac
     else
         log_message "restart-auto-download.sh URL or file path not configured, skipping check"
@@ -444,19 +433,16 @@ download_files() {
         check_update_script "$CHECK_UPDATE_SCRIPT_URL" "$CHECK_UPDATE_SCRIPT_FILE"
         local check_update_result=$?
         case $check_update_result in
-            1)  # File updated
-                files_updated=1
+            1)  files_updated=1
                 ;;
-            3)  # Download/verification failed
-                log_message "WARNING: check-update.sh skipped due to SHA-1 verification failure"
+            3)  log_message "WARNING: check-update.sh skipped due to SHA-1 verification failure"
                 ;;
-            # 0 = no update needed, tidak perlu action
         esac
         
         # Setelah memeriksa check-update.sh, jalankan untuk memeriksa auto-download.sh
         log_message "Run check-update.sh to check auto-download.sh..."
         if [ -x "$CHECK_UPDATE_SCRIPT_FILE" ]; then
-            # Jalankan check-update.sh dan tunggu hingga selesai
+
             sh "$CHECK_UPDATE_SCRIPT_FILE"
             local update_check_result=$?
             
@@ -465,16 +451,16 @@ download_files() {
 
             elif [ $update_check_result -eq 1 ]; then
                 log_message "check-update.sh detected an update and has restarted"
-                # Return 1 menandakan auto-download.sh perlu berhenti karena telah di-restart
+
                 return 1
             else
                 log_message "check-update.sh returned error code $update_check_result"
-                # Return error code
+
                 return $update_check_result
             fi
         else
             log_message "WARNING: check-update.sh is not executable"
-            # Lanjutkan proses meskipun tidak bisa memeriksa update
+
         fi
     else
         log_message "check-update.sh URL or file path not configured, skipping check"
@@ -483,11 +469,11 @@ download_files() {
     # Loop melalui setiap URL dalam daftar dan download
     if [ -n "${PROVIDER_URLS}" ]; then
         for url in $PROVIDER_URLS; do
-            # Ekstrak nama file dari URL
+
             filename=$(basename "$url" | sed 's/%20/ /g')
             temp_file="$TEMP_DIR/$filename"
             target_file="$SAVE_DIR/$filename"
-            # Auto-detect executable untuk .sh files
+
             local set_executable=0
             if [ "${filename##*.}" = "sh" ]; then
                 set_executable=1
@@ -496,15 +482,12 @@ download_files() {
             local download_result=$?
             
             case $download_result in
-                0)  # File sama, skip
+                0)  continue
+                    ;;
+                1)  files_updated=1
                     continue
                     ;;
-                1)  # File updated
-                    files_updated=1
-                    continue
-                    ;;
-                3)  # Download/verification failed, skip
-                    log_message "File $filename skipped due to SHA-1 verification failure"
+                3)  log_message "File $filename skipped due to SHA-1 verification failure"
                     continue
                     ;;
             esac
@@ -526,13 +509,10 @@ download_files() {
     local config_result=$?
     
     case $config_result in
-        1)  # File updated
-            files_updated=1
+        1)  files_updated=1
             ;;
-        3)  # Download/verification failed
-            log_message "WARNING: config.json skipped due to SHA-1 verification failure"
+        3)  log_message "WARNING: config.json skipped due to SHA-1 verification failure"
             ;;
-        # 0 = no update needed, tidak perlu action
     esac
     
     # Jika ada file yang diperbarui, restart layanan box
@@ -575,7 +555,7 @@ download_files() {
     
     log_message "Update check process complete"
     
-    check_and_save_pid   # Check and save PID
+    check_and_save_pid
 }
 
 # Fungsi untuk memeriksa SCHEDULE_HOURS
@@ -647,7 +627,6 @@ check_schedule_and_run() {
             
             log_message "Log rotation complete..."
         fi
-        
         # Jalankan download
         download_files
         
@@ -702,7 +681,6 @@ find_next_schedule() {
             fi
         done
     fi
-    
     # Return dalam format "seconds:time"
     echo "$next_schedule_seconds:$next_schedule_time"
 }
@@ -772,7 +750,6 @@ calculate_adaptive_interval() {
             fi
         fi
     fi
-    
     # Kembalikan interval adaptif
     echo $adaptive_interval
 }
@@ -855,7 +832,6 @@ run_as_daemon() {
         next_schedule_time=$(echo "$next_schedule_info" | grep -o "[0-9][0-9]:[0-9][0-9]")
         next_schedule_diff=$(echo "$next_schedule_info" | grep -o "in [0-9]* hours [0-9]* minutes" | sed 's/in //')
         
-        # Log waktu tunggu untuk siklus berikutnya
         log_message "Current time: $current_hour" 
         
         # Hitung waktu pemeriksaan berikutnya (current_hour + next_adaptive_interval)
@@ -870,21 +846,21 @@ run_as_daemon() {
     done
 }
 
-# Deteksi apakah script dijalankan oleh restart-auto-download.sh atau saat boot
+# Deteksi dijalankan oleh restart atau saat boot
 RESTART_FLAG_FILE="/data/adb/auto-download/restart_flag"
 RESTART_MODE=0
 BOOT_MODE=0
 
-# Periksa apakah file penanda restart ada dan baru dibuat (dalam 10 detik terakhir)
+# Periksa apakah file penanda restart ada dan baru dibuat
 if [ -f "$RESTART_FLAG_FILE" ]; then
     FLAG_TIME=$(cat "$RESTART_FLAG_FILE")
     CURRENT_TIME=$(date +%s)
     TIME_DIFF=$((CURRENT_TIME - FLAG_TIME))
     
-    # Jika file penanda dibuat dalam 10 detik terakhir, anggap dijalankan oleh restart-auto-download.sh
+    # Jika file penanda dibuat dalam 10 detik terakhir, anggap dijalankan oleh restart
     if [ $TIME_DIFF -le 10 ]; then
         RESTART_MODE=1
-        # Hapus file penanda setelah digunakan
+
         rm -f "$RESTART_FLAG_FILE"
     fi
 fi
@@ -894,13 +870,12 @@ if [ "$(dirname "$0")" = "/data/adb/service.d" ] || [ -f "/data/adb/auto-downloa
     BOOT_MODE=1
 fi
 
-# Jika dijalankan dalam mode restart, langsung jalankan daemon
 if [ $RESTART_MODE -eq 1 ]; then
     run_as_daemon > /dev/null 2>&1 &
     exit 0
 fi
 
-# Jika dijalankan saat boot, tunggu beberapa saat
+# Jika dijalankan saat boot
 if [ $BOOT_MODE -eq 1 ]; then
     log_message "Script running at boot, waiting $BOOT_WAIT_TIME seconds"
     sleep $BOOT_WAIT_TIME
