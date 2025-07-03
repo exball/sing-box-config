@@ -67,7 +67,7 @@ ensure_directories() {
     for dir in "$@"; do
         if [ -n "$dir" ]; then
             mkdir -p "$dir" 2>/dev/null || {
-                log_message "Peringatan: Gagal membuat direktori: $dir"
+                log_message "Warning: Failed to create directory: $dir"
             }
         fi
     done
@@ -89,7 +89,7 @@ curl_network_check() {
     local timeout_max="${3:-10}"
     
     if [ -z "$test_url" ]; then
-        log_message "Error: URL test tidak boleh kosong"
+        log_message "Error: Test URL cannot be empty"
         return 1
     fi
     
@@ -105,7 +105,7 @@ curl_download_file() {
     local timeout_max="${4:-30}"
     
     if [ -z "$source_url" ] || [ -z "$output_file" ]; then
-        log_message "Error: URL sumber dan file output tidak boleh kosong"
+        log_message "Error: Source URL and output file cannot be empty"
         return 1
     fi
     
@@ -130,7 +130,7 @@ download_and_get_sha1() {
     local temp_file_prefix="${2:-temp_sha1_file}"
     
     if [ -z "$source_url" ]; then
-        log_message "Error: URL sumber tidak boleh kosong"
+        log_message "Error: Source URL cannot be empty"
         return 1
     fi
     
@@ -150,7 +150,7 @@ download_and_get_sha1() {
         echo "$sha1"   # Kembalikan hash SHA-1
         return 0
     else
-        log_message "Gagal mendownload file untuk pemeriksaan hash dari: $source_url"
+        log_message "Failed to download file for hash verification from: $source_url"
         rm -f "$temp_hash_file" 2>/dev/null
         echo ""
         return 1
@@ -164,7 +164,7 @@ compare_sha1_and_decide() {
     local file_description="${3:-file}"
     
     if [ -z "$github_sha1" ]; then
-        log_message "SHA-1 GitHub kosong untuk $file_description"
+        log_message "GitHub SHA-1 is empty for $file_description"
         return 2  # Indicate fallback needed
     fi
     
@@ -195,7 +195,7 @@ verify_downloaded_sha1() {
     local set_executable="${5:-0}"
     
     if [ ! -f "$temp_file" ]; then
-        log_message "Error: File temporary tidak ditemukan"
+        log_message "Error: Temporary file not found"
         return 1
     fi
     
@@ -217,9 +217,9 @@ verify_downloaded_sha1() {
         log_message "Successfully updated (SHA1 verified)"
         return 0
     else
-        log_message "SHA-1 $file_description tidak cocok, gagal verifikasi"
-        log_message "SHA-1 didownload: $downloaded_sha1"
-        log_message "SHA-1 yang diharapkan: $expected_sha1"
+        log_message "SHA-1 $file_description mismatch, verification failed"
+        log_message "Downloaded SHA-1: $downloaded_sha1"
+        log_message "Expected SHA-1: $expected_sha1"
         rm -f "$temp_file"
         return 1
     fi
@@ -274,17 +274,17 @@ fi
 # Muat konfigurasi dari file
 if [ -f "$CONFIG_FILE" ]; then
     source "$CONFIG_FILE"
-    log_message "Konfigurasi dimuat dari $CONFIG_FILE"
+    log_message "Configuration loaded from $CONFIG_FILE"
 else
-    log_message "KESALAHAN: File konfigurasi tidak ditemukan di $CONFIG_FILE"
-    log_message "Pastikan file konfigurasi ada sebelum menjalankan script"
+    log_message "ERROR: Configuration file not found at $CONFIG_FILE"
+    log_message "Make sure the configuration file exists before running the script"
     exit 1
 fi
 
 # Pastikan variabel wajib ada
 if [ -z "$SAVE_DIR" ] || [ -z "$CONFIG_DIR" ] || [ -z "$TEMP_DIR" ] || [ -z "$SCHEDULE_HOURS" ] || [ -z "$CHECK_INTERVAL" ]; then
-    log_message "KESALAHAN: Variabel wajib tidak ditemukan di file konfigurasi"
-    log_message "Pastikan file konfigurasi berisi semua variabel yang diperlukan"
+    log_message "ERROR: Required variables not found in configuration file"
+    log_message "Make sure the configuration file contains all required variables"
     exit 1
 fi
 # =====================
@@ -299,7 +299,7 @@ check_and_save_pid() {
         echo "$CURRENT_PID" > "$PID_FILE"
         log_message "Auto-Download PID: $CURRENT_PID"
     else
-        log_message "Auto-Download PID: Tidak ditemukan"
+        log_message "Auto-Download PID: Not found"
     fi
 }
 
@@ -351,7 +351,7 @@ unified_update_with_security() {
             return 0
             ;;
         2)  # Empty GitHub SHA-1 (should not happen due to check above)
-            log_message "ERROR: SHA-1 kosong setelah download berhasil"
+            log_message "ERROR: SHA-1 is empty after successful download"
             return 3  # Skip for security
             ;;
         1)  # Different SHA-1, download needed
@@ -369,16 +369,16 @@ unified_update_with_security() {
                     if [ "$reload_config" = "1" ]; then
                         if [ -f "$target_file" ]; then
                             source "$target_file"
-                            log_message "Reload config. Menggunakan konfigurasi baru"
+                            log_message "Config reloaded. Using new configuration"
                         fi
                     fi
                     return 1  # File updated
                 else
-                    log_message "KEAMANAN: SHA-1 tidak cocok untuk $file_description, file ditolak"
+                    log_message "SECURITY: SHA-1 mismatch for $file_description, file rejected"
                     return 3  # Verification failed - security
                 fi
             else
-                log_message "Gagal mendownload $file_description dari $source_url"
+                log_message "Failed to download $file_description from $source_url"
                 return 3  # Download failed
             fi
             ;;
@@ -400,7 +400,7 @@ download_files() {
     # Periksa koneksi jaringan terlebih dahulu
     check_network_connection
     if [ $? -ne 0 ]; then
-        log_message "Proses pemeriksaan file dibatalkan karena tidak ada koneksi internet"
+        log_message "File checking process cancelled due to no internet connection"
         return 1
     fi
     
@@ -417,7 +417,7 @@ download_files() {
             files_updated=1
             ;;
         3)  # Download/verification failed
-            log_message "PERINGATAN: auto-download.conf dilewati karena gagal verifikasi SHA-1"
+            log_message "WARNING: auto-download.conf skipped due to SHA-1 verification failure"
             ;;
         # 0 = no update needed, tidak perlu action
     esac
@@ -431,12 +431,12 @@ download_files() {
                 files_updated=1
                 ;;
             3)  # Download/verification failed
-                log_message "PERINGATAN: restart-auto-download.sh dilewati karena gagal verifikasi SHA-1"
+                log_message "WARNING: restart-auto-download.sh skipped due to SHA-1 verification failure"
                 ;;
             # 0 = no update needed, tidak perlu action
         esac
     else
-        log_message "URL atau path file restart-auto-download.sh tidak dikonfigurasi, melewati pemeriksaan"
+        log_message "restart-auto-download.sh URL or file path not configured, skipping check"
     fi
     
     # Periksa dan update file check-update.sh setelah restart-auto-download.sh
@@ -448,7 +448,7 @@ download_files() {
                 files_updated=1
                 ;;
             3)  # Download/verification failed
-                log_message "PERINGATAN: check-update.sh dilewati karena gagal verifikasi SHA-1"
+                log_message "WARNING: check-update.sh skipped due to SHA-1 verification failure"
                 ;;
             # 0 = no update needed, tidak perlu action
         esac
@@ -473,11 +473,11 @@ download_files() {
                 return $update_check_result
             fi
         else
-            log_message "PERINGATAN: check-update.sh tidak dapat dieksekusi"
+            log_message "WARNING: check-update.sh is not executable"
             # Lanjutkan proses meskipun tidak bisa memeriksa update
         fi
     else
-        log_message "URL atau path file check-update.sh tidak dikonfigurasi, melewati pemeriksaan"
+        log_message "check-update.sh URL or file path not configured, skipping check"
     fi
     
     # Loop melalui setiap URL dalam daftar dan download
@@ -504,20 +504,20 @@ download_files() {
                     continue
                     ;;
                 3)  # Download/verification failed, skip
-                    log_message "File $filename dilewati karena gagal verifikasi SHA-1"
+                    log_message "File $filename skipped due to SHA-1 verification failure"
                     continue
                     ;;
             esac
         done
     else
-        log_message "PROVIDER_URLS tidak dikonfigurasi atau kosong"
+        log_message "PROVIDER_URLS not configured or empty"
     fi
     
     # Periksa koneksi jaringan sebelum memproses config.json
     log_message "-----"
     check_network_connection
     if [ $? -ne 0 ]; then
-        log_message "Proses pemeriksaan config.json dibatalkan karena tidak ada koneksi internet"
+        log_message "config.json checking process cancelled due to no internet connection"
         return 1
     fi
     
@@ -530,7 +530,7 @@ download_files() {
             files_updated=1
             ;;
         3)  # Download/verification failed
-            log_message "PERINGATAN: config.json dilewati karena gagal verifikasi SHA-1"
+            log_message "WARNING: config.json skipped due to SHA-1 verification failure"
             ;;
         # 0 = no update needed, tidak perlu action
     esac
@@ -555,7 +555,7 @@ download_files() {
         
         # Kill PID jika masih ada
         if [ -n "$BOX_PID" ] && kill -0 "$BOX_PID" 2>/dev/null; then
-            log_message "Menghentikan proses dengan PID: $BOX_PID"
+            log_message "Stopping process with PID: $BOX_PID"
             kill "$BOX_PID" 2>/dev/null
         fi
         
@@ -620,7 +620,7 @@ check_schedule_and_run() {
             
             is_scheduled=1
             matched_schedule=$schedule_time
-            log_message "Waktu saat ini ($current_time) dalam rentang $SCHEDULE_TOLERANCE menit dari jadwal ($schedule_time)"
+            log_message "Current time ($current_time) is within $SCHEDULE_TOLERANCE minutes of schedule ($schedule_time)"
             break
         fi
     done
@@ -631,7 +631,7 @@ check_schedule_and_run() {
             # Jika file log lama sudah ada, hapus terlebih dahulu
             if [ -f "$OLD_LOG_FILE" ]; then
                 rm -f "$OLD_LOG_FILE"
-                log_message "File log lama dihapus"
+                log_message "Old log file deleted"
             fi
             
             # Jika file log saat ini ada, pindahkan ke file log lama
@@ -719,7 +719,7 @@ get_next_schedule_info() {
     local next_minutes=$(((next_schedule_seconds % 3600) / 60))
     
     # Kembalikan informasi jadwal berikutnya
-    echo "Jadwal berikutnya: $next_schedule_time (dalam $next_hours jam $next_minutes menit)"
+    echo "Next schedule: $next_schedule_time (in $next_hours hours $next_minutes minutes)"
 }
 
 # Fungsi helper untuk menghitung waktu pemeriksaan berikutnya
@@ -798,9 +798,9 @@ run_as_daemon() {
         TIMESTAMP_HEADER_WRITTEN=0
         
         if [ $RESTART_MODE -eq 1 ]; then
-            log_message "Rotasi log selesai (mode restart)"
+            log_message "Log rotation complete (restart mode)"
         else
-            log_message "Rotasi log selesai"
+            log_message "Log rotation complete"
         fi
     fi
     
@@ -822,7 +822,7 @@ run_as_daemon() {
     log_message "Starts a schedule check loop"
     current_hour=$(date +"%H:%M")
     next_schedule_time=$(echo "$next_schedule_info" | grep -o "[0-9][0-9]:[0-9][0-9]")
-    next_schedule_diff=$(echo "$next_schedule_info" | grep -o "dalam [0-9]* jam [0-9]* menit" | sed 's/dalam //')
+    next_schedule_diff=$(echo "$next_schedule_info" | grep -o "in [0-9]* hours [0-9]* minutes" | sed 's/in //')
     
     # Log interval yang dipilih untuk loop pertama
     log_message "Next update check: $next_schedule_time"
@@ -853,7 +853,7 @@ run_as_daemon() {
         # Ekstrak informasi jadwal untuk format log yang lebih ringkas
         current_hour=$(date +"%H:%M")
         next_schedule_time=$(echo "$next_schedule_info" | grep -o "[0-9][0-9]:[0-9][0-9]")
-        next_schedule_diff=$(echo "$next_schedule_info" | grep -o "dalam [0-9]* jam [0-9]* menit" | sed 's/dalam //')
+        next_schedule_diff=$(echo "$next_schedule_info" | grep -o "in [0-9]* hours [0-9]* minutes" | sed 's/in //')
         
         # Log waktu tunggu untuk siklus berikutnya
         log_message "Current time: $current_hour" 
@@ -902,13 +902,13 @@ fi
 
 # Jika dijalankan saat boot, tunggu beberapa saat
 if [ $BOOT_MODE -eq 1 ]; then
-    log_message "Script dijalankan saat boot, menunggu $BOOT_WAIT_TIME detik"
+    log_message "Script running at boot, waiting $BOOT_WAIT_TIME seconds"
     sleep $BOOT_WAIT_TIME
 else
-    log_message "Script dijalankan secara manual"
+    log_message "Script running manually"
 fi
 
 # Selalu jalankan sebagai daemon untuk mode boot dan manual
-log_message "Menjalankan dalam mode daemon"
+log_message "Running in daemon mode"
 run_as_daemon > /dev/null 2>&1 &
 
