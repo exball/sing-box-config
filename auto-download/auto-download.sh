@@ -659,7 +659,7 @@ check_schedule_and_run() {
         LAST_SCHEDULE_TIME=$current_timestamp
     else
         # Pesan "Bukan waktu yang dijadwalkan" ditampilkan setelah informasi jadwal berikutnya
-        log_message "Bukan waktu yang dijadwalkan"
+        log_message "Not an update check schedule"
     fi
 }
 
@@ -822,18 +822,18 @@ run_as_daemon() {
     
     # Kemudian jalankan loop untuk memeriksa jadwal sesuai interval yang dikonfigurasi
     log_message "-------------------------------------"
-    log_message "Memulai loop pemeriksaan jadwal"
+    log_message "Starts a schedule check loop"
     current_hour=$(date +"%H:%M")
     next_schedule_time=$(echo "$next_schedule_info" | grep -o "[0-9][0-9]:[0-9][0-9]")
     next_schedule_diff=$(echo "$next_schedule_info" | grep -o "dalam [0-9]* jam [0-9]* menit" | sed 's/dalam //')
     
     # Log interval yang dipilih untuk loop pertama
-    log_message "Pemeriksaan file berikutnya: $next_schedule_time"
-    log_message "Waktu saat ini: $current_hour"
+    log_message "Next update check: $next_schedule_time"
+    log_message "Current time: $current_hour"
     
     # Hitung waktu pemeriksaan pertama (current_hour + adaptive_interval)
     first_check_info=$(calculate_next_check_time $adaptive_interval)
-    log_message "Pemeriksaan pertama: $first_check_info (Interval: $adaptive_interval)"
+    log_message "First schedule check: $first_check_info (Interval: $adaptive_interval)"
     
     # Loop utama
     while true; do
@@ -847,7 +847,7 @@ run_as_daemon() {
         next_adaptive_interval=$(calculate_adaptive_interval)
         
         # Log informasi pemeriksaan jadwal dengan interval yang benar
-        log_message "Pemeriksaan jadwal"
+        log_message "Schedule check"
 
         # Jalankan pemeriksaan jadwal
         check_schedule_and_run
@@ -861,11 +861,11 @@ run_as_daemon() {
         next_schedule_diff=$(echo "$next_schedule_info" | grep -o "dalam [0-9]* jam [0-9]* menit" | sed 's/dalam //')
         
         # Log waktu tunggu untuk siklus berikutnya
-        log_message "Waktu saat ini: $current_hour" 
+        log_message "Current time: $current_hour" 
         
         # Hitung waktu pemeriksaan berikutnya (current_hour + next_adaptive_interval)
         next_check_info=$(calculate_next_check_time $next_adaptive_interval)
-        log_message "Pemeriksaan berikutnya: $next_check_info (Interval: $next_adaptive_interval)"
+        log_message "Next schedule check: $next_check_info (Interval: $next_adaptive_interval)"
         
         # Simpan interval saat ini untuk perbandingan berikutnya
         LAST_INTERVAL=$next_adaptive_interval
