@@ -828,8 +828,8 @@ run_as_daemon() {
     next_schedule_diff=$(echo "$next_schedule_info" | grep -o "dalam [0-9]* jam [0-9]* menit" | sed 's/dalam //')
     
     # Log interval yang dipilih untuk loop pertama
+    log_message " Pemeriksaan file berikutnya: $next_schedule_time"
     log_message "Waktu saat ini: $current_hour"
-    log_message "Jadwal berikutnya: $next_schedule_time ($next_schedule_diff)"
     
     # Hitung waktu pemeriksaan pertama (current_hour + adaptive_interval)
     first_check_info=$(calculate_next_check_time $adaptive_interval)
@@ -861,8 +861,7 @@ run_as_daemon() {
         next_schedule_diff=$(echo "$next_schedule_info" | grep -o "dalam [0-9]* jam [0-9]* menit" | sed 's/dalam //')
         
         # Log waktu tunggu untuk siklus berikutnya
-        log_message "Waktu saat ini: $current_hour"
-        log_message "Jadwal berikutnya: $next_schedule_time ($next_schedule_diff)"
+        log_message "Waktu saat ini: $current_hour" 
         
         # Hitung waktu pemeriksaan berikutnya (current_hour + next_adaptive_interval)
         next_check_info=$(calculate_next_check_time $next_adaptive_interval)
