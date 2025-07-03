@@ -828,7 +828,7 @@ run_as_daemon() {
     next_schedule_diff=$(echo "$next_schedule_info" | grep -o "dalam [0-9]* jam [0-9]* menit" | sed 's/dalam //')
     
     # Log interval yang dipilih untuk loop pertama
-    log_message " Pemeriksaan file berikutnya: $next_schedule_time"
+    log_message "Pemeriksaan file berikutnya: $next_schedule_time"
     log_message "Waktu saat ini: $current_hour"
     
     # Hitung waktu pemeriksaan pertama (current_hour + adaptive_interval)
