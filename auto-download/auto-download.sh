@@ -227,23 +227,23 @@ verify_downloaded_sha1() {
 
 # Fungsi untuk memeriksa koneksi jaringan
 check_network_connection() {
-    log_message "Memeriksa koneksi internet..."
+    log_message "Checking internet connection"
     
     local attempt=1
     local connected=0
     
     while [ $attempt -le $NETWORK_MAX_ATTEMPTS ]; do
-        log_message "Percobaan ke $attempt dari $NETWORK_MAX_ATTEMPTS"
+        log_message "Attempt $attempt of $NETWORK_MAX_ATTEMPTS"
         
         # Gunakan curl untuk memeriksa koneksi ke URL yang ditentukan
         if curl_network_check "$NETWORK_TEST_URL"; then
-            log_message "Koneksi internet tersedia"
+            log_message "Internet connection available"
             connected=1
             break
         fi
         
         # Jika tidak ada koneksi, tunggu dan coba lagi
-        log_message "Tidak ada koneksi internet, Tunggu $NETWORK_RETRY_WAIT detik."
+        log_message "No internet connection, Wait $NETWORK_RETRY_WAIT seconds"
         
         if [ $attempt -lt $NETWORK_MAX_ATTEMPTS ]; then
             sleep $NETWORK_RETRY_WAIT
@@ -254,7 +254,7 @@ check_network_connection() {
     done
     
     if [ $connected -eq 0 ]; then
-        log_message "Gagal terhubung ke jaringan setelah $NETWORK_MAX_ATTEMPTS percobaan"
+        log_message "Failed to connect after  $NETWORK_MAX_ATTEMPTS attempts"
         return 1
     fi
     
@@ -404,7 +404,7 @@ download_files() {
         return 1
     fi
     
-    log_message "Memulai proses pemeriksaan file"
+    log_message "Starts file checking process"
     
     # Variabel untuk melacak apakah ada file yang diperbarui
     local files_updated=0
@@ -645,7 +645,7 @@ check_schedule_and_run() {
             # Reset variabel timestamp header
             TIMESTAMP_HEADER_WRITTEN=0
             
-            log_message "Rotasi log selesai pada waktu terjadwal: $current_time"
+            log_message "Log rotation complete..."
         fi
         
         # Jalankan download
