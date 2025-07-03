@@ -86,9 +86,17 @@ jobs:
           echo "JSON files found in outbound-provider directory:"
           find ./outbound-provider -name "*.json" 2>/dev/null | sort || echo "outbound-provider directory not found"
           
+          # Show detailed file information
+          echo "Detailed file information:"
+          ls -la ./outbound-provider/*.json 2>/dev/null || echo "No JSON files found"
+          
           # Count total number of JSON files in outbound-provider directory
           JSON_COUNT=$(find ./outbound-provider -name "*.json" 2>/dev/null | wc -l)
           echo "Total JSON files in outbound-provider: $JSON_COUNT"
+          
+          # Show git status to see what files are changed
+          echo "Git status:"
+          git status --porcelain
           
           # Check if any JSON files were created
           if [ "$JSON_COUNT" -eq 0 ]; then
@@ -115,7 +123,7 @@ jobs:
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
           commit_message: "Update proxy list [automated]"
-          file_pattern: "*.json README.md config.ini config_format.ini outbound-provider/"
+          file_pattern: "outbound-provider/*.json extract-outbound/config.ini extract-outbound/config_format.ini proxy-scaner/*.json proxy-scaner/*.txt"
           commit_user_name: "GitHub Actions Bot"
           commit_user_email: "actions@github.com"
           commit_author: "GitHub Actions Bot <actions@github.com>"
