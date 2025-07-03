@@ -531,7 +531,12 @@ def process_single_config(config):
     }
     
     # Buat direktori outbound-provider jika belum ada
-    output_dir = "outbound-provider"
+    # Gunakan path relatif ke parent directory jika script dijalankan dari extract-outbound
+    if os.path.basename(os.getcwd()) == "extract-outbound":
+        output_dir = "../outbound-provider"
+    else:
+        output_dir = "outbound-provider"
+    
     if not os.path.exists(output_dir):
         os.makedirs(output_dir)
         print(f"Created directory: {output_dir}")
