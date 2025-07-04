@@ -29,6 +29,25 @@ LAST_INTERVAL=0
 LAST_EXECUTED_SCHEDULE=""
 LAST_SCHEDULE_TIME=0
 
+# Variabel untuk deep sleep wake detection
+DEEP_SLEEP_WAKE_FLAG=0
+WAKELOCK_MONITOR_LOG="/data/adb/auto-download/wakelock_monitor.log"
+
+# Fungsi signal handler untuk deep sleep wake detection
+handle_deep_sleep_wake() {
+    DEEP_SLEEP_WAKE_FLAG=1
+    log_message "🌅 Deep sleep wake signal received - will recalculate schedule"
+}
+
+# Fungsi untuk setup signal handlers
+setup_signal_handlers() {
+    # Set signal handler untuk SIGUSR1 (deep sleep wake)
+    trap 'handle_deep_sleep_wake' USR1
+    
+    # Set signal handler untuk SIGTERM dan SIGINT (graceful shutdown)
+    trap 'log_message "Received shutdown signal, exiting..."; exit 0' TERM INT
+}
+
 # Fungsi untuk logging
 log_message() {
     local message="$1"
@@ -150,7 +169,7 @@ download_and_get_sha1() {
         echo "$sha1"   # Kembalikan hash SHA-1
         return 0
     else
-        log_message "Failed to download file for hash verification from: $source_url"
+        log_message "Failed to download file for hash verification"
         rm -f "$temp_hash_file" 2>/dev/null
         echo ""
         return 1
@@ -726,6 +745,33 @@ calculate_next_check_time() {
     echo "$next_time"
 }
 
+# Fungsi untuk memproses deep sleep wake event
+process_deep_sleep_wake() {
+    log_message "🔄 Processing deep sleep wake event..."
+    
+    # Reset flag
+    DEEP_SLEEP_WAKE_FLAG=0
+    
+    # Log informasi waktu saat ini
+    local current_time=$(date +%H:%M)
+    log_message "Current time after wake: $current_time"
+    
+    # Langsung jalankan check_schedule_and_run untuk recalculate
+    log_message "Recalculating schedule after deep sleep wake..."
+    check_schedule_and_run
+    
+    # Recalculate adaptive interval untuk siklus berikutnya
+    local new_adaptive_interval=$(calculate_adaptive_interval)
+    log_message "New adaptive interval after wake: $new_adaptive_interval seconds"
+    
+    # Log informasi jadwal berikutnya
+    local next_schedule_info=$(get_next_schedule_info)
+    log_message "$next_schedule_info"
+    
+    # Return interval baru
+    echo $new_adaptive_interval
+}
+
 # Fungsi untuk menghitung interval adaptif berdasarkan waktu ke jadwal berikutnya
 calculate_adaptive_interval() {
     # Gunakan fungsi helper untuk mendapatkan data jadwal berikutnya
@@ -797,6 +843,9 @@ run_as_daemon() {
         fi
     fi
     
+    # Setup signal handlers untuk deep sleep wake detection
+    setup_signal_handlers
+    
     # Periksa dan simpan PID
     check_and_save_pid
     download_files
@@ -828,8 +877,24 @@ run_as_daemon() {
     # Loop utama
     while true; do
         
+        # Cek apakah ada signal deep sleep wake sebelum sleep
+        if [ $DEEP_SLEEP_WAKE_FLAG -eq 1 ]; then
+            log_message "-------------------------------------"
+            adaptive_interval=$(process_deep_sleep_wake)
+            # Continue langsung tanpa sleep untuk memproses wake event
+            continue
+        fi
+        
         # Tunggu sesuai interval adaptif
         sleep $adaptive_interval
+        
+        # Cek lagi setelah sleep (mungkin ada signal saat sleep)
+        if [ $DEEP_SLEEP_WAKE_FLAG -eq 1 ]; then
+            log_message "-------------------------------------"
+            adaptive_interval=$(process_deep_sleep_wake)
+            # Continue untuk menggunakan interval yang baru
+            continue
+        fi
         
         log_message "-------------------------------------"
         log_message "Schedule check"

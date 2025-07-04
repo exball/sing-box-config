@@ -1,0 +1,21 @@
+# Init service configuration untuk Wakelock Monitor auto-download.sh
+# File ini harus ditempatkan di /system/etc/init/
+
+service wakelock_autodownload_monitor /system/bin/wakelock_monitor_autodownload.sh
+    class main
+    user root
+    group root
+    disabled
+    oneshot
+    
+# Start service setelah boot completed
+on property:sys.boot_completed=1
+    start wakelock_autodownload_monitor
+
+# Restart service jika berhenti (untuk reliability)
+on property:init.svc.wakelock_autodownload_monitor=stopped
+    start wakelock_autodownload_monitor
+
+# Stop service saat shutdown
+on property:sys.powerctl=*
+    stop wakelock_autodownload_monitor
