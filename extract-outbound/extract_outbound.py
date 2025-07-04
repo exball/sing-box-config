@@ -421,7 +421,7 @@ def process_single_config(config):
     for country in countries:
         for protocol in protocols:
             for security in securities:
-                url = f"{base_url}/api/bfr?cc={country}&protocols={protocol}&securities={security}"
+                url = f"{base_url}/api/bfr?cc={country}&protocols={protocol}&securities={security}&limit=100"
                 
                 try:
                     print(f"Fetching {protocol} {security} proxies from {country}...")
