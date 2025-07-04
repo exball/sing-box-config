@@ -231,19 +231,28 @@ check_network_connection() {
     
     local attempt=1
     local connected=0
+    local last_attempt_logged=0
     
     while [ $attempt -le $NETWORK_MAX_ATTEMPTS ]; do
-        log_message "Attempt $attempt of $NETWORK_MAX_ATTEMPTS"
+        # Tampilkan attempt di konsol dengan carriage return untuk menimpa baris yang sama
+        printf "\rAttempt %d of %d" "$attempt" "$NETWORK_MAX_ATTEMPTS"
+        
+        # Simpan attempt terakhir untuk log file
+        last_attempt_logged=$attempt
         
         # Gunakan curl untuk memeriksa koneksi ke URL yang ditentukan
         if curl_network_check "$NETWORK_TEST_URL"; then
+            # Bersihkan baris attempt di konsol dan tulis hasil sukses
+            printf "\r"
+            
+            # Log attempt terakhir dan hasil sukses ke file
+            if [ -n "$LOG_FILE" ]; then
+                echo "Attempt $last_attempt_logged of $NETWORK_MAX_ATTEMPTS" >> "$LOG_FILE"
+            fi
             log_message "Internet connection available"
             connected=1
             break
         fi
-        
-        # Jika tidak ada koneksi, tunggu dan coba lagi
-        log_message "No internet connection, Wait $NETWORK_RETRY_WAIT seconds"
         
         if [ $attempt -lt $NETWORK_MAX_ATTEMPTS ]; then
             sleep $NETWORK_RETRY_WAIT
@@ -254,7 +263,14 @@ check_network_connection() {
     done
     
     if [ $connected -eq 0 ]; then
-        log_message "Failed to connect after  $NETWORK_MAX_ATTEMPTS attempts"
+        # Bersihkan baris attempt di konsol
+        printf "\r"
+        
+        # Log attempt terakhir dan hasil gagal ke file
+        if [ -n "$LOG_FILE" ]; then
+            echo "Attempt $last_attempt_logged of $NETWORK_MAX_ATTEMPTS" >> "$LOG_FILE"
+        fi
+        log_message "Failed to connect after $NETWORK_MAX_ATTEMPTS attempts"
         return 1
     fi
     
