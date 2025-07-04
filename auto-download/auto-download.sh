@@ -150,7 +150,7 @@ download_and_get_sha1() {
         echo "$sha1"   # Kembalikan hash SHA-1
         return 0
     else
-        log_message "Failed to download file for hash verification"
+        log_message "Failed to download file for hash verification from: $source_url"
         rm -f "$temp_hash_file" 2>/dev/null
         echo ""
         return 1
