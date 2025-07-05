@@ -1,13 +1,14 @@
-#!/system/bin/sh
+#!/bin/sh
 
 # One-Shot Wake Monitor untuk Auto-Download Script
 # Script ini mendeteksi deep sleep wake dan membangunkan script utama
 
 # ===== KONFIGURASI =====
 TARGET_PID="$1"
-LOG_FILE="/data/adb/auto-download/wake-monitor.log"
-PID_FILE="/data/adb/auto-download/wake-monitor.pid"
-STATE_FILE="/data/adb/auto-download/wake-monitor.state"
+# Allow override via environment variables for testing
+LOG_FILE="${LOG_FILE:-/data/adb/auto-download/wake-monitor.log}"
+PID_FILE="${PID_FILE:-/data/adb/auto-download/wake-monitor.pid}"
+STATE_FILE="${STATE_FILE:-/data/adb/auto-download/wake-monitor.state}"
 
 # Validasi parameter
 if [ -z "$TARGET_PID" ]; then
