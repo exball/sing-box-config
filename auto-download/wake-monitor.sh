@@ -88,14 +88,20 @@ EOF
         local deep_sleep_detected=false
         local detection_reason=""
         
+        # More conservative detection to avoid false positives
         # Detect significant wakeup count jump (likely deep sleep wake)
-        if [ "$wakeup_diff" -gt 2 ]; then
+        # Increased threshold and added time-based validation
+        if [ "$wakeup_diff" -gt 10 ] && [ "$time_diff" -gt 30 ]; then
             deep_sleep_detected=true
             detection_reason="wakeup_count_jump:$wakeup_diff"
         # Detect significant time discrepancy (system was suspended)
-        elif [ "$time_discrepancy" -gt 15 ]; then
+        elif [ "$time_discrepancy" -gt 30 ]; then
             deep_sleep_detected=true
             detection_reason="time_discrepancy:${time_discrepancy}s"
+        # Combined detection: moderate wakeup jump + some time discrepancy
+        elif [ "$wakeup_diff" -gt 5 ] && [ "$time_discrepancy" -gt 10 ]; then
+            deep_sleep_detected=true
+            detection_reason="combined_detection:wakeup+${wakeup_diff}_time+${time_discrepancy}s"
         fi
         
         if [ "$deep_sleep_detected" = "true" ]; then
@@ -110,6 +116,11 @@ EOF
             # Start new monitor for next cycle and exit this one
             start_next_monitor
             cleanup
+        fi
+        
+        # Debug logging (every 10 checks = 20 seconds)
+        if [ $((check_count % 10)) -eq 0 ]; then
+            log_event "Monitor check #$check_count - Wakeup: $baseline_wakeup→$current_wakeup (+$wakeup_diff), Time_diff: ${time_diff}s, Discrepancy: ${time_discrepancy}s"
         fi
         
         # Update baseline periodically to handle normal increments

@@ -76,8 +76,17 @@ smart_sleep() {
         fi
         
         if [ $monitor_running -eq 0 ]; then
-            log_message "Starting wake monitor for PID $$"
-            "$monitor_script" $$ &
+            # Get main script PID from PID file
+            local main_pid=""
+            if [ -f "/data/adb/auto-download/auto-download.pid" ]; then
+                main_pid=$(cat "/data/adb/auto-download/auto-download.pid")
+            else
+                # Fallback: use current process PID
+                main_pid=$$
+            fi
+            
+            log_message "Starting wake monitor for PID $main_pid"
+            "$monitor_script" "$main_pid" &
         fi
     else
         log_message "Warning: Wake monitor not found or not executable, using regular sleep"
