@@ -50,6 +50,65 @@ log_message() {
     fi
 }
 
+# Fungsi smart sleep yang dapat diinterrupt oleh deep sleep wake signal
+smart_sleep() {
+    local sleep_duration="$1"
+    local elapsed=0
+    local check_interval=10  # Check signal setiap 10 detik
+    
+    if [ -z "$sleep_duration" ] || [ "$sleep_duration" -le 0 ]; then
+        log_message "Error: Invalid sleep duration: $sleep_duration"
+        return 1
+    fi
+    
+    # Start wake monitor untuk cycle ini (jika belum ada yang running)
+    local monitor_script="/data/adb/auto-download/wake-monitor.sh"
+    if [ -f "$monitor_script" ] && [ -x "$monitor_script" ]; then
+        # Check apakah monitor sudah running untuk PID ini
+        local monitor_pid_file="/data/adb/auto-download/wake-monitor.pid"
+        local monitor_running=0
+        
+        if [ -f "$monitor_pid_file" ]; then
+            local existing_monitor_pid=$(cat "$monitor_pid_file")
+            if kill -0 "$existing_monitor_pid" 2>/dev/null; then
+                monitor_running=1
+            fi
+        fi
+        
+        if [ $monitor_running -eq 0 ]; then
+            log_message "Starting wake monitor for PID $$"
+            "$monitor_script" $$ &
+        fi
+    else
+        log_message "Warning: Wake monitor not found or not executable, using regular sleep"
+        sleep "$sleep_duration"
+        return 0
+    fi
+    
+    # Setup signal handler untuk USR1 (deep sleep wake signal)
+    trap 'wake_interrupted=true' USR1
+    wake_interrupted=false
+    
+    log_message "Smart sleep started for ${sleep_duration} seconds"
+    
+    # Sleep dalam chunk kecil agar bisa respond ke signal
+    while [ $elapsed -lt $sleep_duration ] && [ "$wake_interrupted" = "false" ]; do
+        sleep $check_interval
+        elapsed=$((elapsed + check_interval))
+    done
+    
+    # Reset trap
+    trap - USR1
+    
+    if [ "$wake_interrupted" = "true" ]; then
+        log_message "Smart sleep interrupted by deep sleep wake signal (slept ${elapsed}s of ${sleep_duration}s)"
+        return 1  # Return code 1 = interrupted by deep sleep wake
+    else
+        log_message "Smart sleep completed normally (${sleep_duration}s)"
+        return 0  # Return code 0 = completed normally
+    fi
+}
+
 # Fungsi untuk mendapatkan hash SHA-1 dari file lokal
 get_local_sha1() {
     local file="$1"
@@ -828,11 +887,16 @@ run_as_daemon() {
     # Loop utama
     while true; do
         
-        # Tunggu sesuai interval adaptif
-        sleep $adaptive_interval
+        # Tunggu sesuai interval adaptif menggunakan smart sleep
+        smart_sleep $adaptive_interval
+        local sleep_result=$?
         
         log_message "-------------------------------------"
-        log_message "Schedule check"
+        if [ $sleep_result -eq 1 ]; then
+            log_message "Schedule check (triggered by deep sleep wake)"
+        else
+            log_message "Schedule check (normal interval)"
+        fi
         
         # Jalankan pemeriksaan jadwal
         check_schedule_and_run
