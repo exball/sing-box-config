@@ -186,6 +186,30 @@ compare_sha1_and_decide() {
     fi
 }
 
+# Fungsi helper untuk membandingkan SHA-1 GitHub vs lokal (compact version)
+compare_sha1_and_decide_compact() {
+    local github_sha1="$1"
+    local local_file="$2"
+    local file_description="${3:-file}"
+    
+    if [ -z "$github_sha1" ]; then
+        return 2  # Indicate fallback needed
+    fi
+    
+    # Dapatkan hash SHA-1 dari file lokal jika ada
+    local local_sha1=""
+    if [ -f "$local_file" ]; then
+        local_sha1=$(get_local_sha1 "$local_file")
+    fi
+    
+    # Bandingkan hash SHA-1
+    if [ -n "$local_sha1" ] && [ "$local_sha1" = "$github_sha1" ]; then
+        return 0  # Same, no update needed
+    else
+        return 1  # Different, update needed
+    fi
+}
+
 # Fungsi helper untuk verifikasi file yang didownload
 verify_downloaded_sha1() {
     local temp_file="$1"
@@ -396,16 +420,97 @@ unified_update_with_security() {
     esac
 }
 
+# Fungsi unified untuk update file dengan compact logging
+unified_update_with_security_compact() {
+    local source_url="$1"
+    local target_file="$2"
+    local file_description="${3:-file}"
+    local set_executable="${4:-0}"
+    local reload_config="${5:-0}"
+    
+    # Download SHA-1 dari GitHub untuk verifikasi
+    local github_sha1=$(download_and_get_sha1 "$source_url" "${file_description}.sha1")
+    
+    # Security check: Skip jika gagal mendapat SHA-1 dari GitHub
+    if [ -z "$github_sha1" ]; then
+        log_compact "SHA-1 $file_description Failed to get SHA-1 from GitHub, skipped for security"
+        return 3
+    fi
+    
+    # Gunakan helper untuk membandingkan SHA-1 (compact version)
+    compare_sha1_and_decide_compact "$github_sha1" "$target_file" "$file_description"
+    local compare_result=$?
+    
+    case $compare_result in
+        0)  # No update needed
+            log_compact "SHA-1 $file_description Same, Skip..."
+            return 0
+            ;;
+        2)  # Error case
+            log_compact "SHA-1 $file_description ERROR: SHA-1 is empty after successful download"
+            return 3
+            ;;
+        1)  # Update needed
+            log_compact "SHA-1 $file_description"
+            log_compact "Github $github_sha1"
+            
+            # Check if local file exists and get its SHA-1
+            if [ -f "$target_file" ]; then
+                local local_sha1=$(sha1sum "$target_file" 2>/dev/null | awk '{print $1}')
+                log_compact "Local $local_sha1"
+            else
+                log_compact "Local (file not exist)"
+            fi
+            
+            log_compact "Update"
+            
+            # Download file ke temporary directory (security: tidak langsung overwrite)
+            local temp_file="$TEMP_DIR/${file_description}.new"
+            if curl_download_file "$source_url" "$temp_file"; then
+
+                ensure_parent_directory "$target_file"
+                
+                # Verifikasi SHA-1 sebelum replace (security-first)
+                if verify_downloaded_sha1 "$temp_file" "$github_sha1" "$target_file" "$file_description" "$set_executable"; then
+                    log_compact "Successfully updated (SHA1 verified)"
+                    
+                    if [ "$reload_config" = "1" ]; then
+                        if [ -f "$target_file" ]; then
+                            source "$target_file"
+                            log_compact "Config reloaded. Using new configuration"
+                        fi
+                    fi
+                    return 1  
+                else
+                    log_compact "SECURITY: SHA-1 mismatch for $file_description, file rejected"
+                    return 3  
+                fi
+            else
+                log_compact "Failed to download $file_description from $source_url"
+                return 3  
+            fi
+            ;;
+    esac
+}
+
 # Konfigurasi file yang perlu diupdate
 # Format: URL|FILE_PATH|DESCRIPTION|SET_EXECUTABLE|RELOAD_CONFIG|SKIP_CONFIG_CHECK|EXECUTE_AFTER
 FILES_CONFIG="
-$CONF_UPDATE_URL|$CONFIG_FILE|auto-download.conf|0|1|1|0
+$CONF_UPDATE_URL|$CONFIG_FILE|auto-download.conf|0|1|0|0
 $RESTART_SCRIPT_URL|$RESTART_SCRIPT_FILE|restart-auto-download.sh|1|0|0|0
 $CHECK_UPDATE_SCRIPT_URL|$CHECK_UPDATE_SCRIPT_FILE|check-update.sh|1|0|0|1
 $BOOT_SCRIPT_URL|$BOOT_SCRIPT_FILE|auto-download-boot.sh|1|0|0|0
 "
 
-# Fungsi untuk memproses satu file update
+# Fungsi untuk compact logging
+log_compact() {
+    local message="$1"
+    if [ -n "$LOG_FILE" ]; then
+        echo "$message" >> "$LOG_FILE"
+    fi
+}
+
+# Fungsi untuk memproses satu file update dengan compact logging
 process_file_update() {
     local url="$1"
     local file_path="$2"
@@ -421,13 +526,13 @@ process_file_update() {
     # Cek konfigurasi jika diperlukan
     if [ "$skip_config_check" -eq 0 ]; then
         if [ -z "$url" ] || [ -z "$file_path" ]; then
-            log_message "$description URL or file path not configured, skipping check"
+            log_compact "SHA-1 $description URL or file path not configured, skipping check"
             return 2
         fi
     fi
     
-    # Update file menggunakan unified function
-    unified_update_with_security "$url" "$file_path" "$description" "$set_executable" "$reload_config"
+    # Update file menggunakan unified function dengan compact logging
+    unified_update_with_security_compact "$url" "$file_path" "$description" "$set_executable" "$reload_config"
     local update_result=$?
     
     # Handle update result
@@ -443,19 +548,19 @@ execute_check_update_script() {
     local script_file="$1"
     
     if [ -x "$script_file" ]; then
-        log_message "Run check-update.sh to check auto-download.sh..."
+        log_compact "Run check-update.sh to check auto-download.sh..."
         sh "$script_file"
         local exec_result=$?
         
         case $exec_result in
-            0) log_message "No updates, continue checking process" ;;
-            1) log_message "check-update.sh detected an update and has restarted"
+            0) log_compact "No updates, continue checking process" ;;
+            1) log_compact "check-update.sh detected an update and has restarted"
                return 1 ;;
-            *) log_message "check-update.sh returned error code $exec_result"
+            *) log_compact "check-update.sh returned error code $exec_result"
                return $exec_result ;;
         esac
     else
-        log_message "WARNING: check-update.sh is not executable"
+        log_compact "WARNING: check-update.sh is not executable"
     fi
     
     return 0
@@ -465,6 +570,9 @@ execute_check_update_script() {
 process_all_files() {
     local files_updated=0
     local temp_file="/data/adb/auto-download/files_config.$$"
+    
+    # Header untuk section main component
+    log_compact "!!! Checking main component !!!"
     
     # Write config to temp file untuk avoid subshell issues
     printf "%s\n" "$FILES_CONFIG" > "$temp_file"
@@ -476,8 +584,6 @@ process_all_files() {
             ''|'#'*) continue ;;
         esac
         
-        log_message "Processing: $description"
-        
         # Call processing function
         process_file_update "$url" "$file_path" "$description" "$set_exec" "$reload_conf" "$skip_check" "$execute_after"
         local result=$?
@@ -485,13 +591,15 @@ process_all_files() {
         # Handle results
         case $result in
             1) files_updated=1 ;;
-            2) log_message "WARNING: $description skipped due to configuration"
+            2) log_compact "WARNING: $description skipped due to configuration"
                continue ;;
-            3) log_message "WARNING: $description skipped due to SHA-1 verification failure" ;;
+            3) log_compact "WARNING: $description skipped due to SHA-1 verification failure" ;;
         esac
         
         # Special handling untuk check-update.sh
         if [ "$execute_after" -eq 1 ] && [ $result -ne 3 ]; then
+            # Add separator before check-update execution
+            log_compact "-----"
             execute_check_update_script "$file_path"
             local exec_result=$?
             if [ $exec_result -eq 1 ]; then
@@ -501,12 +609,101 @@ process_all_files() {
                 rm -f "$temp_file"
                 return $exec_result  # Error
             fi
+            # Add separator after check-update execution
+            log_compact "-----"
         fi
         
     done < "$temp_file"
     
     # Cleanup
     rm -f "$temp_file"
+    
+    # Return files_updated status (0 = no updates, 1 = files updated)
+    if [ $files_updated -eq 1 ]; then
+        return 1
+    else
+        return 0
+    fi
+}
+
+# Fungsi untuk memproses provider files dengan compact logging
+process_provider_files() {
+    local files_updated=0
+    
+    # Header untuk section provider files
+    log_compact "!!! Checking file provider !!!"
+    
+    # Loop melalui setiap URL dalam daftar dan download
+    if [ -n "${PROVIDER_URLS}" ]; then
+        for url in $PROVIDER_URLS; do
+            filename=$(basename "$url" | sed 's/%20/ /g')
+            temp_file="$TEMP_DIR/$filename"
+            target_file="$SAVE_DIR/$filename"
+
+            local set_executable=0
+            if [ "${filename##*.}" = "sh" ]; then
+                set_executable=1
+            fi
+            
+            # Gunakan compact version untuk provider files
+            unified_update_with_security_compact "$url" "$target_file" "$filename" "$set_executable" 0
+            local download_result=$?
+            
+            case $download_result in
+                0)  continue
+                    ;;
+                1)  files_updated=1
+                    continue
+                    ;;
+                3)  log_compact "File $filename skipped due to SHA-1 verification failure"
+                    continue
+                    ;;
+            esac
+        done
+        
+        # Add separator after provider files
+        log_compact "-----"
+    else
+        log_compact "PROVIDER_URLS not configured or empty"
+        log_compact "-----"
+    fi
+    
+    # Return files_updated status (0 = no updates, 1 = files updated)
+    if [ $files_updated -eq 1 ]; then
+        return 1
+    else
+        return 0
+    fi
+}
+
+# Fungsi untuk memproses config.json dengan compact logging
+process_config_file() {
+    local files_updated=0
+    
+    # Header untuk section config file
+    log_compact "!!! Checking config.json !!!"
+    
+    # Periksa koneksi jaringan sebelum memproses config.json
+    check_network_connection
+    if [ $? -ne 0 ]; then
+        log_compact "config.json checking process cancelled due to no internet connection"
+        log_compact "-----"
+        return 1
+    fi
+    
+    # Gunakan compact version untuk download config.json
+    unified_update_with_security_compact "$CONFIG_URL" "$CONFIG_DIR/config.json" "config.json" 0 0
+    local config_result=$?
+    
+    case $config_result in
+        1)  files_updated=1
+            ;;
+        3)  log_compact "config.json skipped due to SHA-1 verification failure"
+            ;;
+    esac
+    
+    # Add separator after config file
+    log_compact "-----"
     
     # Return files_updated status (0 = no updates, 1 = files updated)
     if [ $files_updated -eq 1 ]; then
@@ -545,68 +742,49 @@ download_files() {
             ;;
     esac
     
-    # Loop melalui setiap URL dalam daftar dan download
-    if [ -n "${PROVIDER_URLS}" ]; then
-        for url in $PROVIDER_URLS; do
-
-            filename=$(basename "$url" | sed 's/%20/ /g')
-            temp_file="$TEMP_DIR/$filename"
-            target_file="$SAVE_DIR/$filename"
-
-            local set_executable=0
-            if [ "${filename##*.}" = "sh" ]; then
-                set_executable=1
-            fi
-            unified_update_with_security "$url" "$target_file" "$filename" "$set_executable" 0
-            local download_result=$?
-            
-            case $download_result in
-                0)  continue
-                    ;;
-                1)  files_updated=1
-                    continue
-                    ;;
-                3)  log_message "File $filename skipped due to SHA-1 verification failure"
-                    continue
-                    ;;
-            esac
-        done
-    else
-        log_message "PROVIDER_URLS not configured or empty"
-    fi
+    # Proses provider files menggunakan compact logging
+    process_provider_files
+    local provider_result=$?
     
-    # Periksa koneksi jaringan sebelum memproses config.json
-    log_message "-----"
-    check_network_connection
-    if [ $? -ne 0 ]; then
-        log_message "config.json checking process cancelled due to no internet connection"
-        return 1
-    fi
+    case $provider_result in
+        0)  # No provider files updated
+            ;;
+        1)  # Provider files updated
+            files_updated=1
+            ;;
+        *)  # Error occurred
+            return $provider_result
+            ;;
+    esac
     
-    # Gunakan unified function untuk download config.json dengan SHA-1 check (selalu aktif)
-    unified_update_with_security "$CONFIG_URL" "$CONFIG_DIR/config.json" "config.json" 0 0
+    # Proses config.json menggunakan compact logging
+    process_config_file
     local config_result=$?
     
     case $config_result in
-        1)  files_updated=1
+        0)  # No config file updated
             ;;
-        3)  log_message "WARNING: config.json skipped due to SHA-1 verification failure"
+        1)  # Config file updated
+            files_updated=1
+            ;;
+        *)  # Error occurred
+            return $config_result
             ;;
     esac
     
     # Jika ada file yang diperbarui, restart layanan box
     if [ $files_updated -eq 1 ]; then
-        log_message "-----"
+        log_compact "!!! Restarting Sing-Box Service !!!"
         
         # Deteksi PID lama dari /data/adb/box/run/box.pid
         local BOX_PID=""
         if [ -f "/data/adb/box/run/box.pid" ]; then
             BOX_PID=$(cat "/data/adb/box/run/box.pid")
-            log_message "There is an updated file"
-            log_message "Restart Sing-Box (old PID: $BOX_PID)"
+            log_compact "There is an updated file"
+            log_compact "Restart Sing-Box (old PID: $BOX_PID)"
         else
-            log_message "There is an updated file"
-            log_message "Restart Sing-Box (old PID: not found)"
+            log_compact "There is an updated file"
+            log_compact "Restart Sing-Box (old PID: not found)"
         fi
         
         # Stop layanan sing-box dengan disable iptables dan stop service
@@ -614,7 +792,7 @@ download_files() {
         
         # Kill PID jika masih ada
         if [ -n "$BOX_PID" ] && kill -0 "$BOX_PID" 2>/dev/null; then
-            log_message "Stopping process with PID: $BOX_PID"
+            log_compact "Stopping process with PID: $BOX_PID"
             kill "$BOX_PID" 2>/dev/null
         fi
         
@@ -626,13 +804,16 @@ download_files() {
         # Deteksi PID baru dari /data/adb/box/run/box.pid
         if [ -f "/data/adb/box/run/box.pid" ]; then
             NEW_PID=$(cat "/data/adb/box/run/box.pid")
-            log_message "Sing-Box successfully restarted (new PID: $NEW_PID)"
+            log_compact "Sing-Box successfully restarted (new PID: $NEW_PID)"
         else
-            log_message "WARNING: PID file not found after restart"
+            log_compact "WARNING: PID file not found after restart"
         fi
+        
+        # Add separator after restart
+        log_compact "-----"
     fi
     
-    log_message "Update check process complete"
+    log_compact "Update check process complete"
     
     check_and_save_pid
 }
