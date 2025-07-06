@@ -22,12 +22,11 @@ PID_FILE="/data/adb/auto-download/auto-download.pid"
 # Variabel untuk melacak apakah header timestamp sudah ditulis
 TIMESTAMP_HEADER_WRITTEN=0
 
-# Variabel untuk menyimpan interval terakhir
-LAST_INTERVAL=0
+LAST_INTERVAL=0  # Menyimpan interval terakhir
 
-# Variabel untuk melacak jadwal terakhir yang dijalankan
-LAST_EXECUTED_SCHEDULE=""
-LAST_SCHEDULE_TIME=0
+
+LAST_EXECUTED_SCHEDULE=""  # Variabel untuk melacak 
+LAST_SCHEDULE_TIME=0       # jadwal terakhir yang dijalankan
 
 # Fungsi untuk logging
 log_message() {
@@ -442,16 +441,13 @@ unified_update_with_security_compact() {
     local compare_result=$?
     
     case $compare_result in
-        0)  # No update needed
-            log_compact "SHA-1 $file_description Same, Skip..."
+        0)  log_compact "SHA-1 $file_description Same, Skip..."
             return 0
             ;;
-        2)  # Error case
-            log_compact "SHA-1 $file_description ERROR: SHA-1 is empty after successful download"
+        2)  log_compact "SHA-1 $file_description ERROR: SHA-1 is empty after successful download"
             return 3
             ;;
-        1)  # Update needed
-            log_compact "SHA-1 $file_description"
+        1)  log_compact "SHA-1 $file_description"
             log_compact "Github $github_sha1"
             
             # Check if local file exists and get its SHA-1
@@ -732,13 +728,10 @@ download_files() {
     local process_result=$?
     
     case $process_result in
-        0)  # No files updated
+        0)  ;;
+        1)  files_updated=1
             ;;
-        1)  # Files updated (normal case)
-            files_updated=1
-            ;;
-        *)  # Error occurred or restart detected
-            return $process_result
+        *)  return $process_result
             ;;
     esac
     
@@ -747,13 +740,10 @@ download_files() {
     local provider_result=$?
     
     case $provider_result in
-        0)  # No provider files updated
+        0)  ;;
+        1)  files_updated=1
             ;;
-        1)  # Provider files updated
-            files_updated=1
-            ;;
-        *)  # Error occurred
-            return $provider_result
+        *)  return $provider_result
             ;;
     esac
     
@@ -762,13 +752,10 @@ download_files() {
     local config_result=$?
     
     case $config_result in
-        0)  # No config file updated
+        0)  ;;
+        1)  files_updated=1
             ;;
-        1)  # Config file updated
-            files_updated=1
-            ;;
-        *)  # Error occurred
-            return $config_result
+        *)  return $config_result
             ;;
     esac
     
