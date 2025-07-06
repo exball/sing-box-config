@@ -307,11 +307,11 @@ fi
 
 # Fungsi untuk memeriksa dan menyimpan PID
 check_and_save_pid() {
-    # Periksa PID menggunakan ps
-    local CURRENT_PID=$(ps -ef | grep auto-download.sh | grep -v grep | awk '{print $2}')
+    # Periksa PID menggunakan ps dengan lebih akurat
+    local CURRENT_PID=$(ps -ef | grep "[a]uto-download.sh" | grep -v auto-download-boot | head -1 | awk '{print $2}')
     
     # Jika PID ditemukan, simpan ke file
-    if [ -n "$CURRENT_PID" ]; then
+    if [ -n "$CURRENT_PID" ] && [ "$CURRENT_PID" -eq "$CURRENT_PID" ] 2>/dev/null; then
         echo "$CURRENT_PID" > "$PID_FILE"
         log_message "Auto-Download PID: $CURRENT_PID"
     else
@@ -396,14 +396,124 @@ unified_update_with_security() {
     esac
 }
 
-# Fungsi untuk memeriksa dan mengupdate file script (menggunakan unified function)
-check_update_script() {
-    local script_url="$1"
-    local script_file="$2"
-    local script_name=$(basename "$script_file")
+# Konfigurasi file yang perlu diupdate
+# Format: URL|FILE_PATH|DESCRIPTION|SET_EXECUTABLE|RELOAD_CONFIG|SKIP_CONFIG_CHECK|EXECUTE_AFTER
+FILES_CONFIG="
+$CONF_UPDATE_URL|$CONFIG_FILE|auto-download.conf|0|1|1|0
+$RESTART_SCRIPT_URL|$RESTART_SCRIPT_FILE|restart-auto-download.sh|1|0|0|0
+$CHECK_UPDATE_SCRIPT_URL|$CHECK_UPDATE_SCRIPT_FILE|check-update.sh|1|0|0|1
+$BOOT_SCRIPT_URL|$BOOT_SCRIPT_FILE|auto-download-boot.sh|1|0|0|0
+"
+
+# Fungsi untuk memproses satu file update
+process_file_update() {
+    local url="$1"
+    local file_path="$2"
+    local description="$3"
+    local set_executable="$4"
+    local reload_config="$5"
+    local skip_config_check="$6"
+    local execute_after="$7"
     
-    # Gunakan unified function dengan set executable = 1, tanpa reload
-    unified_update_with_security "$script_url" "$script_file" "$script_name" 1 0
+    # Skip jika baris kosong
+    [ -z "$url" ] && return 0
+    
+    # Cek konfigurasi jika diperlukan
+    if [ "$skip_config_check" -eq 0 ]; then
+        if [ -z "$url" ] || [ -z "$file_path" ]; then
+            log_message "$description URL or file path not configured, skipping check"
+            return 2
+        fi
+    fi
+    
+    # Update file menggunakan unified function
+    unified_update_with_security "$url" "$file_path" "$description" "$set_executable" "$reload_config"
+    local update_result=$?
+    
+    # Handle update result
+    case $update_result in
+        1) return 1 ;;  # File updated
+        3) return 3 ;;  # SHA-1 verification failed
+        *) return 0 ;;  # No update needed
+    esac
+}
+
+# Fungsi untuk mengeksekusi check-update.sh setelah update
+execute_check_update_script() {
+    local script_file="$1"
+    
+    if [ -x "$script_file" ]; then
+        log_message "Run check-update.sh to check auto-download.sh..."
+        sh "$script_file"
+        local exec_result=$?
+        
+        case $exec_result in
+            0) log_message "No updates, continue checking process" ;;
+            1) log_message "check-update.sh detected an update and has restarted"
+               return 1 ;;
+            *) log_message "check-update.sh returned error code $exec_result"
+               return $exec_result ;;
+        esac
+    else
+        log_message "WARNING: check-update.sh is not executable"
+    fi
+    
+    return 0
+}
+
+# Fungsi untuk memproses semua file menggunakan array konfigurasi
+process_all_files() {
+    local files_updated=0
+    local temp_file="/data/adb/auto-download/files_config.$$"
+    
+    # Write config to temp file untuk avoid subshell issues
+    printf "%s\n" "$FILES_CONFIG" > "$temp_file"
+    
+    # Process each line
+    while IFS='|' read -r url file_path description set_exec reload_conf skip_check execute_after; do
+        # Skip empty lines dan comments
+        case "$url" in
+            ''|'#'*) continue ;;
+        esac
+        
+        log_message "Processing: $description"
+        
+        # Call processing function
+        process_file_update "$url" "$file_path" "$description" "$set_exec" "$reload_conf" "$skip_check" "$execute_after"
+        local result=$?
+        
+        # Handle results
+        case $result in
+            1) files_updated=1 ;;
+            2) log_message "WARNING: $description skipped due to configuration"
+               continue ;;
+            3) log_message "WARNING: $description skipped due to SHA-1 verification failure" ;;
+        esac
+        
+        # Special handling untuk check-update.sh
+        if [ "$execute_after" -eq 1 ] && [ $result -ne 3 ]; then
+            execute_check_update_script "$file_path"
+            local exec_result=$?
+            if [ $exec_result -eq 1 ]; then
+                rm -f "$temp_file"
+                return 1  # Restart detected
+            elif [ $exec_result -gt 1 ]; then
+                rm -f "$temp_file"
+                return $exec_result  # Error
+            fi
+        fi
+        
+    done < "$temp_file"
+    
+    # Cleanup
+    rm -f "$temp_file"
+    
+    # Return files_updated status (0 = no updates, 1 = files updated)
+    if [ $files_updated -eq 1 ]; then
+        return 1
+    else
+        return 0
+    fi
 }
 
 # Fungsi untuk mendownload file
@@ -420,67 +530,20 @@ download_files() {
     # Variabel untuk melacak apakah ada file yang diperbarui
     local files_updated=0
     
-    # Periksa dan update file auto-download.conf terlebih dahulu menggunakan unified function
-    unified_update_with_security "$CONF_UPDATE_URL" "$CONFIG_FILE" "auto-download.conf" 0 1
-    local config_result=$?
-    case $config_result in
-        1)  files_updated=1
+    # Proses semua file menggunakan array konfigurasi
+    process_all_files
+    local process_result=$?
+    
+    case $process_result in
+        0)  # No files updated
             ;;
-        3)  log_message "WARNING: auto-download.conf skipped due to SHA-1 verification failure"
+        1)  # Files updated (normal case)
+            files_updated=1
+            ;;
+        *)  # Error occurred or restart detected
+            return $process_result
             ;;
     esac
-    
-    # Periksa dan update file restart-auto-download.sh setelah auto-download.conf
-    if [ -n "$RESTART_SCRIPT_URL" ] && [ -n "$RESTART_SCRIPT_FILE" ]; then
-        check_update_script "$RESTART_SCRIPT_URL" "$RESTART_SCRIPT_FILE"
-        local restart_script_result=$?
-        case $restart_script_result in
-            1)  files_updated=1
-                ;;
-            3)  log_message "WARNING: restart-auto-download.sh skipped due to SHA-1 verification failure"
-                ;;
-        esac
-    else
-        log_message "restart-auto-download.sh URL or file path not configured, skipping check"
-    fi
-    
-    # Periksa dan update file check-update.sh setelah restart-auto-download.sh
-    if [ -n "$CHECK_UPDATE_SCRIPT_URL" ] && [ -n "$CHECK_UPDATE_SCRIPT_FILE" ]; then
-        check_update_script "$CHECK_UPDATE_SCRIPT_URL" "$CHECK_UPDATE_SCRIPT_FILE"
-        local check_update_result=$?
-        case $check_update_result in
-            1)  files_updated=1
-                ;;
-            3)  log_message "WARNING: check-update.sh skipped due to SHA-1 verification failure"
-                ;;
-        esac
-        
-        # Setelah memeriksa check-update.sh, jalankan untuk memeriksa auto-download.sh
-        log_message "Run check-update.sh to check auto-download.sh..."
-        if [ -x "$CHECK_UPDATE_SCRIPT_FILE" ]; then
-
-            sh "$CHECK_UPDATE_SCRIPT_FILE"
-            local update_check_result=$?
-            
-            if [ $update_check_result -eq 0 ]; then
-                log_message "No updates, continue checking process"
-
-            elif [ $update_check_result -eq 1 ]; then
-                log_message "check-update.sh detected an update and has restarted"
-
-                return 1
-            else
-                log_message "check-update.sh returned error code $update_check_result"
-
-                return $update_check_result
-            fi
-        else
-            log_message "WARNING: check-update.sh is not executable"
-
-        fi
-    else
-        log_message "check-update.sh URL or file path not configured, skipping check"
-    fi
     
     # Loop melalui setiap URL dalam daftar dan download
     if [ -n "${PROVIDER_URLS}" ]; then

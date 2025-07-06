@@ -52,9 +52,9 @@ else
     echo "File PID tidak ditemukan"
     
     # Cari PID menggunakan ps
-    OLD_PID=$(ps -ef | grep auto-download.sh | grep -v grep | grep -v restart | awk '{print $2}')
+    OLD_PID=$(ps -ef | grep "[a]uto-download.sh" | grep -v restart | head -1 | awk '{print $2}')
     
-    if [ -n "$OLD_PID" ]; then
+    if [ -n "$OLD_PID" ] && [ "$OLD_PID" -eq "$OLD_PID" ] 2>/dev/null; then
         echo "Menemukan proses auto-download.sh dengan PID $OLD_PID"
         echo "Menghentikan proses..."
         kill "$OLD_PID"
@@ -70,8 +70,8 @@ else
 fi
 
 # Periksa sekali lagi apakah ada proses yang masih berjalan
-RUNNING_PID=$(ps -ef | grep auto-download.sh | grep -v grep | grep -v restart | awk '{print $2}')
-if [ -n "$RUNNING_PID" ]; then
+RUNNING_PID=$(ps -ef | grep "[a]uto-download.sh" | grep -v restart | head -1 | awk '{print $2}')
+if [ -n "$RUNNING_PID" ] && [ "$RUNNING_PID" -eq "$RUNNING_PID" ] 2>/dev/null; then
     echo "PERINGATAN: Proses auto-download.sh masih berjalan dengan PID $RUNNING_PID"
     echo "Mencoba menghentikan paksa..."
     kill -9 $RUNNING_PID
@@ -90,8 +90,8 @@ nohup sh "$SCRIPT_PATH" > /dev/null 2>&1 &
 sleep 2
 
 # Periksa apakah script berjalan
-NEW_PID=$(ps -ef | grep auto-download.sh | grep -v grep | grep -v restart | awk '{print $2}')
-if [ -n "$NEW_PID" ]; then
+NEW_PID=$(ps -ef | grep "[a]uto-download.sh" | grep -v restart | head -1 | awk '{print $2}')
+if [ -n "$NEW_PID" ] && [ "$NEW_PID" -eq "$NEW_PID" ] 2>/dev/null; then
     echo "Script auto-download.sh berhasil dijalankan dengan PID $NEW_PID"
 else
     echo "PERINGATAN: Script auto-download.sh gagal dijalankan"

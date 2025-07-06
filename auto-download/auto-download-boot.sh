@@ -44,8 +44,8 @@ chmod +x "$SCRIPT_PATH"
 log_boot "Izin eksekusi diberikan ke $SCRIPT_PATH"
 
 # Periksa apakah script sudah berjalan
-PID=$(ps -ef | grep auto-download.sh | grep -v grep | grep -v auto-download-boot | awk '{print $2}')
-if [ -n "$PID" ]; then
+PID=$(ps -ef | grep "[a]uto-download.sh" | grep -v auto-download-boot | head -1 | awk '{print $2}')
+if [ -n "$PID" ] && [ "$PID" -eq "$PID" ] 2>/dev/null; then
     log_boot "Script auto-download.sh sudah berjalan dengan PID $PID"
     exit 0
 fi
@@ -58,8 +58,8 @@ sh "$SCRIPT_PATH" > /dev/null 2>&1 &
 sleep 5
 
 # Periksa apakah script berhasil dijalankan
-NEW_PID=$(ps -ef | grep auto-download.sh | grep -v grep | grep -v auto-download-boot | awk '{print $2}')
-if [ -n "$NEW_PID" ]; then
+NEW_PID=$(ps -ef | grep "[a]uto-download.sh" | grep -v auto-download-boot | head -1 | awk '{print $2}')
+if [ -n "$NEW_PID" ] && [ "$NEW_PID" -eq "$NEW_PID" ] 2>/dev/null; then
     log_boot "Script auto-download.sh berhasil dijalankan dengan PID $NEW_PID"
 else
     log_boot "PERINGATAN: Script auto-download.sh gagal dijalankan"
@@ -71,8 +71,8 @@ else
     sleep 5
     
     # Periksa lagi
-    FINAL_PID=$(ps -ef | grep auto-download.sh | grep -v grep | grep -v auto-download-boot | awk '{print $2}')
-    if [ -n "$FINAL_PID" ]; then
+    FINAL_PID=$(ps -ef | grep "[a]uto-download.sh" | grep -v auto-download-boot | head -1 | awk '{print $2}')
+    if [ -n "$FINAL_PID" ] && [ "$FINAL_PID" -eq "$FINAL_PID" ] 2>/dev/null; then
         log_boot "Script auto-download.sh berhasil dijalankan dengan PID $FINAL_PID pada percobaan kedua"
     else
         log_boot "KRITIS: Script auto-download.sh gagal dijalankan setelah beberapa percobaan"
