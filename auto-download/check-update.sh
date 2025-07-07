@@ -18,24 +18,21 @@ NETWORK_TEST_URL="https://www.google.com"
 NETWORK_MAX_ATTEMPTS=5
 NETWORK_RETRY_WAIT=3
 
-# File log
-LOG_FILE="/data/adb/auto-download/check-update.log"
+# File log - menggunakan file log yang sama dengan auto-download.sh
+LOG_FILE="/data/adb/auto-download/auto-download.log"
 
 # ===== PERSIAPAN =====
 # Pastikan direktori yang diperlukan ada
 mkdir -p /data/adb/auto-download
 mkdir -p "$TEMP_DIR"
 
-# Kosongkan log file setiap kali script dijalankan
-if [ -n "$LOG_FILE" ]; then
-    > "$LOG_FILE"
-fi
+# Tidak mengosongkan log file karena melanjutkan dari auto-download.sh
+# Log akan ditambahkan setelah log dari auto-download.sh
 
-# Variabel untuk melacak apakah header timestamp sudah ditulis
-TIMESTAMP_HEADER_WRITTEN=0
+# Variabel TIMESTAMP_HEADER_WRITTEN tidak diperlukan lagi karena melanjutkan dari auto-download.sh
 
 # ===== FUNGSI UTILITAS =====
-# Fungsi untuk logging
+# Fungsi untuk logging - melanjutkan dari log auto-download.sh
 log_message() {
     local message="$1"
     local timestamp=$(date "+%Y-%m-%d %H:%M:%S")
@@ -44,14 +41,9 @@ log_message() {
     echo "$timestamp: $message"
     
     # Tulis ke file log jika dikonfigurasi
+    # Tidak membuat header timestamp baru karena melanjutkan dari auto-download.sh
     if [ -n "$LOG_FILE" ]; then
-        # Jika ini adalah pesan pertama setelah log dikosongkan, tulis header timestamp
-        if [ $TIMESTAMP_HEADER_WRITTEN -eq 0 ]; then
-            echo "$timestamp:" >> "$LOG_FILE"
-            TIMESTAMP_HEADER_WRITTEN=1
-        fi
-        
-        # Tulis pesan tanpa timestamp
+        # Tulis pesan tanpa timestamp langsung ke log file
         echo "$message" >> "$LOG_FILE"
     fi
 }
@@ -374,10 +366,7 @@ run_update_check() {
 }
 
 # ===== EKSEKUSI UTAMA =====
-# Inisialisasi file log jika belum ada
-if [ -n "$LOG_FILE" ] && [ ! -f "$LOG_FILE" ]; then
-    touch "$LOG_FILE"
-fi
+# File log sudah diinisialisasi oleh auto-download.sh
 
 # Jalankan pemeriksaan dan pembaruan
 log_message "Memulai check-update.sh"
