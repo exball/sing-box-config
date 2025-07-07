@@ -319,7 +319,6 @@ run_update_check() {
         
         if [ -x "$restart_script" ]; then
             sh "$restart_script"
-            log_message "Restart script telah dijalankan"
         else
             log_message "Script restart-auto-download.sh tidak ditemukan atau tidak dapat dieksekusi"
             log_message "Mencoba restart manual..."
@@ -349,8 +348,6 @@ run_update_check() {
                 log_message "auto-download.sh tidak sedang berjalan, tidak perlu di-restart"
             fi
         fi
-        
-        log_message "Proses pemeriksaan selesai - auto-download.sh telah diperbarui dan di-restart"
         # Return 1 untuk memberi tahu auto-download.sh bahwa ada update dan telah di-restart
         # Auto-download.sh yang memanggil script ini harus berhenti
         exit 1
