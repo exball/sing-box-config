@@ -35,6 +35,12 @@ LAST_SCREEN_STATE=""
 LAST_SCREEN_ON_COUNT=""
 WAKE_UP_DETECTED=0
 
+# Variabel untuk wake-up debouncing
+WAKE_UP_DEBOUNCE_ENABLED=1
+WAKE_UP_DEBOUNCE_INTERVAL=600  # 10 menit = 600 detik
+LAST_WAKE_UP_TIME=0
+WAKE_UP_DEBOUNCE_FILE="/data/adb/auto-download/last_wake_up_time"
+
 # Fungsi untuk logging
 log_message() {
     local message="$1"
@@ -641,6 +647,66 @@ download_files() {
     check_and_save_pid
 }
 
+# Fungsi untuk menyimpan timestamp wake-up terakhir
+save_wake_up_time() {
+    local current_time=$(date +%s)
+    echo "$current_time" > "$WAKE_UP_DEBOUNCE_FILE" 2>/dev/null
+    LAST_WAKE_UP_TIME=$current_time
+}
+
+# Fungsi untuk membaca timestamp wake-up terakhir
+load_wake_up_time() {
+    if [ -f "$WAKE_UP_DEBOUNCE_FILE" ]; then
+        LAST_WAKE_UP_TIME=$(cat "$WAKE_UP_DEBOUNCE_FILE" 2>/dev/null || echo "0")
+    else
+        LAST_WAKE_UP_TIME=0
+    fi
+}
+
+# Fungsi untuk memeriksa apakah wake-up diizinkan (debouncing)
+is_wake_up_allowed() {
+    if [ $WAKE_UP_DEBOUNCE_ENABLED -eq 0 ]; then
+        return 0  # Debouncing disabled, allow wake-up
+    fi
+    
+    local current_time=$(date +%s)
+    local time_diff=$((current_time - LAST_WAKE_UP_TIME))
+    
+    if [ $time_diff -ge $WAKE_UP_DEBOUNCE_INTERVAL ]; then
+        return 0  # Enough time has passed, allow wake-up
+    else
+        local remaining_time=$((WAKE_UP_DEBOUNCE_INTERVAL - time_diff))
+        local remaining_minutes=$((remaining_time / 60))
+        local remaining_seconds=$((remaining_time % 60))
+        
+        log_message "Wake-up debounced: Last wake-up was ${time_diff}s ago, need to wait ${remaining_minutes}m ${remaining_seconds}s more"
+        return 1  # Too soon, deny wake-up
+    fi
+}
+
+# Fungsi untuk format waktu yang mudah dibaca
+format_time_diff() {
+    local seconds="$1"
+    local minutes=$((seconds / 60))
+    local hours=$((minutes / 60))
+    local days=$((hours / 24))
+    
+    # Correct calculation for display
+    minutes=$((minutes % 60))
+    hours=$((hours % 24))
+    seconds=$((seconds % 60))
+    
+    if [ $days -gt 0 ]; then
+        echo "${days}d ${hours}h ${minutes}m ${seconds}s"
+    elif [ $hours -gt 0 ]; then
+        echo "${hours}h ${minutes}m ${seconds}s"
+    elif [ $minutes -gt 0 ]; then
+        echo "${minutes}m ${seconds}s"
+    else
+        echo "${seconds}s"
+    fi
+}
+
 # Fungsi untuk mendeteksi wake-up dari deep sleep
 detect_wake_up_event() {
     if [ $WAKE_UP_DETECTION_ENABLED -eq 0 ]; then
@@ -693,11 +759,17 @@ detect_wake_up_event() {
     LAST_SCREEN_STATE="$current_screen_state"
     LAST_SCREEN_ON_COUNT="$current_screen_on_count"
     
-    # Jika wake-up terdeteksi, set flag global
+    # Jika wake-up terdeteksi, periksa debouncing
     if [ $wake_up_detected -eq 1 ]; then
-        WAKE_UP_DETECTED=1
-        log_message "Device wake-up from deep sleep detected"
-        return 1
+        # Periksa apakah wake-up diizinkan (debouncing check)
+        if is_wake_up_allowed; then
+            WAKE_UP_DETECTED=1
+            log_message "Device wake-up from deep sleep detected and allowed"
+            return 1
+        else
+            log_message "Device wake-up detected but debounced (ignored)"
+            return 0
+        fi
     fi
     
     return 0
@@ -709,6 +781,9 @@ handle_wake_up_event() {
         log_message "-------------------------------------"
         log_message "Processing wake-up event"
         log_message "Recalculating schedule due to wake-up from deep sleep"
+        
+        # Simpan timestamp wake-up untuk debouncing
+        save_wake_up_time
         
         # Reset flag wake-up
         WAKE_UP_DETECTED=0
@@ -961,6 +1036,19 @@ run_as_daemon() {
         LAST_SCREEN_ON_COUNT=$(dumpsys activity broadcasts 2>/dev/null | grep -c "android.intent.action.SCREEN_ON" 2>/dev/null || echo "0")
         WAKE_UP_DETECTED=0
         log_message "Wake-up detection initialized (Screen state: $LAST_SCREEN_STATE, SCREEN_ON count: $LAST_SCREEN_ON_COUNT)"
+    fi
+    
+    # Inisialisasi wake-up debouncing
+    if [ $WAKE_UP_DEBOUNCE_ENABLED -eq 1 ]; then
+        load_wake_up_time
+        if [ $LAST_WAKE_UP_TIME -eq 0 ]; then
+            log_message "Wake-up debouncing initialized (No previous wake-up recorded)"
+        else
+            local current_time=$(date +%s)
+            local time_since_last=$((current_time - LAST_WAKE_UP_TIME))
+            local formatted_time=$(format_time_diff $time_since_last)
+            log_message "Wake-up debouncing initialized (Last wake-up: ${formatted_time} ago, Interval: ${WAKE_UP_DEBOUNCE_INTERVAL}s)"
+        fi
     fi
     
     # Inisialisasi untuk loop pertama
