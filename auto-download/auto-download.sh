@@ -5,7 +5,7 @@
 # ===== KONFIGURASI BOOTSTRAP =====
 # Parameter minimal yang diperlukan untuk memeriksa pembaruan konfigurasi
 # Parameter ini TIDAK BOLEH diubah melalui file konfigurasi eksternal
-CONF_UPDATE_URL="https://raw.githubusercontent.com/exball/sing-box-config/refs/heads/Master/auto-download/auto-download.conf"
+CONF_UPDATE_URL="https://raw.githubusercontent.com/exball/sing-box-config/refs/heads/test/auto-download/auto-download.conf"
 CONFIG_FILE="/data/adb/auto-download/auto-download.conf"
 TEMP_DIR="/data/adb/auto-download/download_temp"
 NETWORK_TEST_URL="https://www.google.com"
