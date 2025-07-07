@@ -105,23 +105,32 @@ curl_download_file() {
 
 # Fungsi untuk memeriksa koneksi jaringan
 check_network_connection() {
-    log_message "Memeriksa koneksi internet..."
+    log_message "Checking internet connection"
     
     local attempt=1
     local connected=0
+    local last_attempt_logged=0
     
     while [ $attempt -le $NETWORK_MAX_ATTEMPTS ]; do
-        log_message "Percobaan koneksi ke $NETWORK_TEST_URL (Percobaan $attempt dari $NETWORK_MAX_ATTEMPTS)"
+        # Tampilkan attempt di konsol dengan carriage return untuk menimpa baris yang sama
+        printf "\rAttempt %d of %d" "$attempt" "$NETWORK_MAX_ATTEMPTS"
+        
+        # Simpan attempt terakhir untuk log file
+        last_attempt_logged=$attempt
         
         # Gunakan curl untuk memeriksa koneksi ke URL yang ditentukan
         if curl_network_check "$NETWORK_TEST_URL"; then
-            log_message "Koneksi internet tersedia"
+            # Bersihkan baris attempt di konsol dan tulis hasil sukses
+            printf "\r"
+            
+            # Log attempt terakhir dan hasil sukses ke file
+            if [ -n "$LOG_FILE" ]; then
+                echo "Attempt $last_attempt_logged of $NETWORK_MAX_ATTEMPTS" >> "$LOG_FILE"
+            fi
+            log_message "Internet connection available"
             connected=1
             break
         fi
-        
-        # Jika tidak ada koneksi, tunggu dan coba lagi
-        log_message "Tidak ada koneksi internet, Tunggu $NETWORK_RETRY_WAIT detik."
         
         if [ $attempt -lt $NETWORK_MAX_ATTEMPTS ]; then
             sleep $NETWORK_RETRY_WAIT
@@ -132,7 +141,14 @@ check_network_connection() {
     done
     
     if [ $connected -eq 0 ]; then
-        log_message "Gagal terhubung ke jaringan setelah $NETWORK_MAX_ATTEMPTS percobaan"
+        # Bersihkan baris attempt di konsol
+        printf "\r"
+        
+        # Log attempt terakhir dan hasil gagal ke file
+        if [ -n "$LOG_FILE" ]; then
+            echo "Attempt $last_attempt_logged of $NETWORK_MAX_ATTEMPTS" >> "$LOG_FILE"
+        fi
+        log_message "Failed to connect after $NETWORK_MAX_ATTEMPTS attempts"
         return 1
     fi
     
@@ -207,21 +223,21 @@ check_and_update_file() {
         return 1
     fi
     
-    log_message "SHA-1 GitHub $file_name: $github_sha1"
+    log_message "SHA-1 GitHub: $github_sha1"
     
     # Dapatkan hash SHA-1 dari file lokal jika ada
     local local_sha1=""
     if [ -f "$local_file" ]; then
         local_sha1=$(get_local_sha1 "$local_file")
-        log_message "SHA-1 lokal $file_name: $local_sha1"
+        log_message "SHA-1 lokal: $local_sha1"
     fi
     
     # Bandingkan hash SHA-1
     if [ -n "$local_sha1" ] && [ "$local_sha1" = "$github_sha1" ]; then
-        log_message "SHA-1 $file_name sama, tidak perlu diperbarui"
+        log_message "SHA-1 Same, Skip..."
         return 0  # Same, no update needed
     else
-        log_message "SHA-1 $file_name berbeda atau file tidak ada, memperbarui..."
+        log_message "SHA-1 different or file not exist, Update..."
         
         # Pastikan direktori parent ada
         local parent_dir=$(dirname "$local_file")
@@ -237,7 +253,6 @@ check_and_update_file() {
         if curl_download_file "$file_url" "$temp_file"; then
             # Verifikasi hash SHA-1 file yang didownload
             local downloaded_sha1=$(get_local_sha1 "$temp_file")
-            log_message "SHA-1 didownload $file_name: $downloaded_sha1"
             
             if [ "$downloaded_sha1" = "$github_sha1" ]; then
                 # Hapus backup lama jika ada
@@ -258,7 +273,7 @@ check_and_update_file() {
                     chmod +x "$local_file"
                 fi
                 
-                log_message "$file_name berhasil diperbarui"
+                log_message "Successfully updated (SHA1 verified)"
                 
                 # Hapus file backup karena pembaruan berhasil
                 if [ -f "${local_file}.bak" ]; then
