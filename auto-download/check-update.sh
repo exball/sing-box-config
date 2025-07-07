@@ -310,7 +310,7 @@ run_update_check() {
     
     # Jika ada file yang diperbarui, restart layanan jika diperlukan
     if [ $files_updated -eq 1 ]; then
-        log_message "File auto-download.sh telah diperbarui, perlu me-restart layanan"
+        log_message "Restart auto-download service"
         
         # Cari script restart-auto-download.sh
         local restart_script="/data/adb/auto-download/restart-auto-download.sh"
@@ -321,7 +321,6 @@ run_update_check() {
         fi
         
         if [ -x "$restart_script" ]; then
-            log_message "Menjalankan restart-auto-download.sh untuk me-restart dengan versi terbaru..."
             sh "$restart_script"
             log_message "Restart script telah dijalankan"
         else
