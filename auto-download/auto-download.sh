@@ -302,7 +302,6 @@ fi
 # Muat konfigurasi dari file
 if [ -f "$CONFIG_FILE" ]; then
     source "$CONFIG_FILE"
-    log_message "Configuration loaded from $CONFIG_FILE"
 else
     log_message "ERROR: Configuration file not found at $CONFIG_FILE"
     log_message "Make sure the configuration file exists before running the script"
