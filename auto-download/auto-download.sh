@@ -401,8 +401,8 @@ unified_update_with_security() {
 FILES_CONFIG="
 $CONF_UPDATE_URL|$CONFIG_FILE|auto-download.conf|0|1|0|0
 $RESTART_SCRIPT_URL|$RESTART_SCRIPT_FILE|restart-auto-download.sh|1|0|0|0
-$CHECK_UPDATE_SCRIPT_URL|$CHECK_UPDATE_SCRIPT_FILE|check-update.sh|1|0|0|1
 $BOOT_SCRIPT_URL|$BOOT_SCRIPT_FILE|auto-download-boot.sh|1|0|0|0
+$CHECK_UPDATE_SCRIPT_URL|$CHECK_UPDATE_SCRIPT_FILE|check-update.sh|1|0|0|1
 "
 
 # Fungsi untuk memproses satu file update
