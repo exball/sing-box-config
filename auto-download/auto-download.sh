@@ -455,7 +455,7 @@ execute_check_update_script() {
     local script_file="$1"
     
     if [ -x "$script_file" ]; then
-        log_message "Run check-update.sh to check auto-download.sh..."
+        log_message "Run check-update.sh..."
         sh "$script_file"
         local exec_result=$?
         

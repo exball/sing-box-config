@@ -295,8 +295,6 @@ run_update_check() {
         return 1
     fi
     
-    log_message "Memulai proses pemeriksaan file"
-    
     # Variabel untuk melacak apakah ada file yang diperbarui
     local files_updated=0
     
@@ -358,8 +356,6 @@ run_update_check() {
         # Auto-download.sh yang memanggil script ini harus berhenti
         exit 1
     else
-        log_message "Tidak ada pembaruan pada auto-download.sh"
-        log_message "Proses pemeriksaan selesai - melanjutkan proses normal"
         return 0
     fi
 }
@@ -368,9 +364,7 @@ run_update_check() {
 # File log sudah diinisialisasi oleh auto-download.sh
 
 # Jalankan pemeriksaan dan pembaruan
-log_message "Memulai check-update.sh"
 run_update_check
 exit_code=$?
-log_message "check-update.sh selesai dengan kode: $exit_code"
 
 exit $exit_code
