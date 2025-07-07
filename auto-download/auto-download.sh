@@ -29,6 +29,12 @@ LAST_INTERVAL=0
 LAST_EXECUTED_SCHEDULE=""
 LAST_SCHEDULE_TIME=0
 
+# Variabel untuk wake-up detection
+WAKE_UP_DETECTION_ENABLED=1
+LAST_SCREEN_STATE=""
+LAST_SCREEN_ON_COUNT=""
+WAKE_UP_DETECTED=0
+
 # Fungsi untuk logging
 log_message() {
     local message="$1"
@@ -635,6 +641,88 @@ download_files() {
     check_and_save_pid
 }
 
+# Fungsi untuk mendeteksi wake-up dari deep sleep
+detect_wake_up_event() {
+    if [ $WAKE_UP_DETECTION_ENABLED -eq 0 ]; then
+        return 0
+    fi
+    
+    local wake_up_detected=0
+    
+    # Primary detection: Monitor broadcast intents SCREEN_ON
+    local current_screen_on_count=$(dumpsys activity broadcasts 2>/dev/null | grep -c "android.intent.action.SCREEN_ON" 2>/dev/null || echo "0")
+    
+    # Secondary detection: Monitor system properties debug.tracing.screen_state
+    local current_screen_state=$(getprop debug.tracing.screen_state 2>/dev/null)
+    
+    # Jika ini adalah pemeriksaan pertama, simpan state awal
+    if [ -z "$LAST_SCREEN_STATE" ]; then
+        LAST_SCREEN_STATE="$current_screen_state"
+        LAST_SCREEN_ON_COUNT="$current_screen_on_count"
+        return 0
+    fi
+    
+    # Primary detection: Periksa apakah ada SCREEN_ON broadcast baru
+    if [ -n "$LAST_SCREEN_ON_COUNT" ] && [ "$current_screen_on_count" -gt "$LAST_SCREEN_ON_COUNT" ]; then
+        wake_up_detected=1
+        log_message "Wake-up detected: New SCREEN_ON broadcast (count: $LAST_SCREEN_ON_COUNT -> $current_screen_on_count)"
+    fi
+    
+    # Secondary detection: Deteksi perubahan screen state
+    # Berdasarkan testing pada device: 1=OFF, 2=ON
+    local screen_was_off=0
+    local screen_is_on=0
+    
+    # Deteksi screen off state (pada device ini = 1)
+    if [ "$LAST_SCREEN_STATE" = "1" ]; then
+        screen_was_off=1
+    fi
+    
+    # Deteksi screen on state (pada device ini = 2)
+    if [ "$current_screen_state" = "2" ]; then
+        screen_is_on=1
+    fi
+    
+    # Jika screen berubah dari off (1) ke on (2)
+    if [ $screen_was_off -eq 1 ] && [ $screen_is_on -eq 1 ]; then
+        wake_up_detected=1
+        log_message "Wake-up detected: Screen state changed from OFF ($LAST_SCREEN_STATE) to ON ($current_screen_state)"
+    fi
+    
+    # Update last states
+    LAST_SCREEN_STATE="$current_screen_state"
+    LAST_SCREEN_ON_COUNT="$current_screen_on_count"
+    
+    # Jika wake-up terdeteksi, set flag global
+    if [ $wake_up_detected -eq 1 ]; then
+        WAKE_UP_DETECTED=1
+        log_message "Device wake-up from deep sleep detected"
+        return 1
+    fi
+    
+    return 0
+}
+
+# Fungsi untuk menangani wake-up event
+handle_wake_up_event() {
+    if [ $WAKE_UP_DETECTED -eq 1 ]; then
+        log_message "-------------------------------------"
+        log_message "Processing wake-up event"
+        log_message "Recalculating schedule due to wake-up from deep sleep"
+        
+        # Reset flag wake-up
+        WAKE_UP_DETECTED=0
+        
+        # Jalankan check_schedule_and_run untuk menghitung ulang waktu
+        check_schedule_and_run
+        
+        log_message "Wake-up event processing complete"
+        return 1  # Indicate that wake-up was handled
+    fi
+    
+    return 0
+}
+
 # Fungsi untuk memeriksa SCHEDULE_HOURS
 check_schedule_and_run() {
     # Dapatkan waktu saat ini dalam format hh:mm dan timestamp Unix
@@ -867,6 +955,14 @@ run_as_daemon() {
     LAST_EXECUTED_SCHEDULE=""
     LAST_SCHEDULE_TIME=0
     
+    # Inisialisasi wake-up detection
+    if [ $WAKE_UP_DETECTION_ENABLED -eq 1 ]; then
+        LAST_SCREEN_STATE=$(getprop debug.tracing.screen_state 2>/dev/null)
+        LAST_SCREEN_ON_COUNT=$(dumpsys activity broadcasts 2>/dev/null | grep -c "android.intent.action.SCREEN_ON" 2>/dev/null || echo "0")
+        WAKE_UP_DETECTED=0
+        log_message "Wake-up detection initialized (Screen state: $LAST_SCREEN_STATE, SCREEN_ON count: $LAST_SCREEN_ON_COUNT)"
+    fi
+    
     # Inisialisasi untuk loop pertama
     adaptive_interval=$(calculate_adaptive_interval)
     next_schedule_info=$(get_next_schedule_info)
@@ -889,14 +985,43 @@ run_as_daemon() {
     # Loop utama
     while true; do
         
-        # Tunggu sesuai interval adaptif
-        sleep $adaptive_interval
+        # Tunggu sesuai interval adaptif dengan wake-up detection
+        local sleep_interval=$adaptive_interval
+        local sleep_counter=0
+        local check_interval=10  # Check wake-up every 10 seconds
         
-        log_message "-------------------------------------"
-        log_message "Schedule check"
+        # Sleep dengan pemeriksaan wake-up berkala
+        while [ $sleep_counter -lt $sleep_interval ]; do
+            local remaining_sleep=$((sleep_interval - sleep_counter))
+            local current_sleep=$check_interval
+            
+            if [ $remaining_sleep -lt $check_interval ]; then
+                current_sleep=$remaining_sleep
+            fi
+            
+            sleep $current_sleep
+            sleep_counter=$((sleep_counter + current_sleep))
+            
+            # Periksa wake-up event selama sleep
+            detect_wake_up_event
+            if [ $? -eq 1 ]; then
+                # Wake-up detected, break from sleep loop
+                break
+            fi
+        done
         
-        # Jalankan pemeriksaan jadwal
-        check_schedule_and_run
+        # Handle wake-up event jika terdeteksi
+        handle_wake_up_event
+        local wake_up_handled=$?
+        
+        # Jika wake-up tidak ditangani, lakukan schedule check normal
+        if [ $wake_up_handled -eq 0 ]; then
+            log_message "-------------------------------------"
+            log_message "Schedule check"
+            
+            # Jalankan pemeriksaan jadwal
+            check_schedule_and_run
+        fi
         
         # Hitung interval adaptif untuk siklus berikutnya
         next_adaptive_interval=$(calculate_adaptive_interval)
