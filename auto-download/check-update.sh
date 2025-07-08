@@ -115,7 +115,7 @@ check_network_connection() {
             # Bersihkan baris attempt di konsol dan tulis hasil sukses
             printf "\r"
             
-            # Log dengan format "Connected in X(Y) attempt"
+            # Log dengan format baru: Connected in X(Y) attempt
             log_message "Connected in $last_attempt_logged($NETWORK_MAX_ATTEMPTS) attempt"
             connected=1
             break
@@ -133,6 +133,7 @@ check_network_connection() {
         # Bersihkan baris attempt di konsol
         printf "\r"
         
+        # Log dengan format baru untuk kegagalan
         log_message "Failed to connect after $NETWORK_MAX_ATTEMPTS attempts"
         return 1
     fi
@@ -197,9 +198,8 @@ check_and_update_file() {
     local local_file="$2"
     local file_name=$(basename "$local_file")
     
-    log_message "------------------------------"
     log_message ""
-    log_message "# Checking $file_name #"
+    log_message "= Checking $file_name ="
     
     # Download file dan dapatkan SHA-1 dari GitHub
     local github_sha1=$(download_and_get_sha1 "$file_url" "${file_name}.check")
@@ -259,7 +259,12 @@ check_and_update_file() {
                 chmod +x "$local_file"
             fi
             
-            log_message "Successfully updated (SHA1 verified)"
+            # Tentukan pesan berdasarkan apakah file sudah ada sebelumnya
+            if [ -f "${local_file}.bak" ]; then
+                log_message "Successfully updated (SHA1 verified)"
+            else
+                log_message "Successfully downloaded (SHA1 verified)"
+            fi
             
             # Hapus file backup karena pembaruan berhasil
             if [ -f "${local_file}.bak" ]; then
@@ -284,7 +289,7 @@ run_update_check() {
     # Periksa koneksi jaringan terlebih dahulu
     check_network_connection
     if [ $? -ne 0 ]; then
-        log_message "File checking process cancelled due to no internet connection"
+        log_message "Proses pemeriksaan file dibatalkan karena tidak ada koneksi internet"
         return 1
     fi
     
@@ -301,8 +306,7 @@ run_update_check() {
     
     # Jika ada file yang diperbarui, restart layanan jika diperlukan
     if [ $files_updated -eq 1 ]; then
-        log_message ""
-        log_message "# Restart auto-download service #"
+        log_message "Restart auto-download service"
         
         # Cari script restart-auto-download.sh
         local restart_script="/data/adb/auto-download/restart-auto-download.sh"
