@@ -773,8 +773,7 @@ detect_wake_up_event() {
 handle_wake_up_event() {
     if [ $WAKE_UP_DETECTED -eq 1 ]; then
         log_message "-------------------------------------"
-        log_message "Processing wake-up event"
-        log_message "Recalculating schedule due to wake-up from deep sleep"
+        log_message "Schedule check wake-up event"
         
         # Simpan timestamp wake-up untuk debouncing
         save_wake_up_time
