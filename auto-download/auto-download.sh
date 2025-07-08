@@ -377,8 +377,7 @@ unified_update_with_security() {
         2)  log_message "ERROR: SHA-1 is empty after successful download"
             return 3
             ;;
-        1)  # Download file ke temporary directory (security: tidak langsung overwrite)
-            local temp_file="$TEMP_DIR/${file_description}.new"
+        1)  local temp_file="$TEMP_DIR/${file_description}.new"
             if curl_download_file "$source_url" "$temp_file"; then
 
                 ensure_parent_directory "$target_file"
@@ -458,8 +457,7 @@ execute_check_update_script() {
         local exec_result=$?
         
         case $exec_result in
-            0) # No additional message needed, check-update.sh already logged the result
-               ;;
+            0) ;;
             1) log_message "check-update.sh detected an update and has restarted"
                return 1 ;;
             *) log_message "check-update.sh returned error code $exec_result"
@@ -517,10 +515,8 @@ process_all_files() {
         
     done < "$temp_file"
     
-    # Cleanup
     rm -f "$temp_file"
     
-    # Reset trap
     trap - EXIT INT TERM
     
     # Return files_updated status (0 = no updates, 1 = files updated)
@@ -562,13 +558,10 @@ download_files() {
     local process_result=$?
     
     case $process_result in
-        0)  # No files updated
+        0)  ;;
+        1)  files_updated=1
             ;;
-        1)  # Files updated (normal case)
-            files_updated=1
-            ;;
-        *)  # Error occurred or restart detected
-            return $process_result
+        *)  return $process_result
             ;;
     esac
     
