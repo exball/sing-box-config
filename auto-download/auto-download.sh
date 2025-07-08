@@ -1036,14 +1036,6 @@ run_as_daemon() {
     # Inisialisasi wake-up debouncing
     if [ $WAKE_UP_DEBOUNCE_ENABLED -eq 1 ]; then
         load_wake_up_time
-        if [ $LAST_WAKE_UP_TIME -eq 0 ]; then
-
-        else
-            local current_time=$(date +%s)
-            local time_since_last=$((current_time - LAST_WAKE_UP_TIME))
-            local formatted_time=$(format_time_diff $time_since_last)
-
-        fi
     fi
     
     # Inisialisasi untuk loop pertama
