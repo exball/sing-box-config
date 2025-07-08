@@ -477,6 +477,9 @@ process_all_files() {
     local files_updated=0
     local temp_file="/data/adb/auto-download/files_config.$$"
     
+    # Setup trap untuk cleanup otomatis jika script dihentikan
+    trap "rm -f '$temp_file'" EXIT INT TERM
+    
     # Write config to temp file untuk avoid subshell issues
     printf "%s\n" "$FILES_CONFIG" > "$temp_file"
     
@@ -517,11 +520,24 @@ process_all_files() {
     # Cleanup
     rm -f "$temp_file"
     
+    # Reset trap
+    trap - EXIT INT TERM
+    
     # Return files_updated status (0 = no updates, 1 = files updated)
     if [ $files_updated -eq 1 ]; then
         return 1
     else
         return 0
+    fi
+}
+
+# Fungsi untuk membersihkan file temporary yang tertinggal
+cleanup_temp_files() {
+    local temp_dir="/data/adb/auto-download"
+    if [ -d "$temp_dir" ]; then
+        # Hapus file files_config.* yang mungkin tertinggal
+        find "$temp_dir" -name "files_config.*" -type f -mmin +10 -delete 2>/dev/null
+        log_message "Cleanup completed: removed old temporary files"
     fi
 }
 
@@ -1015,6 +1031,10 @@ run_as_daemon() {
     
     # Periksa dan simpan PID
     check_and_save_pid
+    
+    # Bersihkan file temporary yang mungkin tertinggal
+    cleanup_temp_files
+    
     download_files
     
     # Reset variabel untuk melacak interval dan jadwal terakhir
