@@ -362,7 +362,7 @@ unified_update_with_security() {
     
     # Security check: Skip jika gagal mendapat SHA-1 dari GitHub
     if [ -z "$github_sha1" ]; then
-        log_message "WARNING: Failed to get SHA-1 from GitHub for $file_description"
+        log_message "WARNING: Failed to get SHA-1 from source"
         log_message "File skipped for security (no integrity verification)"
         return 3
     fi
@@ -394,11 +394,11 @@ unified_update_with_security() {
                     fi
                     return 1  
                 else
-                    log_message "SECURITY: SHA-1 mismatch for $file_description, file rejected"
+                    log_message "SECURITY: SHA-1 mismatch, file rejected"
                     return 3  
                 fi
             else
-                log_message "Failed to download $file_description from $source_url"
+                log_message "Failed to download from source"
                 return 3  
             fi
             ;;
