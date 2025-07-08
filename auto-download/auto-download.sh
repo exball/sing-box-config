@@ -355,7 +355,7 @@ unified_update_with_security() {
     local reload_config="${5:-0}"
     
     log_message ""
-    log_message "= $file_description ="
+    log_message "{ $file_description }"
     
     # Download SHA-1 dari GitHub untuk verifikasi
     local github_sha1=$(download_and_get_sha1 "$source_url" "${file_description}.sha1")
@@ -546,7 +546,7 @@ download_files() {
         return 1
     fi
     
-    log_message "------------------------------"
+    log_message "« « « « « « = = » » » » » »"
     log_message ""
     log_message "## Checking main script ##"
     
@@ -567,7 +567,7 @@ download_files() {
     
     # Loop melalui setiap URL dalam daftar dan download
     if [ -n "${PROVIDER_URLS}" ]; then
-        log_message "------------------------------"
+        log_message "« « « « « « = = » » » » » »"
         log_message ""
         log_message "## Checking file provider ##"
         
@@ -600,7 +600,7 @@ download_files() {
     fi
     
     # Periksa koneksi jaringan sebelum memproses config.json
-    log_message "------------------------------"
+    log_message "« « « « « « = = » » » » » »"
     log_message ""
     check_network_connection
     if [ $? -ne 0 ]; then
@@ -621,7 +621,7 @@ download_files() {
     
     # Jika ada file yang diperbarui, restart layanan box
     if [ $files_updated -eq 1 ]; then
-        log_message "------------------------------"
+        log_message "« « « « « « = = » » » » » »"
         log_message ""
         
         # Deteksi PID lama dari /data/adb/box/run/box.pid
@@ -790,7 +790,7 @@ detect_wake_up_event() {
 handle_wake_up_event() {
     if [ $WAKE_UP_DETECTED -eq 1 ]; then
         log_message ""
-        log_message "= Schedule check wake-up event ="
+        log_message "{ Schedule check wake-up event }"
         
         # Simpan timestamp wake-up untuk debouncing
         save_wake_up_time
@@ -1060,9 +1060,9 @@ run_as_daemon() {
     next_schedule_info=$(get_next_schedule_info)
     
     # Kemudian jalankan loop untuk memeriksa jadwal sesuai interval yang dikonfigurasi
-    log_message "-------------------------------------"
+    log_message "« « « « « « = = » » » » » »"
     log_message ""
-    log_message "= Starts a schedule check loop ="
+    log_message "{ Starts a schedule check loop }"
     current_hour=$(date +"%H:%M")
     next_schedule_time=$(echo "$next_schedule_info" | grep -o "[0-9][0-9]:[0-9][0-9]")
     next_schedule_diff=$(echo "$next_schedule_info" | grep -o "in [0-9]* hours [0-9]* minutes" | sed 's/in //')
@@ -1110,7 +1110,7 @@ run_as_daemon() {
         # Jika wake-up tidak ditangani, lakukan schedule check normal
         if [ $wake_up_handled -eq 0 ]; then
             log_message ""
-            log_message "= Schedule check ="
+            log_message "{ Schedule check }"
             
             # Jalankan pemeriksaan jadwal
             check_schedule_and_run
