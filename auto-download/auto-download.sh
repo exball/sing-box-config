@@ -678,7 +678,6 @@ is_wake_up_allowed() {
         local remaining_minutes=$((remaining_time / 60))
         local remaining_seconds=$((remaining_time % 60))
         
-
         return 1  # Too soon, deny wake-up
     fi
 }
@@ -786,7 +785,6 @@ handle_wake_up_event() {
         # Jalankan check_schedule_and_run untuk menghitung ulang waktu
         check_schedule_and_run
         
-
         return 1  # Indicate that wake-up was handled
     fi
     
@@ -1030,7 +1028,6 @@ run_as_daemon() {
         LAST_SCREEN_STATE=$(getprop debug.tracing.screen_state 2>/dev/null)
         LAST_SCREEN_ON_COUNT=$(dumpsys activity broadcasts 2>/dev/null | grep -c "android.intent.action.SCREEN_ON" 2>/dev/null || echo "0")
         WAKE_UP_DETECTED=0
-
     fi
     
     # Inisialisasi wake-up debouncing
