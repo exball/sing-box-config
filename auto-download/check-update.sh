@@ -15,8 +15,8 @@ TEMP_DIR="/data/adb/auto-download/download_temp"
 
 # Pengaturan jaringan
 NETWORK_TEST_URL="https://www.google.com"
-NETWORK_MAX_ATTEMPTS=5
-NETWORK_RETRY_WAIT=3
+NETWORK_MAX_ATTEMPTS=10
+NETWORK_RETRY_WAIT=2
 
 # File log - menggunakan file log yang sama dengan auto-download.sh
 LOG_FILE="/data/adb/auto-download/auto-download.log"
@@ -199,7 +199,7 @@ check_and_update_file() {
     local file_name=$(basename "$local_file")
     
     log_message ""
-    log_message "= Checking $file_name ="
+    log_message "= $file_name ="
     
     # Download file dan dapatkan SHA-1 dari GitHub
     local github_sha1=$(download_and_get_sha1 "$file_url" "${file_name}.check")

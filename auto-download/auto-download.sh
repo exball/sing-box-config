@@ -355,7 +355,7 @@ unified_update_with_security() {
     local reload_config="${5:-0}"
     
     log_message ""
-    log_message "= Checking $file_description ="
+    log_message "= $file_description ="
     
     # Download SHA-1 dari GitHub untuk verifikasi
     local github_sha1=$(download_and_get_sha1 "$source_url" "${file_description}.sha1")
@@ -458,7 +458,8 @@ execute_check_update_script() {
         local exec_result=$?
         
         case $exec_result in
-            0) log_message "Local files exist, No updates" ;;
+            0) # No additional message needed, check-update.sh already logged the result
+               ;;
             1) log_message "check-update.sh detected an update and has restarted"
                return 1 ;;
             *) log_message "check-update.sh returned error code $exec_result"
@@ -1067,6 +1068,7 @@ run_as_daemon() {
     
     # Kemudian jalankan loop untuk memeriksa jadwal sesuai interval yang dikonfigurasi
     log_message "-------------------------------------"
+    log_message ""
     log_message "Starts a schedule check loop"
     current_hour=$(date +"%H:%M")
     next_schedule_time=$(echo "$next_schedule_info" | grep -o "[0-9][0-9]:[0-9][0-9]")
