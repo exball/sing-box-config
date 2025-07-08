@@ -180,21 +180,22 @@ compare_sha1_and_decide() {
         return 2  # Indicate fallback needed
     fi
     
-    log_message "SHA-1 GitHub: $github_sha1"
-    
     # Dapatkan hash SHA-1 dari file lokal jika ada
     local local_sha1=""
     if [ -f "$local_file" ]; then
         local_sha1=$(get_local_sha1 "$local_file")
-        log_message "SHA-1 Local: $local_sha1"
-    fi
-    
-    # Bandingkan hash SHA-1
-    if [ -n "$local_sha1" ] && [ "$local_sha1" = "$github_sha1" ]; then
-        log_message "SHA-1 Same, Skip..."
-        return 0  # Same, no update needed
+        
+        # Bandingkan hash SHA-1
+        if [ -n "$local_sha1" ] && [ "$local_sha1" = "$github_sha1" ]; then
+            log_message "Local files exist, No updates"
+            return 0  # Same, no update needed
+        else
+            log_message "Local files exist, Update available"
+            return 1  # Different, update needed
+        fi
     else
-        return 1  # Different, update needed
+        log_message "Local file doesn't exist, Download"
+        return 1  # File doesn't exist, download needed
     fi
 }
 
@@ -205,6 +206,7 @@ verify_downloaded_sha1() {
     local target_file="$3"
     local file_description="${4:-file}"
     local set_executable="${5:-0}"
+    local file_existed_before="${6:-1}"  # Default assume file existed
     
     if [ ! -f "$temp_file" ]; then
         log_message "Error: Temporary file not found"
@@ -226,7 +228,12 @@ verify_downloaded_sha1() {
             chmod +x "$target_file"
         fi
         
-        log_message "Successfully updated (SHA1 verified)"
+        # Berikan pesan sesuai dengan apakah file sudah ada sebelumnya atau tidak
+        if [ "$file_existed_before" -eq 1 ]; then
+            log_message "Successfully updated (SHA1 verified)"
+        else
+            log_message "Successfully downloaded (SHA1 verified)"
+        fi
         return 0
     else
         log_message "SHA-1 $file_description mismatch, verification failed"
@@ -257,11 +264,8 @@ check_network_connection() {
             # Bersihkan baris attempt di konsol dan tulis hasil sukses
             printf "\r"
             
-            # Log attempt terakhir dan hasil sukses ke file
-            if [ -n "$LOG_FILE" ]; then
-                echo "Attempt $last_attempt_logged of $NETWORK_MAX_ATTEMPTS" >> "$LOG_FILE"
-            fi
-            log_message "Internet connection available"
+            # Log dengan format "Connected in X(Y) attempt"
+            log_message "Connected in $last_attempt_logged($NETWORK_MAX_ATTEMPTS) attempt"
             connected=1
             break
         fi
@@ -354,8 +358,9 @@ unified_update_with_security() {
     local set_executable="${4:-0}"
     local reload_config="${5:-0}"
     
-    log_message "-----"
-    log_message "Checking $file_description..."
+    log_message "------------------------------"
+    log_message ""
+    log_message "# Checking $file_description #"
     
     # Download SHA-1 dari GitHub untuk verifikasi
     local github_sha1=$(download_and_get_sha1 "$source_url" "${file_description}.sha1")
@@ -377,16 +382,20 @@ unified_update_with_security() {
         2)  log_message "ERROR: SHA-1 is empty after successful download"
             return 3
             ;;
-        1)  log_message "SHA-1 different or file not exist, Update..."
-            
-            # Download file ke temporary directory (security: tidak langsung overwrite)
+        1)  # Download file ke temporary directory (security: tidak langsung overwrite)
             local temp_file="$TEMP_DIR/${file_description}.new"
             if curl_download_file "$source_url" "$temp_file"; then
 
                 ensure_parent_directory "$target_file"
                 
+                # Tentukan apakah file sudah ada sebelumnya
+                local file_existed_before=1
+                if [ ! -f "$target_file" ]; then
+                    file_existed_before=0
+                fi
+                
                 # Verifikasi SHA-1 sebelum replace (security-first)
-                if verify_downloaded_sha1 "$temp_file" "$github_sha1" "$target_file" "$file_description" "$set_executable"; then
+                if verify_downloaded_sha1 "$temp_file" "$github_sha1" "$target_file" "$file_description" "$set_executable" "$file_existed_before"; then
 
                     if [ "$reload_config" = "1" ]; then
                         if [ -f "$target_file" ]; then
@@ -454,12 +463,15 @@ execute_check_update_script() {
     local script_file="$1"
     
     if [ -x "$script_file" ]; then
-        log_message "Run check-update.sh..."
+        log_message ""
+        log_message "!! Run check-update.sh !!"
         sh "$script_file"
         local exec_result=$?
         
         case $exec_result in
-            0) log_message "No updates, continue checking process" ;;
+            0) log_message ""
+               log_message "# Checking auto-download.sh #"
+               log_message "Local files exist, No updates" ;;
             1) log_message "check-update.sh detected an update and has restarted"
                return 1 ;;
             *) log_message "check-update.sh returned error code $exec_result"
@@ -601,7 +613,7 @@ download_files() {
     fi
     
     # Periksa koneksi jaringan sebelum memproses config.json
-    log_message "-----"
+    log_message "------------------------------"
     check_network_connection
     if [ $? -ne 0 ]; then
         log_message "config.json checking process cancelled due to no internet connection"
@@ -621,7 +633,7 @@ download_files() {
     
     # Jika ada file yang diperbarui, restart layanan box
     if [ $files_updated -eq 1 ]; then
-        log_message "-----"
+        log_message "------------------------------"
         
         # Deteksi PID lama dari /data/adb/box/run/box.pid
         local BOX_PID=""
@@ -788,8 +800,9 @@ detect_wake_up_event() {
 # Fungsi untuk menangani wake-up event
 handle_wake_up_event() {
     if [ $WAKE_UP_DETECTED -eq 1 ]; then
-        log_message "-------------------------------------"
-        log_message "Schedule check wake-up event"
+        log_message "------------------------------"
+        log_message ""
+        log_message "# Schedule check wake-up event #"
         
         # Simpan timestamp wake-up untuk debouncing
         save_wake_up_time
@@ -1059,7 +1072,7 @@ run_as_daemon() {
     next_schedule_info=$(get_next_schedule_info)
     
     # Kemudian jalankan loop untuk memeriksa jadwal sesuai interval yang dikonfigurasi
-    log_message "-------------------------------------"
+    log_message "------------------------------"
     log_message "Starts a schedule check loop"
     current_hour=$(date +"%H:%M")
     next_schedule_time=$(echo "$next_schedule_info" | grep -o "[0-9][0-9]:[0-9][0-9]")
@@ -1107,8 +1120,9 @@ run_as_daemon() {
         
         # Jika wake-up tidak ditangani, lakukan schedule check normal
         if [ $wake_up_handled -eq 0 ]; then
-            log_message "-------------------------------------"
-            log_message "Schedule check"
+            log_message "------------------------------"
+            log_message ""
+            log_message "# Schedule check #"
             
             # Jalankan pemeriksaan jadwal
             check_schedule_and_run

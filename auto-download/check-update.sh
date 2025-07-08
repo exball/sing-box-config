@@ -115,11 +115,8 @@ check_network_connection() {
             # Bersihkan baris attempt di konsol dan tulis hasil sukses
             printf "\r"
             
-            # Log attempt terakhir dan hasil sukses ke file
-            if [ -n "$LOG_FILE" ]; then
-                echo "Attempt $last_attempt_logged of $NETWORK_MAX_ATTEMPTS" >> "$LOG_FILE"
-            fi
-            log_message "Internet connection available"
+            # Log dengan format "Connected in X(Y) attempt"
+            log_message "Connected in $last_attempt_logged($NETWORK_MAX_ATTEMPTS) attempt"
             connected=1
             break
         fi
@@ -136,10 +133,6 @@ check_network_connection() {
         # Bersihkan baris attempt di konsol
         printf "\r"
         
-        # Log attempt terakhir dan hasil gagal ke file
-        if [ -n "$LOG_FILE" ]; then
-            echo "Attempt $last_attempt_logged of $NETWORK_MAX_ATTEMPTS" >> "$LOG_FILE"
-        fi
         log_message "Failed to connect after $NETWORK_MAX_ATTEMPTS attempts"
         return 1
     fi
@@ -204,8 +197,9 @@ check_and_update_file() {
     local local_file="$2"
     local file_name=$(basename "$local_file")
     
-    log_message "-----"
-    log_message "Checking $file_name..."
+    log_message "------------------------------"
+    log_message ""
+    log_message "# Checking $file_name #"
     
     # Download file dan dapatkan SHA-1 dari GitHub
     local github_sha1=$(download_and_get_sha1 "$file_url" "${file_name}.check")
@@ -215,72 +209,72 @@ check_and_update_file() {
         return 1
     fi
     
-    log_message "SHA-1 GitHub: $github_sha1"
-    
     # Dapatkan hash SHA-1 dari file lokal jika ada
     local local_sha1=""
     if [ -f "$local_file" ]; then
         local_sha1=$(get_local_sha1 "$local_file")
-        log_message "SHA-1 lokal: $local_sha1"
+        
+        # Bandingkan hash SHA-1
+        if [ -n "$local_sha1" ] && [ "$local_sha1" = "$github_sha1" ]; then
+            log_message "Local files exist, No updates"
+            return 0  # Same, no update needed
+        else
+            log_message "Local files exist, Update available"
+        fi
+    else
+        log_message "Local file doesn't exist, Download"
     fi
     
-    # Bandingkan hash SHA-1
-    if [ -n "$local_sha1" ] && [ "$local_sha1" = "$github_sha1" ]; then
-        return 0  # Same, no update needed
-    else
-        log_message "SHA-1 different or file not exist, Update..."
+    # Pastikan direktori parent ada
+    local parent_dir=$(dirname "$local_file")
+    if [ ! -d "$parent_dir" ]; then
+        mkdir -p "$parent_dir" 2>/dev/null || {
+            log_message "Error: Tidak dapat membuat direktori $parent_dir"
+            return 1
+        }
+    fi
+    
+    # Download file untuk update
+    local temp_file="$TEMP_DIR/${file_name}.new"
+    if curl_download_file "$file_url" "$temp_file"; then
+        # Verifikasi hash SHA-1 file yang didownload
+        local downloaded_sha1=$(get_local_sha1 "$temp_file")
         
-        # Pastikan direktori parent ada
-        local parent_dir=$(dirname "$local_file")
-        if [ ! -d "$parent_dir" ]; then
-            mkdir -p "$parent_dir" 2>/dev/null || {
-                log_message "Error: Tidak dapat membuat direktori $parent_dir"
-                return 1
-            }
-        fi
-        
-        # Download file untuk update
-        local temp_file="$TEMP_DIR/${file_name}.new"
-        if curl_download_file "$file_url" "$temp_file"; then
-            # Verifikasi hash SHA-1 file yang didownload
-            local downloaded_sha1=$(get_local_sha1 "$temp_file")
-            
-            if [ "$downloaded_sha1" = "$github_sha1" ]; then
-                # Hapus backup lama jika ada
-                if [ -f "${local_file}.bak" ]; then
-                    rm -f "${local_file}.bak"
-                fi
-                
-                # Buat backup file lama jika ada
-                if [ -f "$local_file" ]; then
-                    cp "$local_file" "${local_file}.bak"
-                fi
-                
-                # Pindahkan file baru ke lokasi target
-                mv "$temp_file" "$local_file"
-                
-                # Set executable permission untuk file .sh
-                if [ "${file_name##*.}" = "sh" ]; then
-                    chmod +x "$local_file"
-                fi
-                
-                log_message "Successfully updated (SHA1 verified)"
-                
-                # Hapus file backup karena pembaruan berhasil
-                if [ -f "${local_file}.bak" ]; then
-                    rm -f "${local_file}.bak"
-                fi
-                
-                return 2  # File updated
-            else
-                log_message "Error: SHA-1 file yang didownload tidak cocok"
-                rm -f "$temp_file"
-                return 1
+        if [ "$downloaded_sha1" = "$github_sha1" ]; then
+            # Hapus backup lama jika ada
+            if [ -f "${local_file}.bak" ]; then
+                rm -f "${local_file}.bak"
             fi
+            
+            # Buat backup file lama jika ada
+            if [ -f "$local_file" ]; then
+                cp "$local_file" "${local_file}.bak"
+            fi
+            
+            # Pindahkan file baru ke lokasi target
+            mv "$temp_file" "$local_file"
+            
+            # Set executable permission untuk file .sh
+            if [ "${file_name##*.}" = "sh" ]; then
+                chmod +x "$local_file"
+            fi
+            
+            log_message "Successfully updated (SHA1 verified)"
+            
+            # Hapus file backup karena pembaruan berhasil
+            if [ -f "${local_file}.bak" ]; then
+                rm -f "${local_file}.bak"
+            fi
+            
+            return 2  # File updated
         else
-            log_message "Gagal mendownload $file_name dari $file_url"
+            log_message "Error: SHA-1 file yang didownload tidak cocok"
+            rm -f "$temp_file"
             return 1
         fi
+    else
+        log_message "Gagal mendownload $file_name dari $file_url"
+        return 1
     fi
 }
 
@@ -290,7 +284,7 @@ run_update_check() {
     # Periksa koneksi jaringan terlebih dahulu
     check_network_connection
     if [ $? -ne 0 ]; then
-        log_message "Proses pemeriksaan file dibatalkan karena tidak ada koneksi internet"
+        log_message "File checking process cancelled due to no internet connection"
         return 1
     fi
     
@@ -307,7 +301,8 @@ run_update_check() {
     
     # Jika ada file yang diperbarui, restart layanan jika diperlukan
     if [ $files_updated -eq 1 ]; then
-        log_message "Restart auto-download service"
+        log_message ""
+        log_message "# Restart auto-download service #"
         
         # Cari script restart-auto-download.sh
         local restart_script="/data/adb/auto-download/restart-auto-download.sh"
