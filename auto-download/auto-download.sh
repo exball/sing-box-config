@@ -453,7 +453,7 @@ execute_check_update_script() {
     
     if [ -x "$script_file" ]; then
         log_message ""
-        log_message "!! Run check-update.sh !!"
+        log_message "!!! Run check-update.sh !!!"
         sh "$script_file"
         local exec_result=$?
         
@@ -891,7 +891,7 @@ check_schedule_and_run() {
         LAST_SCHEDULE_TIME=$current_timestamp
     else
         # Pesan "Bukan waktu yang dijadwalkan" ditampilkan setelah informasi jadwal berikutnya
-        log_message "Not an update check schedule"
+        log_message "Not an update check schedule ($next_schedule_time)"
     fi
 }
 
@@ -1069,7 +1069,7 @@ run_as_daemon() {
     # Kemudian jalankan loop untuk memeriksa jadwal sesuai interval yang dikonfigurasi
     log_message "-------------------------------------"
     log_message ""
-    log_message "Starts a schedule check loop"
+    log_message "= Starts a schedule check loop ="
     current_hour=$(date +"%H:%M")
     next_schedule_time=$(echo "$next_schedule_info" | grep -o "[0-9][0-9]:[0-9][0-9]")
     next_schedule_diff=$(echo "$next_schedule_info" | grep -o "in [0-9]* hours [0-9]* minutes" | sed 's/in //')
