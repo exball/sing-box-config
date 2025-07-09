@@ -235,9 +235,9 @@ verify_downloaded_sha1() {
         fi
         return 0
     else
-        log_message "SHA-1 $file_description mismatch, verification failed"
-        log_message "Downloaded SHA-1: $downloaded_sha1"
-        log_message "Expected SHA-1: $expected_sha1"
+        log_message "SECURITY: SHA-1 mismatch, file rejected"
+        log_message "$file_description file skipped"
+        log_message "Failed to verify SHA-1"
         rm -f "$temp_file"
         return 1
     fi
@@ -338,12 +338,81 @@ if [ -n "$LOG_FILE" ]; then
     ensure_parent_directory "$LOG_FILE"
 fi
 
-# Fungsi untuk mendapatkan hash SHA-1 dari URL raw GitHub (menggunakan helper baru)
-get_github_sha1() {
-    local raw_url="$1"
+# Fungsi get_github_sha1 dihapus karena redundan dengan download_and_get_sha1
+
+# Fungsi untuk rotasi log (menggabungkan logika duplikasi)
+rotate_log_file() {
+    local mode_message="${1:-}"
     
-    # Gunakan fungsi helper yang sudah distandarisasi
-    download_and_get_sha1 "$raw_url" "temp_hash_file"
+    if [ -n "$LOG_FILE" ]; then
+        # Jika file log lama sudah ada, hapus terlebih dahulu
+        if [ -f "$OLD_LOG_FILE" ]; then
+            rm -f "$OLD_LOG_FILE"
+        fi
+        
+        # Jika file log saat ini ada, pindahkan ke file log lama
+        if [ -f "$LOG_FILE" ]; then
+            mv "$LOG_FILE" "$OLD_LOG_FILE"
+        fi
+        
+        # Buat file log baru (kosong)
+        touch "$LOG_FILE"
+        
+        # Reset variabel timestamp header
+        TIMESTAMP_HEADER_WRITTEN=0
+        
+        if [ -n "$mode_message" ]; then
+            log_message "Log rotation complete ($mode_message)"
+        else
+            log_message "Log rotation complete"
+        fi
+    fi
+}
+
+# Fungsi helper untuk network check dengan pesan kustom (menggabungkan duplikasi)
+check_network_with_message() {
+    local context_message="${1:-checking process}"
+    
+    check_network_connection
+    if [ $? -ne 0 ]; then
+        log_message "$context_message cancelled due to no internet connection"
+        return 1
+    fi
+    return 0
+}
+
+# Fungsi helper untuk menghitung dan log informasi jadwal berikutnya (menggabungkan duplikasi)
+calculate_and_log_next_schedule() {
+    local adaptive_interval=$(calculate_adaptive_interval)
+    local current_hour=$(date +"%H:%M")
+    local next_check_info=$(calculate_next_check_time $adaptive_interval)
+    
+    log_message "Current time: $current_hour"
+    log_message "Next schedule check: $next_check_info (Interval: $adaptive_interval)"
+    
+    echo "$adaptive_interval"
+}
+
+# Fungsi helper untuk menangani hasil update (menggabungkan logika duplikasi)
+handle_update_result() {
+    local result=$1
+    local files_updated_var=$2
+    local file_description="${3:-file}"
+    
+    case $result in
+        0)  return 0  # No update needed
+            ;;
+        1)  eval "$files_updated_var=1"  # File updated
+            return 1
+            ;;
+        3)  if [ -n "$file_description" ] && [ "$file_description" != "file" ]; then
+                log_message "WARNING: $file_description skipped due to SHA-1 verification failure"
+            fi
+            return 3  # SHA-1 verification failed
+            ;;
+        *)  return $result  # Other errors
+            ;;
+    esac
 }
 
 # Fungsi unified untuk update file dengan security-first approach
@@ -393,7 +462,6 @@ unified_update_with_security() {
                     fi
                     return 1  
                 else
-                    log_message "SECURITY: SHA-1 mismatch, file rejected"
                     return 3  
                 fi
             else
@@ -540,9 +608,8 @@ cleanup_temp_files() {
 # Fungsi untuk mendownload file
 download_files() {
 
-    check_network_connection
+    check_network_with_message "File checking process"
     if [ $? -ne 0 ]; then
-        log_message "File checking process cancelled due to no internet connection"
         return 1
     fi
     
@@ -584,16 +651,8 @@ download_files() {
             unified_update_with_security "$url" "$target_file" "$filename" "$set_executable" 0
             local download_result=$?
             
-            case $download_result in
-                0)  continue
-                    ;;
-                1)  files_updated=1
-                    continue
-                    ;;
-                3)  log_message "File $filename skipped due to SHA-1 verification failure"
-                    continue
-                    ;;
-            esac
+            handle_update_result $download_result files_updated
+            continue
         done
     else
         log_message "PROVIDER_URLS not configured or empty"
@@ -602,9 +661,8 @@ download_files() {
     # Periksa koneksi jaringan sebelum memproses config.json
     log_message "« « « « « « = = » » » » » »"
     log_message ""
-    check_network_connection
+    check_network_with_message "config.json checking process"
     if [ $? -ne 0 ]; then
-        log_message "config.json checking process cancelled due to no internet connection"
         return 1
     fi
     
@@ -612,12 +670,7 @@ download_files() {
     unified_update_with_security "$CONFIG_URL" "$CONFIG_DIR/config.json" "config.json" 0 0
     local config_result=$?
     
-    case $config_result in
-        1)  files_updated=1
-            ;;
-        3)  log_message "WARNING: config.json skipped due to SHA-1 verification failure"
-            ;;
-    esac
+    handle_update_result $config_result files_updated "config.json"
     
     # Jika ada file yang diperbarui, restart layanan box
     if [ $files_updated -eq 1 ]; then
@@ -856,26 +909,7 @@ check_schedule_and_run() {
     
     if [ $is_scheduled -eq 1 ]; then
         # Rotasi file log hanya jika ini adalah waktu yang dijadwalkan
-        if [ -n "$LOG_FILE" ]; then
-            # Jika file log lama sudah ada, hapus terlebih dahulu
-            if [ -f "$OLD_LOG_FILE" ]; then
-                rm -f "$OLD_LOG_FILE"
-                log_message "Old log file deleted"
-            fi
-            
-            # Jika file log saat ini ada, pindahkan ke file log lama
-            if [ -f "$LOG_FILE" ]; then
-                mv "$LOG_FILE" "$OLD_LOG_FILE"
-            fi
-            
-            # Buat file log baru (kosong)
-            touch "$LOG_FILE"
-            
-            # Reset variabel timestamp header
-            TIMESTAMP_HEADER_WRITTEN=0
-            
-            log_message "Log rotation complete..."
-        fi
+        rotate_log_file
         # Jalankan download
         download_files
         
@@ -1006,28 +1040,10 @@ calculate_adaptive_interval() {
 # Fungsi untuk menjalankan script sebagai daemon (background)
 run_as_daemon() {
     # Rotasi file log jika dikonfigurasi (untuk semua mode termasuk restart)
-    if [ -n "$LOG_FILE" ]; then
-        # Jika file log lama sudah ada, hapus terlebih dahulu
-        if [ -f "$OLD_LOG_FILE" ]; then
-            rm -f "$OLD_LOG_FILE"
-        fi
-        
-        # Jika file log saat ini ada, pindahkan ke file log lama
-        if [ -f "$LOG_FILE" ]; then
-            mv "$LOG_FILE" "$OLD_LOG_FILE"
-        fi
-        
-        # Buat file log baru (kosong)
-        touch "$LOG_FILE"
-        
-        # Reset variabel timestamp header
-        TIMESTAMP_HEADER_WRITTEN=0
-        
-        if [ $RESTART_MODE -eq 1 ]; then
-            log_message "Log rotation complete (restart mode)"
-        else
-            log_message "Log rotation complete"
-        fi
+    if [ $RESTART_MODE -eq 1 ]; then
+        rotate_log_file "restart mode"
+    else
+        rotate_log_file
     fi
     
     # Periksa dan simpan PID
@@ -1055,25 +1071,19 @@ run_as_daemon() {
         load_wake_up_time
     fi
     
-    # Inisialisasi untuk loop pertama
-    adaptive_interval=$(calculate_adaptive_interval)
-    next_schedule_info=$(get_next_schedule_info)
-    
     # Kemudian jalankan loop untuk memeriksa jadwal sesuai interval yang dikonfigurasi
     log_message "« « « « « « = = » » » » » »"
     log_message ""
     log_message "{ Starts a schedule check loop }"
-    current_hour=$(date +"%H:%M")
+    
+    # Inisialisasi untuk loop pertama dengan informasi jadwal berikutnya
+    next_schedule_info=$(get_next_schedule_info)
     next_schedule_time=$(echo "$next_schedule_info" | grep -o "[0-9][0-9]:[0-9][0-9]")
-    next_schedule_diff=$(echo "$next_schedule_info" | grep -o "in [0-9]* hours [0-9]* minutes" | sed 's/in //')
-    
-    # Log interval yang dipilih untuk loop pertama
     log_message "Next update check: $next_schedule_time"
-    log_message "Current time: $current_hour"
     
-    # Hitung waktu pemeriksaan pertama (current_hour + adaptive_interval)
-    first_check_info=$(calculate_next_check_time $adaptive_interval)
-    log_message "First schedule check: $first_check_info (Interval: $adaptive_interval)"
+    # Hitung dan log informasi jadwal pertama
+    adaptive_interval=$(calculate_and_log_next_schedule)
+    log_message "First schedule check: $(calculate_next_check_time $adaptive_interval) (Interval: $adaptive_interval)"
     
     # Loop utama
     while true; do
@@ -1081,7 +1091,7 @@ run_as_daemon() {
         # Tunggu sesuai interval adaptif dengan wake-up detection
         local sleep_interval=$adaptive_interval
         local sleep_counter=0
-        local check_interval=30  # Check wake-up every 10 seconds
+        local check_interval=60  # Check wake-up every 10 seconds
         
         # Sleep dengan pemeriksaan wake-up berkala
         while [ $sleep_counter -lt $sleep_interval ]; do
@@ -1116,28 +1126,11 @@ run_as_daemon() {
             check_schedule_and_run
         fi
         
-        # Hitung interval adaptif untuk siklus berikutnya
-        next_adaptive_interval=$(calculate_adaptive_interval)
-        
-        # Dapatkan waktu ke jadwal berikutnya untuk log
-        next_schedule_info=$(get_next_schedule_info)
-        
-        # Ekstrak informasi jadwal untuk format log yang lebih ringkas
-        current_hour=$(date +"%H:%M")
-        next_schedule_time=$(echo "$next_schedule_info" | grep -o "[0-9][0-9]:[0-9][0-9]")
-        next_schedule_diff=$(echo "$next_schedule_info" | grep -o "in [0-9]* hours [0-9]* minutes" | sed 's/in //')
-        
-        log_message "Current time: $current_hour" 
-        
-        # Hitung waktu pemeriksaan berikutnya (current_hour + next_adaptive_interval)
-        next_check_info=$(calculate_next_check_time $next_adaptive_interval)
-        log_message "Next schedule check: $next_check_info (Interval: $next_adaptive_interval)"
+        # Hitung dan log informasi jadwal berikutnya untuk siklus berikutnya
+        adaptive_interval=$(calculate_and_log_next_schedule)
         
         # Simpan interval saat ini untuk perbandingan berikutnya
-        LAST_INTERVAL=$next_adaptive_interval
-        
-        # Gunakan interval yang baru dihitung untuk siklus berikutnya
-        adaptive_interval=$next_adaptive_interval
+        LAST_INTERVAL=$adaptive_interval
     done
 }
 

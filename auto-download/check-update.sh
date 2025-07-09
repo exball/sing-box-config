@@ -199,7 +199,7 @@ check_and_update_file() {
     local file_name=$(basename "$local_file")
     
     log_message ""
-    log_message "= $file_name ="
+    log_message "{ $file_name }"
     
     # Download file dan dapatkan SHA-1 dari GitHub
     local github_sha1=$(download_and_get_sha1 "$file_url" "${file_name}.check")
