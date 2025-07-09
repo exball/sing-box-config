@@ -914,6 +914,10 @@ check_schedule_and_run() {
         LAST_EXECUTED_SCHEDULE=$matched_schedule
         LAST_SCHEDULE_TIME=$current_timestamp
     else
+        # Dapatkan jadwal berikutnya untuk pesan log
+        local schedule_result=$(find_next_schedule)
+        local next_schedule_time=$(echo "$schedule_result" | cut -d: -f2-)
+        
         # Pesan "Bukan waktu yang dijadwalkan" ditampilkan setelah informasi jadwal berikutnya
         log_message "Not an update check schedule ($next_schedule_time)"
     fi
@@ -1123,8 +1127,8 @@ run_as_daemon() {
             check_schedule_and_run
         fi
         
-        # Hitung dan log informasi jadwal berikutnya untuk siklus berikutnya
-        adaptive_interval=$(calculate_and_log_next_schedule)
+        # Hitung interval adaptif untuk siklus berikutnya (tanpa log berulang)
+        adaptive_interval=$(calculate_adaptive_interval)
         
         # Simpan interval saat ini untuk perbandingan berikutnya
         LAST_INTERVAL=$adaptive_interval
