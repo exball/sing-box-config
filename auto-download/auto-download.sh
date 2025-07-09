@@ -314,7 +314,6 @@ if [ -z "$SAVE_DIR" ] || [ -z "$CONFIG_DIR" ] || [ -z "$TEMP_DIR" ] || [ -z "$SC
     log_message "Make sure the configuration file contains all required variables"
     exit 1
 fi
-# =====================
 
 # Fungsi untuk memeriksa dan menyimpan PID
 check_and_save_pid() {
@@ -337,8 +336,6 @@ ensure_directories "/data/adb/auto-download" "$SAVE_DIR" "$CONFIG_DIR" "$TEMP_DI
 if [ -n "$LOG_FILE" ]; then
     ensure_parent_directory "$LOG_FILE"
 fi
-
-# Fungsi get_github_sha1 dihapus karena redundan dengan download_and_get_sha1
 
 # Fungsi untuk rotasi log (menggabungkan logika duplikasi)
 rotate_log_file() {
