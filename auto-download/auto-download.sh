@@ -1081,7 +1081,7 @@ run_as_daemon() {
         # Tunggu sesuai interval adaptif dengan wake-up detection
         local sleep_interval=$adaptive_interval
         local sleep_counter=0
-        local check_interval=10  # Check wake-up every 10 seconds
+        local check_interval=30  # Check wake-up every 10 seconds
         
         # Sleep dengan pemeriksaan wake-up berkala
         while [ $sleep_counter -lt $sleep_interval ]; do
