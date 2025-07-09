@@ -22,16 +22,7 @@
           "8.8.8.8",
           "208.67.222.222"
         ],
-        "detour": "best latency vmess"
-      },
-      {
-        "tag": "cf",
-        "address": [
-          "1.0.0.1",
-          "8.8.8.8",
-          "tcp://1.0.0.1"
-        ],
-        "detour": "best latency cf"
+        "detour": "server"
       },
       {
         "tag": "local",
@@ -126,7 +117,6 @@
       "outbounds": [
         "best latency",
         "best latency vmess",
-        "best latency cf",
         "Vmess Tls",
         "Vmess Ntls",
         "ID vless tls",
@@ -150,9 +140,15 @@
     {
       "type": "urltest",
       "tag": "best latency",
-      "outbounds":[
-        "best latency vmess",
-        "best latency cf"
+      "outbounds": [
+        "Vmess Tls",
+        "Vmess Ntls",
+        "ID vless tls",
+        "ID vless ntls",
+        "SG vless tls",
+        "SG vless ntls",
+        "ID SG trojan tls ntls",
+        "backup"
       ]
     },
     {
@@ -161,18 +157,6 @@
       "outbounds": [
         "Vmess Tls",
         "Vmess Ntls"
-      ]
-    },
-    {
-      "type": "urltest",
-      "tag": "best latency cf",
-      "outbounds": [
-        "ID vless tls",
-        "ID vless ntls",
-        "SG vless tls",
-        "SG vless ntls",
-        "ID SG trojan tls ntls",
-        "backup"
       ]
     },
     {
