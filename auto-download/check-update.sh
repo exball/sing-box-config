@@ -21,17 +21,29 @@ NETWORK_RETRY_WAIT=2
 # File log - menggunakan file log yang sama dengan auto-download.sh
 LOG_FILE="/data/adb/auto-download/auto-download.log"
 
-# ===== PERSIAPAN =====
-# Pastikan direktori yang diperlukan ada
-mkdir -p /data/adb/auto-download
-mkdir -p "$TEMP_DIR"
-
-# Tidak mengosongkan log file karena melanjutkan dari auto-download.sh
-# Log akan ditambahkan setelah log dari auto-download.sh
-
-# Variabel TIMESTAMP_HEADER_WRITTEN tidak diperlukan lagi karena melanjutkan dari auto-download.sh
-
 # ===== FUNGSI UTILITAS =====
+# Fungsi untuk membuat direktori yang diperlukan
+ensure_directories() {
+    local dirs_to_create="$@"
+    
+    for dir in "$@"; do
+        if [ -n "$dir" ]; then
+            mkdir -p "$dir" 2>/dev/null || {
+                log_message "Warning: Failed to create directory: $dir"
+            }
+        fi
+    done
+}
+
+# Fungsi untuk membuat direktori dari path file
+ensure_parent_directory() {
+    local file_path="$1"
+    if [ -n "$file_path" ]; then
+        local parent_dir=$(dirname "$file_path")
+        ensure_directories "$parent_dir"
+    fi
+}
+
 # Fungsi untuk logging - melanjutkan dari log auto-download.sh
 log_message() {
     local message="$1"
@@ -58,7 +70,7 @@ curl_network_check() {
     local timeout_max="${3:-10}"
     
     if [ -z "$test_url" ]; then
-        log_message "Error: URL test tidak boleh kosong"
+        log_message "Error: Test URL cannot be empty"
         return 1
     fi
     
@@ -74,14 +86,12 @@ curl_download_file() {
     local timeout_max="${4:-30}"
     
     if [ -z "$source_url" ] || [ -z "$output_file" ]; then
-        log_message "Error: URL sumber dan file output tidak boleh kosong"
+        log_message "Error: Source URL and output file cannot be empty"
         return 1
     fi
     
     # Pastikan direktori output ada
-    mkdir -p "$(dirname "$output_file")" 2>/dev/null || {
-        log_message "Peringatan: Gagal membuat direktori: $(dirname "$output_file")"
-    }
+    ensure_parent_directory "$output_file"
     
     # Download file dengan follow redirects
     curl -s -L --connect-timeout "$timeout_connect" --max-time "$timeout_max" "$source_url" -o "$output_file"
@@ -157,17 +167,12 @@ download_and_get_sha1() {
     local temp_file_prefix="${2:-temp_sha1_file}"
     
     if [ -z "$source_url" ]; then
-        log_message "Error: URL sumber tidak boleh kosong"
+        log_message "Error: Source URL cannot be empty"
         return 1
     fi
     
-    # Pastikan temp directory ada
-    if [ ! -d "$TEMP_DIR" ]; then
-        mkdir -p "$TEMP_DIR" 2>/dev/null || {
-            log_message "Warning: Tidak dapat membuat direktori temp, menggunakan /tmp"
-            TEMP_DIR="/tmp"
-        }
-    fi
+    # Buat direktori temp jika belum ada
+    ensure_directories "$TEMP_DIR"
     
     # Buat temporary file
     local temp_hash_file="$TEMP_DIR/${temp_file_prefix}"
@@ -183,7 +188,7 @@ download_and_get_sha1() {
             echo "$sha1"
             return 0
         else
-            log_message "Error: Gagal menghitung SHA-1 dari file yang didownload"
+            log_message "Error: Failed to calculate SHA-1 from downloaded file"
             return 1
         fi
     else
@@ -203,7 +208,7 @@ check_and_update_file() {
     
     if [ -z "$github_sha1" ]; then
         log_message "- { $file_name }"
-        log_message "- Gagal mendapatkan SHA-1 file $file_name dari GitHub"
+        log_message "- Failed to get SHA-1 for $file_name from GitHub"
         return 1
     fi
     
@@ -225,13 +230,7 @@ check_and_update_file() {
     log_message "- { $file_name }"
     
     # Pastikan direktori parent ada
-    local parent_dir=$(dirname "$local_file")
-    if [ ! -d "$parent_dir" ]; then
-        mkdir -p "$parent_dir" 2>/dev/null || {
-            log_message "Error: Tidak dapat membuat direktori $parent_dir"
-            return 1
-        }
-    fi
+    ensure_parent_directory "$local_file"
     
     # Download file untuk update
     local temp_file="$TEMP_DIR/${file_name}.new"
@@ -281,10 +280,19 @@ check_and_update_file() {
             return 1
         fi
     else
-        log_message "- Gagal mendownload $file_name dari $file_url"
+        log_message "- Failed to download $file_name from $file_url"
         return 1
     fi
 }
+
+# ===== PERSIAPAN =====
+# Pastikan direktori yang diperlukan ada
+ensure_directories "/data/adb/auto-download" "$TEMP_DIR"
+
+# Tidak mengosongkan log file karena melanjutkan dari auto-download.sh
+# Log akan ditambahkan setelah log dari auto-download.sh
+
+# Variabel TIMESTAMP_HEADER_WRITTEN tidak diperlukan lagi karena melanjutkan dari auto-download.sh
 
 # ===== FUNGSI UTAMA =====
 # Fungsi untuk menjalankan pemeriksaan dan pembaruan
@@ -292,7 +300,7 @@ run_update_check() {
     # Periksa koneksi jaringan terlebih dahulu
     check_network_connection
     if [ $? -ne 0 ]; then
-        log_message "Proses pemeriksaan file dibatalkan karena tidak ada koneksi internet"
+        log_message "File check process cancelled due to no internet connection"
         return 1
     fi
     
@@ -322,12 +330,12 @@ run_update_check() {
         if [ -x "$restart_script" ]; then
             sh "$restart_script"
         else
-            log_message "Script restart-auto-download.sh tidak ditemukan atau tidak dapat dieksekusi"
-            log_message "Mencoba restart manual..."
+            log_message "Script restart-auto-download.sh not found or not executable"
+            log_message "Trying manual restart..."
             
             # Fallback: restart manual jika restart script tidak tersedia
             if pgrep -f "auto-download.sh" > /dev/null; then
-                log_message "Mendeteksi auto-download.sh sedang berjalan, mencoba me-restart..."
+                log_message "Detected auto-download.sh is running, trying to restart..."
                 
                 # Hentikan proses yang sedang berjalan
                 pkill -f "auto-download.sh"
@@ -340,14 +348,14 @@ run_update_check() {
                 
                 # Jalankan kembali auto-download.sh
                 if [ -x "$SCRIPT_FILE" ]; then
-                    log_message "Menjalankan kembali auto-download.sh..."
+                    log_message "Running auto-download.sh again..."
                     nohup sh "$SCRIPT_FILE" > /dev/null 2>&1 &
-                    log_message "auto-download.sh telah di-restart dengan PID: $!"
+                    log_message "auto-download.sh has been restarted with PID: $!"
                 else
-                    log_message "PERINGATAN: auto-download.sh tidak dapat dieksekusi"
+                    log_message "WARNING: auto-download.sh is not executable"
                 fi
             else
-                log_message "auto-download.sh tidak sedang berjalan, tidak perlu di-restart"
+                log_message "auto-download.sh is not running, no need to restart"
             fi
         fi
         # Return 1 untuk memberi tahu auto-download.sh bahwa ada update dan telah di-restart
