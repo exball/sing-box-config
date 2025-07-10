@@ -726,6 +726,11 @@ detect_wake_up_event() {
         return 0
     fi
     
+    # Jika wake-up sudah terdeteksi dan belum ditangani, jangan deteksi lagi
+    if [ $WAKE_UP_DETECTED -eq 1 ]; then
+        return 1
+    fi
+    
     local wake_up_detected=0
     
     # Primary detection: Monitor broadcast intents SCREEN_ON
@@ -766,17 +771,26 @@ detect_wake_up_event() {
         wake_up_detected=1
     fi
     
-    # Update last states
-    LAST_SCREEN_STATE="$current_screen_state"
-    LAST_SCREEN_ON_COUNT="$current_screen_on_count"
+    # Update last states hanya jika tidak ada wake-up yang terdeteksi
+    # Ini mencegah multiple detection dari state yang sama
+    if [ $wake_up_detected -eq 0 ]; then
+        LAST_SCREEN_STATE="$current_screen_state"
+        LAST_SCREEN_ON_COUNT="$current_screen_on_count"
+    fi
     
     # Jika wake-up terdeteksi, periksa debouncing
     if [ $wake_up_detected -eq 1 ]; then
         # Periksa apakah wake-up diizinkan (debouncing check)
         if is_wake_up_allowed; then
+            # Update states setelah wake-up diizinkan untuk mencegah deteksi berulang
+            LAST_SCREEN_STATE="$current_screen_state"
+            LAST_SCREEN_ON_COUNT="$current_screen_on_count"
             WAKE_UP_DETECTED=1
             return 1
         else
+            # Update states meskipun wake-up tidak diizinkan untuk mencegah spam detection
+            LAST_SCREEN_STATE="$current_screen_state"
+            LAST_SCREEN_ON_COUNT="$current_screen_on_count"
             return 0
         fi
     fi
@@ -1093,10 +1107,15 @@ run_as_daemon() {
             sleep $current_sleep
             sleep_counter=$((sleep_counter + current_sleep))
             
-            # Periksa wake-up event selama sleep
-            detect_wake_up_event
-            if [ $? -eq 1 ]; then
-                # Wake-up detected, break from sleep loop
+            # Periksa wake-up event selama sleep hanya jika belum terdeteksi
+            if [ $WAKE_UP_DETECTED -eq 0 ]; then
+                detect_wake_up_event
+                if [ $? -eq 1 ]; then
+                    # Wake-up detected, break from sleep loop
+                    break
+                fi
+            else
+                # Wake-up sudah terdeteksi, keluar dari sleep loop
                 break
             fi
         done
