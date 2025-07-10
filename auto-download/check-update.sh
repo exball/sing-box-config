@@ -198,32 +198,31 @@ check_and_update_file() {
     local local_file="$2"
     local file_name=$(basename "$local_file")
     
-    log_message ""
-    log_message "{ $file_name }"
-    
     # Download file dan dapatkan SHA-1 dari GitHub
     local github_sha1=$(download_and_get_sha1 "$file_url" "${file_name}.check")
     
     if [ -z "$github_sha1" ]; then
-        log_message "Gagal mendapatkan SHA-1 file $file_name dari GitHub"
+        log_message "- { $file_name }"
+        log_message "- Gagal mendapatkan SHA-1 file $file_name dari GitHub"
         return 1
     fi
     
     # Dapatkan hash SHA-1 dari file lokal jika ada
     local local_sha1=""
+    local file_existed=0
     if [ -f "$local_file" ]; then
+        file_existed=1
         local_sha1=$(get_local_sha1 "$local_file")
         
         # Bandingkan hash SHA-1
         if [ -n "$local_sha1" ] && [ "$local_sha1" = "$github_sha1" ]; then
-            log_message "Local files exist, No updates"
+            log_message "@ $file_name = No updates"
             return 0  # Same, no update needed
-        else
-            log_message "Local files exist, Update available"
         fi
-    else
-        log_message "Local file doesn't exist, Download"
     fi
+    
+    # Jika sampai di sini, berarti perlu update atau download
+    log_message "- { $file_name }"
     
     # Pastikan direktori parent ada
     local parent_dir=$(dirname "$local_file")
@@ -260,10 +259,12 @@ check_and_update_file() {
             fi
             
             # Tentukan pesan berdasarkan apakah file sudah ada sebelumnya
-            if [ -f "${local_file}.bak" ]; then
-                log_message "Successfully updated (SHA1 verified)"
+            if [ $file_existed -eq 1 ]; then
+                log_message "- Local files exist, Updates available"
+                log_message "- Successfully updated (SHA1 verified)"
             else
-                log_message "Successfully downloaded (SHA1 verified)"
+                log_message "- Local file doesn't exist, Download"
+                log_message "- Successfully updated (SHA1 verified)"
             fi
             
             # Hapus file backup karena pembaruan berhasil
@@ -273,14 +274,14 @@ check_and_update_file() {
             
             return 2  # File updated
         else
-            log_message "[SECURITY]: SHA-1 mismatch, file rejected"
-            log_message "File $file_name skipped"
-            log_message "Failed to verify SHA-1"
+            log_message "- [SECURITY]: SHA-1 mismatch, file rejected"
+            log_message "- File $file_name skipped"
+            log_message "- Failed to verify SHA-1"
             rm -f "$temp_file"
             return 1
         fi
     else
-        log_message "Gagal mendownload $file_name dari $file_url"
+        log_message "- Gagal mendownload $file_name dari $file_url"
         return 1
     fi
 }

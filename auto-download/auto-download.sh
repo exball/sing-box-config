@@ -34,10 +34,9 @@ WAKE_UP_DETECTION_ENABLED=1
 LAST_SCREEN_STATE=""
 LAST_SCREEN_ON_COUNT=""
 WAKE_UP_DETECTED=0
+WAKE_UP_TRIGGERED_THIS_SESSION=0  # Flag untuk mencegah multiple wake-up dalam satu sesi screen ON
 
-# Variabel untuk wake-up debouncing
-WAKE_UP_DEBOUNCE_ENABLED=1
-WAKE_UP_DEBOUNCE_INTERVAL=600  # 10 menit = 600 detik
+# Variabel untuk wake-up debouncing (akan diload dari config file)
 LAST_WAKE_UP_TIME=0
 WAKE_UP_DEBOUNCE_FILE="/data/adb/auto-download/last_wake_up_time"
 
@@ -186,14 +185,11 @@ compare_sha1_and_decide() {
         
         # Bandingkan hash SHA-1
         if [ -n "$local_sha1" ] && [ "$local_sha1" = "$github_sha1" ]; then
-            log_message "Local files exist, No updates"
             return 0  # Same, no update needed
         else
-            log_message "Local files exist, Update available"
             return 1  # Different, update needed
         fi
     else
-        log_message "Local file doesn't exist, Download"
         return 1  # File doesn't exist, download needed
     fi
 }
@@ -215,6 +211,12 @@ verify_downloaded_sha1() {
     local downloaded_sha1=$(get_local_sha1 "$temp_file")
     
     if [ "$downloaded_sha1" = "$expected_sha1" ]; then
+        # Cek apakah file target sudah ada sebelumnya
+        local file_existed=0
+        if [ -f "$target_file" ]; then
+            file_existed=1
+        fi
+        
         # Pastikan direktori target ada
         ensure_parent_directory "$target_file"
         
@@ -227,10 +229,12 @@ verify_downloaded_sha1() {
         fi
         
         # Tentukan pesan berdasarkan apakah file sudah ada sebelumnya
-        if [ -f "$target_file.bak" ] 2>/dev/null || [ -f "$target_file" ]; then
-            log_message "Successfully updated (SHA1 verified)"
+        if [ $file_existed -eq 1 ]; then
+            log_message "- Local files exist, Updates available"
+            log_message "- Successfully updated (SHA1 verified)"
         else
-            log_message "Successfully downloaded (SHA1 verified)"
+            log_message "- Local file doesn't exist, Download"
+            log_message "- Successfully updated (SHA1 verified)"
         fi
         return 0
     else
@@ -310,6 +314,12 @@ if [ -z "$SAVE_DIR" ] || [ -z "$CONFIG_DIR" ] || [ -z "$TEMP_DIR" ] || [ -z "$SC
     log_message "Make sure the configuration file contains all required variables"
     exit 1
 fi
+
+# Set default values untuk variabel wake-up jika tidak ada di config file
+WAKE_UP_DETECTION_ENABLED=${WAKE_UP_DETECTION_ENABLED:-1}
+WAKE_UP_DEBOUNCE_ENABLED=${WAKE_UP_DEBOUNCE_ENABLED:-1}
+WAKE_UP_DEBOUNCE_INTERVAL=${WAKE_UP_DEBOUNCE_INTERVAL:-300}
+WAKE_UP_CHECK_INTERVAL=${WAKE_UP_CHECK_INTERVAL:-60}
 # =====================
 
 # Fungsi untuk memeriksa dan menyimpan PID
@@ -350,9 +360,6 @@ unified_update_with_security() {
     local set_executable="${4:-0}"
     local reload_config="${5:-0}"
     
-    log_message ""
-    log_message "{ $file_description }"
-    
     # Download SHA-1 dari GitHub untuk verifikasi
     local github_sha1=$(download_and_get_sha1 "$source_url" "${file_description}.sha1")
     local download_sha1_result=$?
@@ -364,20 +371,24 @@ unified_update_with_security() {
     # Security check: Skip jika gagal mendapat SHA-1 dari GitHub
     if [ -z "$github_sha1" ] || [ $download_sha1_result -ne 0 ]; then
         if [ $compare_result -eq 1 ]; then
-            log_message "Failed to download file for hash verification"
+            log_message "- { $file_description }"
+            log_message "- Failed to download file for hash verification"
         fi
-        log_message "WARNING: Failed to get SHA-1 from source"
-        log_message "File skipped for security (no integrity verification)"
+        log_message "- WARNING: Failed to get SHA-1 from source"
+        log_message "- File skipped for security (no integrity verification)"
         return 3
     fi
     
     case $compare_result in
-        0)  return 0
+        0)  log_message "@ $file_description = No updates"
+            return 0
             ;;
-        2)  log_message "ERROR: SHA-1 is empty after successful download"
+        2)  log_message "- { $file_description }"
+            log_message "- ERROR: SHA-1 is empty after successful download"
             return 3
             ;;
-        1)  local temp_file="$TEMP_DIR/${file_description}.new"
+        1)  log_message "- { $file_description }"
+            local temp_file="$TEMP_DIR/${file_description}.new"
             if curl_download_file "$source_url" "$temp_file"; then
 
                 ensure_parent_directory "$target_file"
@@ -388,18 +399,18 @@ unified_update_with_security() {
                     if [ "$reload_config" = "1" ]; then
                         if [ -f "$target_file" ]; then
                             source "$target_file"
-                            log_message "Config reloaded. Using new configuration"
+                            log_message "- Config reloaded. Using new configuration"
                         fi
                     fi
                     return 1  
                 else
-                    log_message "[SECURITY]: SHA-1 mismatch, file rejected"
-                    log_message "File $file_description skipped"
-                    log_message "Failed to verify SHA-1"
+                    log_message "- [SECURITY]: SHA-1 mismatch, file rejected"
+                    log_message "- File $file_description skipped"
+                    log_message "- Failed to verify SHA-1"
                     return 3  
                 fi
             else
-                log_message "Failed to download from source"
+                log_message "- Failed to download from source"
                 return 3  
             fi
             ;;
@@ -730,28 +741,25 @@ detect_wake_up_event() {
     
     local wake_up_detected=0
     
-    # Primary detection: Monitor broadcast intents SCREEN_ON
-    local current_screen_on_count=$(dumpsys activity broadcasts 2>/dev/null | grep -c "android.intent.action.SCREEN_ON" 2>/dev/null || echo "0")
-    
-    # Secondary detection: Monitor system properties debug.tracing.screen_state
+    # Monitor system properties debug.tracing.screen_state
     local current_screen_state=$(getprop debug.tracing.screen_state 2>/dev/null)
     
     # Jika ini adalah pemeriksaan pertama, simpan state awal
     if [ -z "$LAST_SCREEN_STATE" ]; then
         LAST_SCREEN_STATE="$current_screen_state"
-        LAST_SCREEN_ON_COUNT="$current_screen_on_count"
+        # Set flag berdasarkan state awal
+        if [ "$current_screen_state" = "2" ]; then
+            WAKE_UP_TRIGGERED_THIS_SESSION=1  # Screen sudah ON, anggap sudah triggered
+        else
+            WAKE_UP_TRIGGERED_THIS_SESSION=0  # Screen OFF, siap untuk detect wake-up
+        fi
         return 0
     fi
     
-    # Primary detection: Periksa apakah ada SCREEN_ON broadcast baru
-    if [ -n "$LAST_SCREEN_ON_COUNT" ] && [ "$current_screen_on_count" -gt "$LAST_SCREEN_ON_COUNT" ]; then
-        wake_up_detected=1
-    fi
-    
-    # Secondary detection: Deteksi perubahan screen state
-    # Berdasarkan testing pada device: 1=OFF, 2=ON
+    # Deteksi transisi screen state
     local screen_was_off=0
     local screen_is_on=0
+    local screen_is_off=0
     
     # Deteksi screen off state (pada device ini = 1)
     if [ "$LAST_SCREEN_STATE" = "1" ]; then
@@ -763,20 +771,32 @@ detect_wake_up_event() {
         screen_is_on=1
     fi
     
-    # Jika screen berubah dari off (1) ke on (2)
-    if [ $screen_was_off -eq 1 ] && [ $screen_is_on -eq 1 ]; then
+    # Deteksi screen off state saat ini (untuk reset flag)
+    if [ "$current_screen_state" = "1" ]; then
+        screen_is_off=1
+    fi
+    
+    # Reset flag ketika screen OFF (siap untuk wake-up detection berikutnya)
+    if [ $screen_is_off -eq 1 ]; then
+        WAKE_UP_TRIGGERED_THIS_SESSION=0
+    fi
+    
+    # Hanya trigger wake-up jika:
+    # 1. Screen berubah dari OFF ke ON
+    # 2. Belum pernah trigger dalam sesi screen ON ini
+    if [ $screen_was_off -eq 1 ] && [ $screen_is_on -eq 1 ] && [ $WAKE_UP_TRIGGERED_THIS_SESSION -eq 0 ]; then
         wake_up_detected=1
     fi
     
-    # Update last states
+    # Update last state
     LAST_SCREEN_STATE="$current_screen_state"
-    LAST_SCREEN_ON_COUNT="$current_screen_on_count"
     
     # Jika wake-up terdeteksi, periksa debouncing
     if [ $wake_up_detected -eq 1 ]; then
         # Periksa apakah wake-up diizinkan (debouncing check)
         if is_wake_up_allowed; then
             WAKE_UP_DETECTED=1
+            WAKE_UP_TRIGGERED_THIS_SESSION=1  # Set flag untuk mencegah trigger berulang
             return 1
         else
             return 0
@@ -1046,8 +1066,13 @@ run_as_daemon() {
     # Inisialisasi wake-up detection
     if [ $WAKE_UP_DETECTION_ENABLED -eq 1 ]; then
         LAST_SCREEN_STATE=$(getprop debug.tracing.screen_state 2>/dev/null)
-        LAST_SCREEN_ON_COUNT=$(dumpsys activity broadcasts 2>/dev/null | grep -c "android.intent.action.SCREEN_ON" 2>/dev/null || echo "0")
         WAKE_UP_DETECTED=0
+        # Set flag berdasarkan state awal
+        if [ "$LAST_SCREEN_STATE" = "2" ]; then
+            WAKE_UP_TRIGGERED_THIS_SESSION=1  # Screen sudah ON, anggap sudah triggered
+        else
+            WAKE_UP_TRIGGERED_THIS_SESSION=0  # Screen OFF, siap untuk detect wake-up
+        fi
     fi
     
     # Inisialisasi wake-up debouncing
@@ -1081,7 +1106,7 @@ run_as_daemon() {
         # Tunggu sesuai interval adaptif dengan wake-up detection
         local sleep_interval=$adaptive_interval
         local sleep_counter=0
-        local check_interval=60  # Check wake-up every 10 seconds
+        local check_interval=${WAKE_UP_CHECK_INTERVAL:-60}  # Interval pemeriksaan wake-up dari config
         
         # Sleep dengan pemeriksaan wake-up berkala
         while [ $sleep_counter -lt $sleep_interval ]; do
