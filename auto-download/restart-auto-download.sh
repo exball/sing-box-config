@@ -85,48 +85,111 @@ echo "$(date +%s)" > "$RESTART_FLAG_FILE"
 # Jalankan script baru
 echo "Memulai script auto-download.sh yang baru..."
 
+# Cek apakah ini adalah restart otomatis dari update
+AUTO_UPDATE_RESTART_FLAG="/data/adb/auto-download/auto_update_restart_flag"
+IS_AUTO_UPDATE_RESTART=0
+
+if [ -f "$AUTO_UPDATE_RESTART_FLAG" ]; then
+    FLAG_TIME=$(cat "$AUTO_UPDATE_RESTART_FLAG")
+    CURRENT_TIME=$(date +%s)
+    TIME_DIFF=$((CURRENT_TIME - FLAG_TIME))
+    
+    # Jika file penanda dibuat dalam 10 detik terakhir, anggap restart otomatis
+    if [ $TIME_DIFF -le 10 ]; then
+        IS_AUTO_UPDATE_RESTART=1
+        rm -f "$AUTO_UPDATE_RESTART_FLAG"
+    fi
+fi
+
 # Cek apakah dijalankan dari terminal (interactive mode)
 if [ -t 0 ] && [ -t 1 ]; then
-    # Mode interaktif - tampilkan output langsung
-    nohup sh "$SCRIPT_PATH" > /dev/null 2>&1 &
-    
-    # Tunggu sebentar untuk memastikan script berjalan
-    sleep 2
-    
-    # Periksa apakah script berjalan
-    NEW_PID=$(ps -ef | grep "[a]uto-download.sh" | grep -v restart | head -1 | awk '{print $2}')
-    if [ -n "$NEW_PID" ] && [ "$NEW_PID" -eq "$NEW_PID" ] 2>/dev/null; then
-        echo "Script auto-download.sh berhasil dijalankan dengan PID $NEW_PID"
-        echo "Proses restart selesai"
-        echo ""
-        echo "=== Output dari auto-download.sh ==="
+    # Mode interaktif
+    if [ $IS_AUTO_UPDATE_RESTART -eq 1 ]; then
+        # Restart otomatis dari update - jalankan di background dan lanjutkan monitoring
+        echo "Restart otomatis karena ada pembaruan script..."
+        nohup sh "$SCRIPT_PATH" > /dev/null 2>&1 &
         
-        # Tunggu sebentar agar auto-download.sh mulai menulis log
-        sleep 3
+        # Tunggu sebentar untuk memastikan script berjalan
+        sleep 2
         
-        # Tampilkan output dari log file secara real-time
-        LOG_FILE="/data/adb/auto-download/auto-download.log"
-        if [ -f "$LOG_FILE" ]; then
-            tail -f "$LOG_FILE"
-        else
-            echo "Log file tidak ditemukan: $LOG_FILE"
-            echo "Menunggu log file dibuat..."
-            # Tunggu hingga log file dibuat (maksimal 30 detik)
-            local wait_count=0
-            while [ ! -f "$LOG_FILE" ] && [ $wait_count -lt 30 ]; do
-                sleep 1
-                wait_count=$((wait_count + 1))
-            done
+        # Periksa apakah script berjalan
+        NEW_PID=$(ps -ef | grep "[a]uto-download.sh" | grep -v restart | head -1 | awk '{print $2}')
+        if [ -n "$NEW_PID" ] && [ "$NEW_PID" -eq "$NEW_PID" ] 2>/dev/null; then
+            echo "Script auto-download.sh berhasil di-restart dengan PID $NEW_PID"
+            echo "Melanjutkan monitoring log..."
+            echo ""
             
+            # Tunggu sebentar agar auto-download.sh mulai menulis log
+            sleep 3
+            
+            # Lanjutkan monitoring log tanpa menghentikan proses yang ada
+            LOG_FILE="/data/adb/auto-download/auto-download.log"
+            if [ -f "$LOG_FILE" ]; then
+                # Gunakan exec untuk mengganti proses saat ini dengan tail -f
+                # Ini memastikan monitoring tidak terputus
+                exec tail -f "$LOG_FILE"
+            else
+                echo "Log file tidak ditemukan: $LOG_FILE"
+                echo "Menunggu log file dibuat..."
+                # Tunggu hingga log file dibuat (maksimal 30 detik)
+                local wait_count=0
+                while [ ! -f "$LOG_FILE" ] && [ $wait_count -lt 30 ]; do
+                    sleep 1
+                    wait_count=$((wait_count + 1))
+                done
+                
+                if [ -f "$LOG_FILE" ]; then
+                    exec tail -f "$LOG_FILE"
+                else
+                    echo "Log file tidak dibuat dalam 30 detik"
+                fi
+            fi
+        else
+            echo "PERINGATAN: Script auto-download.sh gagal dijalankan"
+            echo "Proses restart selesai"
+        fi
+    else
+        # Restart manual dari terminal - tampilkan output seperti biasa
+        nohup sh "$SCRIPT_PATH" > /dev/null 2>&1 &
+        
+        # Tunggu sebentar untuk memastikan script berjalan
+        sleep 2
+        
+        # Periksa apakah script berjalan
+        NEW_PID=$(ps -ef | grep "[a]uto-download.sh" | grep -v restart | head -1 | awk '{print $2}')
+        if [ -n "$NEW_PID" ] && [ "$NEW_PID" -eq "$NEW_PID" ] 2>/dev/null; then
+            echo "Script auto-download.sh berhasil dijalankan dengan PID $NEW_PID"
+            echo "Proses restart selesai"
+            echo ""
+            echo "=== Output dari auto-download.sh ==="
+            
+            # Tunggu sebentar agar auto-download.sh mulai menulis log
+            sleep 3
+            
+            # Tampilkan output dari log file secara real-time
+            LOG_FILE="/data/adb/auto-download/auto-download.log"
             if [ -f "$LOG_FILE" ]; then
                 tail -f "$LOG_FILE"
             else
-                echo "Log file tidak dibuat dalam 30 detik"
+                echo "Log file tidak ditemukan: $LOG_FILE"
+                echo "Menunggu log file dibuat..."
+                # Tunggu hingga log file dibuat (maksimal 30 detik)
+                local wait_count=0
+                while [ ! -f "$LOG_FILE" ] && [ $wait_count -lt 30 ]; do
+                    sleep 1
+                    wait_count=$((wait_count + 1))
+                done
+                
+                if [ -f "$LOG_FILE" ]; then
+                    tail -f "$LOG_FILE"
+                else
+                    echo "Log file tidak dibuat dalam 30 detik"
+                fi
             fi
+        else
+            echo "PERINGATAN: Script auto-download.sh gagal dijalankan"
+            echo "Proses restart selesai"
         fi
-    else
-        echo "PERINGATAN: Script auto-download.sh gagal dijalankan"
-        echo "Proses restart selesai"
     fi
 else
     # Mode non-interaktif - jalankan seperti biasa tanpa menampilkan output
