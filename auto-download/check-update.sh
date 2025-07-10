@@ -187,7 +187,7 @@ download_and_get_sha1() {
             return 1
         fi
     else
-        log_message "Error: Gagal mendownload file dari $source_url"
+        log_message "Failed to download file for hash verification"
         return 1
     fi
 }
@@ -273,7 +273,9 @@ check_and_update_file() {
             
             return 2  # File updated
         else
-            log_message "Error: SHA-1 file yang didownload tidak cocok"
+            log_message "[SECURITY]: SHA-1 mismatch, file rejected"
+            log_message "File $file_name skipped"
+            log_message "Failed to verify SHA-1"
             rm -f "$temp_file"
             return 1
         fi

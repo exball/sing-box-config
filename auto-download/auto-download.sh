@@ -162,7 +162,6 @@ download_and_get_sha1() {
         echo "$sha1"   # Kembalikan hash SHA-1
         return 0
     else
-        log_message "Failed to download file for hash verification"
         rm -f "$temp_hash_file" 2>/dev/null
         echo ""
         return 1
@@ -235,9 +234,6 @@ verify_downloaded_sha1() {
         fi
         return 0
     else
-        log_message "SHA-1 $file_description mismatch, verification failed"
-        log_message "Downloaded SHA-1: $downloaded_sha1"
-        log_message "Expected SHA-1: $expected_sha1"
         rm -f "$temp_file"
         return 1
     fi
@@ -359,17 +355,21 @@ unified_update_with_security() {
     
     # Download SHA-1 dari GitHub untuk verifikasi
     local github_sha1=$(download_and_get_sha1 "$source_url" "${file_description}.sha1")
-    
-    # Security check: Skip jika gagal mendapat SHA-1 dari GitHub
-    if [ -z "$github_sha1" ]; then
-        log_message "WARNING: Failed to get SHA-1 from source"
-        log_message "File skipped for security (no integrity verification)"
-        return 3
-    fi
+    local download_sha1_result=$?
     
     # Gunakan helper untuk membandingkan SHA-1
     compare_sha1_and_decide "$github_sha1" "$target_file" "$file_description"
     local compare_result=$?
+    
+    # Security check: Skip jika gagal mendapat SHA-1 dari GitHub
+    if [ -z "$github_sha1" ] || [ $download_sha1_result -ne 0 ]; then
+        if [ $compare_result -eq 1 ]; then
+            log_message "Failed to download file for hash verification"
+        fi
+        log_message "WARNING: Failed to get SHA-1 from source"
+        log_message "File skipped for security (no integrity verification)"
+        return 3
+    fi
     
     case $compare_result in
         0)  return 0
@@ -393,7 +393,9 @@ unified_update_with_security() {
                     fi
                     return 1  
                 else
-                    log_message "SECURITY: SHA-1 mismatch, file rejected"
+                    log_message "[SECURITY]: SHA-1 mismatch, file rejected"
+                    log_message "File $file_description skipped"
+                    log_message "Failed to verify SHA-1"
                     return 3  
                 fi
             else
@@ -497,7 +499,7 @@ process_all_files() {
             1) files_updated=1 ;;
             2) log_message "WARNING: $description skipped due to configuration"
                continue ;;
-            3) log_message "WARNING: $description skipped due to SHA-1 verification failure" ;;
+            3) ;;
         esac
         
         # Special handling untuk check-update.sh
@@ -590,8 +592,7 @@ download_files() {
                 1)  files_updated=1
                     continue
                     ;;
-                3)  log_message "File $filename skipped due to SHA-1 verification failure"
-                    continue
+                3)  continue
                     ;;
             esac
         done
@@ -615,8 +616,7 @@ download_files() {
     case $config_result in
         1)  files_updated=1
             ;;
-        3)  log_message "WARNING: config.json skipped due to SHA-1 verification failure"
-            ;;
+        3)  ;;
     esac
     
     # Jika ada file yang diperbarui, restart layanan box
