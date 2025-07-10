@@ -317,17 +317,7 @@ run_update_check() {
         fi
         
         if [ -x "$restart_script" ]; then
-            # Buat file penanda untuk restart otomatis (dari update)
-            echo "$(date +%s)" > "/data/adb/auto-download/auto_update_restart_flag"
-            
-            # Buat file penanda untuk memberitahu auto-download.sh bahwa perlu restart
-            echo "$(date +%s)" > "/data/adb/auto-download/need_restart_flag"
-            
-            # Jangan langsung panggil restart script, biarkan auto-download.sh menangani sendiri
-            log_message "Update completed. auto-download.sh will restart itself..."
-            
-            # Return 0 agar auto-download.sh dapat mendeteksi flag dan restart sendiri
-            return 0
+            sh "$restart_script"
         else
             log_message "Script restart-auto-download.sh tidak ditemukan atau tidak dapat dieksekusi"
             log_message "Mencoba restart manual..."
@@ -357,6 +347,9 @@ run_update_check() {
                 log_message "auto-download.sh tidak sedang berjalan, tidak perlu di-restart"
             fi
         fi
+        # Return 1 untuk memberi tahu auto-download.sh bahwa ada update dan telah di-restart
+        # Auto-download.sh yang memanggil script ini harus berhenti
+        exit 1
     else
         return 0
     fi

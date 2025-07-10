@@ -235,9 +235,9 @@ verify_downloaded_sha1() {
         fi
         return 0
     else
-        log_message "SECURITY: SHA-1 mismatch, file rejected"
-        log_message "$file_description file skipped"
-        log_message "Failed to verify SHA-1"
+        log_message "SHA-1 $file_description mismatch, verification failed"
+        log_message "Downloaded SHA-1: $downloaded_sha1"
+        log_message "Expected SHA-1: $expected_sha1"
         rm -f "$temp_file"
         return 1
     fi
@@ -393,6 +393,7 @@ unified_update_with_security() {
                     fi
                     return 1  
                 else
+                    log_message "SECURITY: SHA-1 mismatch, file rejected"
                     return 3  
                 fi
             else
@@ -456,33 +457,7 @@ execute_check_update_script() {
         local exec_result=$?
         
         case $exec_result in
-            0) 
-                # Periksa apakah ada flag restart yang dibuat oleh check-update.sh
-                if [ -f "/data/adb/auto-download/need_restart_flag" ]; then
-                    log_message "Update detected, preparing for seamless restart..."
-                    
-                    # Hapus flag
-                    rm -f "/data/adb/auto-download/need_restart_flag"
-                    
-                    # Jalankan restart script dengan flag auto-update
-                    local restart_script="/data/adb/auto-download/restart-auto-download.sh"
-                    if [ -x "$restart_script" ]; then
-                        log_message "Executing seamless restart..."
-                        
-                        # Jalankan restart script di background
-                        nohup sh "$restart_script" > /dev/null 2>&1 &
-                        
-                        # Tunggu sebentar untuk memastikan restart script mulai
-                        sleep 2
-                        
-                        # Keluar dari proses saat ini dengan graceful
-                        log_message "Current process exiting for seamless restart..."
-                        exit 0
-                    else
-                        log_message "WARNING: restart script not found, continuing normally"
-                    fi
-                fi
-                ;;
+            0) ;;
             1) log_message "check-update.sh detected an update and has restarted"
                return 1 ;;
             *) log_message "check-update.sh returned error code $exec_result"
@@ -615,7 +590,8 @@ download_files() {
                 1)  files_updated=1
                     continue
                     ;;
-                3)  continue
+                3)  log_message "File $filename skipped due to SHA-1 verification failure"
+                    continue
                     ;;
             esac
         done
@@ -752,11 +728,6 @@ detect_wake_up_event() {
         return 0
     fi
     
-    # Jika wake-up sudah terdeteksi dan belum ditangani, jangan deteksi lagi
-    if [ $WAKE_UP_DETECTED -eq 1 ]; then
-        return 1
-    fi
-    
     local wake_up_detected=0
     
     # Primary detection: Monitor broadcast intents SCREEN_ON
@@ -797,26 +768,17 @@ detect_wake_up_event() {
         wake_up_detected=1
     fi
     
-    # Update last states hanya jika tidak ada wake-up yang terdeteksi
-    # Ini mencegah multiple detection dari state yang sama
-    if [ $wake_up_detected -eq 0 ]; then
-        LAST_SCREEN_STATE="$current_screen_state"
-        LAST_SCREEN_ON_COUNT="$current_screen_on_count"
-    fi
+    # Update last states
+    LAST_SCREEN_STATE="$current_screen_state"
+    LAST_SCREEN_ON_COUNT="$current_screen_on_count"
     
     # Jika wake-up terdeteksi, periksa debouncing
     if [ $wake_up_detected -eq 1 ]; then
         # Periksa apakah wake-up diizinkan (debouncing check)
         if is_wake_up_allowed; then
-            # Update states setelah wake-up diizinkan untuk mencegah deteksi berulang
-            LAST_SCREEN_STATE="$current_screen_state"
-            LAST_SCREEN_ON_COUNT="$current_screen_on_count"
             WAKE_UP_DETECTED=1
             return 1
         else
-            # Update states meskipun wake-up tidak diizinkan untuk mencegah spam detection
-            LAST_SCREEN_STATE="$current_screen_state"
-            LAST_SCREEN_ON_COUNT="$current_screen_on_count"
             return 0
         fi
     fi
@@ -1133,15 +1095,10 @@ run_as_daemon() {
             sleep $current_sleep
             sleep_counter=$((sleep_counter + current_sleep))
             
-            # Periksa wake-up event selama sleep hanya jika belum terdeteksi
-            if [ $WAKE_UP_DETECTED -eq 0 ]; then
-                detect_wake_up_event
-                if [ $? -eq 1 ]; then
-                    # Wake-up detected, break from sleep loop
-                    break
-                fi
-            else
-                # Wake-up sudah terdeteksi, keluar dari sleep loop
+            # Periksa wake-up event selama sleep
+            detect_wake_up_event
+            if [ $? -eq 1 ]; then
+                # Wake-up detected, break from sleep loop
                 break
             fi
         done
