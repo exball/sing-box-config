@@ -24,10 +24,32 @@ if [ -f "$BOOT_LOG_FILE" ]; then
     fi
 fi
 
-echo "Memeriksa apakah script auto-download.sh sedang berjalan..."
+# Cek apakah ini adalah restart otomatis dari update SEBELUM meng-kill proses
+AUTO_UPDATE_RESTART_FLAG="/data/adb/auto-download/auto_update_restart_flag"
+IS_AUTO_UPDATE_RESTART=0
 
-# Cek apakah file PID ada
-if [ -f "$PID_FILE" ]; then
+if [ -f "$AUTO_UPDATE_RESTART_FLAG" ]; then
+    FLAG_TIME=$(cat "$AUTO_UPDATE_RESTART_FLAG")
+    CURRENT_TIME=$(date +%s)
+    TIME_DIFF=$((CURRENT_TIME - FLAG_TIME))
+    
+    # Jika file penanda dibuat dalam 10 detik terakhir, anggap restart otomatis
+    if [ $TIME_DIFF -le 10 ]; then
+        IS_AUTO_UPDATE_RESTART=1
+        rm -f "$AUTO_UPDATE_RESTART_FLAG"
+        echo "Detected seamless restart from auto-update"
+    fi
+fi
+
+if [ $IS_AUTO_UPDATE_RESTART -eq 1 ]; then
+    echo "Seamless restart mode: Proses lama akan exit dengan graceful"
+    echo "Tidak perlu meng-kill proses lama secara paksa"
+else
+    echo "Memeriksa apakah script auto-download.sh sedang berjalan..."
+fi
+
+# Cek apakah file PID ada (hanya untuk restart manual)
+if [ $IS_AUTO_UPDATE_RESTART -eq 0 ] && [ -f "$PID_FILE" ]; then
     OLD_PID=$(cat "$PID_FILE")
     echo "PID lama ditemukan: $OLD_PID"
     
@@ -48,7 +70,7 @@ if [ -f "$PID_FILE" ]; then
     else
         echo "Tidak ada proses yang berjalan dengan PID $OLD_PID"
     fi
-else
+elif [ $IS_AUTO_UPDATE_RESTART -eq 0 ]; then
     echo "File PID tidak ditemukan"
     
     # Cari PID menggunakan ps
@@ -69,13 +91,15 @@ else
     fi
 fi
 
-# Periksa sekali lagi apakah ada proses yang masih berjalan
-RUNNING_PID=$(ps -ef | grep "[a]uto-download.sh" | grep -v restart | head -1 | awk '{print $2}')
-if [ -n "$RUNNING_PID" ] && [ "$RUNNING_PID" -eq "$RUNNING_PID" ] 2>/dev/null; then
-    echo "PERINGATAN: Proses auto-download.sh masih berjalan dengan PID $RUNNING_PID"
-    echo "Mencoba menghentikan paksa..."
-    kill -9 $RUNNING_PID
-    sleep 2
+# Periksa sekali lagi apakah ada proses yang masih berjalan (hanya untuk restart manual)
+if [ $IS_AUTO_UPDATE_RESTART -eq 0 ]; then
+    RUNNING_PID=$(ps -ef | grep "[a]uto-download.sh" | grep -v restart | head -1 | awk '{print $2}')
+    if [ -n "$RUNNING_PID" ] && [ "$RUNNING_PID" -eq "$RUNNING_PID" ] 2>/dev/null; then
+        echo "PERINGATAN: Proses auto-download.sh masih berjalan dengan PID $RUNNING_PID"
+        echo "Mencoba menghentikan paksa..."
+        kill -9 $RUNNING_PID
+        sleep 2
+    fi
 fi
 
 # Buat file penanda untuk menandakan script dijalankan oleh restart-auto-download.sh
@@ -85,32 +109,18 @@ echo "$(date +%s)" > "$RESTART_FLAG_FILE"
 # Jalankan script baru
 echo "Memulai script auto-download.sh yang baru..."
 
-# Cek apakah ini adalah restart otomatis dari update
-AUTO_UPDATE_RESTART_FLAG="/data/adb/auto-download/auto_update_restart_flag"
-IS_AUTO_UPDATE_RESTART=0
-
-if [ -f "$AUTO_UPDATE_RESTART_FLAG" ]; then
-    FLAG_TIME=$(cat "$AUTO_UPDATE_RESTART_FLAG")
-    CURRENT_TIME=$(date +%s)
-    TIME_DIFF=$((CURRENT_TIME - FLAG_TIME))
-    
-    # Jika file penanda dibuat dalam 10 detik terakhir, anggap restart otomatis
-    if [ $TIME_DIFF -le 10 ]; then
-        IS_AUTO_UPDATE_RESTART=1
-        rm -f "$AUTO_UPDATE_RESTART_FLAG"
-    fi
-fi
-
 # Cek apakah dijalankan dari terminal (interactive mode)
 if [ -t 0 ] && [ -t 1 ]; then
     # Mode interaktif
     if [ $IS_AUTO_UPDATE_RESTART -eq 1 ]; then
-        # Restart otomatis dari update - jalankan di background dan lanjutkan monitoring
-        echo "Restart otomatis karena ada pembaruan script..."
+        # Restart otomatis dari update - tidak perlu kill proses lama karena sudah exit gracefully
+        echo "Seamless restart karena ada pembaruan script..."
+        echo "Proses lama sudah exit dengan graceful, memulai proses baru..."
+        
         nohup sh "$SCRIPT_PATH" > /dev/null 2>&1 &
         
         # Tunggu sebentar untuk memastikan script berjalan
-        sleep 2
+        sleep 3
         
         # Periksa apakah script berjalan
         NEW_PID=$(ps -ef | grep "[a]uto-download.sh" | grep -v restart | head -1 | awk '{print $2}')

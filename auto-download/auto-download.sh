@@ -456,7 +456,33 @@ execute_check_update_script() {
         local exec_result=$?
         
         case $exec_result in
-            0) ;;
+            0) 
+                # Periksa apakah ada flag restart yang dibuat oleh check-update.sh
+                if [ -f "/data/adb/auto-download/need_restart_flag" ]; then
+                    log_message "Update detected, preparing for seamless restart..."
+                    
+                    # Hapus flag
+                    rm -f "/data/adb/auto-download/need_restart_flag"
+                    
+                    # Jalankan restart script dengan flag auto-update
+                    local restart_script="/data/adb/auto-download/restart-auto-download.sh"
+                    if [ -x "$restart_script" ]; then
+                        log_message "Executing seamless restart..."
+                        
+                        # Jalankan restart script di background
+                        nohup sh "$restart_script" > /dev/null 2>&1 &
+                        
+                        # Tunggu sebentar untuk memastikan restart script mulai
+                        sleep 2
+                        
+                        # Keluar dari proses saat ini dengan graceful
+                        log_message "Current process exiting for seamless restart..."
+                        exit 0
+                    else
+                        log_message "WARNING: restart script not found, continuing normally"
+                    fi
+                fi
+                ;;
             1) log_message "check-update.sh detected an update and has restarted"
                return 1 ;;
             *) log_message "check-update.sh returned error code $exec_result"
