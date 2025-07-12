@@ -230,11 +230,11 @@ verify_downloaded_sha1() {
         
         # Tentukan pesan berdasarkan apakah file sudah ada sebelumnya
         if [ $file_existed -eq 1 ]; then
-            log_message "- Local files exist, Updates available"
-            log_message "- Successfully updated (SHA1 verified)"
+            log_message "🔁 Local files exist, Updates available"
+            log_message "✅ Successfully updated (SHA1 verified)"
         else
-            log_message "- Local file doesn't exist, Download"
-            log_message "- Successfully updated (SHA1 verified)"
+            log_message "📥 Local file doesn't exist, Download"
+            log_message "✅ Successfully updated (SHA1 verified)"
         fi
         return 0
     else
@@ -380,7 +380,7 @@ unified_update_with_security() {
     fi
     
     case $compare_result in
-        0)  log_message "@ $file_description = No updates"
+        0)  log_message "☑️ $file_description = No updates"
             return 0
             ;;
         2)  log_message "{ $file_description }"
@@ -465,7 +465,7 @@ execute_check_update_script() {
     
     if [ -x "$script_file" ]; then
         log_message ""
-        log_message "!!! Run check-update.sh !!!"
+        log_message "‼️Run check-update.sh‼️"
         sh "$script_file"
         local exec_result=$?
         
@@ -561,7 +561,7 @@ download_files() {
     
     log_message "« « « « « « = = » » » » » »"
     log_message ""
-    log_message "## Checking main script ##"
+    log_message "✳️ Checking main script ✳️"
     
     # Variabel untuk melacak apakah ada file yang diperbarui
     local files_updated=0
@@ -582,7 +582,7 @@ download_files() {
     if [ -n "${PROVIDER_URLS}" ]; then
         log_message "« « « « « « = = » » » » » »"
         log_message ""
-        log_message "## Checking file provider ##"
+        log_message "✳️ Checking file provider ✳️"
         
         for url in $PROVIDER_URLS; do
 
