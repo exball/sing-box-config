@@ -5,7 +5,7 @@
 # ===== KONFIGURASI BOOTSTRAP =====
 # Parameter minimal yang diperlukan untuk memeriksa pembaruan konfigurasi
 # Parameter ini TIDAK BOLEH diubah melalui file konfigurasi eksternal
-CONF_UPDATE_URL="https://raw.githubusercontent.com/exball/sing-box-config/refs/heads/Master/auto-download/auto-download.conf"
+CONF_UPDATE_URL="https://raw.githubusercontent.com/exball/sing-box-config/refs/heads/test/auto-download/auto-download.conf"
 CONFIG_FILE="/data/adb/auto-download/auto-download.conf"
 TEMP_DIR="/data/adb/auto-download/download_temp"
 NETWORK_TEST_URL="https://www.google.com"
@@ -28,6 +28,17 @@ LAST_INTERVAL=0
 # Variabel untuk melacak jadwal terakhir yang dijalankan
 LAST_EXECUTED_SCHEDULE=""
 LAST_SCHEDULE_TIME=0
+
+# Variabel untuk wake-up detection
+WAKE_UP_DETECTION_ENABLED=1
+LAST_SCREEN_STATE=""
+LAST_SCREEN_ON_COUNT=""
+WAKE_UP_DETECTED=0
+WAKE_UP_TRIGGERED_THIS_SESSION=0  # Flag untuk mencegah multiple wake-up dalam satu sesi screen ON
+
+# Variabel untuk wake-up debouncing (akan diload dari config file)
+LAST_WAKE_UP_TIME=0
+WAKE_UP_DEBOUNCE_FILE="/data/adb/auto-download/last_wake_up_time"
 
 # Fungsi untuk logging
 log_message() {
@@ -67,7 +78,7 @@ ensure_directories() {
     for dir in "$@"; do
         if [ -n "$dir" ]; then
             mkdir -p "$dir" 2>/dev/null || {
-                log_message "Warning: Failed to create directory: $dir"
+                log_message "⚠️ Failed to create directory: $dir"
             }
         fi
     done
@@ -150,7 +161,6 @@ download_and_get_sha1() {
         echo "$sha1"   # Kembalikan hash SHA-1
         return 0
     else
-        log_message "Failed to download file for hash verification"
         rm -f "$temp_hash_file" 2>/dev/null
         echo ""
         return 1
@@ -168,21 +178,19 @@ compare_sha1_and_decide() {
         return 2  # Indicate fallback needed
     fi
     
-    log_message "SHA-1 GitHub: $github_sha1"
-    
     # Dapatkan hash SHA-1 dari file lokal jika ada
     local local_sha1=""
     if [ -f "$local_file" ]; then
         local_sha1=$(get_local_sha1 "$local_file")
-        log_message "SHA-1 Local: $local_sha1"
-    fi
-    
-    # Bandingkan hash SHA-1
-    if [ -n "$local_sha1" ] && [ "$local_sha1" = "$github_sha1" ]; then
-        log_message "SHA-1 Same, Skip..."
-        return 0  # Same, no update needed
+        
+        # Bandingkan hash SHA-1
+        if [ -n "$local_sha1" ] && [ "$local_sha1" = "$github_sha1" ]; then
+            return 0  # Same, no update needed
+        else
+            return 1  # Different, update needed
+        fi
     else
-        return 1  # Different, update needed
+        return 1  # File doesn't exist, download needed
     fi
 }
 
@@ -203,6 +211,12 @@ verify_downloaded_sha1() {
     local downloaded_sha1=$(get_local_sha1 "$temp_file")
     
     if [ "$downloaded_sha1" = "$expected_sha1" ]; then
+        # Cek apakah file target sudah ada sebelumnya
+        local file_existed=0
+        if [ -f "$target_file" ]; then
+            file_existed=1
+        fi
+        
         # Pastikan direktori target ada
         ensure_parent_directory "$target_file"
         
@@ -214,12 +228,16 @@ verify_downloaded_sha1() {
             chmod +x "$target_file"
         fi
         
-        log_message "Successfully updated (SHA1 verified)"
+        # Tentukan pesan berdasarkan apakah file sudah ada sebelumnya
+        if [ $file_existed -eq 1 ]; then
+            log_message "🔁 Local files exist, Updates available"
+            log_message "✅ Successfully updated (SHA1 verified)"
+        else
+            log_message "📥 Local file doesn't exist, Download"
+            log_message "✅ Successfully updated (SHA1 verified)"
+        fi
         return 0
     else
-        log_message "SHA-1 $file_description mismatch, verification failed"
-        log_message "Downloaded SHA-1: $downloaded_sha1"
-        log_message "Expected SHA-1: $expected_sha1"
         rm -f "$temp_file"
         return 1
     fi
@@ -245,11 +263,8 @@ check_network_connection() {
             # Bersihkan baris attempt di konsol dan tulis hasil sukses
             printf "\r"
             
-            # Log attempt terakhir dan hasil sukses ke file
-            if [ -n "$LOG_FILE" ]; then
-                echo "Attempt $last_attempt_logged of $NETWORK_MAX_ATTEMPTS" >> "$LOG_FILE"
-            fi
-            log_message "Internet connection available"
+            # Log dengan format baru: Connected in X(Y) attempt
+            log_message "Connected in $last_attempt_logged($NETWORK_MAX_ATTEMPTS) attempt"
             connected=1
             break
         fi
@@ -266,10 +281,7 @@ check_network_connection() {
         # Bersihkan baris attempt di konsol
         printf "\r"
         
-        # Log attempt terakhir dan hasil gagal ke file
-        if [ -n "$LOG_FILE" ]; then
-            echo "Attempt $last_attempt_logged of $NETWORK_MAX_ATTEMPTS" >> "$LOG_FILE"
-        fi
+        # Log dengan format baru untuk kegagalan
         log_message "Failed to connect after $NETWORK_MAX_ATTEMPTS attempts"
         return 1
     fi
@@ -290,7 +302,6 @@ fi
 # Muat konfigurasi dari file
 if [ -f "$CONFIG_FILE" ]; then
     source "$CONFIG_FILE"
-    log_message "Configuration loaded from $CONFIG_FILE"
 else
     log_message "ERROR: Configuration file not found at $CONFIG_FILE"
     log_message "Make sure the configuration file exists before running the script"
@@ -303,6 +314,12 @@ if [ -z "$SAVE_DIR" ] || [ -z "$CONFIG_DIR" ] || [ -z "$TEMP_DIR" ] || [ -z "$SC
     log_message "Make sure the configuration file contains all required variables"
     exit 1
 fi
+
+# Set default values untuk variabel wake-up jika tidak ada di config file
+WAKE_UP_DETECTION_ENABLED=${WAKE_UP_DETECTION_ENABLED:-1}
+WAKE_UP_DEBOUNCE_ENABLED=${WAKE_UP_DEBOUNCE_ENABLED:-1}
+WAKE_UP_DEBOUNCE_INTERVAL=${WAKE_UP_DEBOUNCE_INTERVAL:-300}
+WAKE_UP_CHECK_INTERVAL=${WAKE_UP_CHECK_INTERVAL:-60}
 # =====================
 
 # Fungsi untuk memeriksa dan menyimpan PID
@@ -314,8 +331,10 @@ check_and_save_pid() {
     if [ -n "$CURRENT_PID" ] && [ "$CURRENT_PID" -eq "$CURRENT_PID" ] 2>/dev/null; then
         echo "$CURRENT_PID" > "$PID_FILE"
         log_message "Auto-Download PID: $CURRENT_PID"
+        log_message ""
     else
         log_message "Auto-Download PID: Not found"
+        log_message ""
     fi
 }
 
@@ -343,32 +362,34 @@ unified_update_with_security() {
     local set_executable="${4:-0}"
     local reload_config="${5:-0}"
     
-    log_message "-----"
-    log_message "Checking $file_description..."
-    
     # Download SHA-1 dari GitHub untuk verifikasi
     local github_sha1=$(download_and_get_sha1 "$source_url" "${file_description}.sha1")
-    
-    # Security check: Skip jika gagal mendapat SHA-1 dari GitHub
-    if [ -z "$github_sha1" ]; then
-        log_message "WARNING: Failed to get SHA-1 from GitHub for $file_description"
-        log_message "File skipped for security (no integrity verification)"
-        return 3
-    fi
+    local download_sha1_result=$?
     
     # Gunakan helper untuk membandingkan SHA-1
     compare_sha1_and_decide "$github_sha1" "$target_file" "$file_description"
     local compare_result=$?
     
+    # Security check: Skip jika gagal mendapat SHA-1 dari GitHub
+    if [ -z "$github_sha1" ] || [ $download_sha1_result -ne 0 ]; then
+        if [ $compare_result -eq 1 ]; then
+            log_message "🔎 $file_description"
+            log_message "- Failed to download file for hash verification"
+        fi
+        log_message "⚠️ Failed to get SHA-1 from source"
+        log_message "- File skipped for security (no integrity verification)"
+        return 3
+    fi
+    
     case $compare_result in
-        0)  return 0
+        0)  log_message "☑️ $file_description = No updates"
+            return 0
             ;;
-        2)  log_message "ERROR: SHA-1 is empty after successful download"
+        2)  log_message "🔎 $file_description"
+            log_message "- ERROR: SHA-1 is empty after successful download"
             return 3
             ;;
-        1)  log_message "SHA-1 different or file not exist, Update..."
-            
-            # Download file ke temporary directory (security: tidak langsung overwrite)
+        1)  log_message "🔎 $file_description"
             local temp_file="$TEMP_DIR/${file_description}.new"
             if curl_download_file "$source_url" "$temp_file"; then
 
@@ -380,16 +401,18 @@ unified_update_with_security() {
                     if [ "$reload_config" = "1" ]; then
                         if [ -f "$target_file" ]; then
                             source "$target_file"
-                            log_message "Config reloaded. Using new configuration"
+                            log_message "- Config reloaded. Using new configuration"
                         fi
                     fi
                     return 1  
                 else
-                    log_message "SECURITY: SHA-1 mismatch for $file_description, file rejected"
+                    log_message "- [SECURITY]: SHA-1 mismatch, file rejected"
+                    log_message "- File $file_description skipped"
+                    log_message "- Failed to verify SHA-1"
                     return 3  
                 fi
             else
-                log_message "Failed to download $file_description from $source_url"
+                log_message "- Failed to download from source"
                 return 3  
             fi
             ;;
@@ -443,19 +466,20 @@ execute_check_update_script() {
     local script_file="$1"
     
     if [ -x "$script_file" ]; then
-        log_message "Run check-update.sh to check auto-download.sh..."
+        log_message ""
+        log_message "‼️Run check-update.sh‼️"
         sh "$script_file"
         local exec_result=$?
         
         case $exec_result in
-            0) log_message "No updates, continue checking process" ;;
+            0) ;;
             1) log_message "check-update.sh detected an update and has restarted"
                return 1 ;;
             *) log_message "check-update.sh returned error code $exec_result"
                return $exec_result ;;
         esac
     else
-        log_message "WARNING: check-update.sh is not executable"
+        log_message "⚠️ check-update.sh is not executable"
     fi
     
     return 0
@@ -465,6 +489,9 @@ execute_check_update_script() {
 process_all_files() {
     local files_updated=0
     local temp_file="/data/adb/auto-download/files_config.$$"
+    
+    # Setup trap untuk cleanup otomatis jika script dihentikan
+    trap "rm -f '$temp_file'" EXIT INT TERM
     
     # Write config to temp file untuk avoid subshell issues
     printf "%s\n" "$FILES_CONFIG" > "$temp_file"
@@ -483,9 +510,9 @@ process_all_files() {
         # Handle results
         case $result in
             1) files_updated=1 ;;
-            2) log_message "WARNING: $description skipped due to configuration"
+            2) log_message "⚠️ $description skipped due to configuration"
                continue ;;
-            3) log_message "WARNING: $description skipped due to SHA-1 verification failure" ;;
+            3) ;;
         esac
         
         # Special handling untuk check-update.sh
@@ -503,14 +530,25 @@ process_all_files() {
         
     done < "$temp_file"
     
-    # Cleanup
     rm -f "$temp_file"
+    
+    trap - EXIT INT TERM
     
     # Return files_updated status (0 = no updates, 1 = files updated)
     if [ $files_updated -eq 1 ]; then
         return 1
     else
         return 0
+    fi
+}
+
+# Fungsi untuk membersihkan file temporary yang tertinggal
+cleanup_temp_files() {
+    local temp_dir="/data/adb/auto-download"
+    if [ -d "$temp_dir" ]; then
+        # Hapus file files_config.* yang mungkin tertinggal
+        find "$temp_dir" -name "files_config.*" -type f -mmin +10 -delete 2>/dev/null
+        log_message "Cleanup completed: removed old temporary files"
     fi
 }
 
@@ -523,7 +561,8 @@ download_files() {
         return 1
     fi
     
-    log_message "Starts file checking process"
+    log_message ""
+    log_message "✳️ Checking main script ✳️"
     
     # Variabel untuk melacak apakah ada file yang diperbarui
     local files_updated=0
@@ -533,18 +572,18 @@ download_files() {
     local process_result=$?
     
     case $process_result in
-        0)  # No files updated
+        0)  ;;
+        1)  files_updated=1
             ;;
-        1)  # Files updated (normal case)
-            files_updated=1
-            ;;
-        *)  # Error occurred or restart detected
-            return $process_result
+        *)  return $process_result
             ;;
     esac
     
     # Loop melalui setiap URL dalam daftar dan download
     if [ -n "${PROVIDER_URLS}" ]; then
+        log_message ""
+        log_message "✳️ Checking file provider ✳️"
+        
         for url in $PROVIDER_URLS; do
 
             filename=$(basename "$url" | sed 's/%20/ /g')
@@ -564,8 +603,7 @@ download_files() {
                 1)  files_updated=1
                     continue
                     ;;
-                3)  log_message "File $filename skipped due to SHA-1 verification failure"
-                    continue
+                3)  continue
                     ;;
             esac
         done
@@ -574,7 +612,7 @@ download_files() {
     fi
     
     # Periksa koneksi jaringan sebelum memproses config.json
-    log_message "-----"
+    log_message ""
     check_network_connection
     if [ $? -ne 0 ]; then
         log_message "config.json checking process cancelled due to no internet connection"
@@ -588,13 +626,12 @@ download_files() {
     case $config_result in
         1)  files_updated=1
             ;;
-        3)  log_message "WARNING: config.json skipped due to SHA-1 verification failure"
-            ;;
+        3)  ;;
     esac
     
     # Jika ada file yang diperbarui, restart layanan box
     if [ $files_updated -eq 1 ]; then
-        log_message "-----"
+        log_message ""
         
         # Deteksi PID lama dari /data/adb/box/run/box.pid
         local BOX_PID=""
@@ -626,13 +663,166 @@ download_files() {
             NEW_PID=$(cat "/data/adb/box/run/box.pid")
             log_message "Sing-Box successfully restarted (new PID: $NEW_PID)"
         else
-            log_message "WARNING: PID file not found after restart"
+            log_message "⚠️ PID file not found after restart"
         fi
     fi
     
     log_message "Update check process complete"
     
     check_and_save_pid
+}
+
+# Fungsi untuk menyimpan timestamp wake-up terakhir
+save_wake_up_time() {
+    local current_time=$(date +%s)
+    echo "$current_time" > "$WAKE_UP_DEBOUNCE_FILE" 2>/dev/null
+    LAST_WAKE_UP_TIME=$current_time
+}
+
+# Fungsi untuk membaca timestamp wake-up terakhir
+load_wake_up_time() {
+    if [ -f "$WAKE_UP_DEBOUNCE_FILE" ]; then
+        LAST_WAKE_UP_TIME=$(cat "$WAKE_UP_DEBOUNCE_FILE" 2>/dev/null || echo "0")
+    else
+        LAST_WAKE_UP_TIME=0
+    fi
+}
+
+# Fungsi untuk memeriksa apakah wake-up diizinkan (debouncing)
+is_wake_up_allowed() {
+    if [ $WAKE_UP_DEBOUNCE_ENABLED -eq 0 ]; then
+        return 0  # Debouncing disabled, allow wake-up
+    fi
+    
+    local current_time=$(date +%s)
+    local time_diff=$((current_time - LAST_WAKE_UP_TIME))
+    
+    if [ $time_diff -ge $WAKE_UP_DEBOUNCE_INTERVAL ]; then
+        return 0  # Enough time has passed, allow wake-up
+    else
+        local remaining_time=$((WAKE_UP_DEBOUNCE_INTERVAL - time_diff))
+        local remaining_minutes=$((remaining_time / 60))
+        local remaining_seconds=$((remaining_time % 60))
+        
+        return 1  # Too soon, deny wake-up
+    fi
+}
+
+# Fungsi untuk format waktu yang mudah dibaca
+format_time_diff() {
+    local seconds="$1"
+    local minutes=$((seconds / 60))
+    local hours=$((minutes / 60))
+    local days=$((hours / 24))
+    
+    # Correct calculation for display
+    minutes=$((minutes % 60))
+    hours=$((hours % 24))
+    seconds=$((seconds % 60))
+    
+    if [ $days -gt 0 ]; then
+        echo "${days}d ${hours}h ${minutes}m ${seconds}s"
+    elif [ $hours -gt 0 ]; then
+        echo "${hours}h ${minutes}m ${seconds}s"
+    elif [ $minutes -gt 0 ]; then
+        echo "${minutes}m ${seconds}s"
+    else
+        echo "${seconds}s"
+    fi
+}
+
+# Fungsi untuk mendeteksi wake-up dari deep sleep
+detect_wake_up_event() {
+    if [ $WAKE_UP_DETECTION_ENABLED -eq 0 ]; then
+        return 0
+    fi
+    
+    local wake_up_detected=0
+    
+    # Monitor system properties debug.tracing.screen_state
+    local current_screen_state=$(getprop debug.tracing.screen_state 2>/dev/null)
+    
+    # Jika ini adalah pemeriksaan pertama, simpan state awal
+    if [ -z "$LAST_SCREEN_STATE" ]; then
+        LAST_SCREEN_STATE="$current_screen_state"
+        # Set flag berdasarkan state awal
+        if [ "$current_screen_state" = "2" ]; then
+            WAKE_UP_TRIGGERED_THIS_SESSION=1  # Screen sudah ON, anggap sudah triggered
+        else
+            WAKE_UP_TRIGGERED_THIS_SESSION=0  # Screen OFF, siap untuk detect wake-up
+        fi
+        return 0
+    fi
+    
+    # Deteksi transisi screen state
+    local screen_was_off=0
+    local screen_is_on=0
+    local screen_is_off=0
+    
+    # Deteksi screen off state (pada device ini = 1)
+    if [ "$LAST_SCREEN_STATE" = "1" ]; then
+        screen_was_off=1
+    fi
+    
+    # Deteksi screen on state (pada device ini = 2)
+    if [ "$current_screen_state" = "2" ]; then
+        screen_is_on=1
+    fi
+    
+    # Deteksi screen off state saat ini (untuk reset flag)
+    if [ "$current_screen_state" = "1" ]; then
+        screen_is_off=1
+    fi
+    
+    # Reset flag ketika screen OFF (siap untuk wake-up detection berikutnya)
+    if [ $screen_is_off -eq 1 ]; then
+        WAKE_UP_TRIGGERED_THIS_SESSION=0
+    fi
+    
+    # Hanya trigger wake-up jika:
+    # 1. Screen berubah dari OFF ke ON
+    # 2. Belum pernah trigger dalam sesi screen ON ini
+    if [ $screen_was_off -eq 1 ] && [ $screen_is_on -eq 1 ] && [ $WAKE_UP_TRIGGERED_THIS_SESSION -eq 0 ]; then
+        wake_up_detected=1
+    fi
+    
+    # Update last state
+    LAST_SCREEN_STATE="$current_screen_state"
+    
+    # Jika wake-up terdeteksi, periksa debouncing
+    if [ $wake_up_detected -eq 1 ]; then
+        # Periksa apakah wake-up diizinkan (debouncing check)
+        if is_wake_up_allowed; then
+            WAKE_UP_DETECTED=1
+            WAKE_UP_TRIGGERED_THIS_SESSION=1  # Set flag untuk mencegah trigger berulang
+            return 1
+        else
+            return 0
+        fi
+    fi
+    
+    return 0
+}
+
+# Fungsi untuk menangani wake-up event
+handle_wake_up_event() {
+    if [ $WAKE_UP_DETECTED -eq 1 ]; then
+        log_message ""
+        log_message "{ Schedule check wake-up event }"
+        
+        # Simpan timestamp wake-up untuk debouncing
+        save_wake_up_time
+        
+        # Reset flag wake-up
+        WAKE_UP_DETECTED=0
+        
+        # Jalankan check_schedule_and_run untuk menghitung ulang waktu
+        check_schedule_and_run
+        
+        return 1  # Indicate that wake-up was handled
+    fi
+    
+    return 0
 }
 
 # Fungsi untuk memeriksa SCHEDULE_HOURS
@@ -711,8 +901,8 @@ check_schedule_and_run() {
         LAST_EXECUTED_SCHEDULE=$matched_schedule
         LAST_SCHEDULE_TIME=$current_timestamp
     else
-        # Pesan "Bukan waktu yang dijadwalkan" ditampilkan setelah informasi jadwal berikutnya
-        log_message "Not an update check schedule"
+        # Bukan waktu yang dijadwalkan, tidak perlu log tambahan
+        :
     fi
 }
 
@@ -860,6 +1050,10 @@ run_as_daemon() {
     
     # Periksa dan simpan PID
     check_and_save_pid
+    
+    # Bersihkan file temporary yang mungkin tertinggal
+    cleanup_temp_files
+    
     download_files
     
     # Reset variabel untuk melacak interval dan jadwal terakhir
@@ -867,36 +1061,78 @@ run_as_daemon() {
     LAST_EXECUTED_SCHEDULE=""
     LAST_SCHEDULE_TIME=0
     
+    # Inisialisasi wake-up detection
+    if [ $WAKE_UP_DETECTION_ENABLED -eq 1 ]; then
+        LAST_SCREEN_STATE=$(getprop debug.tracing.screen_state 2>/dev/null)
+        WAKE_UP_DETECTED=0
+        # Set flag berdasarkan state awal
+        if [ "$LAST_SCREEN_STATE" = "2" ]; then
+            WAKE_UP_TRIGGERED_THIS_SESSION=1  # Screen sudah ON, anggap sudah triggered
+        else
+            WAKE_UP_TRIGGERED_THIS_SESSION=0  # Screen OFF, siap untuk detect wake-up
+        fi
+    fi
+    
+    # Inisialisasi wake-up debouncing
+    if [ $WAKE_UP_DEBOUNCE_ENABLED -eq 1 ]; then
+        load_wake_up_time
+    fi
+    
     # Inisialisasi untuk loop pertama
     adaptive_interval=$(calculate_adaptive_interval)
     next_schedule_info=$(get_next_schedule_info)
     
     # Kemudian jalankan loop untuk memeriksa jadwal sesuai interval yang dikonfigurasi
-    log_message "-------------------------------------"
-    log_message "Starts a schedule check loop"
+    log_message ""
+    log_message "{ Starts a schedule check loop }"
     current_hour=$(date +"%H:%M")
     next_schedule_time=$(echo "$next_schedule_info" | grep -o "[0-9][0-9]:[0-9][0-9]")
     next_schedule_diff=$(echo "$next_schedule_info" | grep -o "in [0-9]* hours [0-9]* minutes" | sed 's/in //')
     
     # Log interval yang dipilih untuk loop pertama
-    log_message "Next update check: $next_schedule_time"
     log_message "Current time: $current_hour"
     
     # Hitung waktu pemeriksaan pertama (current_hour + adaptive_interval)
     first_check_info=$(calculate_next_check_time $adaptive_interval)
-    log_message "First schedule check: $first_check_info (Interval: $adaptive_interval)"
+    log_message "  Next schedule check: $first_check_info (${adaptive_interval}s)"
     
     # Loop utama
     while true; do
         
-        # Tunggu sesuai interval adaptif
-        sleep $adaptive_interval
+        # Tunggu sesuai interval adaptif dengan wake-up detection
+        local sleep_interval=$adaptive_interval
+        local sleep_counter=0
+        local check_interval=${WAKE_UP_CHECK_INTERVAL:-60}  # Interval pemeriksaan wake-up dari config
         
-        log_message "-------------------------------------"
-        log_message "Schedule check"
+        # Sleep dengan pemeriksaan wake-up berkala
+        while [ $sleep_counter -lt $sleep_interval ]; do
+            local remaining_sleep=$((sleep_interval - sleep_counter))
+            local current_sleep=$check_interval
+            
+            if [ $remaining_sleep -lt $check_interval ]; then
+                current_sleep=$remaining_sleep
+            fi
+            
+            sleep $current_sleep
+            sleep_counter=$((sleep_counter + current_sleep))
+            
+            # Periksa wake-up event selama sleep
+            detect_wake_up_event
+            if [ $? -eq 1 ]; then
+                # Wake-up detected, break from sleep loop
+                break
+            fi
+        done
         
-        # Jalankan pemeriksaan jadwal
-        check_schedule_and_run
+        # Handle wake-up event jika terdeteksi
+        handle_wake_up_event
+        local wake_up_handled=$?
+        
+        # Jika wake-up tidak ditangani, lakukan schedule check normal
+        if [ $wake_up_handled -eq 0 ]; then
+            # Jalankan pemeriksaan jadwal
+            check_schedule_and_run
+        fi
         
         # Hitung interval adaptif untuk siklus berikutnya
         next_adaptive_interval=$(calculate_adaptive_interval)
@@ -909,11 +1145,12 @@ run_as_daemon() {
         next_schedule_time=$(echo "$next_schedule_info" | grep -o "[0-9][0-9]:[0-9][0-9]")
         next_schedule_diff=$(echo "$next_schedule_info" | grep -o "in [0-9]* hours [0-9]* minutes" | sed 's/in //')
         
-        log_message "Current time: $current_hour" 
+        log_message ""
+        log_message "⌛Schedule check. Current time: $current_hour" 
         
         # Hitung waktu pemeriksaan berikutnya (current_hour + next_adaptive_interval)
         next_check_info=$(calculate_next_check_time $next_adaptive_interval)
-        log_message "Next schedule check: $next_check_info (Interval: $next_adaptive_interval)"
+        log_message "  Next schedule check: $next_check_info (${next_adaptive_interval}s)"
         
         # Simpan interval saat ini untuk perbandingan berikutnya
         LAST_INTERVAL=$next_adaptive_interval

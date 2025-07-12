@@ -86,10 +86,9 @@ sleep 30
 log_boot "Proses boot selesai"
 
 # Buat salinan log boot untuk referensi (opsional)
-cp "$BOOT_LOG" "/data/adb/auto-download/boot_last.log" 2>/dev/null
+# cp "$BOOT_LOG" "/data/adb/auto-download/boot_last.log" 2>/dev/null
 
 # Hapus file boot.log setelah auto-download.sh berjalan
-# Ini mencegah deteksi mode boot yang salah jika script di-restart secara manual
 rm -f "$BOOT_LOG"
 
 exit 0
