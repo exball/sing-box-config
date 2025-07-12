@@ -331,8 +331,10 @@ check_and_save_pid() {
     if [ -n "$CURRENT_PID" ] && [ "$CURRENT_PID" -eq "$CURRENT_PID" ] 2>/dev/null; then
         echo "$CURRENT_PID" > "$PID_FILE"
         log_message "Auto-Download PID: $CURRENT_PID"
+        log_message ""
     else
         log_message "Auto-Download PID: Not found"
+        log_message ""
     fi
 }
 
@@ -559,7 +561,6 @@ download_files() {
         return 1
     fi
     
-    log_message "« « « « « « = = » » » » » »"
     log_message ""
     log_message "✳️ Checking main script ✳️"
     
@@ -580,7 +581,6 @@ download_files() {
     
     # Loop melalui setiap URL dalam daftar dan download
     if [ -n "${PROVIDER_URLS}" ]; then
-        log_message "« « « « « « = = » » » » » »"
         log_message ""
         log_message "✳️ Checking file provider ✳️"
         
@@ -612,7 +612,6 @@ download_files() {
     fi
     
     # Periksa koneksi jaringan sebelum memproses config.json
-    log_message "« « « « « « = = » » » » » »"
     log_message ""
     check_network_connection
     if [ $? -ne 0 ]; then
@@ -632,7 +631,6 @@ download_files() {
     
     # Jika ada file yang diperbarui, restart layanan box
     if [ $files_updated -eq 1 ]; then
-        log_message "« « « « « « = = » » » » » »"
         log_message ""
         
         # Deteksi PID lama dari /data/adb/box/run/box.pid
@@ -903,8 +901,8 @@ check_schedule_and_run() {
         LAST_EXECUTED_SCHEDULE=$matched_schedule
         LAST_SCHEDULE_TIME=$current_timestamp
     else
-        # Pesan "Bukan waktu yang dijadwalkan" ditampilkan setelah informasi jadwal berikutnya
-        log_message "Not an update check schedule ($next_schedule_time)"
+        # Bukan waktu yang dijadwalkan, tidak perlu log tambahan
+        :
     fi
 }
 
@@ -1085,7 +1083,6 @@ run_as_daemon() {
     next_schedule_info=$(get_next_schedule_info)
     
     # Kemudian jalankan loop untuk memeriksa jadwal sesuai interval yang dikonfigurasi
-    log_message "« « « « « « = = » » » » » »"
     log_message ""
     log_message "{ Starts a schedule check loop }"
     current_hour=$(date +"%H:%M")
@@ -1093,12 +1090,11 @@ run_as_daemon() {
     next_schedule_diff=$(echo "$next_schedule_info" | grep -o "in [0-9]* hours [0-9]* minutes" | sed 's/in //')
     
     # Log interval yang dipilih untuk loop pertama
-    log_message "Next update check: $next_schedule_time"
     log_message "Current time: $current_hour"
     
     # Hitung waktu pemeriksaan pertama (current_hour + adaptive_interval)
     first_check_info=$(calculate_next_check_time $adaptive_interval)
-    log_message "First schedule check: $first_check_info (Interval: $adaptive_interval)"
+    log_message "  Next schedule check: $first_check_info (${adaptive_interval}s)"
     
     # Loop utama
     while true; do
@@ -1134,9 +1130,6 @@ run_as_daemon() {
         
         # Jika wake-up tidak ditangani, lakukan schedule check normal
         if [ $wake_up_handled -eq 0 ]; then
-            log_message ""
-            log_message "{ Schedule check }"
-            
             # Jalankan pemeriksaan jadwal
             check_schedule_and_run
         fi
@@ -1152,11 +1145,12 @@ run_as_daemon() {
         next_schedule_time=$(echo "$next_schedule_info" | grep -o "[0-9][0-9]:[0-9][0-9]")
         next_schedule_diff=$(echo "$next_schedule_info" | grep -o "in [0-9]* hours [0-9]* minutes" | sed 's/in //')
         
-        log_message "Current time: $current_hour" 
+        log_message ""
+        log_message "⌛Schedule check. Current time: $current_hour" 
         
         # Hitung waktu pemeriksaan berikutnya (current_hour + next_adaptive_interval)
         next_check_info=$(calculate_next_check_time $next_adaptive_interval)
-        log_message "Next schedule check: $next_check_info (Interval: $next_adaptive_interval)"
+        log_message "  Next schedule check: $next_check_info (${next_adaptive_interval}s)"
         
         # Simpan interval saat ini untuk perbandingan berikutnya
         LAST_INTERVAL=$next_adaptive_interval
