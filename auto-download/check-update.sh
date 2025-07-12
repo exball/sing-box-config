@@ -29,7 +29,7 @@ ensure_directories() {
     for dir in "$@"; do
         if [ -n "$dir" ]; then
             mkdir -p "$dir" 2>/dev/null || {
-                log_message "Warning: Failed to create directory: $dir"
+                log_message "⚠️: Failed to create directory: $dir"
             }
         fi
     done
@@ -221,7 +221,7 @@ check_and_update_file() {
         
         # Bandingkan hash SHA-1
         if [ -n "$local_sha1" ] && [ "$local_sha1" = "$github_sha1" ]; then
-            log_message "@ $file_name = No updates"
+            log_message "☑️ $file_name = No updates"
             return 0  # Same, no update needed
         fi
     fi
@@ -259,11 +259,11 @@ check_and_update_file() {
             
             # Tentukan pesan berdasarkan apakah file sudah ada sebelumnya
             if [ $file_existed -eq 1 ]; then
-                log_message "- Local files exist, Updates available"
-                log_message "- Successfully updated (SHA1 verified)"
+                log_message "🔁 Local files exist, Updates available"
+                log_message "✅ Successfully updated (SHA1 verified)"
             else
-                log_message "- Local file doesn't exist, Download"
-                log_message "- Successfully updated (SHA1 verified)"
+                log_message "📥 Local file doesn't exist, Download"
+                log_message "✅ Successfully updated (SHA1 verified)"
             fi
             
             # Hapus file backup karena pembaruan berhasil
@@ -352,7 +352,7 @@ run_update_check() {
                     nohup sh "$SCRIPT_FILE" > /dev/null 2>&1 &
                     log_message "auto-download.sh has been restarted with PID: $!"
                 else
-                    log_message "WARNING: auto-download.sh is not executable"
+                    log_message "⚠️: auto-download.sh is not executable"
                 fi
             else
                 log_message "auto-download.sh is not running, no need to restart"
