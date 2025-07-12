@@ -371,7 +371,7 @@ unified_update_with_security() {
     # Security check: Skip jika gagal mendapat SHA-1 dari GitHub
     if [ -z "$github_sha1" ] || [ $download_sha1_result -ne 0 ]; then
         if [ $compare_result -eq 1 ]; then
-            log_message "{ $file_description }"
+            log_message "🔎 $file_description"
             log_message "- Failed to download file for hash verification"
         fi
         log_message "- WARNING: Failed to get SHA-1 from source"
@@ -383,11 +383,11 @@ unified_update_with_security() {
         0)  log_message "☑️ $file_description = No updates"
             return 0
             ;;
-        2)  log_message "{ $file_description }"
+        2)  log_message "🔎 $file_description"
             log_message "- ERROR: SHA-1 is empty after successful download"
             return 3
             ;;
-        1)  log_message "{ $file_description }"
+        1)  log_message "🔎 $file_description"
             local temp_file="$TEMP_DIR/${file_description}.new"
             if curl_download_file "$source_url" "$temp_file"; then
 
