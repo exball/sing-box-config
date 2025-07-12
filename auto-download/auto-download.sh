@@ -78,7 +78,7 @@ ensure_directories() {
     for dir in "$@"; do
         if [ -n "$dir" ]; then
             mkdir -p "$dir" 2>/dev/null || {
-                log_message "Warning: Failed to create directory: $dir"
+                log_message "⚠️ Failed to create directory: $dir"
             }
         fi
     done
@@ -374,7 +374,7 @@ unified_update_with_security() {
             log_message "🔎 $file_description"
             log_message "- Failed to download file for hash verification"
         fi
-        log_message "- WARNING: Failed to get SHA-1 from source"
+        log_message "⚠️ Failed to get SHA-1 from source"
         log_message "- File skipped for security (no integrity verification)"
         return 3
     fi
@@ -477,7 +477,7 @@ execute_check_update_script() {
                return $exec_result ;;
         esac
     else
-        log_message "WARNING: check-update.sh is not executable"
+        log_message "⚠️ check-update.sh is not executable"
     fi
     
     return 0
@@ -508,7 +508,7 @@ process_all_files() {
         # Handle results
         case $result in
             1) files_updated=1 ;;
-            2) log_message "WARNING: $description skipped due to configuration"
+            2) log_message "⚠️ $description skipped due to configuration"
                continue ;;
             3) ;;
         esac
@@ -665,7 +665,7 @@ download_files() {
             NEW_PID=$(cat "/data/adb/box/run/box.pid")
             log_message "Sing-Box successfully restarted (new PID: $NEW_PID)"
         else
-            log_message "WARNING: PID file not found after restart"
+            log_message "⚠️ PID file not found after restart"
         fi
     fi
     

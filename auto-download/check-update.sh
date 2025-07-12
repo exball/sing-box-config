@@ -29,7 +29,7 @@ ensure_directories() {
     for dir in "$@"; do
         if [ -n "$dir" ]; then
             mkdir -p "$dir" 2>/dev/null || {
-                log_message "⚠️: Failed to create directory: $dir"
+                log_message "⚠️ Failed to create directory: $dir"
             }
         fi
     done
@@ -207,7 +207,7 @@ check_and_update_file() {
     local github_sha1=$(download_and_get_sha1 "$file_url" "${file_name}.check")
     
     if [ -z "$github_sha1" ]; then
-        log_message "{ $file_name }"
+        log_message "🔎 $file_name"
         log_message "- Failed to get SHA-1 for $file_name from GitHub"
         return 1
     fi
@@ -227,7 +227,7 @@ check_and_update_file() {
     fi
     
     # Jika sampai di sini, berarti perlu update atau download
-    log_message "{ $file_name }"
+    log_message "🔎 $file_name"
     
     # Pastikan direktori parent ada
     ensure_parent_directory "$local_file"
