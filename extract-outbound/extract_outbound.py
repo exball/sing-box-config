@@ -11,9 +11,13 @@ import configparser
 from datetime import datetime
 from collections import defaultdict
 import pytz
+import hashlib
 
 # Variabel global untuk menyimpan format outbound
 outbound_format = None
+
+# File untuk menyimpan history proxy yang sudah diambil
+HISTORY_FILE = "proxy_history.json"
 
 # URL untuk mengambil proxy
 PROXY_URL_MORNING = "https://proxy.ex-vpn.my.id"  # Digunakan dari 00:00-12:00 (UTC+8)
@@ -57,6 +61,116 @@ def get_flag_emoji(country_code):
     return chr(code_points[0]) + chr(code_points[1])
 
 # Fungsi untuk mendapatkan nama negara dari kode negara
+def generate_proxy_id(outbound):
+    """
+    Generate unique ID untuk proxy berdasarkan server, port, dan beberapa field unik lainnya.
+    """
+    # Ambil field-field yang unik untuk membuat ID
+    server = outbound.get("server", "")
+    port = str(outbound.get("server_port", ""))
+    uuid = outbound.get("uuid", "")
+    password = outbound.get("password", "")
+    
+    # Gabungkan field-field untuk membuat string unik
+    unique_string = f"{server}:{port}:{uuid}:{password}"
+    
+    # Generate hash MD5 untuk ID yang lebih pendek
+    return hashlib.md5(unique_string.encode()).hexdigest()[:12]
+
+def load_proxy_history():
+    """
+    Load history proxy yang sudah diambil dari file.
+    Format: {
+        "provider_name": {
+            "country_protocol_security": {
+                "used_proxies": ["proxy_id1", "proxy_id2", ...],
+                "last_index": 5
+            }
+        }
+    }
+    """
+    if not os.path.exists(HISTORY_FILE):
+        return {}
+    
+    try:
+        with open(HISTORY_FILE, 'r', encoding='utf-8') as f:
+            return json.load(f)
+    except Exception as e:
+        print(f"Warning: Error loading proxy history: {e}")
+        return {}
+
+def save_proxy_history(history):
+    """
+    Simpan history proxy ke file.
+    """
+    try:
+        with open(HISTORY_FILE, 'w', encoding='utf-8') as f:
+            json.dump(history, f, indent=2, ensure_ascii=False)
+    except Exception as e:
+        print(f"Warning: Error saving proxy history: {e}")
+
+def get_next_proxies_for_provider(provider_name, category_key, all_proxies, max_count, history):
+    """
+    Ambil proxy berikutnya untuk provider dengan sistem rotasi.
+    
+    Args:
+        provider_name: Nama provider
+        category_key: Key kategori (country_protocol_security)
+        all_proxies: List semua proxy dari provider ini
+        max_count: Jumlah maksimal proxy yang ingin diambil
+        history: Dictionary history
+    
+    Returns:
+        List proxy yang dipilih dan history yang diupdate
+    """
+    if not all_proxies:
+        return [], history
+    
+    # Inisialisasi history untuk provider ini jika belum ada
+    if provider_name not in history:
+        history[provider_name] = {}
+    
+    if category_key not in history[provider_name]:
+        history[provider_name][category_key] = {
+            "last_index": 0
+        }
+    
+    provider_history = history[provider_name][category_key]
+    last_index = provider_history["last_index"]
+    
+    selected_proxies = []
+    current_index = last_index
+    
+    # Ambil proxy mulai dari last_index dengan sistem rotasi
+    for i in range(max_count):
+        if len(selected_proxies) >= max_count:
+            break
+            
+        # Jika sudah mencapai akhir list, mulai dari awal (rotasi)
+        if current_index >= len(all_proxies):
+            current_index = 0
+        
+        proxy = all_proxies[current_index]
+        selected_proxies.append(proxy)
+        current_index += 1
+        
+        # Jika sudah mengambil semua proxy yang tersedia dan masih kurang
+        if current_index >= len(all_proxies) and len(selected_proxies) < max_count:
+            # Jika proxy yang tersedia kurang dari yang diminta, ambil dari awal lagi
+            remaining_needed = max_count - len(selected_proxies)
+            for j in range(min(remaining_needed, len(all_proxies))):
+                if len(selected_proxies) >= max_count:
+                    break
+                proxy = all_proxies[j]
+                selected_proxies.append(proxy)
+            current_index = min(remaining_needed, len(all_proxies))
+            break
+    
+    # Update history dengan posisi index berikutnya
+    history[provider_name][category_key]["last_index"] = current_index % len(all_proxies) if all_proxies else 0
+    
+    return selected_proxies, history
+
 def get_country_name(country_code):
     country_names = {
         "AR": "Argentina",
@@ -247,6 +361,20 @@ def read_config_file(file_path):
             print(f"Warning: Blok konfigurasi #{block_index+1} memiliki parameter kosong: {', '.join(empty_params)}")
             continue
             
+        # Validasi Max_Proxies_Per_Provider jika ada
+        if "Max_Proxies_Per_Provider" in config:
+            try:
+                max_proxies_value = config["Max_Proxies_Per_Provider"][0]
+                max_proxies_int = int(max_proxies_value)
+                if max_proxies_int <= 0:
+                    print(f"Warning: Blok konfigurasi #{block_index+1} memiliki Max_Proxies_Per_Provider tidak valid: {max_proxies_value}. Menggunakan nilai default.")
+                    config["Max_Proxies_Per_Provider"] = ["1"]
+                else:
+                    config["Max_Proxies_Per_Provider"] = [str(max_proxies_int)]
+            except (ValueError, IndexError):
+                print(f"Warning: Blok konfigurasi #{block_index+1} memiliki Max_Proxies_Per_Provider tidak valid. Menggunakan nilai default (1).")
+                config["Max_Proxies_Per_Provider"] = ["1"]
+            
         configs.append(config)
     
     return configs
@@ -328,6 +456,16 @@ def apply_outbound_format(outbound, format_template):
     apply_format(result, outbound, template)
     return result
 
+def reset_proxy_history():
+    """
+    Reset proxy history dengan menghapus file history.
+    """
+    if os.path.exists(HISTORY_FILE):
+        os.remove(HISTORY_FILE)
+        print(f"Proxy history reset. File {HISTORY_FILE} deleted.")
+    else:
+        print(f"No history file found at {HISTORY_FILE}")
+
 def parse_args():
     """
     Parse command line arguments.
@@ -335,6 +473,7 @@ def parse_args():
     parser = argparse.ArgumentParser(description='Extract outbound configurations based on specified criteria.')
     parser.add_argument('--config-file', '-f', type=str, help='Path to configuration file (default: config.ini)')
     parser.add_argument('--format-file', '-o', type=str, help='Path to outbound format file (default: config_format.ini)')
+    parser.add_argument('--reset-history', '-r', action='store_true', help='Reset proxy history before extraction')
     
     return parser.parse_args()
 
@@ -358,6 +497,7 @@ def process_single_config(config):
     protocols = [p.lower() for p in config.get("Protocol", [])]
     securities = [s.lower() for s in config.get("Security", [])]
     output_name = config.get("Output_Name", [""])[0]
+    max_proxies_per_provider = int(config.get("Max_Proxies_Per_Provider", ["1"])[0])
     
     # Pastikan semua parameter memiliki nilai
     empty_params = []
@@ -408,11 +548,16 @@ def process_single_config(config):
     print(f"- Negara: {', '.join(countries)}")
     print(f"- Protokol: {', '.join(protocols)}")
     print(f"- Security: {', '.join(securities)}")
+    print(f"- Max proxies per provider (selain ID): {max_proxies_per_provider}")
     print(f"- Output file: {output_name}")
     
     # Dictionary untuk menyimpan outbound berdasarkan negara, protokol, dan keamanan
     outbounds_by_category = defaultdict(list)
     all_outbounds = []
+    
+    # Load proxy history
+    proxy_history = load_proxy_history()
+    print(f"Loaded proxy history from {HISTORY_FILE}")
     
     # Ambil outbound untuk setiap kombinasi negara, protokol, dan keamanan
     # Dapatkan URL dasar berdasarkan waktu saat ini
@@ -455,8 +600,9 @@ def process_single_config(config):
                     # Filter outbound berdasarkan protokol dan keamanan
                     filtered_outbounds = []
                     
-                    # Untuk melacak provider yang sudah diambil (untuk negara selain Indonesia)
-                    providers_seen = set()
+                    # Untuk negara selain Indonesia, kelompokkan proxy berdasarkan provider
+                    if country != "ID":
+                        provider_proxies = defaultdict(list)
                     
                     for outbound in outbounds:
                         if (outbound.get("type") == protocol and 
@@ -502,16 +648,29 @@ def process_single_config(config):
                             
                             # Logika untuk memfilter proxy:
                             # 1. Untuk Indonesia (ID): Ambil semua proxy
-                            # 2. Untuk negara lain: Ambil hanya 1 proxy per provider
-                            if country == "ID" or provider_name not in providers_seen:
+                            # 2. Untuk negara lain: Kelompokkan berdasarkan provider untuk sistem rotasi
+                            if country == "ID":
                                 filtered_outbounds.append(outbound_copy)
+                            else:
+                                # Kelompokkan proxy berdasarkan provider
+                                provider_proxies[provider_name].append(outbound_copy)
+                    
+                    # Untuk negara selain Indonesia, gunakan sistem rotasi per provider
+                    if country != "ID":
+                        category_key = f"{country}_{protocol}_{security}"
+                        
+                        for provider_name, proxies in provider_proxies.items():
+                            if proxies:
+                                # Ambil proxy dengan sistem rotasi
+                                selected_proxies, proxy_history = get_next_proxies_for_provider(
+                                    provider_name, category_key, proxies, max_proxies_per_provider, proxy_history
+                                )
                                 
-                                # Tambahkan provider ke set untuk melacak (kecuali untuk Indonesia)
-                                if country != "ID":
-                                    providers_seen.add(provider_name)
-                                    
-                                    # Debug info
-                                    print(f"Added {country} proxy from provider: {provider_name}")
+                                filtered_outbounds.extend(selected_proxies)
+                                
+                                # Debug info
+                                if selected_proxies:
+                                    print(f"Added {len(selected_proxies)} {country} proxies from provider: {provider_name} (total available: {len(proxies)})")
                     
                     print(f"Found {len(filtered_outbounds)} {protocol} {security} proxies from {country}")
                     
@@ -548,6 +707,10 @@ def process_single_config(config):
     
     print(f"Total proxies collected: {len(all_outbounds)}")
     print(f"Successfully saved all proxies to {output_path}")
+    
+    # Simpan proxy history
+    save_proxy_history(proxy_history)
+    print(f"Proxy history saved to {HISTORY_FILE}")
     
     # Buat summary untuk ditampilkan ke pengguna
     print("\nSummary:")
@@ -609,6 +772,10 @@ def main():
     # Parse command line arguments
     args = parse_args()
     
+    # Reset history jika diminta
+    if args.reset_history:
+        reset_proxy_history()
+    
     # Tentukan file konfigurasi yang akan digunakan
     config_file = args.config_file if args.config_file else "config.ini"
     format_file = args.format_file if args.format_file else "config_format.ini"
@@ -628,6 +795,7 @@ def main():
         print("Protocol= vless")
         print("Security= tls")
         print("Output_Name= ID vless tls.json")
+        print("Max_Proxies_Per_Provider= 1  # Optional: max proxies per provider for non-ID countries (default: 1)")
         print("\nAvailable country codes:")
         print("ID (Indonesia), SG (Singapore), US (United States), JP (Japan), KR (South Korea),")
         print("HK (Hong Kong), TW (Taiwan), GB (United Kingdom), DE (Germany), FR (France),")
