@@ -329,10 +329,8 @@ check_and_display_pid() {
     # Jika PID ditemukan, tampilkan di log
     if [ -n "$CURRENT_PID" ] && [ "$CURRENT_PID" -eq "$CURRENT_PID" ] 2>/dev/null; then
         log_message "Auto-Download PID: $CURRENT_PID"
-        log_message ""
     else
         log_message "Auto-Download PID: Not found"
-        log_message ""
     fi
 }
 
