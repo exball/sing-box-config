@@ -260,10 +260,10 @@ check_and_update_file() {
             # Tentukan pesan berdasarkan apakah file sudah ada sebelumnya
             if [ $file_existed -eq 1 ]; then
                 log_message "🔁 Local files exist, Updates available"
-                log_message "    Successfully updated (SHA1 verified)"
+                log_message "╰➤ Successfully updated (SHA1 verified)"
             else
                 log_message "📥 Local file doesn't exist, Download"
-                log_message "    Successfully updated (SHA1 verified)"
+                log_message "╰➤ Successfully download (SHA1 verified)"
             fi
             
             # Hapus file backup karena pembaruan berhasil
@@ -280,7 +280,7 @@ check_and_update_file() {
             return 1
         fi
     else
-        log_message "    Failed to download from source"
+        log_message "╰➤ Failed to download from source"
         return 1
     fi
 }

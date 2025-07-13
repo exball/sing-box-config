@@ -230,10 +230,10 @@ verify_downloaded_sha1() {
         # Tentukan pesan berdasarkan apakah file sudah ada sebelumnya
         if [ $file_existed -eq 1 ]; then
             log_message "🔁 $file_description updates available"
-            log_message "╰┈➤ Successfully updated (SHA1 verified)"
+            log_message "╰➤ Successfully updated (SHA1 verified)"
         else
             log_message "📥 $file_description does not exist"
-            log_message "╰┈➤ Successfully download (SHA1 verified)"
+            log_message "╰➤ Successfully download (SHA1 verified)"
         fi
         return 0
     else
@@ -370,10 +370,10 @@ unified_update_with_security() {
     if [ -z "$github_sha1" ] || [ $download_sha1_result -ne 0 ]; then
         if [ $compare_result -eq 1 ]; then
             log_message "⚠️ $file_description"
-            log_message "    Failed to download file for hash verification"
+            log_message "╰➤ Failed to download file for hash verification"
         fi
-        log_message "    Failed to get SHA-1 from source"
-        log_message "    File skipped for security"
+        log_message "╰➤ Failed to get SHA-1 from source"
+        log_message "╰➤ File skipped for security"
         return 3
     fi
     
@@ -382,7 +382,7 @@ unified_update_with_security() {
             return 0
             ;;
         2)  log_message "⚠️ $file_description"
-            log_message "    SHA-1 is empty after successful download"
+            log_message "╰➤ SHA-1 is empty after successful download"
             return 3
             ;;
         1)  local temp_file="$TEMP_DIR/${file_description}.new"
@@ -402,12 +402,12 @@ unified_update_with_security() {
                     return 1  
                 else
                     log_message "⚠️ SHA-1 mismatch, file rejected"
-                    log_message "    File $file_description skipped"
-                    log_message "    Failed to verify SHA-1"
+                    log_message "╰➤ File $file_description skipped"
+                    log_message "╰➤ Failed to verify SHA-1"
                     return 3  
                 fi
             else
-                log_message "    Failed to download from source"
+                log_message "╰➤ Failed to download from source"
                 return 3  
             fi
             ;;
