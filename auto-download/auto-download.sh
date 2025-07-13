@@ -230,11 +230,11 @@ verify_downloaded_sha1() {
         
         # Tentukan pesan berdasarkan apakah file sudah ada sebelumnya
         if [ $file_existed -eq 1 ]; then
-            log_message "🔁 Local files exist, Updates available"
-            log_message "✅ Successfully updated (SHA1 verified)"
+            log_message "🔁 $file_description updates available"
+            log_message "  ✅ Successfully updated (SHA1 verified)"
         else
-            log_message "📥 Local file doesn't exist, Download"
-            log_message "✅ Successfully updated (SHA1 verified)"
+            log_message "📥 $file_description does not exist"
+            log_message "  ✅ Successfully download (SHA1 verified)"
         fi
         return 0
     else
@@ -389,8 +389,7 @@ unified_update_with_security() {
             log_message "- ERROR: SHA-1 is empty after successful download"
             return 3
             ;;
-        1)  log_message "🔎 $file_description"
-            local temp_file="$TEMP_DIR/${file_description}.new"
+        1)  local temp_file="$TEMP_DIR/${file_description}.new"
             if curl_download_file "$source_url" "$temp_file"; then
 
                 ensure_parent_directory "$target_file"
