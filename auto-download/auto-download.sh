@@ -230,10 +230,10 @@ verify_downloaded_sha1() {
         # Tentukan pesan berdasarkan apakah file sudah ada sebelumnya
         if [ $file_existed -eq 1 ]; then
             log_message "🔁 $file_description updates available"
-            log_message " ✅ Successfully updated (SHA1 verified)"
+            log_message "╰┈➤ Successfully updated (SHA1 verified)"
         else
             log_message "📥 $file_description does not exist"
-            log_message " ✅ Successfully download (SHA1 verified)"
+            log_message "╰┈➤ Successfully download (SHA1 verified)"
         fi
         return 0
     else
