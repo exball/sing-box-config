@@ -7,9 +7,6 @@
 # Path ke script auto-download.sh
 SCRIPT_PATH="/data/adb/auto-download/auto-download.sh"
 
-# Path ke file PID
-PID_FILE="/data/adb/auto-download/auto-download.pid"
-
 # Path ke file boot.log
 BOOT_LOG_FILE="/data/adb/auto-download/boot.log"
 
@@ -24,58 +21,44 @@ if [ -f "$BOOT_LOG_FILE" ]; then
     fi
 fi
 
-echo "Memeriksa apakah script auto-download.sh sedang berjalan..."
+echo "Memeriksa semua proses auto-download.sh yang sedang berjalan..."
 
-# Cek apakah file PID ada
-if [ -f "$PID_FILE" ]; then
-    OLD_PID=$(cat "$PID_FILE")
-    echo "PID lama ditemukan: $OLD_PID"
-    
-    # Cek apakah proses dengan PID tersebut masih berjalan
-    if kill -0 "$OLD_PID" 2>/dev/null; then
-        echo "Menghentikan proses auto-download.sh dengan PID $OLD_PID..."
-        kill "$OLD_PID"
-        
-        # Tunggu beberapa detik untuk memastikan proses benar-benar berhenti
-        sleep 3
-        
-        # Periksa lagi apakah proses masih berjalan
-        if kill -0 "$OLD_PID" 2>/dev/null; then
-            echo "Proses masih berjalan, mencoba menghentikan paksa..."
-            kill -9 "$OLD_PID"
-            sleep 2
+# Cari semua PID yang menjalankan auto-download.sh
+RUNNING_PIDS=$(ps -ef | grep "[a]uto-download.sh" | grep -v restart | awk '{print $2}')
+
+if [ -n "$RUNNING_PIDS" ]; then
+    echo "Ditemukan proses auto-download.sh yang berjalan:"
+    for PID in $RUNNING_PIDS; do
+        if [ -n "$PID" ] && [ "$PID" -eq "$PID" ] 2>/dev/null; then
+            echo "  PID: $PID"
         fi
-    else
-        echo "Tidak ada proses yang berjalan dengan PID $OLD_PID"
+    done
+    
+    echo "Menghentikan semua proses auto-download.sh..."
+    for PID in $RUNNING_PIDS; do
+        if [ -n "$PID" ] && [ "$PID" -eq "$PID" ] 2>/dev/null; then
+            echo "Menghentikan PID $PID..."
+            kill "$PID" 2>/dev/null
+        fi
+    done
+    
+    # Tunggu beberapa detik untuk memastikan proses benar-benar berhenti
+    sleep 3
+    
+    # Periksa apakah masih ada proses yang berjalan dan hentikan paksa jika perlu
+    STILL_RUNNING=$(ps -ef | grep "[a]uto-download.sh" | grep -v restart | awk '{print $2}')
+    if [ -n "$STILL_RUNNING" ]; then
+        echo "Beberapa proses masih berjalan, menghentikan paksa..."
+        for PID in $STILL_RUNNING; do
+            if [ -n "$PID" ] && [ "$PID" -eq "$PID" ] 2>/dev/null; then
+                echo "Menghentikan paksa PID $PID..."
+                kill -9 "$PID" 2>/dev/null
+            fi
+        done
+        sleep 2
     fi
 else
-    echo "File PID tidak ditemukan"
-    
-    # Cari PID menggunakan ps
-    OLD_PID=$(ps -ef | grep "[a]uto-download.sh" | grep -v restart | head -1 | awk '{print $2}')
-    
-    if [ -n "$OLD_PID" ] && [ "$OLD_PID" -eq "$OLD_PID" ] 2>/dev/null; then
-        echo "Menemukan proses auto-download.sh dengan PID $OLD_PID"
-        echo "Menghentikan proses..."
-        kill "$OLD_PID"
-        sleep 3
-        
-        # Periksa lagi apakah proses masih berjalan
-        if kill -0 "$OLD_PID" 2>/dev/null; then
-            echo "Proses masih berjalan, mencoba menghentikan paksa..."
-            kill -9 "$OLD_PID"
-            sleep 2
-        fi
-    fi
-fi
-
-# Periksa sekali lagi apakah ada proses yang masih berjalan
-RUNNING_PID=$(ps -ef | grep "[a]uto-download.sh" | grep -v restart | head -1 | awk '{print $2}')
-if [ -n "$RUNNING_PID" ] && [ "$RUNNING_PID" -eq "$RUNNING_PID" ] 2>/dev/null; then
-    echo "PERINGATAN: Proses auto-download.sh masih berjalan dengan PID $RUNNING_PID"
-    echo "Mencoba menghentikan paksa..."
-    kill -9 $RUNNING_PID
-    sleep 2
+    echo "Tidak ada proses auto-download.sh yang berjalan"
 fi
 
 # Buat file penanda untuk menandakan script dijalankan oleh restart-auto-download.sh

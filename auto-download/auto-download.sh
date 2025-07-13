@@ -16,8 +16,7 @@ LOG_FILE="/data/adb/auto-download/auto-download.log"
 # Pastikan direktori yang diperlukan ada
 ensure_directories "/data/adb/auto-download" "$TEMP_DIR"
 
-# File PID untuk melacak proses yang sedang berjalan
-PID_FILE="/data/adb/auto-download/auto-download.pid"
+
 
 # Variabel untuk melacak apakah header timestamp sudah ditulis
 TIMESTAMP_HEADER_WRITTEN=0
@@ -174,7 +173,7 @@ compare_sha1_and_decide() {
     local file_description="${3:-file}"
     
     if [ -z "$github_sha1" ]; then
-        log_message "GitHub SHA-1 is empty for $file_description"
+        log_message "⚠️ SHA-1 $file_description empty"
         return 2  # Indicate fallback needed
     fi
     
@@ -322,14 +321,13 @@ WAKE_UP_DEBOUNCE_INTERVAL=${WAKE_UP_DEBOUNCE_INTERVAL:-300}
 WAKE_UP_CHECK_INTERVAL=${WAKE_UP_CHECK_INTERVAL:-60}
 # =====================
 
-# Fungsi untuk memeriksa dan menyimpan PID
-check_and_save_pid() {
+# Fungsi untuk memeriksa dan menampilkan PID
+check_and_display_pid() {
     # Periksa PID menggunakan ps dengan lebih akurat
     local CURRENT_PID=$(ps -ef | grep "[a]uto-download.sh" | grep -v auto-download-boot | head -1 | awk '{print $2}')
     
-    # Jika PID ditemukan, simpan ke file
+    # Jika PID ditemukan, tampilkan di log
     if [ -n "$CURRENT_PID" ] && [ "$CURRENT_PID" -eq "$CURRENT_PID" ] 2>/dev/null; then
-        echo "$CURRENT_PID" > "$PID_FILE"
         log_message "Auto-Download PID: $CURRENT_PID"
         log_message ""
     else
@@ -374,10 +372,10 @@ unified_update_with_security() {
     if [ -z "$github_sha1" ] || [ $download_sha1_result -ne 0 ]; then
         if [ $compare_result -eq 1 ]; then
             log_message "🔎 $file_description"
-            log_message "- Failed to download file for hash verification"
+            log_message "🚨 Failed to download file for hash verification"
         fi
-        log_message "⚠️ Failed to get SHA-1 from source"
-        log_message "- File skipped for security (no integrity verification)"
+        log_message "🚨 Failed to get SHA-1 from source"
+        log_message "🚫 File skipped for security"
         return 3
     fi
     
@@ -668,7 +666,7 @@ download_files() {
     
     log_message "Update check process complete"
     
-    check_and_save_pid
+    check_and_display_pid
 }
 
 # Fungsi untuk menyimpan timestamp wake-up terakhir
@@ -1047,8 +1045,8 @@ run_as_daemon() {
         fi
     fi
     
-    # Periksa dan simpan PID
-    check_and_save_pid
+    # Periksa dan tampilkan PID
+    check_and_display_pid
     
     # Bersihkan file temporary yang mungkin tertinggal
     cleanup_temp_files
