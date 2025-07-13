@@ -260,10 +260,10 @@ check_and_update_file() {
             # Tentukan pesan berdasarkan apakah file sudah ada sebelumnya
             if [ $file_existed -eq 1 ]; then
                 log_message "🔁 Local files exist, Updates available"
-                log_message "✅ Successfully updated (SHA1 verified)"
+                log_message " ✅ Successfully updated (SHA1 verified)"
             else
                 log_message "📥 Local file doesn't exist, Download"
-                log_message "✅ Successfully updated (SHA1 verified)"
+                log_message " ✅ Successfully updated (SHA1 verified)"
             fi
             
             # Hapus file backup karena pembaruan berhasil
@@ -273,14 +273,14 @@ check_and_update_file() {
             
             return 2  # File updated
         else
-            log_message "- [SECURITY]: SHA-1 mismatch, file rejected"
-            log_message "- File $file_name skipped"
-            log_message "- Failed to verify SHA-1"
+            log_message "⚠️ SHA-1 mismatch, file rejected"
+            log_message "    File $file_name skipped"
+            log_message "    Failed to verify SHA-1"
             rm -f "$temp_file"
             return 1
         fi
     else
-        log_message "- Failed to download $file_name from $file_url"
+        log_message "    Failed to download from source"
         return 1
     fi
 }
