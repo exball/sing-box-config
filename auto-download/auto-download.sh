@@ -604,11 +604,9 @@ cleanup_unused_provider_files() {
         IFS="$IFS_OLD"
         
         if [ $should_keep -eq 1 ]; then
-            log_message "✅ Keeping file: $filename"
             kept_count=$((kept_count + 1))
         else
             if rm -f "$file_path" 2>/dev/null; then
-                log_message "🗑️ Deleted unused file: $filename"
                 deleted_count=$((deleted_count + 1))
             else
                 log_message "❌ Failed to delete: $filename"
