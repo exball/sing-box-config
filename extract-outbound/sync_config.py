@@ -71,9 +71,23 @@ def update_config_json(output_names):
     
     # 1. Update outbound_providers
     print("\n=== Updating outbound_providers ===")
-    new_providers = []
+    
+    # Preserve provider manual (Vmess)
+    manual_providers = [
+        {
+            "type": "local",
+            "path": "./provider/Vmess Tls.json",
+            "tag": "Vmess Tls"
+        },
+        {
+            "type": "local", 
+            "path": "./provider/Vmess Ntls.json",
+            "tag": "Vmess Ntls"
+        }
+    ]
     
     # Tambahkan provider otomatis dari config.ini
+    auto_providers = []
     for output_name in output_names:
         tag = get_tag_from_filename(output_name)
         provider = {
@@ -81,10 +95,14 @@ def update_config_json(output_names):
             "path": f"./provider/{output_name}",
             "tag": tag
         }
-        new_providers.append(provider)
+        auto_providers.append(provider)
         print(f"Added provider: {tag} -> ./provider/{output_name}")
     
+    # Gabungkan manual + auto providers
+    new_providers = manual_providers + auto_providers
     config_data['outbound_providers'] = new_providers
+    
+    print(f"✅ Total providers: {len(new_providers)} (2 manual Vmess + {len(auto_providers)} auto dari config.ini)")
     
     # 2. Update individual outbounds (urltest untuk setiap provider)
     print("\n=== Updating individual outbounds ===")
