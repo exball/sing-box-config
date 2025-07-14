@@ -548,6 +548,83 @@ cleanup_temp_files() {
     fi
 }
 
+# Fungsi untuk membersihkan file provider yang tidak digunakan lagi
+cleanup_unused_provider_files() {
+    if [ -z "$SAVE_DIR" ] || [ ! -d "$SAVE_DIR" ]; then
+        log_message "⚠️ SAVE_DIR not configured or directory not found, skip provider cleanup"
+        return 0
+    fi
+    
+    if [ -z "$PROVIDER_URLS" ]; then
+        log_message "⚠️ PROVIDER_URLS not configured, skip provider cleanup"
+        return 0
+    fi
+    
+    log_message ""
+    log_message "🧹 Cleaning up unused provider files"
+    
+    # File manual yang harus di-preserve (hardcoded untuk Android)
+    local manual_files="Vmess Tls.json|Vmess Ntls.json"
+    
+    # Extract expected filenames dari PROVIDER_URLS
+    local expected_files=""
+    for url in $PROVIDER_URLS; do
+        local filename=$(basename "$url" | sed 's/%20/ /g')
+        if [ -n "$expected_files" ]; then
+            expected_files="$expected_files|$filename"
+        else
+            expected_files="$filename"
+        fi
+    done
+    
+    # Gabungkan manual + expected files
+    local keep_files="$manual_files|$expected_files"
+    
+    # Scan semua file JSON di SAVE_DIR
+    local deleted_count=0
+    local kept_count=0
+    
+    # Loop melalui semua file .json di direktori
+    for file_path in "$SAVE_DIR"/*.json; do
+        # Skip jika tidak ada file .json
+        [ ! -f "$file_path" ] && continue
+        
+        local filename=$(basename "$file_path")
+        local should_keep=0
+        
+        # Cek apakah file harus di-keep
+        local IFS_OLD="$IFS"
+        IFS="|"
+        for keep_file in $keep_files; do
+            if [ "$filename" = "$keep_file" ]; then
+                should_keep=1
+                break
+            fi
+        done
+        IFS="$IFS_OLD"
+        
+        if [ $should_keep -eq 1 ]; then
+            log_message "✅ Keeping file: $filename"
+            kept_count=$((kept_count + 1))
+        else
+            if rm -f "$file_path" 2>/dev/null; then
+                log_message "🗑️ Deleted unused file: $filename"
+                deleted_count=$((deleted_count + 1))
+            else
+                log_message "❌ Failed to delete: $filename"
+            fi
+        fi
+    done
+    
+    if [ $deleted_count -gt 0 ]; then
+        log_message "🧹 Cleanup completed: $deleted_count unused files deleted, $kept_count files kept"
+    else
+        log_message "✨ No unused files found, directory is clean ($kept_count files kept)"
+    fi
+    
+    return 0
+}
+
 # Fungsi untuk mendownload file
 download_files() {
 
@@ -603,6 +680,9 @@ download_files() {
                     ;;
             esac
         done
+        
+        # Cleanup unused provider files setelah download selesai
+        cleanup_unused_provider_files
     else
         log_message "PROVIDER_URLS not configured or empty"
     fi

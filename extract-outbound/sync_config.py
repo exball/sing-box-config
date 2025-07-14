@@ -247,6 +247,58 @@ def update_auto_download_conf(output_names):
     print(f"📋 Total URLs: {len(all_urls)} (2 manual Vmess + {len(auto_urls)} auto dari config.ini)")
     return True
 
+def cleanup_unused_provider_files(output_names):
+    """
+    Hapus file provider yang tidak digunakan lagi
+    Preserve file Vmess manual, hapus file auto yang tidak ada di config.ini
+    """
+    import os
+    import glob
+    
+    provider_dir = '../outbound-provider'
+    
+    if not os.path.exists(provider_dir):
+        print(f"⚠️  Direktori {provider_dir} tidak ditemukan, skip cleanup")
+        return True
+    
+    print("\n=== Cleaning up unused provider files ===")
+    
+    # File manual yang harus di-preserve
+    manual_files = {
+        'Vmess Tls.json',
+        'Vmess Ntls.json'
+    }
+    
+    # File yang seharusnya ada (dari config.ini)
+    expected_files = set(output_names)
+    
+    # Gabungkan manual + expected files
+    keep_files = manual_files | expected_files
+    
+    # Scan semua file JSON di direktori provider
+    json_files = glob.glob(os.path.join(provider_dir, '*.json'))
+    
+    deleted_count = 0
+    for file_path in json_files:
+        filename = os.path.basename(file_path)
+        
+        if filename not in keep_files:
+            try:
+                os.remove(file_path)
+                print(f"🗑️  Deleted unused file: {filename}")
+                deleted_count += 1
+            except Exception as e:
+                print(f"❌ Failed to delete {filename}: {e}")
+        else:
+            print(f"✅ Keeping file: {filename}")
+    
+    if deleted_count > 0:
+        print(f"🧹 Cleanup completed: {deleted_count} unused files deleted")
+    else:
+        print("✨ No unused files found, directory is clean")
+    
+    return True
+
 def main():
     """
     Main function untuk menjalankan sinkronisasi
@@ -281,12 +333,19 @@ def main():
         print("❌ Gagal mengupdate auto-download.conf!")
         sys.exit(1)
     
+    # 4. Cleanup unused provider files
+    print(f"\n🧹 Membersihkan file provider yang tidak digunakan...")
+    if not cleanup_unused_provider_files(output_names):
+        print("❌ Gagal membersihkan file provider!")
+        sys.exit(1)
+    
     print("\n" + "=" * 60)
     print("✅ SINKRONISASI BERHASIL COMPLETED!")
     print("=" * 60)
     print("📋 Yang telah diupdate:")
     print("   • config.json (outbound_providers, outbounds, server, best latency cf)")
     print("   • auto-download.conf (PROVIDER_URLS)")
+    print("   • outbound-provider/ (cleanup unused files)")
     print()
     print("🎯 Sistem sekarang tersinkronisasi dengan config.ini")
     print("=" * 60)
