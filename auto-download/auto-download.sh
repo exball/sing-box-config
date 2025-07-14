@@ -34,6 +34,7 @@ LAST_SCREEN_STATE=""
 LAST_SCREEN_ON_COUNT=""
 WAKE_UP_DETECTED=0
 WAKE_UP_TRIGGERED_THIS_SESSION=0  # Flag untuk mencegah multiple wake-up dalam satu sesi screen ON
+WAKE_UP_EVENT_ACTIVE=0  # Flag untuk menandai bahwa schedule check dipicu oleh wake-up event
 
 # Variabel untuk wake-up debouncing (akan diload dari config file)
 LAST_WAKE_UP_TIME=0
@@ -802,17 +803,20 @@ detect_wake_up_event() {
 # Fungsi untuk menangani wake-up event
 handle_wake_up_event() {
     if [ $WAKE_UP_DETECTED -eq 1 ]; then
-        log_message ""
-        log_message "{ Schedule check wake-up event }"
-        
         # Simpan timestamp wake-up untuk debouncing
         save_wake_up_time
         
         # Reset flag wake-up
         WAKE_UP_DETECTED=0
         
+        # Set flag untuk menandai bahwa ini adalah wake-up event
+        WAKE_UP_EVENT_ACTIVE=1
+        
         # Jalankan check_schedule_and_run untuk menghitung ulang waktu
         check_schedule_and_run
+        
+        # Reset flag setelah selesai
+        WAKE_UP_EVENT_ACTIVE=0
         
         return 1  # Indicate that wake-up was handled
     fi
@@ -1141,7 +1145,12 @@ run_as_daemon() {
         next_schedule_diff=$(echo "$next_schedule_info" | grep -o "in [0-9]* hours [0-9]* minutes" | sed 's/in //')
         
         log_message ""
-        log_message "⌛Schedule check. Current time: $current_hour" 
+        # Cek apakah ini adalah wake-up event
+        if [ $WAKE_UP_EVENT_ACTIVE -eq 1 ]; then
+            log_message "⌛Schedule check (WakeUp). $current_hour"
+        else
+            log_message "⌛Schedule check. $current_hour"
+        fi
         
         # Hitung waktu pemeriksaan berikutnya (current_hour + next_adaptive_interval)
         next_check_info=$(calculate_next_check_time $next_adaptive_interval)
