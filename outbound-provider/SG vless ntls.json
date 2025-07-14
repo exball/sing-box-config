@@ -2,10 +2,10 @@
     "outbounds": [
         {
             "type": "vless",
-            "tag": "1 🇸🇬 Oracle Public Cloud WS NTLS [proxy]",
+            "tag": "8 🇸🇬 Oracle Corporation WS NTLS [proxy]",
             "server": "quiz.int.vidio.com",
             "server_port": 80,
-            "uuid": "5e316593-7ac0-4d79-ad6e-d690fce26e2f",
+            "uuid": "d7ce8160-c4c8-4488-8167-6897d12d7adb",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -15,16 +15,16 @@
                 "headers": {
                     "Host": "proxy.ex-vpn.my.id"
                 },
-                "path": "/168.138.171.70-23280",
+                "path": "/129.150.58.86-57621",
                 "type": "ws"
             }
         },
         {
             "type": "vless",
-            "tag": "62 🇸🇬 Oracle Svenska AB WS NTLS [proxy]",
+            "tag": "4 🇸🇬 Oracle Public Cloud WS NTLS [proxy]",
             "server": "quiz.int.vidio.com",
             "server_port": 80,
-            "uuid": "5e316593-7ac0-4d79-ad6e-d690fce26e2f",
+            "uuid": "d7ce8160-c4c8-4488-8167-6897d12d7adb",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -34,16 +34,16 @@
                 "headers": {
                     "Host": "proxy.ex-vpn.my.id"
                 },
-                "path": "/213.35.107.73-443",
+                "path": "/168.138.181.188-61731",
                 "type": "ws"
             }
         },
         {
             "type": "vless",
-            "tag": "3 🇸🇬 OVH Singapore PTE. LTD WS NTLS [proxy]",
+            "tag": "19 🇸🇬 Oracle Svenska AB WS NTLS [proxy]",
             "server": "quiz.int.vidio.com",
             "server_port": 80,
-            "uuid": "5e316593-7ac0-4d79-ad6e-d690fce26e2f",
+            "uuid": "d7ce8160-c4c8-4488-8167-6897d12d7adb",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -53,16 +53,35 @@
                 "headers": {
                     "Host": "proxy.ex-vpn.my.id"
                 },
-                "path": "/51.79.254.182-443",
+                "path": "/213.35.108.135-12596",
                 "type": "ws"
             }
         },
         {
             "type": "vless",
-            "tag": "21 🇸🇬 PDK LLC WS NTLS [proxy]",
+            "tag": "2 🇸🇬 OVH Singapore PTE. LTD WS NTLS [proxy]",
             "server": "quiz.int.vidio.com",
             "server_port": 80,
-            "uuid": "5e316593-7ac0-4d79-ad6e-d690fce26e2f",
+            "uuid": "d7ce8160-c4c8-4488-8167-6897d12d7adb",
+            "network": "tcp",
+            "packet_encoding": "xudp",
+            "tls": {
+                "insecure": true
+            },
+            "transport": {
+                "headers": {
+                    "Host": "proxy.ex-vpn.my.id"
+                },
+                "path": "/51.79.158.58-2053",
+                "type": "ws"
+            }
+        },
+        {
+            "type": "vless",
+            "tag": "22 🇸🇬 PDK LLC WS NTLS [proxy]",
+            "server": "quiz.int.vidio.com",
+            "server_port": 80,
+            "uuid": "d7ce8160-c4c8-4488-8167-6897d12d7adb",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -73,25 +92,6 @@
                     "Host": "proxy.ex-vpn.my.id"
                 },
                 "path": "/31.192.238.71-8443",
-                "type": "ws"
-            }
-        },
-        {
-            "type": "vless",
-            "tag": "56 🇸🇬 SGP_VULTR_CUST WS NTLS [proxy]",
-            "server": "quiz.int.vidio.com",
-            "server_port": 80,
-            "uuid": "5e316593-7ac0-4d79-ad6e-d690fce26e2f",
-            "network": "tcp",
-            "packet_encoding": "xudp",
-            "tls": {
-                "insecure": true
-            },
-            "transport": {
-                "headers": {
-                    "Host": "proxy.ex-vpn.my.id"
-                },
-                "path": "/139.180.215.77-57878",
                 "type": "ws"
             }
         }
