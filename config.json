@@ -133,7 +133,7 @@
         "ID vless ntls",
         "SG vless tls",
         "SG vless ntls",
-        "ID trojan (n)tls",
+        "ID trojan tls",
         "SG trojan (n)tls",
         "backup"
       ],
@@ -144,7 +144,7 @@
         "ID vless ntls",
         "SG vless tls",
         "SG vless ntls",
-        "ID trojan (n)tls",
+        "ID trojan tls",
         "SG trojan (n)tls",
         "backup"
       ]
@@ -152,7 +152,7 @@
     {
       "type": "urltest",
       "tag": "best latency",
-      "outbounds":[
+      "outbounds": [
         "best latency vmess",
         "best latency cf"
       ]
@@ -173,7 +173,7 @@
         "ID vless ntls",
         "SG vless tls",
         "SG vless ntls",
-        "ID trojan (n)tls",
+        "ID trojan tls",
         "SG trojan (n)tls",
         "backup"
       ]
@@ -191,6 +191,18 @@
       "providers": "Vmess Ntls",
       "url": "https://www.gstatic.com/generate_204",
       "interval": "1m0s"
+    },
+    {
+      "type": "dns",
+      "tag": "dns"
+    },
+    {
+      "type": "direct",
+      "tag": "direct"
+    },
+    {
+      "type": "block",
+      "tag": "block"
     },
     {
       "type": "urltest",
@@ -222,8 +234,8 @@
     },
     {
       "type": "urltest",
-      "tag": "ID trojan (n)tls",
-      "providers": "ID trojan (n)tls",
+      "tag": "ID trojan tls",
+      "providers": "ID trojan tls",
       "url": "https://www.gstatic.com/generate_204",
       "interval": "1m0s"
     },
@@ -240,18 +252,6 @@
       "providers": "backup",
       "url": "https://www.gstatic.com/generate_204",
       "interval": "1m0s"
-    },
-    {
-      "type": "dns",
-      "tag": "dns"
-    },
-    {
-      "type": "direct",
-      "tag": "direct"
-    },
-    {
-      "type": "block",
-      "tag": "block"
     }
   ],
   "route": {
@@ -295,16 +295,6 @@
   "outbound_providers": [
     {
       "type": "local",
-      "path": "./provider/Vmess Tls.json",
-      "tag": "Vmess Tls"
-    },
-    {
-      "type": "local",
-      "path": "./provider/Vmess Ntls.json",
-      "tag": "Vmess Ntls"
-    },
-    {
-      "type": "local",
       "path": "./provider/ID vless tls.json",
       "tag": "ID vless tls"
     },
@@ -325,8 +315,8 @@
     },
     {
       "type": "local",
-      "path": "./provider/ID trojan (n)tls.json",
-      "tag": "ID trojan (n)tls"
+      "path": "./provider/ID trojan tls.json",
+      "tag": "ID trojan tls"
     },
     {
       "type": "local",
