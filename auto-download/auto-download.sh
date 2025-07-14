@@ -815,8 +815,7 @@ handle_wake_up_event() {
         # Jalankan check_schedule_and_run untuk menghitung ulang waktu
         check_schedule_and_run
         
-        # Reset flag setelah selesai
-        WAKE_UP_EVENT_ACTIVE=0
+        # JANGAN reset flag di sini, biarkan sampai log ditampilkan
         
         return 1  # Indicate that wake-up was handled
     fi
@@ -1148,6 +1147,8 @@ run_as_daemon() {
         # Cek apakah ini adalah wake-up event
         if [ $WAKE_UP_EVENT_ACTIVE -eq 1 ]; then
             log_message "⌛Schedule check (WakeUp). $current_hour"
+            # Reset flag setelah log ditampilkan
+            WAKE_UP_EVENT_ACTIVE=0
         else
             log_message "⌛Schedule check. $current_hour"
         fi
