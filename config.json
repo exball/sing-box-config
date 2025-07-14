@@ -133,7 +133,8 @@
         "ID vless ntls",
         "SG vless tls",
         "SG vless ntls",
-        "ID SG trojan tls ntls",
+        "ID trojan (n)tls",
+        "SG trojan (n)tls",
         "backup"
       ],
       "providers": [
@@ -143,7 +144,8 @@
         "ID vless ntls",
         "SG vless tls",
         "SG vless ntls",
-        "ID SG trojan tls ntls",
+        "ID trojan (n)tls",
+        "SG trojan (n)tls",
         "backup"
       ]
     },
@@ -171,7 +173,8 @@
         "ID vless ntls",
         "SG vless tls",
         "SG vless ntls",
-        "ID SG trojan tls ntls",
+        "ID trojan (n)tls",
+        "SG trojan (n)tls",
         "backup"
       ]
     },
@@ -219,8 +222,15 @@
     },
     {
       "type": "urltest",
-      "tag": "ID SG trojan tls ntls",
-      "providers": "ID SG trojan tls ntls",
+      "tag": "ID trojan (n)tls",
+      "providers": "ID trojan (n)tls",
+      "url": "https://www.gstatic.com/generate_204",
+      "interval": "1m0s"
+    },
+    {
+      "type": "urltest",
+      "tag": "SG trojan (n)tls",
+      "providers": "SG trojan (n)tls",
       "url": "https://www.gstatic.com/generate_204",
       "interval": "1m0s"
     },
@@ -315,8 +325,13 @@
     },
     {
       "type": "local",
-      "path": "./provider/ID SG trojan tls ntls.json",
-      "tag": "ID SG trojan tls ntls"
+      "path": "./provider/ID trojan (n)tls.json",
+      "tag": "ID trojan (n)tls"
+    },
+    {
+      "type": "local",
+      "path": "./provider/SG trojan (n)tls.json",
+      "tag": "SG trojan (n)tls"
     },
     {
       "type": "local",
