@@ -109,6 +109,53 @@ def save_proxy_history(history):
     except Exception as e:
         print(f"Warning: Error saving proxy history: {e}")
 
+def get_next_providers(available_providers, category_key, max_count, history):
+    """
+    Pilih provider berikutnya dengan sistem rotasi.
+    
+    Args:
+        available_providers: List tuple (provider_name, proxies)
+        category_key: Key kategori (country_protocol_security)
+        max_count: Jumlah maksimal provider yang ingin dipilih
+        history: Dictionary history
+    
+    Returns:
+        List provider yang dipilih dan history yang diupdate
+    """
+    if not available_providers:
+        return [], history
+    
+    # Inisialisasi history untuk provider selection jika belum ada
+    provider_selection_key = f"provider_selection_{category_key}"
+    if provider_selection_key not in history:
+        history[provider_selection_key] = {"last_index": 0}
+    
+    last_index = history[provider_selection_key]["last_index"]
+    
+    # Urutkan provider berdasarkan nama untuk konsistensi
+    sorted_providers = sorted(available_providers, key=lambda x: x[0])
+    
+    selected_providers = []
+    current_index = last_index
+    
+    # Tentukan berapa banyak provider yang akan dipilih
+    providers_to_take = min(max_count, len(sorted_providers))
+    
+    # Pilih provider mulai dari last_index dengan sistem rotasi
+    for i in range(providers_to_take):
+        # Jika sudah mencapai akhir list, mulai dari awal (rotasi)
+        if current_index >= len(sorted_providers):
+            current_index = 0
+        
+        provider = sorted_providers[current_index]
+        selected_providers.append(provider)
+        current_index += 1
+    
+    # Update history dengan posisi index berikutnya
+    history[provider_selection_key]["last_index"] = current_index % len(sorted_providers) if sorted_providers else 0
+    
+    return selected_providers, history
+
 def get_next_proxies_for_provider(provider_name, category_key, all_proxies, max_count, history):
     """
     Ambil proxy berikutnya untuk provider dengan sistem rotasi.
@@ -141,11 +188,13 @@ def get_next_proxies_for_provider(provider_name, category_key, all_proxies, max_
     selected_proxies = []
     current_index = last_index
     
+    # Tentukan berapa banyak proxy yang akan diambil
+    # Jika proxy yang tersedia kurang dari max_count, ambil semua yang tersedia
+    # Jika proxy yang tersedia lebih dari atau sama dengan max_count, ambil sesuai max_count
+    proxies_to_take = min(max_count, len(all_proxies))
+    
     # Ambil proxy mulai dari last_index dengan sistem rotasi
-    for i in range(max_count):
-        if len(selected_proxies) >= max_count:
-            break
-            
+    for i in range(proxies_to_take):
         # Jika sudah mencapai akhir list, mulai dari awal (rotasi)
         if current_index >= len(all_proxies):
             current_index = 0
@@ -153,18 +202,6 @@ def get_next_proxies_for_provider(provider_name, category_key, all_proxies, max_
         proxy = all_proxies[current_index]
         selected_proxies.append(proxy)
         current_index += 1
-        
-        # Jika sudah mengambil semua proxy yang tersedia dan masih kurang
-        if current_index >= len(all_proxies) and len(selected_proxies) < max_count:
-            # Jika proxy yang tersedia kurang dari yang diminta, ambil dari awal lagi
-            remaining_needed = max_count - len(selected_proxies)
-            for j in range(min(remaining_needed, len(all_proxies))):
-                if len(selected_proxies) >= max_count:
-                    break
-                proxy = all_proxies[j]
-                selected_proxies.append(proxy)
-            current_index = min(remaining_needed, len(all_proxies))
-            break
     
     # Update history dengan posisi index berikutnya
     history[provider_name][category_key]["last_index"] = current_index % len(all_proxies) if all_proxies else 0
@@ -659,18 +696,26 @@ def process_single_config(config):
                     if country != "ID":
                         category_key = f"{country}_{protocol}_{security}"
                         
-                        for provider_name, proxies in provider_proxies.items():
-                            if proxies:
-                                # Ambil proxy dengan sistem rotasi
-                                selected_proxies, proxy_history = get_next_proxies_for_provider(
-                                    provider_name, category_key, proxies, max_proxies_per_provider, proxy_history
-                                )
-                                
-                                filtered_outbounds.extend(selected_proxies)
-                                
-                                # Debug info
-                                if selected_proxies:
-                                    print(f"Added {len(selected_proxies)} {country} proxies from provider: {provider_name} (total available: {len(proxies)})")
+                        # Ambil hanya sejumlah provider sesuai max_proxies_per_provider
+                        # dan ambil 1 proxy dari setiap provider yang dipilih
+                        available_providers = [(name, proxies) for name, proxies in provider_proxies.items() if proxies]
+                        
+                        # Pilih provider dengan sistem rotasi
+                        selected_providers, proxy_history = get_next_providers(
+                            available_providers, category_key, max_proxies_per_provider, proxy_history
+                        )
+                        
+                        for provider_name, proxies in selected_providers:
+                            # Ambil hanya 1 proxy dari setiap provider dengan sistem rotasi
+                            selected_proxies, proxy_history = get_next_proxies_for_provider(
+                                provider_name, category_key, proxies, 1, proxy_history  # max_count = 1
+                            )
+                            
+                            filtered_outbounds.extend(selected_proxies)
+                            
+                            # Debug info
+                            if selected_proxies:
+                                print(f"Added {len(selected_proxies)} {country} proxies from provider: {provider_name} (total available: {len(proxies)})")
                     
                     print(f"Found {len(filtered_outbounds)} {protocol} {security} proxies from {country}")
                     
