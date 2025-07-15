@@ -1,0 +1,54 @@
+Run stefanzweifel/git-auto-commit-action@v5
+  with:
+    commit_message: Update proxy list and sync configurations [automated]
+    file_pattern: outbound-provider/*.json outbound-provider/*.yaml outbound-provider/*.yml extract-outbound/config.ini extract-outbound/sing_outbound.ini extract-outbound/clash_proxies.ini extract-outbound/proxy_history.json proxy-scaner/*.json proxy-scaner/*.txt config.json auto-download/auto-download.conf
+    commit_user_name: GitHub Actions Bot
+    commit_user_email: actions@github.com
+    commit_author: GitHub Actions Bot <actions@github.com>
+    push_options: --force
+    repository: .
+    skip_dirty_check: false
+    skip_fetch: false
+    skip_checkout: false
+    disable_globbing: false
+    create_branch: false
+    create_git_tag_only: false
+    internal_git_binary: git
+  env:
+    pythonLocation: /opt/hostedtoolcache/Python/3.10.18/x64
+    PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.10.18/x64/lib/pkgconfig
+    Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.10.18/x64
+    Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.10.18/x64
+    Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.10.18/x64
+    LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.10.18/x64/lib
+Started: bash /home/runner/work/_actions/stefanzweifel/git-auto-commit-action/v5/entrypoint.sh
+INPUT_REPOSITORY value: .
+INPUT_STATUS_OPTIONS: 
+INPUT_FILE_PATTERN: outbound-provider/*.json outbound-provider/*.yaml outbound-provider/*.yml extract-outbound/config.ini extract-outbound/sing_outbound.ini extract-outbound/clash_proxies.ini extract-outbound/proxy_history.json proxy-scaner/*.json proxy-scaner/*.txt config.json auto-download/auto-download.conf
+INPUT_BRANCH value: 
+M	auto-download/auto-download.conf
+M	config.json
+M	extract-outbound/proxy_history.json
+M	outbound-provider/ID trojan tls.json
+M	outbound-provider/ID vless ntls.json
+M	outbound-provider/ID vless tls.json
+M	outbound-provider/SG trojan tls.json
+M	outbound-provider/SG vless ntls.json
+M	outbound-provider/SG vless tls.json
+M	outbound-provider/backup.json
+Your branch is up to date with 'origin/Master'.
+INPUT_ADD_OPTIONS: 
+INPUT_FILE_PATTERN: outbound-provider/*.json outbound-provider/*.yaml outbound-provider/*.yml extract-outbound/config.ini extract-outbound/sing_outbound.ini extract-outbound/clash_proxies.ini extract-outbound/proxy_history.json proxy-scaner/*.json proxy-scaner/*.txt config.json auto-download/auto-download.conf
+fatal: pathspec 'outbound-provider/*.yaml' did not match any files
+Error: Invalid status code: 128
+    at ChildProcess.<anonymous> (/home/runner/work/_actions/stefanzweifel/git-auto-commit-action/v5/index.js:17:19)
+    at ChildProcess.emit (node:events:524:28)
+    at maybeClose (node:internal/child_process:1104:16)
+    at ChildProcess._handle.onexit (node:internal/child_process:304:5) {
+  code: 128
+}
+Error: Invalid status code: 128
+    at ChildProcess.<anonymous> (/home/runner/work/_actions/stefanzweifel/git-auto-commit-action/v5/index.js:17:19)
+    at ChildProcess.emit (node:events:524:28)
+    at maybeClose (node:internal/child_process:1104:16)
+    at ChildProcess._handle.onexit (node:internal/child_process:304:5)
