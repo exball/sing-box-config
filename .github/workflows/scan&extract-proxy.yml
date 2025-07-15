@@ -73,7 +73,7 @@ jobs:
           cat ./extract-outbound/config.ini
           
           echo "Format config file contents:"
-          cat ./extract-outbound/config_format.ini
+          cat ./extract-outbound/sing_outbound.ini
       
       - name: Sync configuration files
         run: |
@@ -92,7 +92,7 @@ jobs:
         run: |
           ls -la ./extract-outbound/
           
-          cd extract-outbound && python extract_outbound.py -o config_format.ini -f config.ini
+          cd extract-outbound && python extract_outbound.py -o sing_outbound.ini -f config.ini
           cd ..
           
           echo "Checking output files:"
@@ -137,7 +137,7 @@ jobs:
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
           commit_message: "Update proxy list and sync configurations [automated]"
-          file_pattern: "outbound-provider/*.json extract-outbound/config.ini extract-outbound/config_format.ini proxy-scaner/*.json proxy-scaner/*.txt config.json auto-download/auto-download.conf"
+          file_pattern: "outbound-provider/*.json extract-outbound/config.ini extract-outbound/sing_outbound.ini proxy-scaner/*.json proxy-scaner/*.txt config.json auto-download/auto-download.conf"
           commit_user_name: "GitHub Actions Bot"
           commit_user_email: "actions@github.com"
           commit_author: "GitHub Actions Bot <actions@github.com>"

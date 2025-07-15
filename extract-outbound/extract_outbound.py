@@ -416,7 +416,7 @@ def read_config_file(file_path):
     
     return configs
 
-def load_outbound_format(format_file="config_format.ini"):
+def load_outbound_format(format_file="sing_outbound.ini"):
     """
     Membaca format outbound dari file konfigurasi format.
     Jika file tidak ada, gunakan format default.
@@ -509,7 +509,7 @@ def parse_args():
     """
     parser = argparse.ArgumentParser(description='Extract outbound configurations based on specified criteria.')
     parser.add_argument('--config-file', '-f', type=str, help='Path to configuration file (default: config.ini)')
-    parser.add_argument('--format-file', '-o', type=str, help='Path to outbound format file (default: config_format.ini)')
+    parser.add_argument('--format-file', '-o', type=str, help='Path to outbound format file (default: sing_outbound.ini)')
     parser.add_argument('--reset-history', '-r', action='store_true', help='Reset proxy history before extraction')
     
     return parser.parse_args()
@@ -823,7 +823,7 @@ def main():
     
     # Tentukan file konfigurasi yang akan digunakan
     config_file = args.config_file if args.config_file else "config.ini"
-    format_file = args.format_file if args.format_file else "config_format.ini"
+    format_file = args.format_file if args.format_file else "sing_outbound.ini"
     
     # Muat format outbound
     global outbound_format
