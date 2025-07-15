@@ -1,6 +1,4 @@
 #!/usr/bin/env python3
-
-# 1
 import json
 import re
 import requests
@@ -10,6 +8,7 @@ import time
 import random
 import argparse
 import configparser
+import copy
 from datetime import datetime
 from collections import defaultdict
 import pytz
@@ -317,11 +316,13 @@ def read_config_file(file_path):
     """
     Membaca konfigurasi dari file.
     Format file:
+    Format= bfr    # Pengaturan global untuk semua konfigurasi
+    
     #Komentar (opsional)
     Country_ID= ID, SG
     Protocol= vless, trojan
     Security= tls, ntls
-    Output_Name= output.json
+    Output_Name= output
     
     #Komentar untuk blok berikutnya (opsional)
     Country_ID= JP
@@ -329,24 +330,49 @@ def read_config_file(file_path):
     """
     if not os.path.exists(file_path):
         print(f"Error: File konfigurasi '{file_path}' tidak ditemukan.")
-        return []
+        return [], "bfr"
     
     try:
         with open(file_path, 'r', encoding='utf-8') as f:
             content = f.read()
     except Exception as e:
         print(f"Error: Gagal membaca file konfigurasi '{file_path}': {str(e)}")
-        return []
+        return [], "bfr"
+    
+    # Baca pengaturan global Format
+    global_format = "bfr"  # Default format
+    lines = content.split('\n')
+    
+    # Cari pengaturan Format global di baris-baris awal
+    for line in lines:
+        line = line.strip()
+        if line.startswith('Format='):
+            try:
+                global_format = line.split('=', 1)[1].strip().lower()
+                
+                # Validasi format
+                valid_formats = ["bfr", "raw", "clash", "sfa", "v2ray"]
+                if global_format not in valid_formats:
+                    print(f"Warning: Invalid format type: {global_format}. Using default format: bfr")
+                    global_format = "bfr"
+                
+                break
+            except IndexError:
+                print("Warning: Format line tidak valid, menggunakan default: bfr")
+                global_format = "bfr"
     
     # Pisahkan file menjadi blok-blok konfigurasi
     # Blok dipisahkan oleh baris kosong atau baris yang dimulai dengan #
     blocks = []
     current_block = []
     
-    lines = content.split('\n')
     for i, line in enumerate(lines):
         line_num = i + 1  # Line numbers start at 1
         line = line.strip()
+        
+        # Skip pengaturan global Format
+        if line.startswith('Format='):
+            continue
         
         # Jika baris adalah komentar atau kosong dan ada blok sebelumnya, simpan blok
         if (line.startswith('#') or not line) and current_block:
@@ -416,7 +442,72 @@ def read_config_file(file_path):
             
         configs.append(config)
     
-    return configs
+    return configs, global_format
+
+def load_clash_format(format_file="clash_proxies.ini"):
+    """
+    Membaca format proxy clash dari file konfigurasi format.
+    File format berisi template untuk setiap jenis proxy dalam format YAML.
+    """
+    format_data = {}
+    
+    if not os.path.exists(format_file):
+        print(f"Warning: Format file '{format_file}' tidak ditemukan.")
+        return format_data
+    
+    try:
+        import yaml
+        with open(format_file, 'r', encoding='utf-8') as f:
+            format_data = yaml.safe_load(f)
+    except ImportError:
+        print(f"Error: PyYAML tidak tersedia, tidak bisa membaca format file '{format_file}'")
+        return {}
+    except yaml.YAMLError as e:
+        print(f"Error: Format file '{format_file}' tidak valid YAML: {e}")
+        return {}
+    except Exception as e:
+        print(f"Error: Gagal membaca format file '{format_file}': {e}")
+        return {}
+    
+    return format_data if format_data else {}
+
+def apply_clash_format(proxy, format_template):
+    """
+    Menerapkan format template pada proxy clash yang diambil dari API.
+    Logika:
+    - Field kosong/null di template → gunakan nilai asli dari API
+    - Field ada nilainya di template → gunakan nilai dari template (override)
+    """
+    if not proxy or not format_template:
+        return proxy
+    
+    # Mulai dengan data asli dari API
+    formatted_proxy = copy.deepcopy(proxy)
+    
+    # Fungsi untuk mengecek apakah nilai kosong
+    def is_empty_value(value):
+        return value is None or value == "" or value == [] or value == {}
+    
+    # Fungsi untuk menerapkan template secara selektif
+    def apply_template_selectively(target, template):
+        for key, template_value in template.items():
+            if isinstance(template_value, dict):
+                # Jika template value adalah dict, proses secara rekursif
+                if key not in target:
+                    target[key] = {}
+                elif not isinstance(target[key], dict):
+                    target[key] = {}
+                apply_template_selectively(target[key], template_value)
+            else:
+                # Jika template value tidak kosong, gunakan nilai dari template
+                if not is_empty_value(template_value):
+                    target[key] = template_value
+                # Jika template value kosong, biarkan nilai asli dari API (tidak diubah)
+    
+    # Terapkan template secara selektif
+    apply_template_selectively(formatted_proxy, format_template)
+    
+    return formatted_proxy
 
 def load_outbound_format(format_file="sing_outbound.ini"):
     """
@@ -516,7 +607,7 @@ def parse_args():
     
     return parser.parse_args()
 
-def process_single_config(config):
+def process_single_config(config, format_type="bfr", format_file="sing_outbound.ini"):
     """
     Proses satu konfigurasi dan ambil outbound berdasarkan konfigurasi tersebut.
     """
@@ -537,6 +628,18 @@ def process_single_config(config):
     securities = [s.lower() for s in config.get("Security", [])]
     output_name = config.get("Output_Name", [""])[0]
     max_proxies_per_provider = int(config.get("Max_Proxies_Per_Provider", ["1"])[0])
+    
+    # Tambahkan ekstensi berdasarkan format jika belum ada
+    if output_name and not any(output_name.endswith(ext) for ext in ['.json', '.yaml', '.yml', '.txt']):
+        if format_type == "clash":
+            output_name += ".yaml"
+        elif format_type in ["bfr", "v2ray"]:
+            output_name += ".json"
+        elif format_type in ["raw", "sfa"]:
+            output_name += ".txt"
+        else:
+            # Default ke json untuk format yang tidak dikenal
+            output_name += ".json"
     
     # Pastikan semua parameter memiliki nilai
     empty_params = []
@@ -563,6 +666,12 @@ def process_single_config(config):
     invalid_protocols = [p for p in protocols if p not in ["vless", "trojan"]]
     invalid_securities = [s for s in securities if s not in ["tls", "ntls"]]
     
+    # Validasi format type
+    valid_formats = ["bfr", "raw", "clash", "sfa", "v2ray"]
+    if format_type not in valid_formats:
+        print(f"Warning: Invalid format type: {format_type}. Using default format: bfr")
+        format_type = "bfr"
+    
     if invalid_countries:
         print(f"Warning: Invalid country codes: {', '.join(invalid_countries)}")
         print("These country codes will be ignored.")
@@ -587,6 +696,7 @@ def process_single_config(config):
     print(f"- Negara: {', '.join(countries)}")
     print(f"- Protokol: {', '.join(protocols)}")
     print(f"- Security: {', '.join(securities)}")
+    print(f"- Format: {format_type}")
     print(f"- Max proxies per provider (selain ID): {max_proxies_per_provider}")
     print(f"- Output file: {output_name}")
     
@@ -605,36 +715,97 @@ def process_single_config(config):
     for country in countries:
         for protocol in protocols:
             for security in securities:
-                url = f"{base_url}/api/bfr?cc={country}&protocols={protocol}&securities={security}&limit=100"
+                url = f"{base_url}/api/{format_type}?cc={country}&protocols={protocol}&securities={security}&limit=100"
                 
                 try:
                     print(f"Fetching {protocol} {security} proxies from {country}...")
                     
-                    # Mengambil konfigurasi BFR dengan retry
+                    # Mengambil konfigurasi dengan retry
                     response = fetch_with_retry(url)
-                    bfr_config = response.text
+                    response_text = response.text
                     
-                    # Mencari bagian JSON dalam konfigurasi BFR
-                    json_match = re.search(r'(\{[\s\S]*\})', bfr_config)
-                    if not json_match:
-                        print(f"Warning: Could not find JSON configuration in BFR response for {country}")
+                    # Parse response berdasarkan format
+                    if format_type == "bfr":
+                        # Mencari bagian JSON dalam konfigurasi BFR
+                        json_match = re.search(r'(\{[\s\S]*\})', response_text)
+                        if not json_match:
+                            print(f"Warning: Could not find JSON configuration in BFR response for {country}")
+                            continue
+                        
+                        json_str = json_match.group(1)
+                        
+                        # Parse JSON
+                        try:
+                            config = json.loads(json_str)
+                        except json.JSONDecodeError as e:
+                            print(f"Warning: Error parsing JSON for {country}: {e}")
+                            continue
+                    
+                    elif format_type == "raw":
+                        # Skip raw format karena tidak menghasilkan JSON outbound
+                        print(f"Warning: Raw format tidak mendukung ekstraksi outbound untuk {country}")
                         continue
                     
-                    json_str = json_match.group(1)
+                    elif format_type == "clash":
+                        # Parse YAML untuk format clash
+                        try:
+                            import yaml
+                            config_yaml = yaml.safe_load(response_text)
+                            
+                            # Ekstrak bagian proxies dari clash config
+                            if "proxies" not in config_yaml:
+                                print(f"Warning: No 'proxies' section found in clash configuration for {country}")
+                                continue
+                            
+                            # Load clash format template
+                            clash_format = load_clash_format(format_file)
+                            
+                            # Apply format template to each proxy
+                            formatted_proxies = []
+                            for proxy in config_yaml["proxies"]:
+                                proxy_type = proxy.get("type", "").lower()
+                                if proxy_type in clash_format:
+                                    formatted_proxy = apply_clash_format(proxy, clash_format[proxy_type])
+                                    formatted_proxies.append(formatted_proxy)
+                                else:
+                                    # Jika tidak ada template, gunakan proxy asli
+                                    formatted_proxies.append(proxy)
+                            
+                            # Update proxies section with formatted proxies
+                            config_yaml["proxies"] = formatted_proxies
+                            config = config_yaml
+                            
+                            if not config["proxies"]:
+                                print(f"Warning: No valid proxies found in clash configuration for {country}")
+                                continue
+                                
+                        except ImportError:
+                            print(f"Warning: PyYAML not installed, cannot parse clash format for {country}")
+                            continue
+                        except yaml.YAMLError as e:
+                            print(f"Warning: Error parsing YAML for {country}: {e}")
+                            continue
                     
-                    # Parse JSON
-                    try:
-                        config = json.loads(json_str)
-                    except json.JSONDecodeError as e:
-                        print(f"Warning: Error parsing JSON for {country}: {e}")
+                    elif format_type in ["sfa", "v2ray"]:
+                        # Format ini sudah dalam format final, tidak bisa di-extract sebagai outbound
+                        print(f"Warning: Format {format_type} tidak mendukung ekstraksi outbound untuk {country}")
                         continue
                     
-                    # Ekstrak bagian Outbound
-                    if "outbounds" not in config:
-                        print(f"Warning: No 'outbounds' section found in configuration for {country}")
+                    else:
+                        print(f"Warning: Format {format_type} tidak didukung untuk {country}")
                         continue
                     
-                    outbounds = config["outbounds"]
+                    # Ekstrak bagian Outbound atau Proxies
+                    if format_type == "clash":
+                        if "proxies" not in config:
+                            print(f"Warning: No 'proxies' section found in configuration for {country}")
+                            continue
+                        outbounds = config["proxies"]
+                    else:
+                        if "outbounds" not in config:
+                            print(f"Warning: No 'outbounds' section found in configuration for {country}")
+                            continue
+                        outbounds = config["outbounds"]
                     
                     # Filter outbound berdasarkan protokol dan keamanan
                     filtered_outbounds = []
@@ -644,55 +815,110 @@ def process_single_config(config):
                         provider_proxies = defaultdict(list)
                     
                     for outbound in outbounds:
-                        if (outbound.get("type") == protocol and 
-                            ((security == "tls" and outbound.get("tls", {}).get("enabled") == True) or
-                             (security == "ntls" and (not outbound.get("tls") or outbound.get("tls", {}).get("enabled") != True)))):
-                            
-                            # Tambahkan emoji bendera ke tag
-                            provider_name = "unknown"
-                            if "tag" in outbound:
-                                tag_parts = outbound["tag"].split(" ")
-                                if len(tag_parts) >= 3:
-                                    # Ambil nomor urut
-                                    number = tag_parts[0]
-                                    # Tambahkan emoji bendera
-                                    flag_emoji = get_flag_emoji(country)
-                                    # Ambil provider dan seterusnya (skip nomor dan emoji asli)
-                                    provider_parts = tag_parts[2:]
-                                    # Ekstrak nama provider untuk tracking
-                                    provider_name = ' '.join(provider_parts).lower()
-                                    # Gabungkan kembali dengan emoji yang benar
-                                    clean_tag = f"{number} {flag_emoji} {' '.join(provider_parts)}"
-                                    outbound["tag"] = clean_tag
-                            
-                            # Buat salinan outbound tanpa field country_code
-                            outbound_copy = {}
-                            
-                            # Tambahkan field dalam urutan yang diinginkan
-                            for key in ["server", "server_port", "tag"]:
-                                if key in outbound:
-                                    outbound_copy[key] = outbound[key]
-                            
-                            # Tambahkan network setelah tag
-                            outbound_copy["network"] = "tcp"
-                            
-                            # Tambahkan field lainnya
-                            for key in outbound:
-                                if key not in ["server", "server_port", "tag", "country_code"] and key not in outbound_copy:
-                                    outbound_copy[key] = outbound[key]
-                            
-                            # Terapkan format konfigurasi jika tersedia
-                            if outbound_format:
-                                outbound_copy = apply_outbound_format(outbound_copy, outbound_format)
-                            
-                            # Logika untuk memfilter proxy:
-                            # 1. Untuk Indonesia (ID): Ambil semua proxy
-                            # 2. Untuk negara lain: Kelompokkan berdasarkan provider untuk sistem rotasi
-                            if country == "ID":
-                                filtered_outbounds.append(outbound_copy)
+                        # Filter berdasarkan format
+                        if format_type == "clash":
+                            # Filter untuk clash format
+                            tls_condition = False
+                            if protocol == "trojan":
+                                # Untuk trojan, TLS terimplikasi dengan adanya SNI
+                                if security == "tls":
+                                    tls_condition = outbound.get("sni") is not None
+                                else:  # ntls
+                                    tls_condition = outbound.get("sni") is None
                             else:
-                                # Kelompokkan proxy berdasarkan provider
-                                provider_proxies[provider_name].append(outbound_copy)
+                                # Untuk protokol lain (vless, vmess, dll)
+                                if security == "tls":
+                                    tls_condition = outbound.get("tls") == True
+                                else:  # ntls
+                                    tls_condition = outbound.get("tls") != True
+                            
+                            if outbound.get("type") == protocol and tls_condition:
+                                
+                                # Tambahkan emoji bendera ke name
+                                provider_name = "unknown"
+                                if "name" in outbound:
+                                    name_parts = outbound["name"].split(" ")
+                                    if len(name_parts) >= 3:
+                                        # Ambil nomor urut
+                                        number = name_parts[0]
+                                        # Tambahkan emoji bendera
+                                        flag_emoji = get_flag_emoji(country)
+                                        # Ambil provider dan seterusnya (skip nomor dan emoji asli)
+                                        provider_parts = name_parts[2:]
+                                        # Ekstrak nama provider untuk tracking
+                                        provider_name = ' '.join(provider_parts).lower()
+                                        # Gabungkan kembali dengan emoji yang benar
+                                        clean_name = f"{number} {flag_emoji} {' '.join(provider_parts)}"
+                                        outbound["name"] = clean_name
+                                
+                                # Buat salinan outbound
+                                outbound_copy = outbound.copy()
+                                
+                                # Terapkan format konfigurasi clash jika tersedia
+                                if outbound_format:
+                                    proxy_type = outbound.get("type", "").lower()
+                                    if proxy_type in outbound_format:
+                                        outbound_copy = apply_clash_format(outbound_copy, outbound_format[proxy_type])
+                                
+                                # Logika untuk memfilter proxy:
+                                # 1. Untuk Indonesia (ID): Ambil semua proxy
+                                # 2. Untuk negara lain: Kelompokkan berdasarkan provider untuk sistem rotasi
+                                if country == "ID":
+                                    filtered_outbounds.append(outbound_copy)
+                                else:
+                                    # Kelompokkan proxy berdasarkan provider
+                                    provider_proxies[provider_name].append(outbound_copy)
+                        else:
+                            # Filter untuk sing-box format
+                            if (outbound.get("type") == protocol and 
+                                ((security == "tls" and outbound.get("tls", {}).get("enabled") == True) or
+                                 (security == "ntls" and (not outbound.get("tls") or outbound.get("tls", {}).get("enabled") != True)))):
+                                
+                                # Tambahkan emoji bendera ke tag
+                                provider_name = "unknown"
+                                if "tag" in outbound:
+                                    tag_parts = outbound["tag"].split(" ")
+                                    if len(tag_parts) >= 3:
+                                        # Ambil nomor urut
+                                        number = tag_parts[0]
+                                        # Tambahkan emoji bendera
+                                        flag_emoji = get_flag_emoji(country)
+                                        # Ambil provider dan seterusnya (skip nomor dan emoji asli)
+                                        provider_parts = tag_parts[2:]
+                                        # Ekstrak nama provider untuk tracking
+                                        provider_name = ' '.join(provider_parts).lower()
+                                        # Gabungkan kembali dengan emoji yang benar
+                                        clean_tag = f"{number} {flag_emoji} {' '.join(provider_parts)}"
+                                        outbound["tag"] = clean_tag
+                                
+                                # Buat salinan outbound tanpa field country_code
+                                outbound_copy = {}
+                                
+                                # Tambahkan field dalam urutan yang diinginkan
+                                for key in ["server", "server_port", "tag"]:
+                                    if key in outbound:
+                                        outbound_copy[key] = outbound[key]
+                                
+                                # Tambahkan network setelah tag
+                                outbound_copy["network"] = "tcp"
+                                
+                                # Tambahkan field lainnya
+                                for key in outbound:
+                                    if key not in ["server", "server_port", "tag", "country_code"] and key not in outbound_copy:
+                                        outbound_copy[key] = outbound[key]
+                                
+                                # Terapkan format konfigurasi jika tersedia
+                                if outbound_format:
+                                    outbound_copy = apply_outbound_format(outbound_copy, outbound_format)
+                                
+                                # Logika untuk memfilter proxy:
+                                # 1. Untuk Indonesia (ID): Ambil semua proxy
+                                # 2. Untuk negara lain: Kelompokkan berdasarkan provider untuk sistem rotasi
+                                if country == "ID":
+                                    filtered_outbounds.append(outbound_copy)
+                                else:
+                                    # Kelompokkan proxy berdasarkan provider
+                                    provider_proxies[provider_name].append(outbound_copy)
                     
                     # Untuk negara selain Indonesia, gunakan sistem rotasi per provider
                     if country != "ID":
@@ -732,9 +958,16 @@ def process_single_config(config):
                     print(f"Error processing {country} {protocol} {security}: {e}")
     
     # Simpan semua outbound ke file output yang ditentukan
-    all_result = {
-        "outbounds": all_outbounds
-    }
+    if format_type == "clash":
+        # Untuk format clash, simpan sebagai YAML dengan struktur clash
+        all_result = {
+            "proxies": all_outbounds
+        }
+    else:
+        # Untuk format lainnya, simpan sebagai JSON dengan struktur sing-box
+        all_result = {
+            "outbounds": all_outbounds
+        }
     
     # Buat direktori outbound-provider jika belum ada
     # Gunakan path relatif ke parent directory jika script dijalankan dari extract-outbound
@@ -749,8 +982,18 @@ def process_single_config(config):
     
     # Simpan ke file output yang ditentukan di dalam direktori outbound-provider
     output_path = os.path.join(output_dir, output_name)
-    with open(output_path, "w", encoding="utf-8") as f:
-        json.dump(all_result, f, indent=4, ensure_ascii=False)
+    if format_type == "clash":
+        try:
+            import yaml
+            with open(output_path, "w", encoding="utf-8") as f:
+                yaml.dump(all_result, f, default_flow_style=False, allow_unicode=True)
+        except ImportError:
+            print("Warning: PyYAML not available, saving as JSON instead")
+            with open(output_path, "w", encoding="utf-8") as f:
+                json.dump(all_result, f, indent=4, ensure_ascii=False)
+    else:
+        with open(output_path, "w", encoding="utf-8") as f:
+            json.dump(all_result, f, indent=4, ensure_ascii=False)
     
     print(f"Total proxies collected: {len(all_outbounds)}")
     print(f"Successfully saved all proxies to {output_path}")
@@ -825,14 +1068,24 @@ def main():
     
     # Tentukan file konfigurasi yang akan digunakan
     config_file = args.config_file if args.config_file else "config.ini"
-    format_file = args.format_file if args.format_file else "sing_outbound.ini"
     
-    # Muat format outbound
+    # Baca konfigurasi dari file untuk menentukan format file yang tepat
+    configs, global_format = read_config_file(config_file)
+    
+    # Tentukan format file berdasarkan global format atau argument
+    if args.format_file:
+        format_file = args.format_file
+    elif global_format == "clash":
+        format_file = "clash_proxies.ini"
+    else:
+        format_file = "sing_outbound.ini"
+    
+    # Muat format outbound atau clash
     global outbound_format
-    outbound_format = load_outbound_format(format_file)
-    
-    # Baca konfigurasi dari file
-    configs = read_config_file(config_file)
+    if global_format == "clash":
+        outbound_format = load_clash_format(format_file)
+    else:
+        outbound_format = load_outbound_format(format_file)
     
     if not configs:
         print(f"Error: No valid configurations found in file '{config_file}'.")
@@ -841,7 +1094,7 @@ def main():
         print("Country_ID= ID")
         print("Protocol= vless")
         print("Security= tls")
-        print("Output_Name= ID vless tls.json")
+        print("Output_Name= ID vless tls")
         print("Max_Proxies_Per_Provider= 1  # Optional: max proxies per provider for non-ID countries (default: 1)")
         print("\nAvailable country codes:")
         print("ID (Indonesia), SG (Singapore), US (United States), JP (Japan), KR (South Korea),")
@@ -863,7 +1116,7 @@ def main():
     total_proxies = 0
     for i, config in enumerate(configs):
         print(f"\nProcessing configuration {i+1}/{len(configs)}...")
-        proxies_count = process_single_config(config)
+        proxies_count = process_single_config(config, global_format, format_file)
         total_proxies += proxies_count
     
     print(f"\nTotal proxies collected from all configurations: {total_proxies}")

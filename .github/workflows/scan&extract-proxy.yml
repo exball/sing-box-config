@@ -59,10 +59,10 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install requests boto3 pytz
+          pip install requests boto3 pytz pyyaml
           
-          echo "Checking if extract_outbound.py exists in extract-outbound directory:"
-          ls -la extract-outbound/extract_outbound.py || echo "extract_outbound.py not found"
+          echo "Checking if extract.py exists in extract-outbound directory:"
+          ls -la extract-outbound/extract.py || echo "extract.py not found"
           
           echo "Directory contents:"
           ls -la
@@ -74,6 +74,12 @@ jobs:
           
           echo "Format config file contents:"
           cat ./extract-outbound/sing_outbound.ini
+          
+          echo "Checking if clash_proxies.ini exists:"
+          ls -la ./extract-outbound/clash_proxies.ini || echo "clash_proxies.ini not found"
+          
+          echo "Checking if proxy_history.json exists:"
+          ls -la ./extract-outbound/proxy_history.json || echo "proxy_history.json not found (will be created)"
       
       - name: Sync configuration files
         run: |
@@ -92,7 +98,7 @@ jobs:
         run: |
           ls -la ./extract-outbound/
           
-          cd extract-outbound && python extract_outbound.py -o sing_outbound.ini -f config.ini
+          cd extract-outbound && python extract.py -o sing_outbound.ini -f config.ini
           cd ..
           
           echo "Checking output files:"
@@ -100,21 +106,31 @@ jobs:
           echo "JSON files found in outbound-provider directory:"
           find ./outbound-provider -name "*.json" 2>/dev/null | sort || echo "outbound-provider directory not found"
           
+          # Check YAML files in outbound-provider directory (for clash format)
+          echo "YAML files found in outbound-provider directory:"
+          find ./outbound-provider -name "*.yaml" -o -name "*.yml" 2>/dev/null | sort || echo "No YAML files found"
+          
           # Show detailed file information
           echo "Detailed file information:"
           ls -la ./outbound-provider/*.json 2>/dev/null || echo "No JSON files found"
+          ls -la ./outbound-provider/*.yaml 2>/dev/null || echo "No YAML files found"
+          ls -la ./outbound-provider/*.yml 2>/dev/null || echo "No YML files found"
           
-          # Count total number of JSON files in outbound-provider directory
+          # Count total number of output files in outbound-provider directory
           JSON_COUNT=$(find ./outbound-provider -name "*.json" 2>/dev/null | wc -l)
+          YAML_COUNT=$(find ./outbound-provider -name "*.yaml" -o -name "*.yml" 2>/dev/null | wc -l)
+          TOTAL_COUNT=$((JSON_COUNT + YAML_COUNT))
           echo "Total JSON files in outbound-provider: $JSON_COUNT"
+          echo "Total YAML files in outbound-provider: $YAML_COUNT"
+          echo "Total output files in outbound-provider: $TOTAL_COUNT"
           
           # Show git status to see what files are changed
           echo "Git status:"
           git status --porcelain
           
-          # Check if any JSON files were created
-          if [ "$JSON_COUNT" -eq 0 ]; then
-            echo "WARNING: No JSON files were created in outbound-provider directory!"
+          # Check if any output files were created
+          if [ "$TOTAL_COUNT" -eq 0 ]; then
+            echo "WARNING: No output files were created in outbound-provider directory!"
             exit 1
           fi
       
@@ -137,7 +153,7 @@ jobs:
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
           commit_message: "Update proxy list and sync configurations [automated]"
-          file_pattern: "outbound-provider/*.json extract-outbound/config.ini extract-outbound/sing_outbound.ini proxy-scaner/*.json proxy-scaner/*.txt config.json auto-download/auto-download.conf"
+          file_pattern: "outbound-provider/*.json outbound-provider/*.yaml outbound-provider/*.yml extract-outbound/config.ini extract-outbound/sing_outbound.ini extract-outbound/clash_proxies.ini extract-outbound/proxy_history.json proxy-scaner/*.json proxy-scaner/*.txt config.json auto-download/auto-download.conf"
           commit_user_name: "GitHub Actions Bot"
           commit_user_email: "actions@github.com"
           commit_author: "GitHub Actions Bot <actions@github.com>"
@@ -148,4 +164,7 @@ jobs:
           echo "Workflow completed successfully!"
           echo "JSON files generated in outbound-provider directory:"
           find ./outbound-provider -name "*.json" 2>/dev/null | sort || echo "No JSON files found"
+          echo "YAML files generated in outbound-provider directory:"
+          find ./outbound-provider -name "*.yaml" -o -name "*.yml" 2>/dev/null | sort || echo "No YAML files found"
           echo "Total JSON files: $(find ./outbound-provider -name "*.json" 2>/dev/null | wc -l)"
+          echo "Total YAML files: $(find ./outbound-provider -name "*.yaml" -o -name "*.yml" 2>/dev/null | wc -l)"
