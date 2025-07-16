@@ -16,8 +16,6 @@ LOG_FILE="/data/adb/auto-download/auto-download.log"
 # Pastikan direktori yang diperlukan ada
 ensure_directories "/data/adb/auto-download" "$TEMP_DIR"
 
-
-
 # Variabel untuk melacak apakah header timestamp sudah ditulis
 TIMESTAMP_HEADER_WRITTEN=0
 
