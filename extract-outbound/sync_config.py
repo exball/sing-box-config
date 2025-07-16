@@ -14,17 +14,68 @@ import os
 import sys
 from datetime import datetime
 
+def read_format_from_config():
+    """
+    Membaca nilai Format dari config.ini
+    Returns: string format (bfr, clash, raw, sfa, v2ray)
+    """
+    config_path = 'config.ini'
+    
+    if not os.path.exists(config_path):
+        print(f"Error: {config_path} tidak ditemukan!")
+        return "bfr"  # default
+    
+    # Baca file baris per baris
+    with open(config_path, 'r', encoding='utf-8') as f:
+        lines = f.readlines()
+    
+    for line_num, line in enumerate(lines, 1):
+        line = line.strip()
+        
+        # Cari baris yang mengandung Format
+        if line.startswith('Format='):
+            # Extract value setelah =
+            format_value = line.split('=', 1)[1].strip()
+            if format_value:
+                print(f"Found Format (line {line_num}): {format_value}")
+                return format_value
+    
+    print("Format tidak ditemukan, menggunakan default: bfr")
+    return "bfr"  # default
+
+def get_file_extension_from_format(format_value):
+    """
+    Menentukan ekstensi file berdasarkan format
+    Args: format_value (string): Format dari config.ini
+    Returns: string ekstensi file (dengan titik)
+    """
+    format_to_extension = {
+        'bfr': '.json',
+        'v2ray': '.json', 
+        'clash': '.yaml',
+        'raw': '.txt',
+        'sfa': '.txt'
+    }
+    
+    extension = format_to_extension.get(format_value.lower(), '.json')
+    print(f"Format '{format_value}' → Extension '{extension}'")
+    return extension
+
 def read_output_names_from_config():
     """
     Membaca semua Output_Name dari config.ini
     Format custom (bukan INI standar)
-    Returns: list of output names (dengan ekstensi .json)
+    Returns: list of output names (dengan ekstensi yang sesuai format)
     """
     config_path = 'config.ini'
     
     if not os.path.exists(config_path):
         print(f"Error: {config_path} tidak ditemukan!")
         return []
+    
+    # Baca format terlebih dahulu
+    format_value = read_format_from_config()
+    extension = get_file_extension_from_format(format_value)
     
     output_names = []
     
@@ -40,16 +91,29 @@ def read_output_names_from_config():
             # Extract value setelah =
             output_name = line.split('=', 1)[1].strip()
             if output_name:
-                output_names.append(output_name)
-                print(f"Found Output_Name (line {line_num}): {output_name}")
+                # Pastikan output_name memiliki ekstensi yang sesuai
+                # Hapus ekstensi lama jika ada
+                if '.' in output_name:
+                    base_name = output_name.rsplit('.', 1)[0]
+                else:
+                    base_name = output_name
+                
+                # Tambahkan ekstensi yang sesuai dengan format
+                final_output_name = base_name + extension
+                output_names.append(final_output_name)
+                print(f"Found Output_Name (line {line_num}): {output_name} → {final_output_name}")
     
     return output_names
 
 def get_tag_from_filename(filename):
     """
-    Mengubah nama file menjadi tag (tanpa ekstensi .json)
+    Mengubah nama file menjadi tag (tanpa ekstensi)
+    Mendukung berbagai ekstensi: .json, .yaml, .yml, .txt
     """
-    return filename.replace('.json', '')
+    # Hapus ekstensi apapun dari filename
+    if '.' in filename:
+        return filename.rsplit('.', 1)[0]
+    return filename
 
 def update_config_json(output_names):
     """
@@ -251,6 +315,7 @@ def cleanup_unused_provider_files(output_names):
     """
     Hapus file provider yang tidak digunakan lagi
     Preserve file Vmess manual, hapus file auto yang tidak ada di config.ini
+    Mendukung berbagai format file: .json, .yaml, .yml, .txt
     """
     import os
     import glob
@@ -263,34 +328,41 @@ def cleanup_unused_provider_files(output_names):
     
     print("\n=== Cleaning up unused provider files ===")
     
-    # File manual yang harus di-preserve
-    manual_files = {
-        'Vmess Tls.json',
-        'Vmess Ntls.json'
+    # File manual yang harus di-preserve (format apapun)
+    manual_base_names = {
+        'Vmess Tls',
+        'Vmess Ntls'
     }
     
     # File yang seharusnya ada (dari config.ini)
     expected_files = set(output_names)
     
-    # Gabungkan manual + expected files
-    keep_files = manual_files | expected_files
+    # Scan semua file provider dengan berbagai ekstensi
+    all_extensions = ['*.json', '*.yaml', '*.yml', '*.txt']
+    all_files = []
     
-    # Scan semua file JSON di direktori provider
-    json_files = glob.glob(os.path.join(provider_dir, '*.json'))
+    for ext in all_extensions:
+        files = glob.glob(os.path.join(provider_dir, ext))
+        all_files.extend(files)
     
     deleted_count = 0
-    for file_path in json_files:
+    for file_path in all_files:
         filename = os.path.basename(file_path)
+        base_name = get_tag_from_filename(filename)
         
-        if filename not in keep_files:
+        # Check apakah file ini manual atau expected
+        is_manual = base_name in manual_base_names
+        is_expected = filename in expected_files
+        
+        if is_manual or is_expected:
+            print(f"✅ Keeping file: {filename}")
+        else:
             try:
                 os.remove(file_path)
                 print(f"🗑️  Deleted unused file: {filename}")
                 deleted_count += 1
             except Exception as e:
                 print(f"❌ Failed to delete {filename}: {e}")
-        else:
-            print(f"✅ Keeping file: {filename}")
     
     if deleted_count > 0:
         print(f"🧹 Cleanup completed: {deleted_count} unused files deleted")
