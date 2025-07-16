@@ -1,0 +1,105 @@
+redir-port: 9797
+tproxy-port: 9898
+mode: rule
+allow-lan: true
+bind-address: '*'
+log-level: silent
+unified-delay: true
+geodata-mode: true
+geodata-loader: memconservative
+ipv6: false
+external-controller: 0.0.0.0:9090
+secret: ''
+external-ui: /data/adb/box/clash/dashboard
+global-client-fingerprint: chrome
+find-process-mode: strict
+keep-alive-interval: 15
+geo-auto-update: false
+geo-update-interval: 24
+tcp-concurrent: false
+tun:
+  enable: false
+  mtu: 9000
+  device: clash
+  stack: mixed
+  dns-hijack:
+  - any:53
+  - tcp://any:53
+  auto-route: true
+  strict-route: false
+  auto-redirect: true
+  auto-detect-interface: true
+profile:
+  store-selected: true
+  store-fake-ip: false
+geox-url:
+  geoip: https://github.com/MetaCubeX/meta-rules-dat/raw/release/geoip-lite.dat
+  mmdb: https://github.com/MetaCubeX/meta-rules-dat/raw/release/country-lite.mmdb
+  geosite: https://github.com/MetaCubeX/meta-rules-dat/raw/release/geosite.dat
+sniffer:
+  enable: true
+  force-dns-mapping: false
+  parse-pure-ip: false
+  override-destination: false
+  sniff:
+    QUIC:
+      ports:
+      - 443
+    TLS:
+      ports:
+      - 443
+      - 8443
+    HTTP:
+      ports:
+      - 80
+      - 8080-8880
+      override-destination: true
+  sniffing:
+  - tls
+  - http
+  port-whitelist:
+  - 80
+  - 443
+dns:
+  cache-algorithm: arc
+  enable: true
+  prefer-h3: false
+  ipv6: false
+  ipv6-timeout: 300
+  default-nameserver:
+  - 8.8.8.8
+  - 1.1.1.1
+  listen: 0.0.0.0:1053
+  use-hosts: true
+  enhanced-mode: redir-host
+  fake-ip-range: 198.18.0.1/16
+  fake-ip-filter:
+  - '*.lan'
+  - '*.ntp.*'
+  nameserver:
+  - 8.8.8.8#🆃🆆🅾🅿🅴🅽
+  - 1.1.1.1#🆃🆆🅾🅿🅴🅽
+  proxy-server-nameserver:
+  - 112.215.203.246
+  - 112.215.198.248
+  - 112.215.198.254
+  - 192.168.156.30
+proxies:
+proxy-groups:
+- name: 🆃🆆🅾🅿🅴🅽
+  type: select
+  proxies:
+  - DIRECT
+  - vmess_ws_lsb.sing-box.space_VVIP
+  - freemium-point.1-1-1-1.my
+proxy-providers:
+  helianthus:
+    type: file
+    path: 🆃🆆🅾🅿🅴🅽.YAML
+    health-check:
+      enable: true
+      url: http://www.gstatic.com/generate_204
+      interval: 36000
+rules:
+- IN-TYPE,INNER,🆃🆆🅾🅿🅴🅽
+- MATCH,🆃🆆🅾🅿🅴🅽
