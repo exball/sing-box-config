@@ -969,18 +969,18 @@ def process_single_config(config, format_type="bfr", format_file="sing_outbound.
             "outbounds": all_outbounds
         }
     
-    # Buat direktori outbound-provider jika belum ada
+    # Buat direktori provider jika belum ada
     # Gunakan path relatif ke parent directory jika script dijalankan dari extract-outbound
     if os.path.basename(os.getcwd()) == "extract-outbound":
-        output_dir = "../outbound-provider"
+        output_dir = "../provider"
     else:
-        output_dir = "outbound-provider"
+        output_dir = "provider"
     
     if not os.path.exists(output_dir):
         os.makedirs(output_dir)
         print(f"Created directory: {output_dir}")
     
-    # Simpan ke file output yang ditentukan di dalam direktori outbound-provider
+    # Simpan ke file output yang ditentukan di dalam direktori provider
     output_path = os.path.join(output_dir, output_name)
     if format_type == "clash":
         try:

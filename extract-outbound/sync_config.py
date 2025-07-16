@@ -250,7 +250,7 @@ def update_auto_download_conf(output_names):
     print("\n=== Updating auto-download.conf ===")
     
     # Generate PROVIDER_URLS dengan URL encoding
-    base_url = "https://raw.githubusercontent.com/exball/sing-box-config/refs/heads/Master/outbound-provider"
+    base_url = "https://raw.githubusercontent.com/exball/sing-box-config/refs/heads/Master/provider"
     
     # URLs manual untuk Vmess (preserve)
     manual_urls = [
@@ -320,7 +320,7 @@ def cleanup_unused_provider_files(output_names):
     import os
     import glob
     
-    provider_dir = '../outbound-provider'
+    provider_dir = '../provider'
     
     if not os.path.exists(provider_dir):
         print(f"⚠️  Direktori {provider_dir} tidak ditemukan, skip cleanup")
@@ -417,7 +417,7 @@ def main():
     print("📋 Yang telah diupdate:")
     print("   • config.json (outbound_providers, outbounds, server, best latency cf)")
     print("   • auto-download.conf (PROVIDER_URLS)")
-    print("   • outbound-provider/ (cleanup unused files)")
+    print("   • provider/ (cleanup unused files)")
     print()
     print("🎯 Sistem sekarang tersinkronisasi dengan config.ini")
     print("=" * 60)

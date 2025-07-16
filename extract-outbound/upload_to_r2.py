@@ -38,11 +38,11 @@ def upload_to_r2():
         config=s3_config
     )
     
-    # Cari semua file JSON di direktori outbound-provider (relatif terhadap root project)
-    json_files = glob.glob('../outbound-provider/*.json')
+    # Cari semua file JSON di direktori provider (relatif terhadap root project)
+    json_files = glob.glob('../provider/*.json')
     
     if not json_files:
-        print("No JSON files found in outbound-provider directory to upload")
+        print("No JSON files found in provider directory to upload")
         return False
     
     # Ambil nama folder dari environment variable (default: "sing-box_config")
