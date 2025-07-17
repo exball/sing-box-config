@@ -38,57 +38,6 @@ WAKE_UP_EVENT_ACTIVE=0  # Flag untuk menandai bahwa schedule check dipicu oleh w
 LAST_WAKE_UP_TIME=0
 WAKE_UP_DEBOUNCE_FILE="/data/adb/auto-download/last_wake_up_time"
 
-# Lock file untuk mencegah multiple instance
-LOCK_FILE="/data/adb/auto-download/auto-download.lock"
-
-# Fungsi untuk cleanup saat script keluar
-cleanup_on_exit() {
-    if [ -f "$LOCK_FILE" ]; then
-        rm -f "$LOCK_FILE"
-    fi
-}
-
-# Setup trap untuk cleanup otomatis
-trap cleanup_on_exit EXIT INT TERM
-
-# Fungsi untuk memeriksa dan membuat lock file
-acquire_lock() {
-    local max_wait=60
-    local wait_count=0
-    
-    echo "$(date '+%Y-%m-%d %H:%M:%S'): Checking lock file: $LOCK_FILE"
-    
-    while [ $wait_count -lt $max_wait ]; do
-        if [ ! -f "$LOCK_FILE" ]; then
-            # Buat lock file dengan PID saat ini
-            echo "$(date '+%Y-%m-%d %H:%M:%S'): Creating lock file with PID: $$"
-            echo "$$" > "$LOCK_FILE"
-            return 0
-        else
-            # Periksa apakah PID dalam lock file masih valid
-            local lock_pid=$(cat "$LOCK_FILE" 2>/dev/null)
-            if [ -n "$lock_pid" ]; then
-                if ! kill -0 "$lock_pid" 2>/dev/null; then
-                    # PID tidak valid, hapus lock file lama
-                    rm -f "$LOCK_FILE"
-                    echo "$$" > "$LOCK_FILE"
-                    return 0
-                fi
-            else
-                # Lock file kosong, hapus dan buat baru
-                rm -f "$LOCK_FILE"
-                echo "$$" > "$LOCK_FILE"
-                return 0
-            fi
-        fi
-        
-        sleep 1
-        wait_count=$((wait_count + 1))
-    done
-    
-    return 1
-}
-
 # Fungsi untuk logging
 log_message() {
     local message="$1"
@@ -1291,14 +1240,6 @@ run_as_daemon() {
         adaptive_interval=$next_adaptive_interval
     done
 }
-
-# Periksa dan acquire lock sebelum melakukan apapun
-echo "$(date '+%Y-%m-%d %H:%M:%S'): Trying to acquire lock..."
-if ! acquire_lock; then
-    echo "$(date '+%Y-%m-%d %H:%M:%S'): Another instance of auto-download.sh is already running. Exiting."
-    exit 1
-fi
-echo "$(date '+%Y-%m-%d %H:%M:%S'): Lock acquired successfully."
 
 # Deteksi dijalankan oleh restart atau saat boot
 RESTART_FLAG_FILE="/data/adb/auto-download/restart_flag"

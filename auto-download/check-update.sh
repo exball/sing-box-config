@@ -328,7 +328,6 @@ run_update_check() {
         fi
         
         if [ -x "$restart_script" ]; then
-            log_message "Using restart-auto-download.sh for clean restart..."
             sh "$restart_script"
         else
             log_message "Script restart-auto-download.sh not found or not executable"
@@ -338,19 +337,9 @@ run_update_check() {
             if pgrep -f "auto-download.sh" > /dev/null; then
                 log_message "Detected auto-download.sh is running, trying to restart..."
                 
-                # Hentikan semua proses yang sedang berjalan
+                # Hentikan proses yang sedang berjalan
                 pkill -f "auto-download.sh"
-                sleep 3
-                
-                # Pastikan tidak ada yang tersisa
-                if pgrep -f "auto-download.sh" > /dev/null; then
-                    log_message "Force killing remaining processes..."
-                    pkill -9 -f "auto-download.sh"
-                    sleep 2
-                fi
-                
-                # Hapus lock file jika ada
-                rm -f "/data/adb/auto-download/auto-download.lock"
+                sleep 2
                 
                 # Pastikan auto-download.sh dapat dieksekusi
                 if [ -f "$SCRIPT_FILE" ]; then
@@ -361,14 +350,7 @@ run_update_check() {
                 if [ -x "$SCRIPT_FILE" ]; then
                     log_message "Running auto-download.sh again..."
                     nohup sh "$SCRIPT_FILE" > /dev/null 2>&1 &
-                    sleep 2
-                    
-                    # Verifikasi restart berhasil
-                    if pgrep -f "auto-download.sh" > /dev/null; then
-                        log_message "auto-download.sh has been restarted successfully"
-                    else
-                        log_message "⚠️: Failed to restart auto-download.sh"
-                    fi
+                    log_message "auto-download.sh has been restarted with PID: $!"
                 else
                     log_message "⚠️: auto-download.sh is not executable"
                 fi
