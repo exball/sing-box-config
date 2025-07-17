@@ -70,6 +70,7 @@
       },
       {
         "domain": [
+          "quiz.int.vidio.com",
           "zencoder.ai",
           "api.openai.com",
           "chat.openai.com",
@@ -272,6 +273,14 @@
           }
         ],
         "outbound": "dns"
+      },
+      {
+        "protocol": "icmp",
+        "outbound": "direct"
+      },
+      {
+        "protocol": "icmp",
+        "outbound": "direct"
       },
       {
         "domain_suffix": "zimperium.com",
