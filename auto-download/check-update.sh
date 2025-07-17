@@ -337,22 +337,33 @@ run_update_check() {
             if pgrep -f "auto-download.sh" > /dev/null; then
                 log_message "Detected auto-download.sh is running, trying to restart..."
                 
-                # Hentikan proses yang sedang berjalan
-                pkill -f "auto-download.sh"
-                sleep 2
-                
-                # Pastikan auto-download.sh dapat dieksekusi
-                if [ -f "$SCRIPT_FILE" ]; then
-                    chmod +x "$SCRIPT_FILE"
-                fi
-                
-                # Jalankan kembali auto-download.sh
-                if [ -x "$SCRIPT_FILE" ]; then
-                    log_message "Running auto-download.sh again..."
-                    nohup sh "$SCRIPT_FILE" > /dev/null 2>&1 &
-                    log_message "auto-download.sh has been restarted with PID: $!"
+                # Gunakan script restart yang sudah ada untuk menghindari multiple instance
+                if [ -x "$restart_script" ]; then
+                    log_message "Using restart-auto-download.sh for safe restart..."
+                    sh "$restart_script" > /dev/null 2>&1
+                    log_message "auto-download.sh has been restarted safely"
                 else
-                    log_message "⚠️: auto-download.sh is not executable"
+                    log_message "restart-auto-download.sh not found, using manual restart..."
+                    # Fallback ke metode manual dengan cleanup PID lock
+                    pkill -f "auto-download.sh"
+                    sleep 2
+                    
+                    # Hapus file PID lock untuk memastikan instance baru bisa berjalan
+                    rm -f "/data/adb/auto-download/auto-download.pid" "/data/adb/auto-download/auto-download.lock" 2>/dev/null
+                    
+                    # Pastikan auto-download.sh dapat dieksekusi
+                    if [ -f "$SCRIPT_FILE" ]; then
+                        chmod +x "$SCRIPT_FILE"
+                    fi
+                    
+                    # Jalankan kembali auto-download.sh
+                    if [ -x "$SCRIPT_FILE" ]; then
+                        log_message "Running auto-download.sh again..."
+                        nohup sh "$SCRIPT_FILE" > /dev/null 2>&1 &
+                        log_message "auto-download.sh has been restarted with PID: $!"
+                    else
+                        log_message "⚠️: auto-download.sh is not executable"
+                    fi
                 fi
             else
                 log_message "auto-download.sh is not running, no need to restart"
