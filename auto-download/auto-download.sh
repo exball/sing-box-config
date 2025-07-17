@@ -56,9 +56,12 @@ acquire_lock() {
     local max_wait=60
     local wait_count=0
     
+    echo "$(date '+%Y-%m-%d %H:%M:%S'): Checking lock file: $LOCK_FILE"
+    
     while [ $wait_count -lt $max_wait ]; do
         if [ ! -f "$LOCK_FILE" ]; then
             # Buat lock file dengan PID saat ini
+            echo "$(date '+%Y-%m-%d %H:%M:%S'): Creating lock file with PID: $$"
             echo "$$" > "$LOCK_FILE"
             return 0
         else
@@ -1290,10 +1293,12 @@ run_as_daemon() {
 }
 
 # Periksa dan acquire lock sebelum melakukan apapun
+echo "$(date '+%Y-%m-%d %H:%M:%S'): Trying to acquire lock..."
 if ! acquire_lock; then
     echo "$(date '+%Y-%m-%d %H:%M:%S'): Another instance of auto-download.sh is already running. Exiting."
     exit 1
 fi
+echo "$(date '+%Y-%m-%d %H:%M:%S'): Lock acquired successfully."
 
 # Deteksi dijalankan oleh restart atau saat boot
 RESTART_FLAG_FILE="/data/adb/auto-download/restart_flag"
