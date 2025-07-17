@@ -21,6 +21,18 @@ if [ -f "$BOOT_LOG_FILE" ]; then
     fi
 fi
 
+# Hapus lock file jika ada
+LOCK_FILE="/data/adb/auto-download/auto-download.lock"
+if [ -f "$LOCK_FILE" ]; then
+    echo "Menghapus lock file..."
+    rm -f "$LOCK_FILE"
+    if [ ! -f "$LOCK_FILE" ]; then
+        echo "Lock file berhasil dihapus"
+    else
+        echo "PERINGATAN: Gagal menghapus lock file"
+    fi
+fi
+
 echo "Memeriksa semua proses auto-download.sh yang sedang berjalan..."
 
 # Cari semua PID yang menjalankan auto-download.sh

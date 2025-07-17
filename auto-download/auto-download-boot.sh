@@ -50,6 +50,13 @@ if [ -n "$PID" ] && [ "$PID" -eq "$PID" ] 2>/dev/null; then
     exit 0
 fi
 
+# Hapus lock file lama jika ada (untuk mencegah masalah setelah reboot)
+LOCK_FILE="/data/adb/auto-download/auto-download.lock"
+if [ -f "$LOCK_FILE" ]; then
+    log_boot "Menghapus lock file lama setelah reboot..."
+    rm -f "$LOCK_FILE"
+fi
+
 # Jalankan script utama
 log_boot "Menjalankan script auto-download.sh..."
 sh "$SCRIPT_PATH" > /dev/null 2>&1 &
