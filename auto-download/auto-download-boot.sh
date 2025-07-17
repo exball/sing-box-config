@@ -16,6 +16,10 @@ mkdir -p /data/adb/auto-download/download_temp
 # File log untuk boot
 BOOT_LOG="/data/adb/auto-download/boot.log"
 
+# Path ke file PID lock
+PID_FILE="/data/adb/auto-download/auto-download.pid"
+LOCK_FILE="/data/adb/auto-download/auto-download.lock"
+
 # Fungsi untuk logging
 log_boot() {
     echo "$(date '+%Y-%m-%d %H:%M:%S'): $1" >> "$BOOT_LOG"
@@ -43,10 +47,30 @@ fi
 chmod +x "$SCRIPT_PATH"
 log_boot "Izin eksekusi diberikan ke $SCRIPT_PATH"
 
-# Periksa apakah script sudah berjalan
+# Periksa apakah script sudah berjalan menggunakan PID lock
+if [ -f "$LOCK_FILE" ]; then
+    EXISTING_PID=$(cat "$LOCK_FILE" 2>/dev/null)
+    if [ -n "$EXISTING_PID" ] && kill -0 "$EXISTING_PID" 2>/dev/null; then
+        # Periksa apakah PID tersebut benar-benar auto-download.sh
+        if ps -p "$EXISTING_PID" | grep -q "auto-download.sh\|sh.*auto-download"; then
+            log_boot "Script auto-download.sh sudah berjalan dengan PID $EXISTING_PID"
+            exit 0
+        else
+            # PID bukan auto-download.sh, hapus lock file
+            log_boot "Menghapus lock file yang tidak valid (PID $EXISTING_PID bukan auto-download.sh)"
+            rm -f "$LOCK_FILE" "$PID_FILE" 2>/dev/null
+        fi
+    else
+        # PID tidak valid, hapus lock file
+        log_boot "Menghapus lock file yang sudah tidak valid (PID $EXISTING_PID tidak berjalan)"
+        rm -f "$LOCK_FILE" "$PID_FILE" 2>/dev/null
+    fi
+fi
+
+# Fallback: periksa menggunakan ps jika lock file tidak ada
 PID=$(ps -ef | grep "[a]uto-download.sh" | grep -v auto-download-boot | head -1 | awk '{print $2}')
 if [ -n "$PID" ] && [ "$PID" -eq "$PID" ] 2>/dev/null; then
-    log_boot "Script auto-download.sh sudah berjalan dengan PID $PID"
+    log_boot "Script auto-download.sh sudah berjalan dengan PID $PID (detected via ps)"
     exit 0
 fi
 

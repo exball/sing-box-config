@@ -10,6 +10,10 @@ SCRIPT_PATH="/data/adb/auto-download/auto-download.sh"
 # Path ke file boot.log
 BOOT_LOG_FILE="/data/adb/auto-download/boot.log"
 
+# Path ke file PID lock
+PID_FILE="/data/adb/auto-download/auto-download.pid"
+LOCK_FILE="/data/adb/auto-download/auto-download.lock"
+
 # Hapus file boot.log jika ada untuk mencegah deteksi mode boot yang salah
 if [ -f "$BOOT_LOG_FILE" ]; then
     echo "Menghapus file boot.log untuk mencegah deteksi mode boot yang salah..."
@@ -20,6 +24,10 @@ if [ -f "$BOOT_LOG_FILE" ]; then
         echo "PERINGATAN: Gagal menghapus file boot.log"
     fi
 fi
+
+# Hapus file PID lock untuk memastikan instance baru bisa berjalan
+echo "Menghapus file PID lock..."
+rm -f "$PID_FILE" "$LOCK_FILE" 2>/dev/null
 
 echo "Memeriksa semua proses auto-download.sh yang sedang berjalan..."
 

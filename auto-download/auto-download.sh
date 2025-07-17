@@ -13,8 +13,7 @@ NETWORK_MAX_ATTEMPTS=5
 NETWORK_RETRY_WAIT=3
 LOG_FILE="/data/adb/auto-download/auto-download.log"
 
-# Pastikan direktori yang diperlukan ada
-ensure_directories "/data/adb/auto-download" "$TEMP_DIR"
+# Pastikan direktori yang diperlukan ada (akan dipanggil setelah fungsi didefinisikan)
 
 # Variabel untuk melacak apakah header timestamp sudah ditulis
 TIMESTAMP_HEADER_WRITTEN=0
@@ -37,6 +36,84 @@ WAKE_UP_EVENT_ACTIVE=0  # Flag untuk menandai bahwa schedule check dipicu oleh w
 # Variabel untuk wake-up debouncing (akan diload dari config file)
 LAST_WAKE_UP_TIME=0
 WAKE_UP_DEBOUNCE_FILE="/data/adb/auto-download/last_wake_up_time"
+
+# Variabel untuk PID lock mechanism
+PID_FILE="/data/adb/auto-download/auto-download.pid"
+LOCK_FILE="/data/adb/auto-download/auto-download.lock"
+
+# Fungsi untuk membuat PID lock
+create_pid_lock() {
+    local current_pid=$$
+    local max_attempts=5
+    local attempt=1
+    
+    while [ $attempt -le $max_attempts ]; do
+        # Coba buat lock file dengan atomic operation
+        if (set -C; echo "$current_pid" > "$LOCK_FILE") 2>/dev/null; then
+            # Lock berhasil dibuat, sekarang buat PID file
+            echo "$current_pid" > "$PID_FILE"
+            return 0
+        fi
+        
+        # Lock gagal, periksa apakah PID yang ada masih valid
+        if [ -f "$LOCK_FILE" ]; then
+            local existing_pid=$(cat "$LOCK_FILE" 2>/dev/null)
+            if [ -n "$existing_pid" ]; then
+                # Periksa apakah PID masih berjalan dan merupakan auto-download.sh
+                if ! kill -0 "$existing_pid" 2>/dev/null; then
+                    # PID tidak valid, hapus lock dan coba lagi
+                    rm -f "$LOCK_FILE" "$PID_FILE" 2>/dev/null
+                    log_message "Removed stale lock file (PID $existing_pid not running)"
+                else
+                    # Periksa apakah PID tersebut benar-benar auto-download.sh
+                    local process_name=$(ps -p "$existing_pid" -o comm= 2>/dev/null)
+                    if [ "$process_name" != "sh" ] && [ "$process_name" != "auto-download.sh" ]; then
+                        # PID bukan auto-download.sh, hapus lock
+                        rm -f "$LOCK_FILE" "$PID_FILE" 2>/dev/null
+                        log_message "Removed invalid lock file (PID $existing_pid is not auto-download.sh)"
+                    else
+                        # PID valid dan masih berjalan
+                        log_message "Another instance is already running (PID: $existing_pid)"
+                        return 1
+                    fi
+                fi
+            else
+                # Lock file kosong, hapus dan coba lagi
+                rm -f "$LOCK_FILE" "$PID_FILE" 2>/dev/null
+            fi
+        fi
+        
+        # Tunggu sebentar sebelum mencoba lagi
+        sleep 1
+        attempt=$((attempt + 1))
+    done
+    
+    log_message "Failed to create PID lock after $max_attempts attempts"
+    return 1
+}
+
+# Fungsi untuk menghapus PID lock
+remove_pid_lock() {
+    local current_pid=$$
+    
+    # Periksa apakah lock file ada dan berisi PID kita
+    if [ -f "$LOCK_FILE" ]; then
+        local lock_pid=$(cat "$LOCK_FILE" 2>/dev/null)
+        if [ "$lock_pid" = "$current_pid" ]; then
+            rm -f "$LOCK_FILE" "$PID_FILE" 2>/dev/null
+        fi
+    fi
+}
+
+# Fungsi untuk cleanup saat script dihentikan
+cleanup_on_exit() {
+    log_message "Script terminated, cleaning up..."
+    remove_pid_lock
+    exit 0
+}
+
+# Setup trap untuk cleanup otomatis
+trap cleanup_on_exit INT TERM EXIT
 
 # Fungsi untuk logging
 log_message() {
@@ -320,9 +397,27 @@ WAKE_UP_DEBOUNCE_INTERVAL=${WAKE_UP_DEBOUNCE_INTERVAL:-300}
 WAKE_UP_CHECK_INTERVAL=${WAKE_UP_CHECK_INTERVAL:-60}
 # =====================
 
+# Coba buat PID lock untuk mencegah multiple instance
+if ! create_pid_lock; then
+    # Jika gagal membuat lock, keluar dengan kode 0 (bukan error)
+    # karena instance lain sudah berjalan
+    exit 0
+fi
+
 # Fungsi untuk memeriksa dan menampilkan PID
 check_and_display_pid() {
-    # Periksa PID menggunakan ps dengan lebih akurat
+    local current_pid=$$
+    
+    # Periksa PID dari file PID jika ada
+    if [ -f "$PID_FILE" ]; then
+        local stored_pid=$(cat "$PID_FILE" 2>/dev/null)
+        if [ -n "$stored_pid" ] && [ "$stored_pid" = "$current_pid" ]; then
+            log_message "Auto-Download PID: $current_pid"
+            return
+        fi
+    fi
+    
+    # Fallback ke metode lama jika PID file tidak valid
     local CURRENT_PID=$(ps -ef | grep "[a]uto-download.sh" | grep -v auto-download-boot | head -1 | awk '{print $2}')
     
     # Jika PID ditemukan, tampilkan di log
