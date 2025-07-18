@@ -1,6 +1,6 @@
 {
   "log": {
-    "level": "error",
+    "level": "fatal",
     "output": "/data/adb/box/run/sing-box.log",
     "timestamp": true
   },
@@ -273,10 +273,6 @@
           }
         ],
         "outbound": "dns"
-      },
-      {
-        "protocol": "icmp",
-        "outbound": "direct"
       },
       {
         "protocol": "icmp",
