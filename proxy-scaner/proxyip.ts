@@ -155,9 +155,19 @@ async function readProxyList(): Promise<ProxyStruct[]> {
     // Skip empty lines
     if (!proxy.trim()) continue;
     
-    const [address, port, country, org] = proxy.split(",");
+    const parts = proxy.split(",");
     
-    // Skip invalid entries (must have at least address and port)
+    // Skip invalid entries (must have at least 3 parts: address, port, country)
+    if (parts.length < 3) continue;
+    
+    const address = parts[0];
+    const port = parts[1];
+    const country = parts[2];
+    
+    // Join remaining parts as org (in case org contains commas)
+    const org = parts.length > 3 ? parts.slice(3).join(",") : "Unknown";
+    
+    // Skip invalid entries (must have address and port)
     if (!address || !port) continue;
     
     proxyList.push({
