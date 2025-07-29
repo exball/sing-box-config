@@ -152,12 +152,19 @@ async function readProxyList(): Promise<ProxyStruct[]> {
 
   const proxyListString = (await Bun.file(RAW_PROXY_LIST_FILE).text()).split("\n");
   for (const proxy of proxyListString) {
+    // Skip empty lines
+    if (!proxy.trim()) continue;
+    
     const [address, port, country, org] = proxy.split(",");
+    
+    // Skip invalid entries (must have at least address and port)
+    if (!address || !port) continue;
+    
     proxyList.push({
       address,
       port: parseInt(port),
-      country,
-      org,
+      country: country || "Unknown",
+      org: org || "Unknown",
     });
   }
 
@@ -284,19 +291,19 @@ async function writeProxyHistory(history: ProxyHistory): Promise<void> {
         address: proxy.address,
         port: proxy.port,
         country: proxy.country,
-        org: proxy.org.replaceAll(/[+]/g, " "),
+        org: (proxy.org || "Unknown").replaceAll(/[+]/g, " "),
         activeCount: 0
       };
     } else {
       // Update country and org info in case they changed in rawProxyList.txt
       proxyHistory.proxies[proxyKey].country = proxy.country;
-      proxyHistory.proxies[proxyKey].org = proxy.org.replaceAll(/[+]/g, " ");
+      proxyHistory.proxies[proxyKey].org = (proxy.org || "Unknown").replaceAll(/[+]/g, " ");
     }
     
     if (!proxyChecked.includes(proxyKey)) {
       proxyChecked.push(proxyKey);
       try {
-        uniqueRawProxies.push(`${proxy.address},${proxy.port},${proxy.country},${proxy.org.replaceAll(/[+]/g, " ")}`);
+        uniqueRawProxies.push(`${proxy.address},${proxy.port},${proxy.country},${(proxy.org || "Unknown").replaceAll(/[+]/g, " ")}`);
       } catch (e: any) {
         continue;
       }
