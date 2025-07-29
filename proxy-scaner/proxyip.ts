@@ -258,7 +258,7 @@ async function writeProxyHistory(history: ProxyHistory): Promise<void> {
     const proxy = proxyList[i];
     const proxyKey = `${proxy.address}:${proxy.port}`;
     
-    // Initialize proxy in history if not exists
+    // Initialize proxy in history if not exists, or update country/org info if changed
     if (!proxyHistory.proxies[proxyKey]) {
       proxyHistory.proxies[proxyKey] = {
         address: proxy.address,
@@ -267,6 +267,10 @@ async function writeProxyHistory(history: ProxyHistory): Promise<void> {
         org: proxy.org.replaceAll(/[+]/g, " "),
         activeCount: 0
       };
+    } else {
+      // Update country and org info in case they changed in rawProxyList.txt
+      proxyHistory.proxies[proxyKey].country = proxy.country;
+      proxyHistory.proxies[proxyKey].org = proxy.org.replaceAll(/[+]/g, " ");
     }
     
     if (!proxyChecked.includes(proxyKey)) {
