@@ -207,7 +207,7 @@ jobs:
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
           commit_message: "Update proxy list and sync configurations [automated]"
-          file_pattern: "${{ steps.determine_pattern.outputs.pattern }} extract-outbound/config.ini extract-outbound/sing_outbound.ini extract-outbound/clash_proxies.ini extract-outbound/proxy_history.json proxy-scaner/*.json proxy-scaner/*.txt config.json auto-download/auto-download.conf"
+          file_pattern: "${{ steps.determine_pattern.outputs.pattern }} extract-outbound/config.ini extract-outbound/sing_outbound.ini extract-outbound/clash_proxies.ini extract-outbound/proxy_history.json proxy-scaner/*.json proxy-scaner/*.txt proxy-scaner/active-proxy-history.txt config.json auto-download/auto-download.conf"
           commit_user_name: "GitHub Actions Bot"
           commit_user_email: "actions@github.com"
           commit_author: "GitHub Actions Bot <actions@github.com>"

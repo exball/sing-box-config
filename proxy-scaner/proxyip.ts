@@ -21,12 +21,26 @@ interface ProxyTestResult {
   };
 }
 
+interface ProxyHistoryEntry {
+  address: string;
+  port: number;
+  country: string;
+  org: string;
+  activeCount: number;
+}
+
+interface ProxyHistory {
+  totalChecksRun: number;
+  proxies: { [key: string]: ProxyHistoryEntry };
+}
+
 let myGeoIpString: any = null;
 
 // Perubahan path file untuk menyesuaikan dengan struktur direktori baru
 const KV_PAIR_PROXY_FILE = "./kvProxyList.json";
 const RAW_PROXY_LIST_FILE = "./rawProxyList.txt";
 const PROXY_LIST_FILE = "./proxyList.txt";
+const ACTIVE_PROXY_HISTORY_FILE = "./active-proxy-history.txt";
 const IP_RESOLVER_DOMAIN = "ip-resolver.xbl.workers.dev";
 const IP_RESOLVER_PATH = "/";
 const CONCURRENCY = 99;
@@ -150,6 +164,83 @@ async function readProxyList(): Promise<ProxyStruct[]> {
   return proxyList;
 }
 
+async function readProxyHistory(): Promise<ProxyHistory> {
+  try {
+    const historyFile = Bun.file(ACTIVE_PROXY_HISTORY_FILE);
+    if (await historyFile.exists()) {
+      const content = await historyFile.text();
+      const lines = content.split('\n').filter(line => line.trim() !== '');
+      
+      if (lines.length === 0) {
+        return { totalChecksRun: 0, proxies: {} };
+      }
+
+      // Parse total checks run
+      const totalChecksLine = lines[0];
+      const totalChecksMatch = totalChecksLine.match(/total checks run = (\d+)/);
+      const totalChecksRun = totalChecksMatch ? parseInt(totalChecksMatch[1]) : 0;
+
+      const proxies: { [key: string]: ProxyHistoryEntry } = {};
+      
+      // Parse proxy entries (skip first line and separator line)
+      for (let i = 2; i < lines.length; i++) {
+        const line = lines[i].trim();
+        if (line === '' || line.startsWith('----------')) continue;
+        
+        const parts = line.split(' = ');
+        if (parts.length === 2) {
+          const proxyInfo = parts[0];
+          const activeCount = parseInt(parts[1]);
+          const [address, port, country, org] = proxyInfo.split(',');
+          
+          const key = `${address}:${port}`;
+          proxies[key] = {
+            address,
+            port: parseInt(port),
+            country,
+            org,
+            activeCount
+          };
+        }
+      }
+
+      return { totalChecksRun, proxies };
+    }
+  } catch (error) {
+    console.log("Error reading proxy history:", error);
+  }
+  
+  return { totalChecksRun: 0, proxies: {} };
+}
+
+async function writeProxyHistory(history: ProxyHistory): Promise<void> {
+  const lines: string[] = [];
+  
+  // Add total checks run
+  lines.push(`total checks run = ${history.totalChecksRun}`);
+  lines.push('----------');
+  
+  // Sort proxies by country then by address
+  const sortedEntries = Object.entries(history.proxies).sort((a, b) => {
+    const [, entryA] = a;
+    const [, entryB] = b;
+    
+    // First sort by country
+    const countryCompare = entryA.country.localeCompare(entryB.country);
+    if (countryCompare !== 0) return countryCompare;
+    
+    // Then sort by address
+    return entryA.address.localeCompare(entryB.address);
+  });
+  
+  // Add proxy entries
+  for (const [key, entry] of sortedEntries) {
+    lines.push(`${entry.address},${entry.port},${entry.country},${entry.org} = ${entry.activeCount}`);
+  }
+  
+  await Bun.write(ACTIVE_PROXY_HISTORY_FILE, lines.join('\n'));
+}
+
 (async () => {
   const proxyList = await readProxyList();
   const proxyChecked: string[] = [];
@@ -157,11 +248,27 @@ async function readProxyList(): Promise<ProxyStruct[]> {
   const activeProxyList: string[] = [];
   const kvPair: any = {};
 
+  // Load existing proxy history
+  const proxyHistory = await readProxyHistory();
+  proxyHistory.totalChecksRun += 1;
+
   let proxySaved = 0;
 
   for (let i = 0; i < proxyList.length; i++) {
     const proxy = proxyList[i];
     const proxyKey = `${proxy.address}:${proxy.port}`;
+    
+    // Initialize proxy in history if not exists
+    if (!proxyHistory.proxies[proxyKey]) {
+      proxyHistory.proxies[proxyKey] = {
+        address: proxy.address,
+        port: proxy.port,
+        country: proxy.country,
+        org: proxy.org.replaceAll(/[+]/g, " "),
+        activeCount: 0
+      };
+    }
+    
     if (!proxyChecked.includes(proxyKey)) {
       proxyChecked.push(proxyKey);
       try {
@@ -177,6 +284,9 @@ async function readProxyList(): Promise<ProxyStruct[]> {
     checkProxy(proxy.address, proxy.port)
       .then((res) => {
         if (!res.error && res.result?.proxyip === true && res.result.country) {
+          // Update proxy history - increment active count
+          proxyHistory.proxies[proxyKey].activeCount += 1;
+          
           activeProxyList.push(
             `${res.result?.proxy},${res.result?.port},${res.result?.country},${res.result?.asOrganization}`
           );
@@ -189,6 +299,7 @@ async function readProxyList(): Promise<ProxyStruct[]> {
           proxySaved += 1;
           console.log(`[${i}/${proxyList.length}] Proxy disimpan:`, proxySaved);
         }
+        // Note: If proxy is not active, we don't increment the activeCount (it stays the same)
       })
       .finally(() => {
         CHECK_QUEUE.pop();
@@ -207,11 +318,16 @@ async function readProxyList(): Promise<ProxyStruct[]> {
   uniqueRawProxies.sort(sortByCountry);
   activeProxyList.sort(sortByCountry);
 
+  // Save proxy history
+  await writeProxyHistory(proxyHistory);
+
   await Bun.write(KV_PAIR_PROXY_FILE, JSON.stringify(kvPair, null, "  "));
   await Bun.write(RAW_PROXY_LIST_FILE, uniqueRawProxies.join("\n"));
   await Bun.write(PROXY_LIST_FILE, activeProxyList.join("\n"));
 
   console.log(`Waktu proses: ${(Bun.nanoseconds() / 1000000000).toFixed(2)} detik`);
+  console.log(`Total pemeriksaan yang telah dilakukan: ${proxyHistory.totalChecksRun}`);
+  console.log(`Riwayat proxy disimpan ke: ${ACTIVE_PROXY_HISTORY_FILE}`);
   process.exit(0);
 })();
 
