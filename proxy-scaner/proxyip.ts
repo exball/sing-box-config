@@ -252,6 +252,26 @@ async function writeProxyHistory(history: ProxyHistory): Promise<void> {
   const proxyHistory = await readProxyHistory();
   proxyHistory.totalChecksRun += 1;
 
+  // Create a set of current proxy keys from rawProxyList.txt for efficient lookup
+  const currentProxyKeys = new Set<string>();
+  for (const proxy of proxyList) {
+    currentProxyKeys.add(`${proxy.address}:${proxy.port}`);
+  }
+
+  // Remove proxies from history that are no longer in rawProxyList.txt
+  const historyKeys = Object.keys(proxyHistory.proxies);
+  let removedProxiesCount = 0;
+  for (const historyKey of historyKeys) {
+    if (!currentProxyKeys.has(historyKey)) {
+      delete proxyHistory.proxies[historyKey];
+      removedProxiesCount++;
+    }
+  }
+
+  if (removedProxiesCount > 0) {
+    console.log(`Menghapus ${removedProxiesCount} proxy dari riwayat yang sudah tidak ada di rawProxyList.txt`);
+  }
+
   let proxySaved = 0;
 
   for (let i = 0; i < proxyList.length; i++) {
