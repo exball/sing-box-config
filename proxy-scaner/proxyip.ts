@@ -36,6 +36,75 @@ interface ProxyHistory {
 
 let myGeoIpString: any = null;
 
+// Country code to country name mapping
+const countryMapping: { [key: string]: string } = {
+  'AE': 'United Arab Emirates',
+  'AL': 'Albania',
+  'AM': 'Armenia',
+  'AR': 'Argentina',
+  'AT': 'Austria',
+  'AU': 'Australia',
+  'AZ': 'Azerbaijan',
+  'BE': 'Belgium',
+  'BG': 'Bulgaria',
+  'BR': 'Brazil',
+  'CA': 'Canada',
+  'CH': 'Switzerland',
+  'CN': 'China',
+  'CO': 'Colombia',
+  'CY': 'Cyprus',
+  'CZ': 'Czech Republic',
+  'DE': 'Germany',
+  'DK': 'Denmark',
+  'EE': 'Estonia',
+  'EG': 'Egypt',
+  'ES': 'Spain',
+  'FI': 'Finland',
+  'FR': 'France',
+  'GB': 'United Kingdom',
+  'GE': 'Georgia',
+  'HK': 'Hong Kong',
+  'HU': 'Hungary',
+  'ID': 'Indonesia',
+  'IE': 'Ireland',
+  'IL': 'Israel',
+  'IN': 'India',
+  'IR': 'Iran',
+  'IT': 'Italy',
+  'JP': 'Japan',
+  'KR': 'South Korea',
+  'KZ': 'Kazakhstan',
+  'LT': 'Lithuania',
+  'LU': 'Luxembourg',
+  'LV': 'Latvia',
+  'MD': 'Moldova',
+  'MU': 'Mauritius',
+  'MX': 'Mexico',
+  'MY': 'Malaysia',
+  'NL': 'Netherlands',
+  'NZ': 'New Zealand',
+  'PH': 'Philippines',
+  'PL': 'Poland',
+  'PR': 'Puerto Rico',
+  'PT': 'Portugal',
+  'QA': 'Qatar',
+  'RO': 'Romania',
+  'RS': 'Serbia',
+  'RU': 'Russia',
+  'SA': 'Saudi Arabia',
+  'SE': 'Sweden',
+  'SG': 'Singapore',
+  'SK': 'Slovakia',
+  'TH': 'Thailand',
+  'TR': 'Turkey',
+  'TW': 'Taiwan',
+  'UA': 'Ukraine',
+  'US': 'United States',
+  'UZ': 'Uzbekistan',
+  'VN': 'Vietnam',
+  'ZA': 'South Africa'
+};
+
 // Perubahan path file untuk menyesuaikan dengan struktur direktori baru
 const KV_PAIR_PROXY_FILE = "./kvProxyList.json";
 const RAW_PROXY_LIST_FILE = "./rawProxyList.txt";
@@ -199,10 +268,10 @@ async function readProxyHistory(): Promise<ProxyHistory> {
 
       const proxies: { [key: string]: ProxyHistoryEntry } = {};
       
-      // Parse proxy entries (skip first line and separator line)
+      // Parse proxy entries (skip first line, separator line, and country headers)
       for (let i = 2; i < lines.length; i++) {
         const line = lines[i].trim();
-        if (line === '' || line.startsWith('----------')) continue;
+        if (line === '' || line.startsWith('----------') || line.startsWith('#')) continue;
         
         const parts = line.split(' = ');
         if (parts.length === 2) {
@@ -250,8 +319,22 @@ async function writeProxyHistory(history: ProxyHistory): Promise<void> {
     return entryA.address.localeCompare(entryB.address);
   });
   
-  // Add proxy entries
+  // Group entries by country and add country headers
+  let currentCountry = '';
   for (const [key, entry] of sortedEntries) {
+    // Add country header when country changes
+    if (entry.country !== currentCountry) {
+      // Add empty line before new country (except for first country)
+      if (currentCountry !== '') {
+        lines.push('');
+      }
+      
+      const countryName = countryMapping[entry.country] || entry.country;
+      lines.push(`# ${countryName} #`);
+      currentCountry = entry.country;
+    }
+    
+    // Add proxy entry
     lines.push(`${entry.address},${entry.port},${entry.country},${entry.org} = ${entry.activeCount}`);
   }
   
