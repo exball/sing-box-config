@@ -2,10 +2,33 @@
     "outbounds": [
         {
             "type": "trojan",
-            "tag": "15 🇸🇬 Oracle Public Cloud WS TLS [proxy]",
+            "tag": "Trojan UDP",
             "server": "quiz.int.vidio.com",
             "server_port": 443,
-            "password": "eeccf4a6-0e5c-4463-9179-328731b0b162",
+            "password": "t.me/foolvpn",
+            "network": "tcp",
+            "tls": {
+                "enabled": true,
+                "insecure": true,
+                "server_name": "id1.foolvpn.me"
+            },
+            "transport": {
+                "type": "ws",
+                "path": "/trojan-udp",
+                "headers": {
+                    "Host": "id1.foolvpn.me"
+                }
+            },
+            "multiplex": {
+                "enabled": false
+            }
+        },
+        {
+            "type": "trojan",
+            "tag": "11 🇸🇬 Viewqwest Pte Ltd WS TLS [proxy]",
+            "server": "quiz.int.vidio.com",
+            "server_port": 443,
+            "password": "ddf78bce-fbfa-44d5-8a0d-6fee815ed2f4",
             "network": "tcp",
             "tls": {
                 "enabled": true,
@@ -14,7 +37,7 @@
             },
             "transport": {
                 "type": "ws",
-                "path": "/168.138.171.70-23280",
+                "path": "/143.42.66.91-443",
                 "headers": {
                     "Host": "proxy.ex-vpn.my.id"
                 }
@@ -25,10 +48,10 @@
         },
         {
             "type": "trojan",
-            "tag": "60 🇸🇬 Oracle Svenska AB WS TLS [proxy]",
+            "tag": "28 🇸🇬 Vultr Holdings WS TLS [proxy]",
             "server": "quiz.int.vidio.com",
             "server_port": 443,
-            "password": "eeccf4a6-0e5c-4463-9179-328731b0b162",
+            "password": "ddf78bce-fbfa-44d5-8a0d-6fee815ed2f4",
             "network": "tcp",
             "tls": {
                 "enabled": true,
@@ -37,7 +60,7 @@
             },
             "transport": {
                 "type": "ws",
-                "path": "/213.35.100.31-47112",
+                "path": "/45.76.183.217-49292",
                 "headers": {
                     "Host": "proxy.ex-vpn.my.id"
                 }
@@ -48,10 +71,10 @@
         },
         {
             "type": "trojan",
-            "tag": "45 🇸🇬 OVH Singapore PTE. LTD WS TLS [proxy]",
+            "tag": "48 🇸🇬 Zappie Host LLC WS TLS [proxy]",
             "server": "quiz.int.vidio.com",
             "server_port": 443,
-            "password": "eeccf4a6-0e5c-4463-9179-328731b0b162",
+            "password": "ddf78bce-fbfa-44d5-8a0d-6fee815ed2f4",
             "network": "tcp",
             "tls": {
                 "enabled": true,
@@ -60,7 +83,7 @@
             },
             "transport": {
                 "type": "ws",
-                "path": "/51.79.158.58-8443",
+                "path": "/83.142.30.4-2096",
                 "headers": {
                     "Host": "proxy.ex-vpn.my.id"
                 }
@@ -71,10 +94,10 @@
         },
         {
             "type": "trojan",
-            "tag": "51 🇸🇬 PDK LLC WS TLS [proxy]",
+            "tag": "12 🇸🇬 1 Raffles Place WS TLS [proxy]",
             "server": "quiz.int.vidio.com",
             "server_port": 443,
-            "password": "eeccf4a6-0e5c-4463-9179-328731b0b162",
+            "password": "ddf78bce-fbfa-44d5-8a0d-6fee815ed2f4",
             "network": "tcp",
             "tls": {
                 "enabled": true,
@@ -83,30 +106,7 @@
             },
             "transport": {
                 "type": "ws",
-                "path": "/31.192.238.71-8443",
-                "headers": {
-                    "Host": "proxy.ex-vpn.my.id"
-                }
-            },
-            "multiplex": {
-                "enabled": false
-            }
-        },
-        {
-            "type": "trojan",
-            "tag": "61 🇸🇬 UCUL-SG WS TLS [proxy]",
-            "server": "quiz.int.vidio.com",
-            "server_port": 443,
-            "password": "eeccf4a6-0e5c-4463-9179-328731b0b162",
-            "network": "tcp",
-            "tls": {
-                "enabled": true,
-                "insecure": true,
-                "server_name": "proxy.ex-vpn.my.id"
-            },
-            "transport": {
-                "type": "ws",
-                "path": "/164.52.2.100-443",
+                "path": "/161.117.249.114-2025",
                 "headers": {
                     "Host": "proxy.ex-vpn.my.id"
                 }
