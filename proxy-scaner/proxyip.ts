@@ -255,7 +255,7 @@ async function readProxyHistory(): Promise<ProxyHistory> {
     const historyFile = Bun.file(ACTIVE_PROXY_HISTORY_FILE);
     if (await historyFile.exists()) {
       const content = await historyFile.text();
-      const lines = content.split('\n').filter(line => line.trim() !== '');
+      const lines = content.split('\n');
       
       if (lines.length === 0) {
         return { totalChecksRun: 0, proxies: {} };
@@ -268,12 +268,13 @@ async function readProxyHistory(): Promise<ProxyHistory> {
 
       const proxies: { [key: string]: ProxyHistoryEntry } = {};
       
-      // Parse proxy entries (skip first line, separator line, and country headers)
+      // Parse proxy entries (skip first line, separator line, country headers, and statistics)
       for (let i = 2; i < lines.length; i++) {
-        const line = lines[i].trim();
-        if (line === '' || line.startsWith('----------') || line.startsWith('#')) continue;
+        const line = lines[i];
+        const trimmedLine = line.trim();
+        if (trimmedLine === '' || trimmedLine.startsWith('----------') || trimmedLine.startsWith('#') || line.startsWith('  - ')) continue;
         
-        const parts = line.split(' = ');
+        const parts = trimmedLine.split(' = ');
         if (parts.length === 2) {
           const proxyInfo = parts[0];
           const activeCount = parseInt(parts[1]);
@@ -319,23 +320,62 @@ async function writeProxyHistory(history: ProxyHistory): Promise<void> {
     return entryA.address.localeCompare(entryB.address);
   });
   
-  // Group entries by country and add country headers
+  // Group entries by country and add country headers with statistics
   let currentCountry = '';
+  let countryProxies: ProxyHistoryEntry[] = [];
+  
   for (const [key, entry] of sortedEntries) {
-    // Add country header when country changes
+    // If country changes, process the previous country's statistics
     if (entry.country !== currentCountry) {
+      // Process previous country if it exists
+      if (currentCountry !== '' && countryProxies.length > 0) {
+        // Calculate statistics for previous country
+        const totalProxy = countryProxies.length;
+        const activeProxy = countryProxies.filter(p => p.activeCount > 0).length;
+        const inactiveProxy = countryProxies.filter(p => p.activeCount === 0).length;
+        
+        // Add statistics
+        lines.push(`  - Total Proxy = ${totalProxy}`);
+        lines.push(`  - Active = ${activeProxy}`);
+        lines.push(`  - Inactive = ${inactiveProxy}`);
+        
+        // Add proxy entries for previous country
+        for (const proxy of countryProxies) {
+          lines.push(`${proxy.address},${proxy.port},${proxy.country},${proxy.org} = ${proxy.activeCount}`);
+        }
+      }
+      
       // Add empty line before new country (except for first country)
       if (currentCountry !== '') {
         lines.push('');
       }
       
+      // Add new country header
       const countryName = countryMapping[entry.country] || entry.country;
       lines.push(`# ${countryName} #`);
       currentCountry = entry.country;
+      countryProxies = [];
     }
     
-    // Add proxy entry
-    lines.push(`${entry.address},${entry.port},${entry.country},${entry.org} = ${entry.activeCount}`);
+    // Add entry to current country's proxy list
+    countryProxies.push(entry);
+  }
+  
+  // Process the last country
+  if (currentCountry !== '' && countryProxies.length > 0) {
+    const totalProxy = countryProxies.length;
+    const activeProxy = countryProxies.filter(p => p.activeCount > 0).length;
+    const inactiveProxy = countryProxies.filter(p => p.activeCount === 0).length;
+    
+    // Add statistics
+    lines.push(`  - Total Proxy = ${totalProxy}`);
+    lines.push(`  - Active = ${activeProxy}`);
+    lines.push(`  - Inactive = ${inactiveProxy}`);
+    
+    // Add proxy entries for last country
+    for (const proxy of countryProxies) {
+      lines.push(`${proxy.address},${proxy.port},${proxy.country},${proxy.org} = ${proxy.activeCount}`);
+    }
   }
   
   await Bun.write(ACTIVE_PROXY_HISTORY_FILE, lines.join('\n'));
