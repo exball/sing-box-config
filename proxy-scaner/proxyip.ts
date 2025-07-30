@@ -152,8 +152,8 @@ async function readProxyList(): Promise<ProxyStruct[]> {
 
   const proxyListString = (await Bun.file(RAW_PROXY_LIST_FILE).text()).split("\n");
   for (const proxy of proxyListString) {
-    // Skip empty lines
-    if (!proxy.trim()) continue;
+    // Skip empty lines and comment lines
+    if (!proxy.trim() || proxy.trim().startsWith('#')) continue;
     
     const parts = proxy.split(",");
     
