@@ -2,10 +2,48 @@
     "outbounds": [
         {
             "type": "vless",
-            "tag": "58 🇸🇬 Greencloud LLC WS NTLS [proxy]",
+            "tag": "20 🇸🇬 Eons Data Communications Limited WS NTLS [proxy]",
             "server": "quiz.int.vidio.com",
             "server_port": 80,
-            "uuid": "89d718e8-6321-4678-b8b3-b3348a7f08be",
+            "uuid": "8b7158ec-28fe-4db0-bc62-437c4a184369",
+            "network": "tcp",
+            "packet_encoding": "xudp",
+            "tls": {
+                "insecure": true
+            },
+            "transport": {
+                "headers": {
+                    "Host": "proxy.ex-vpn.my.id"
+                },
+                "path": "/38.181.70.7-16240",
+                "type": "ws"
+            }
+        },
+        {
+            "type": "vless",
+            "tag": "16 🇸🇬 FIRST SERVER LIMITED WS NTLS [proxy]",
+            "server": "quiz.int.vidio.com",
+            "server_port": 80,
+            "uuid": "8b7158ec-28fe-4db0-bc62-437c4a184369",
+            "network": "tcp",
+            "packet_encoding": "xudp",
+            "tls": {
+                "insecure": true
+            },
+            "transport": {
+                "headers": {
+                    "Host": "proxy.ex-vpn.my.id"
+                },
+                "path": "/194.36.179.17-2053",
+                "type": "ws"
+            }
+        },
+        {
+            "type": "vless",
+            "tag": "41 🇸🇬 Greencloud LLC WS NTLS [proxy]",
+            "server": "quiz.int.vidio.com",
+            "server_port": 80,
+            "uuid": "8b7158ec-28fe-4db0-bc62-437c4a184369",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -21,10 +59,10 @@
         },
         {
             "type": "vless",
-            "tag": "43 🇸🇬 Hetzner Online GmbH WS NTLS [proxy]",
+            "tag": "5 🇸🇬 Hetzner Online GmbH WS NTLS [proxy]",
             "server": "quiz.int.vidio.com",
             "server_port": 80,
-            "uuid": "89d718e8-6321-4678-b8b3-b3348a7f08be",
+            "uuid": "8b7158ec-28fe-4db0-bc62-437c4a184369",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -34,35 +72,16 @@
                 "headers": {
                     "Host": "proxy.ex-vpn.my.id"
                 },
-                "path": "/5.223.49.4-2053",
+                "path": "/5.223.41.187-8443",
                 "type": "ws"
             }
         },
         {
             "type": "vless",
-            "tag": "66 🇸🇬 Internet Utilities NA LLC WS NTLS [proxy]",
+            "tag": "53 🇸🇬 M1 Ltd WS NTLS [proxy]",
             "server": "quiz.int.vidio.com",
             "server_port": 80,
-            "uuid": "89d718e8-6321-4678-b8b3-b3348a7f08be",
-            "network": "tcp",
-            "packet_encoding": "xudp",
-            "tls": {
-                "insecure": true
-            },
-            "transport": {
-                "headers": {
-                    "Host": "proxy.ex-vpn.my.id"
-                },
-                "path": "/64.49.14.41-2053",
-                "type": "ws"
-            }
-        },
-        {
-            "type": "vless",
-            "tag": "34 🇸🇬 M1 Ltd WS NTLS [proxy]",
-            "server": "quiz.int.vidio.com",
-            "server_port": 80,
-            "uuid": "89d718e8-6321-4678-b8b3-b3348a7f08be",
+            "uuid": "8b7158ec-28fe-4db0-bc62-437c4a184369",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -73,25 +92,6 @@
                     "Host": "proxy.ex-vpn.my.id"
                 },
                 "path": "/143.42.66.91-443",
-                "type": "ws"
-            }
-        },
-        {
-            "type": "vless",
-            "tag": "8 🇸🇬 Melbikomas UAB WS NTLS [proxy]",
-            "server": "quiz.int.vidio.com",
-            "server_port": 80,
-            "uuid": "89d718e8-6321-4678-b8b3-b3348a7f08be",
-            "network": "tcp",
-            "packet_encoding": "xudp",
-            "tls": {
-                "insecure": true
-            },
-            "transport": {
-                "headers": {
-                    "Host": "proxy.ex-vpn.my.id"
-                },
-                "path": "/91.192.81.154-8443",
                 "type": "ws"
             }
         }

@@ -2,10 +2,31 @@
     "outbounds": [
         {
             "type": "vless",
-            "tag": "24 🇸🇬 Greencloud LLC WS TLS [proxy]",
+            "tag": "51 🇸🇬 Green Floid LLC WS TLS [proxy]",
             "server": "quiz.int.vidio.com",
             "server_port": 443,
-            "uuid": "456e3049-da91-4239-a83b-e0e306c764bd",
+            "uuid": "acdd6bb3-fe72-44da-9b17-df5ffb5a5d6b",
+            "network": "tcp",
+            "packet_encoding": "xudp",
+            "tls": {
+                "enabled": true,
+                "insecure": true,
+                "server_name": "proxy.ex-vpn.my.id"
+            },
+            "transport": {
+                "headers": {
+                    "Host": "proxy.ex-vpn.my.id"
+                },
+                "path": "/5.34.176.119-81",
+                "type": "ws"
+            }
+        },
+        {
+            "type": "vless",
+            "tag": "22 🇸🇬 Greencloud LLC WS TLS [proxy]",
+            "server": "quiz.int.vidio.com",
+            "server_port": 443,
+            "uuid": "acdd6bb3-fe72-44da-9b17-df5ffb5a5d6b",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -23,10 +44,10 @@
         },
         {
             "type": "vless",
-            "tag": "22 🇸🇬 Hetzner Online GmbH WS TLS [proxy]",
+            "tag": "59 🇸🇬 Hetzner Online GmbH WS TLS [proxy]",
             "server": "quiz.int.vidio.com",
             "server_port": 443,
-            "uuid": "456e3049-da91-4239-a83b-e0e306c764bd",
+            "uuid": "acdd6bb3-fe72-44da-9b17-df5ffb5a5d6b",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -44,10 +65,10 @@
         },
         {
             "type": "vless",
-            "tag": "54 🇸🇬 Internet Utilities NA LLC WS TLS [proxy]",
+            "tag": "52 🇸🇬 Internet Utilities NA LLC WS TLS [proxy]",
             "server": "quiz.int.vidio.com",
             "server_port": 443,
-            "uuid": "456e3049-da91-4239-a83b-e0e306c764bd",
+            "uuid": "acdd6bb3-fe72-44da-9b17-df5ffb5a5d6b",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -65,10 +86,10 @@
         },
         {
             "type": "vless",
-            "tag": "53 🇸🇬 M1 Ltd WS TLS [proxy]",
+            "tag": "90 🇸🇬 M1 Ltd WS TLS [proxy]",
             "server": "quiz.int.vidio.com",
             "server_port": 443,
-            "uuid": "456e3049-da91-4239-a83b-e0e306c764bd",
+            "uuid": "acdd6bb3-fe72-44da-9b17-df5ffb5a5d6b",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -81,27 +102,6 @@
                     "Host": "proxy.ex-vpn.my.id"
                 },
                 "path": "/143.42.66.91-443",
-                "type": "ws"
-            }
-        },
-        {
-            "type": "vless",
-            "tag": "45 🇸🇬 Melbikomas UAB WS TLS [proxy]",
-            "server": "quiz.int.vidio.com",
-            "server_port": 443,
-            "uuid": "456e3049-da91-4239-a83b-e0e306c764bd",
-            "network": "tcp",
-            "packet_encoding": "xudp",
-            "tls": {
-                "enabled": true,
-                "insecure": true,
-                "server_name": "proxy.ex-vpn.my.id"
-            },
-            "transport": {
-                "headers": {
-                    "Host": "proxy.ex-vpn.my.id"
-                },
-                "path": "/91.192.81.154-8443",
                 "type": "ws"
             }
         }
