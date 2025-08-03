@@ -121,10 +121,8 @@ function getResolverDomain(): string {
   // Gunakan resolver.ex-vpn.my.id dari jam 00:00-11:59 UTC+8
   // Gunakan resolver.exbal.my.id dari jam 12:00-23:59 UTC+8
   if (hour >= 0 && hour < 12) {
-    console.log(`[${utcPlus8.toISOString()}] Menggunakan domain: resolver.ex-vpn.my.id (jam ${hour}:xx UTC+8)`);
     return "resolver.ex-vpn.my.id";
   } else {
-    console.log(`[${utcPlus8.toISOString()}] Menggunakan domain: resolver.exbal.my.id (jam ${hour}:xx UTC+8)`);
     return "resolver.exbal.my.id";
   }
 }
@@ -406,6 +404,13 @@ async function writeProxyHistory(history: ProxyHistory): Promise<void> {
   const uniqueRawProxies: string[] = [];
   const activeProxyList: string[] = [];
   const kvPair: any = {};
+
+  // Tampilkan informasi domain resolver yang akan digunakan
+  const now = new Date();
+  const utcPlus8 = new Date(now.getTime() + (8 * 60 * 60 * 1000));
+  const hour = utcPlus8.getUTCHours();
+  const resolverDomain = getResolverDomain();
+  console.log(`[${utcPlus8.toISOString()}] Menggunakan domain resolver: ${resolverDomain} (jam ${hour.toString().padStart(2, '0')}:xx UTC+8)`);
 
   // Load existing proxy history
   const proxyHistory = await readProxyHistory();
