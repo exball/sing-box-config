@@ -110,7 +110,25 @@ const KV_PAIR_PROXY_FILE = "./kvProxyList.json";
 const RAW_PROXY_LIST_FILE = "./rawProxyList.txt";
 const PROXY_LIST_FILE = "./proxyList.txt";
 const ACTIVE_PROXY_HISTORY_FILE = "./active-proxy-history.txt";
-const IP_RESOLVER_DOMAIN = "ip-resolver.xbl.workers.dev";
+
+// Fungsi untuk menentukan domain resolver berdasarkan waktu UTC+8
+function getResolverDomain(): string {
+  const now = new Date();
+  // Konversi ke UTC+8 (tambah 8 jam ke UTC)
+  const utcPlus8 = new Date(now.getTime() + (8 * 60 * 60 * 1000));
+  const hour = utcPlus8.getUTCHours();
+  
+  // Gunakan resolver.ex-vpn.my.id dari jam 00:00-11:59 UTC+8
+  // Gunakan resolver.exbal.my.id dari jam 12:00-23:59 UTC+8
+  if (hour >= 0 && hour < 12) {
+    console.log(`[${utcPlus8.toISOString()}] Menggunakan domain: resolver.ex-vpn.my.id (jam ${hour}:xx UTC+8)`);
+    return "resolver.ex-vpn.my.id";
+  } else {
+    console.log(`[${utcPlus8.toISOString()}] Menggunakan domain: resolver.exbal.my.id (jam ${hour}:xx UTC+8)`);
+    return "resolver.exbal.my.id";
+  }
+}
+
 const IP_RESOLVER_PATH = "/";
 const CONCURRENCY = 99;
 
@@ -157,12 +175,13 @@ export async function checkProxy(proxyAddress: string, proxyPort: number): Promi
   };
 
   const proxyInfo = { host: proxyAddress, port: proxyPort };
+  const currentResolverDomain = getResolverDomain();
 
   try {
     const start = new Date().getTime();
     const [ipinfo, myip] = await Promise.all([
-      sendRequest(IP_RESOLVER_DOMAIN, IP_RESOLVER_PATH, proxyInfo),
-      myGeoIpString == null ? sendRequest(IP_RESOLVER_DOMAIN, IP_RESOLVER_PATH, null) : myGeoIpString,
+      sendRequest(currentResolverDomain, IP_RESOLVER_PATH, proxyInfo),
+      myGeoIpString == null ? sendRequest(currentResolverDomain, IP_RESOLVER_PATH, null) : myGeoIpString,
     ]);
     const finish = new Date().getTime();
 
