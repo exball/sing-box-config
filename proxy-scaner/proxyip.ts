@@ -1,4 +1,4 @@
-import tls from "tls";
+import * as tls from "tls";
 
 interface ProxyStruct {
   address: string;
@@ -27,6 +27,7 @@ interface ProxyHistoryEntry {
   country: string;
   org: string;
   activeCount: number;
+  isCurrentlyActive: boolean;
 }
 
 interface ProxyHistory {
@@ -307,7 +308,8 @@ async function readProxyHistory(): Promise<ProxyHistory> {
             port: parseInt(port),
             country,
             org,
-            activeCount
+            activeCount,
+            isCurrentlyActive: false // Will be updated during current check
           };
         }
       }
@@ -328,7 +330,7 @@ async function writeProxyHistory(history: ProxyHistory): Promise<void> {
   lines.push(`total checks run = ${history.totalChecksRun}`);
   lines.push('----------');
   
-  // Sort proxies by country then by address
+  // Sort proxies by country then by activeCount (descending) then by address
   const sortedEntries = Object.entries(history.proxies).sort((a, b) => {
     const [, entryA] = a;
     const [, entryB] = b;
@@ -337,7 +339,11 @@ async function writeProxyHistory(history: ProxyHistory): Promise<void> {
     const countryCompare = entryA.country.localeCompare(entryB.country);
     if (countryCompare !== 0) return countryCompare;
     
-    // Then sort by address
+    // Then sort by activeCount (descending - highest first)
+    const activeCountCompare = entryB.activeCount - entryA.activeCount;
+    if (activeCountCompare !== 0) return activeCountCompare;
+    
+    // Finally sort by address
     return entryA.address.localeCompare(entryB.address);
   });
   
@@ -352,15 +358,16 @@ async function writeProxyHistory(history: ProxyHistory): Promise<void> {
       if (currentCountry !== '' && countryProxies.length > 0) {
         // Calculate statistics for previous country
         const totalProxy = countryProxies.length;
-        const activeProxy = countryProxies.filter(p => p.activeCount > 0).length;
+        const currentlyActiveProxy = countryProxies.filter(p => p.isCurrentlyActive).length;
+        const everActiveProxy = countryProxies.filter(p => p.activeCount > 0).length;
         const inactiveProxy = countryProxies.filter(p => p.activeCount === 0).length;
         
         // Add statistics
         lines.push(`  - Total Proxy = ${totalProxy}`);
-        lines.push(`  - Active = ${activeProxy}`);
+        lines.push(`  - Active = ${currentlyActiveProxy} (${everActiveProxy})`);
         lines.push(`  - Inactive = ${inactiveProxy}`);
         
-        // Add proxy entries for previous country
+        // Add proxy entries for previous country (already sorted by activeCount descending)
         for (const proxy of countryProxies) {
           lines.push(`${proxy.address},${proxy.port},${proxy.country},${proxy.org} = ${proxy.activeCount}`);
         }
@@ -385,15 +392,16 @@ async function writeProxyHistory(history: ProxyHistory): Promise<void> {
   // Process the last country
   if (currentCountry !== '' && countryProxies.length > 0) {
     const totalProxy = countryProxies.length;
-    const activeProxy = countryProxies.filter(p => p.activeCount > 0).length;
+    const currentlyActiveProxy = countryProxies.filter(p => p.isCurrentlyActive).length;
+    const everActiveProxy = countryProxies.filter(p => p.activeCount > 0).length;
     const inactiveProxy = countryProxies.filter(p => p.activeCount === 0).length;
     
     // Add statistics
     lines.push(`  - Total Proxy = ${totalProxy}`);
-    lines.push(`  - Active = ${activeProxy}`);
+    lines.push(`  - Active = ${currentlyActiveProxy} (${everActiveProxy})`);
     lines.push(`  - Inactive = ${inactiveProxy}`);
     
-    // Add proxy entries for last country
+    // Add proxy entries for last country (already sorted by activeCount descending)
     for (const proxy of countryProxies) {
       lines.push(`${proxy.address},${proxy.port},${proxy.country},${proxy.org} = ${proxy.activeCount}`);
     }
@@ -419,6 +427,11 @@ async function writeProxyHistory(history: ProxyHistory): Promise<void> {
   // Load existing proxy history
   const proxyHistory = await readProxyHistory();
   proxyHistory.totalChecksRun += 1;
+
+  // Reset all isCurrentlyActive flags to false at the start of each check
+  for (const key in proxyHistory.proxies) {
+    proxyHistory.proxies[key].isCurrentlyActive = false;
+  }
 
   // Create a set of current proxy keys from rawProxyList.txt for efficient lookup
   const currentProxyKeys = new Set<string>();
@@ -453,7 +466,8 @@ async function writeProxyHistory(history: ProxyHistory): Promise<void> {
         port: proxy.port,
         country: proxy.country,
         org: (proxy.org || "Unknown").replaceAll(/[+]/g, " "),
-        activeCount: 0
+        activeCount: 0,
+        isCurrentlyActive: false
       };
     } else {
       // Update country and org info in case they changed in rawProxyList.txt
@@ -476,8 +490,9 @@ async function writeProxyHistory(history: ProxyHistory): Promise<void> {
     checkProxy(proxy.address, proxy.port)
       .then((res) => {
         if (!res.error && res.result?.proxyip === true && res.result.country) {
-          // Update proxy history - increment active count
+          // Update proxy history - increment active count and mark as currently active
           proxyHistory.proxies[proxyKey].activeCount += 1;
+          proxyHistory.proxies[proxyKey].isCurrentlyActive = true;
           
           activeProxyList.push(
             `${res.result?.proxy},${res.result?.port},${res.result?.country},${res.result?.asOrganization}`
@@ -491,7 +506,7 @@ async function writeProxyHistory(history: ProxyHistory): Promise<void> {
           proxySaved += 1;
           console.log(`[${i}/${proxyList.length}] Proxy disimpan:`, proxySaved);
         }
-        // Note: If proxy is not active, we don't increment the activeCount (it stays the same)
+        // Note: If proxy is not active, isCurrentlyActive remains false
       })
       .finally(() => {
         CHECK_QUEUE.pop();
