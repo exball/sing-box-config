@@ -4,9 +4,9 @@ name: Scan & Extract Proxy
 on:
   workflow_dispatch:  # Memungkinkan menjalankan workflow secara manual dari GitHub UI
   schedule:
-    # Runs at 00:00, 06:00, 12:00, 18:00 in UTC+8 timezone
-    # Which is 16:00, 24:00, 04:00, 10:00 in UTC
-    - cron: "0 16,22,4,10 * * *"
+    # Runs at 00:00, 04:00, 08:00, 12:00, 16:00, 20:00 in UTC+8 timezone
+    # Which is 16:00, 20:00, 00:00, 04:00, 08:00, 12:00 in UTC
+    - cron: "0 16,20,0,4,8,12 * * *"
 
 permissions:
   contents: write  # Memberikan izin untuk menulis ke repository

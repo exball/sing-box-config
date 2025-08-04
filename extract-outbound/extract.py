@@ -20,16 +20,19 @@ outbound_format = None
 # File untuk menyimpan history proxy yang sudah diambil
 HISTORY_FILE = "proxy_history.json"
 
-# URL untuk mengambil proxy
-PROXY_URL_MORNING = "https://proxy.ex-vpn.my.id"  # Digunakan dari 00:00-12:00 (UTC+8)
-PROXY_URL_EVENING = "https://proxy.exbal.my.id"   # Digunakan dari 12:00-00:00 (UTC+8)
+# URL untuk mengambil proxy (3 domain dengan pembagian 8 jam)
+PROXY_URL_PERIOD1 = "https://proxy.ex-vpn.my.id"    # Digunakan dari 00:00-07:59 (UTC+8)
+PROXY_URL_PERIOD2 = "https://proxy.exbal.my.id"     # Digunakan dari 08:00-15:59 (UTC+8)
+PROXY_URL_PERIOD3 = "https://proxy.xtunnel.my.id"   # Digunakan dari 16:00-23:59 (UTC+8)
 
 # Fungsi untuk mendapatkan URL proxy berdasarkan waktu saat ini (UTC+8)
 def get_proxy_base_url():
     """
     Mengembalikan URL dasar untuk mengambil proxy berdasarkan waktu saat ini.
-    - Dari jam 00:00 sampai 12:00 (UTC+8): menggunakan proxy.ex-vpn.my.id
-    - Dari jam 12:00 sampai 00:00 (UTC+8): menggunakan proxy.exbal.my.id
+    Pembagian 3 domain dengan periode 8 jam masing-masing:
+    - Dari jam 00:00-07:59 (UTC+8): menggunakan proxy.ex-vpn.my.id
+    - Dari jam 08:00-15:59 (UTC+8): menggunakan proxy.exbal.my.id
+    - Dari jam 16:00-23:59 (UTC+8): menggunakan proxy.xtunnel.my.id
     """
     # Dapatkan waktu saat ini dalam UTC
     utc_now = datetime.now(pytz.UTC)
@@ -41,13 +44,16 @@ def get_proxy_base_url():
     # Ambil jam dalam format 24 jam
     current_hour = now_utc8.hour
     
-    # Tentukan URL berdasarkan jam
-    if 0 <= current_hour < 12:
-        print(f"Waktu saat ini: {now_utc8.strftime('%H:%M:%S')} (UTC+8) - Menggunakan {PROXY_URL_MORNING}")
-        return PROXY_URL_MORNING
+    # Tentukan URL berdasarkan jam (pembagian 8 jam per domain)
+    if 0 <= current_hour < 8:
+        print(f"Waktu saat ini: {now_utc8.strftime('%H:%M:%S')} (UTC+8) - Menggunakan {PROXY_URL_PERIOD1}")
+        return PROXY_URL_PERIOD1
+    elif 8 <= current_hour < 16:
+        print(f"Waktu saat ini: {now_utc8.strftime('%H:%M:%S')} (UTC+8) - Menggunakan {PROXY_URL_PERIOD2}")
+        return PROXY_URL_PERIOD2
     else:
-        print(f"Waktu saat ini: {now_utc8.strftime('%H:%M:%S')} (UTC+8) - Menggunakan {PROXY_URL_EVENING}")
-        return PROXY_URL_EVENING
+        print(f"Waktu saat ini: {now_utc8.strftime('%H:%M:%S')} (UTC+8) - Menggunakan {PROXY_URL_PERIOD3}")
+        return PROXY_URL_PERIOD3
 
 # Fungsi untuk mendapatkan emoji bendera berdasarkan kode negara
 def get_flag_emoji(country_code):

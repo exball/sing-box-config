@@ -118,12 +118,16 @@ function getResolverDomain(): string {
   const utcPlus8 = new Date(now.getTime() + (8 * 60 * 60 * 1000));
   const hour = utcPlus8.getUTCHours();
   
-  // Gunakan resolver.ex-vpn.my.id dari jam 00:00-11:59 UTC+8
-  // Gunakan resolver.exbal.my.id dari jam 12:00-23:59 UTC+8
-  if (hour >= 0 && hour < 12) {
+  // Pembagian 3 domain dengan periode 8 jam masing-masing:
+  // 00:00-07:59 UTC+8 → resolver.ex-vpn.my.id
+  // 08:00-15:59 UTC+8 → resolver.exbal.my.id  
+  // 16:00-23:59 UTC+8 → resolver.xtunnel.my.id
+  if (hour >= 0 && hour < 8) {
     return "resolver.ex-vpn.my.id";
-  } else {
+  } else if (hour >= 8 && hour < 16) {
     return "resolver.exbal.my.id";
+  } else {
+    return "resolver.xtunnel.my.id";
   }
 }
 
