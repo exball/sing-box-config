@@ -1,0 +1,202 @@
+name: Extract Proxy (Development)
+
+on:
+  workflow_dispatch:
+    inputs:
+      config_file:
+        description: 'Config file name (in extract-outbound directory)'
+        required: true
+        default: 'config.ini'
+        type: choice
+        options:
+          - config.ini
+          - clash_proxies.ini
+          - sing_outbound.ini
+      output_file:
+        description: 'Output format file name (in extract-outbound directory)'
+        required: true
+        default: 'sing_outbound.ini'
+        type: choice
+        options:
+          - sing_outbound.ini
+          - clash_proxies.ini
+      dry_run:
+        description: 'Dry run (do not commit changes)'
+        required: false
+        default: false
+        type: boolean
+      debug_mode:
+        description: 'Enable debug output'
+        required: false
+        default: false
+        type: boolean
+
+
+permissions:
+  contents: write
+
+jobs:
+  extract-dev:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GIT_TOKEN }}
+          fetch-depth: 0
+      
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+      
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install requests boto3 pytz pyyaml
+      
+      - name: Display workflow inputs
+        run: |
+          echo "🔧 Workflow Configuration:"
+          echo "  Config file: ${{ github.event.inputs.config_file }}"
+          echo "  Output file: ${{ github.event.inputs.output_file }}"
+          echo "  Dry run: ${{ github.event.inputs.dry_run }}"
+          echo "  Debug mode: ${{ github.event.inputs.debug_mode }}"
+
+      
+      - name: Verify files
+        run: |
+          echo "📁 Checking files:"
+          ls -la extract-outbound/
+          echo "📋 Config file content:"
+          cat extract-outbound/${{ github.event.inputs.config_file }}
+          echo "📋 Output format file content:"
+          cat extract-outbound/${{ github.event.inputs.output_file }}
+      
+      - name: Sync configuration files
+        run: |
+          echo "🔄 Syncing configuration files..."
+          cd extract-outbound && python sync_config.py
+          
+          if [ "${{ github.event.inputs.debug_mode }}" = "true" ]; then
+            echo "🐛 Debug: Config sync results:"
+            echo "Config.json changes:"
+            git diff config.json || echo "No changes in config.json"
+            echo "Auto-download.conf changes:"
+            git diff auto-download/auto-download.conf || echo "No changes in auto-download.conf"
+          fi
+      
+      - name: Run extraction with debug
+        run: |
+          echo "🚀 Running proxy extraction..."
+          cd extract-outbound
+          
+          if [ "${{ github.event.inputs.debug_mode }}" = "true" ]; then
+            echo "🐛 Debug mode enabled - showing detailed output"
+            python -u extract.py -o "${{ github.event.inputs.output_file }}" -f "${{ github.event.inputs.config_file }}" 2>&1 | tee extraction.log
+          else
+            python extract.py -o "${{ github.event.inputs.output_file }}" -f "${{ github.event.inputs.config_file }}"
+          fi
+      
+      - name: Show extraction results
+        run: |
+          echo "📊 Extraction Results:"
+          
+          # Determine format
+          FORMAT=$(grep "^Format=" extract-outbound/${{ github.event.inputs.config_file }} | cut -d'=' -f2 | tr -d ' ' | tr -d '\r')
+          echo "Format: $FORMAT"
+          
+          # Show files created
+          echo "📁 Files in provider directory:"
+          ls -la provider/ 2>/dev/null || echo "No provider directory found"
+          
+          # Count files by format
+          case "$FORMAT" in
+            "bfr"|"v2ray")
+              FILE_COUNT=$(find ./provider -name "*.json" 2>/dev/null | wc -l)
+              echo "JSON files created: $FILE_COUNT"
+              if [ "${{ github.event.inputs.debug_mode }}" = "true" ]; then
+                find ./provider -name "*.json" 2>/dev/null | head -5 | while read file; do
+                  echo "Sample from $file:"
+                  head -10 "$file" 2>/dev/null || echo "Cannot read file"
+                done
+              fi
+              ;;
+            "clash")
+              FILE_COUNT=$(find ./provider -name "*.yaml" -o -name "*.yml" 2>/dev/null | wc -l)
+              echo "YAML files created: $FILE_COUNT"
+              ;;
+            "raw"|"sfa")
+              FILE_COUNT=$(find ./provider -name "*.txt" 2>/dev/null | wc -l)
+              echo "TXT files created: $FILE_COUNT"
+              ;;
+          esac
+          
+          echo "Total files created: $FILE_COUNT"
+          
+          # Show git status
+          echo "📋 Git status:"
+          git status --porcelain
+      
+      - name: Show debug log
+        if: ${{ github.event.inputs.debug_mode == 'true' }}
+        run: |
+          echo "🐛 Extraction log:"
+          if [ -f extract-outbound/extraction.log ]; then
+            cat extract-outbound/extraction.log
+          else
+            echo "No extraction log found"
+          fi
+      
+
+      - name: Determine file pattern for commit
+        if: ${{ github.event.inputs.dry_run != 'true' }}
+        id: commit_pattern
+        run: |
+          FORMAT=$(grep "^Format=" extract-outbound/${{ github.event.inputs.config_file }} | cut -d'=' -f2 | tr -d ' ' | tr -d '\r')
+          case "$FORMAT" in
+            "bfr"|"v2ray") echo "pattern=provider/*.json" >> $GITHUB_OUTPUT ;;
+            "clash") echo "pattern=provider/*.yaml provider/*.yml" >> $GITHUB_OUTPUT ;;
+            "raw"|"sfa") echo "pattern=provider/*.txt" >> $GITHUB_OUTPUT ;;
+            *) echo "pattern=provider/*" >> $GITHUB_OUTPUT ;;
+          esac
+      
+      - name: Commit changes
+        if: ${{ github.event.inputs.dry_run != 'true' }}
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "Development proxy extraction - Config: ${{ github.event.inputs.config_file }}, Output: ${{ github.event.inputs.output_file }}"
+          file_pattern: "${{ steps.commit_pattern.outputs.pattern }} extract-outbound/proxy_history.json extract-outbound/extraction.log config.json auto-download/auto-download.conf"
+          commit_user_name: "GitHub Actions Dev"
+          commit_user_email: "dev-actions@github.com"
+      
+      - name: Dry run summary
+        if: ${{ github.event.inputs.dry_run == 'true' }}
+        run: |
+          echo "🏃‍♂️ DRY RUN MODE - No changes committed"
+          echo "📋 Changes that would be committed:"
+          git status --porcelain
+          echo "📊 Files that would be added:"
+          git ls-files --others --exclude-standard
+      
+      - name: Final summary
+        run: |
+          echo "✅ Development extraction completed!"
+          echo "📋 Summary:"
+          echo "  - Config: ${{ github.event.inputs.config_file }}"
+          echo "  - Output: ${{ github.event.inputs.output_file }}"
+          echo "  - Dry run: ${{ github.event.inputs.dry_run }}"
+          echo "  - Debug: ${{ github.event.inputs.debug_mode }}"
+
+          
+          FORMAT=$(grep "^Format=" extract-outbound/${{ github.event.inputs.config_file }} | cut -d'=' -f2 | tr -d ' ' | tr -d '\r')
+          case "$FORMAT" in
+            "bfr"|"v2ray") FILE_COUNT=$(find ./provider -name "*.json" 2>/dev/null | wc -l) ;;
+            "clash") FILE_COUNT=$(find ./provider -name "*.yaml" -o -name "*.yml" 2>/dev/null | wc -l) ;;
+            "raw"|"sfa") FILE_COUNT=$(find ./provider -name "*.txt" 2>/dev/null | wc -l) ;;
+            *) FILE_COUNT=$(find ./provider -type f 2>/dev/null | wc -l) ;;
+          esac
+          
+          echo "  - Files created: $FILE_COUNT"
+          echo "  - Format: $FORMAT"
