@@ -2,10 +2,10 @@
     "outbounds": [
         {
             "type": "trojan",
-            "tag": "3 🇮🇩 Linode WS TLS [proxy]",
+            "tag": "18 🇮🇩 Linode WS TLS [proxy]",
             "server": "quiz.int.vidio.com",
             "server_port": 443,
-            "password": "cf62cbda-1adf-41ce-ae4a-e528e81bdd70",
+            "password": "a7cad1b6-78c9-4bed-8084-c94b392fe2e6",
             "network": "tcp",
             "tls": {
                 "enabled": true,
@@ -14,7 +14,7 @@
             },
             "transport": {
                 "type": "ws",
-                "path": "/172.232.238.52-32225",
+                "path": "/172.232.234.166-443",
                 "headers": {
                     "Host": "proxy.ex-vpn.my.id"
                 }
@@ -25,10 +25,33 @@
         },
         {
             "type": "trojan",
-            "tag": "24 🇮🇩 PT MITRA VISIONER PRATAMA WS TLS [proxy]",
+            "tag": "25 🇮🇩 Amazon.com WS TLS [proxy]",
             "server": "quiz.int.vidio.com",
             "server_port": 443,
-            "password": "cf62cbda-1adf-41ce-ae4a-e528e81bdd70",
+            "password": "a7cad1b6-78c9-4bed-8084-c94b392fe2e6",
+            "network": "tcp",
+            "tls": {
+                "enabled": true,
+                "insecure": true,
+                "server_name": "proxy.ex-vpn.my.id"
+            },
+            "transport": {
+                "type": "ws",
+                "path": "/43.218.77.16-443",
+                "headers": {
+                    "Host": "proxy.ex-vpn.my.id"
+                }
+            },
+            "multiplex": {
+                "enabled": false
+            }
+        },
+        {
+            "type": "trojan",
+            "tag": "23 🇮🇩 PT MITRA VISIONER PRATAMA WS TLS [proxy]",
+            "server": "quiz.int.vidio.com",
+            "server_port": 443,
+            "password": "a7cad1b6-78c9-4bed-8084-c94b392fe2e6",
             "network": "tcp",
             "tls": {
                 "enabled": true,
@@ -48,10 +71,10 @@
         },
         {
             "type": "trojan",
-            "tag": "21 🇮🇩 PT Pusat Media Indonesia WS TLS [proxy]",
+            "tag": "24 🇮🇩 21/F WS TLS [proxy]",
             "server": "quiz.int.vidio.com",
             "server_port": 443,
-            "password": "cf62cbda-1adf-41ce-ae4a-e528e81bdd70",
+            "password": "a7cad1b6-78c9-4bed-8084-c94b392fe2e6",
             "network": "tcp",
             "tls": {
                 "enabled": true,
@@ -60,7 +83,7 @@
             },
             "transport": {
                 "type": "ws",
-                "path": "/103.6.207.108-8080",
+                "path": "/149.129.250.8-443",
                 "headers": {
                     "Host": "proxy.ex-vpn.my.id"
                 }
@@ -71,10 +94,10 @@
         },
         {
             "type": "trojan",
-            "tag": "19 🇮🇩 PT Telekomunikasi Indonesia WS TLS [proxy]",
+            "tag": "26 🇮🇩 Linode WS TLS [proxy]",
             "server": "quiz.int.vidio.com",
             "server_port": 443,
-            "password": "cf62cbda-1adf-41ce-ae4a-e528e81bdd70",
+            "password": "a7cad1b6-78c9-4bed-8084-c94b392fe2e6",
             "network": "tcp",
             "tls": {
                 "enabled": true,
@@ -83,32 +106,9 @@
             },
             "transport": {
                 "type": "ws",
-                "path": "/36.95.152.58-12137",
+                "path": "/172.232.234.166-20205",
                 "headers": {
                     "Host": "proxy.ex-vpn.my.id"
-                }
-            },
-            "multiplex": {
-                "enabled": false
-            }
-        },
-        {
-            "type": "trojan",
-            "tag": "Trojan UDP",
-            "server": "quiz.int.vidio.com",
-            "server_port": 443,
-            "password": "t.me/foolvpn",
-            "network": "tcp",
-            "tls": {
-                "enabled": true,
-                "insecure": true,
-                "server_name": "id1.foolvpn.me"
-            },
-            "transport": {
-                "type": "ws",
-                "path": "/trojan-udp",
-                "headers": {
-                    "Host": "id1.foolvpn.me"
                 }
             },
             "multiplex": {
