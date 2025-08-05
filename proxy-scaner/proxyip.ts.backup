@@ -35,47 +35,7 @@ interface ProxyHistory {
   proxies: { [key: string]: ProxyHistoryEntry };
 }
 
-interface IPDataEntry {
-  query: string;
-  country: string;
-  countryCode: string;
-  isp: string;
-  org: string;
-  as: string;
-  asname: string;
-}
-
-interface Statistics {
-  totalProxies: 0;
-  uniqueIPs: 0;
-  cacheHits: 0;
-  jsonLookups: 0;
-  missingIPs: 0;
-  batchAPIRequests: 0;
-  countriesLoaded: 0;
-}
-
 let myGeoIpString: any = null;
-
-// Cache untuk IP yang sudah diperiksa (untuk multiple ports)
-const ipDataCache = new Map<string, IPDataEntry>();
-
-// Cache untuk IP yang tidak ditemukan (untuk batch API)
-const missingIPsCache = new Set<string>();
-
-// Cache untuk file JSON yang sudah di-load
-const countryDataCache = new Map<string, IPDataEntry[]>();
-
-// Statistics
-const stats: Statistics = {
-  totalProxies: 0,
-  uniqueIPs: 0,
-  cacheHits: 0,
-  jsonLookups: 0,
-  missingIPs: 0,
-  batchAPIRequests: 0,
-  countriesLoaded: 0
-};
 
 // Country code to country name mapping
 const countryMapping: { [key: string]: string } = {
@@ -146,12 +106,11 @@ const countryMapping: { [key: string]: string } = {
   'ZA': 'South Africa'
 };
 
-// File paths
+// Perubahan path file untuk menyesuaikan dengan struktur direktori baru
 const KV_PAIR_PROXY_FILE = "./kvProxyList.json";
 const RAW_PROXY_LIST_FILE = "./rawProxyList.txt";
 const PROXY_LIST_FILE = "./proxyList.txt";
 const ACTIVE_PROXY_HISTORY_FILE = "./active-proxy-history.txt";
-const PROXY_DATA_DIR = "./proxy_data";
 
 // Fungsi untuk menentukan domain resolver berdasarkan waktu UTC+8
 function getResolverDomain(): string {
@@ -177,266 +136,6 @@ const IP_RESOLVER_PATH = "/";
 const CONCURRENCY = 99;
 
 const CHECK_QUEUE: string[] = [];
-
-// Load country data on-demand
-async function loadCountryData(countryCode: string): Promise<IPDataEntry[]> {
-  // Cek cache dulu
-  if (countryDataCache.has(countryCode)) {
-    return countryDataCache.get(countryCode)!;
-  }
-  
-  try {
-    const filePath = `${PROXY_DATA_DIR}/${countryCode}.json`;
-    const data = await Bun.file(filePath).json() as IPDataEntry[];
-    
-    // Cache untuk penggunaan berikutnya
-    countryDataCache.set(countryCode, data);
-    stats.countriesLoaded++;
-    console.log(`📂 Loaded ${data.length} IPs from ${countryCode}.json`);
-    
-    return data;
-  } catch (error) {
-    console.log(`⚠️ Failed to load ${countryCode}.json`);
-    countryDataCache.set(countryCode, []); // Cache empty array
-    return [];
-  }
-}
-
-// Find IP in specific country data
-async function findIPInCountryData(ip: string, countryCode: string): Promise<IPDataEntry | null> {
-  const countryData = await loadCountryData(countryCode);
-  
-  // Cari IP dalam array data negara tersebut
-  const ipData = countryData.find(entry => entry.query === ip);
-  
-  if (ipData) {
-    stats.jsonLookups++;
-    return ipData;
-  } else {
-    return null;
-  }
-}
-
-// Cache-aware IP lookup
-async function getIPData(ip: string, countryCode: string): Promise<IPDataEntry> {
-  // 1. Cek cache IP dulu
-  if (ipDataCache.has(ip)) {
-    stats.cacheHits++;
-    console.log(`🔄 Using cached data for IP: ${ip}`);
-    return ipDataCache.get(ip)!;
-  }
-  
-  // 2. Cari di file JSON negara spesifik
-  const ipData = await findIPInCountryData(ip, countryCode);
-  
-  if (ipData) {
-    // 3. Cache untuk penggunaan berikutnya
-    ipDataCache.set(ip, ipData);
-    console.log(`✅ Found and cached ${ip} from ${countryCode}.json - ${ipData.org || ipData.isp}`);
-    return ipData;
-  } else {
-    // 4. Tambah ke missing IPs untuk batch API nanti
-    missingIPsCache.add(ip);
-    stats.missingIPs++;
-    console.log(`❌ IP ${ip} not found in ${countryCode}.json - added to batch queue`);
-    
-    // 5. Return fallback data sementara
-    const fallbackData: IPDataEntry = {
-      query: ip,
-      country: countryMapping[countryCode] || countryCode,
-      countryCode: countryCode,
-      isp: "Unknown ISP",
-      org: "Unknown Provider",
-      as: "Unknown AS",
-      asname: "Unknown ASName"
-    };
-    
-    return fallbackData;
-  }
-}
-
-// Batch API lookup for missing IPs
-async function batchLookupMissingIPs(): Promise<void> {
-  if (missingIPsCache.size === 0) {
-    console.log("✅ No missing IPs to lookup via API");
-    return;
-  }
-  
-  console.log(`🔍 Starting batch API lookup for ${missingIPsCache.size} missing IPs`);
-  
-  const missingIPs = Array.from(missingIPsCache);
-  const BATCH_SIZE = 90; // Sesuai proxy_validator.py
-  const API_URL = "http://ip-api.com/batch";
-  
-  for (let i = 0; i < missingIPs.length; i += BATCH_SIZE) {
-    const batch = missingIPs.slice(i, i + BATCH_SIZE);
-    
-    // Prepare batch request
-    const queries = batch.map(ip => ({
-      query: ip,
-      fields: "status,country,countryCode,isp,org,as,asname,query"
-    }));
-    
-    try {
-      console.log(`📡 API Batch ${Math.floor(i/BATCH_SIZE) + 1}: ${batch.length} IPs`);
-      
-      const response = await fetch(API_URL, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'User-Agent': 'ProxyScanner/1.0'
-        },
-        body: JSON.stringify(queries)
-      });
-      
-      if (response.ok) {
-        const results = await response.json();
-        await processBatchResults(results);
-        stats.batchAPIRequests++;
-        
-        // Rate limiting - wait 5 seconds between batches
-        if (i + BATCH_SIZE < missingIPs.length) {
-          console.log("⏳ Waiting 5 seconds for rate limiting...");
-          await new Promise(resolve => setTimeout(resolve, 5000));
-        }
-      } else {
-        console.log(`❌ API request failed: ${response.status}`);
-      }
-      
-    } catch (error: any) {
-      console.log(`❌ Batch API error:`, error.message);
-    }
-  }
-}
-
-// Process batch results and update JSON files
-async function processBatchResults(results: any[]): Promise<void> {
-  const countryUpdates = new Map<string, IPDataEntry[]>();
-  
-  for (const result of results) {
-    if (result.status === 'success') {
-      const countryCode = result.countryCode;
-      const ipData: IPDataEntry = {
-        query: result.query,
-        country: result.country,
-        countryCode: result.countryCode,
-        isp: result.isp || 'Unknown ISP',
-        org: result.org || result.asname || 'Unknown Organization',
-        as: result.as || 'Unknown AS',
-        asname: result.asname || 'Unknown ASName'
-      };
-      
-      // Group by country for file updates
-      if (!countryUpdates.has(countryCode)) {
-        countryUpdates.set(countryCode, []);
-      }
-      countryUpdates.get(countryCode)!.push(ipData);
-      
-      // Update cache
-      ipDataCache.set(result.query, ipData);
-      console.log(`✅ API result cached: ${result.query} - ${countryCode} - ${ipData.org}`);
-    }
-  }
-  
-  // Update JSON files
-  for (const [countryCode, newData] of countryUpdates) {
-    await updateCountryJSONFile(countryCode, newData);
-  }
-}
-
-// Update country JSON files
-async function updateCountryJSONFile(countryCode: string, newData: IPDataEntry[]): Promise<void> {
-  const filePath = `${PROXY_DATA_DIR}/${countryCode}.json`;
-  
-  try {
-    // Load existing data
-    let existingData: IPDataEntry[] = [];
-    try {
-      existingData = await Bun.file(filePath).json();
-    } catch {
-      existingData = [];
-    }
-    
-    // Merge new data (avoid duplicates)
-    const existingIPs = new Set(existingData.map(item => item.query));
-    const uniqueNewData = newData.filter(item => !existingIPs.has(item.query));
-    
-    if (uniqueNewData.length > 0) {
-      const combinedData = [...existingData, ...uniqueNewData];
-      
-      // Save updated file
-      await Bun.write(filePath, JSON.stringify(combinedData, null, 2));
-      console.log(`📝 Updated ${countryCode}.json: +${uniqueNewData.length} new IPs`);
-      
-      // Update cache
-      countryDataCache.set(countryCode, combinedData);
-    }
-    
-  } catch (error: any) {
-    console.log(`❌ Error updating ${countryCode}.json:`, error.message);
-  }
-}
-
-// Update proxy entries that used fallback data
-async function updateProxyListWithAPIResults(): Promise<void> {
-  if (missingIPsCache.size === 0) {
-    return;
-  }
-  
-  console.log("🔄 Updating proxyList.txt with API results...");
-  
-  try {
-    // Read current proxyList.txt
-    const proxyListContent = await Bun.file(PROXY_LIST_FILE).text();
-    const lines = proxyListContent.split('\n').filter(line => line.trim());
-    
-    const updatedLines: string[] = [];
-    let updatedCount = 0;
-    
-    for (const line of lines) {
-      const parts = line.split(',');
-      if (parts.length >= 4) {
-        const ip = parts[0];
-        const port = parts[1];
-        
-        // Check if we have updated data for this IP
-        if (ipDataCache.has(ip)) {
-          const ipData = ipDataCache.get(ip)!;
-          const updatedLine = `${ip},${port},${ipData.countryCode},${ipData.org || ipData.isp}`;
-          updatedLines.push(updatedLine);
-          updatedCount++;
-        } else {
-          updatedLines.push(line);
-        }
-      } else {
-        updatedLines.push(line);
-      }
-    }
-    
-    if (updatedCount > 0) {
-      await Bun.write(PROXY_LIST_FILE, updatedLines.join('\n'));
-      console.log(`✅ Updated ${updatedCount} proxy entries with API data`);
-    }
-    
-  } catch (error: any) {
-    console.log(`❌ Error updating proxyList.txt:`, error.message);
-  }
-}
-
-// Show final statistics
-function showFinalStatistics() {
-  console.log("\n📊 Final Statistics:");
-  console.log(`Total proxies processed: ${stats.totalProxies}`);
-  console.log(`Unique IPs encountered: ${stats.uniqueIPs}`);
-  console.log(`Cache hits: ${stats.cacheHits}`);
-  console.log(`JSON file lookups: ${stats.jsonLookups}`);
-  console.log(`Countries loaded: ${stats.countriesLoaded}`);
-  console.log(`Missing IPs (API lookup): ${stats.missingIPs}`);
-  console.log(`Batch API requests: ${stats.batchAPIRequests}`);
-  if (stats.totalProxies > 0) {
-    console.log(`Cache hit ratio: ${((stats.cacheHits / stats.totalProxies) * 100).toFixed(2)}%`);
-  }
-}
 
 async function sendRequest(host: string, path: string, proxy: any = null) {
   return new Promise((resolve, reject) => {
@@ -712,8 +411,6 @@ async function writeProxyHistory(history: ProxyHistory): Promise<void> {
 }
 
 (async () => {
-  console.log("🚀 Starting Enhanced Proxy Scanner with Optimized IP Data Lookup");
-  
   const proxyList = await readProxyList();
   const proxyChecked: string[] = [];
   const uniqueRawProxies: string[] = [];
@@ -791,36 +488,23 @@ async function writeProxyHistory(history: ProxyHistory): Promise<void> {
 
     CHECK_QUEUE.push(proxyKey);
     checkProxy(proxy.address, proxy.port)
-      .then(async (res) => {
-        if (!res.error && res.result?.proxyip === true) {
-          const proxyIP = res.result.ip;
-          const proxyPort = proxy.port; // Use port from rawProxyList
-          
-          // Get accurate IP data using country code hint
-          const ipData = await getIPData(proxyIP, proxy.country);
-          
+      .then((res) => {
+        if (!res.error && res.result?.proxyip === true && res.result.country) {
           // Update proxy history - increment active count and mark as currently active
           proxyHistory.proxies[proxyKey].activeCount += 1;
           proxyHistory.proxies[proxyKey].isCurrentlyActive = true;
           
-          // Format output - TETAP SAMA seperti sekarang: IP,PORT,COUNTRY,ORG
-          const finalResult = `${proxyIP},${proxyPort},${ipData.countryCode},${ipData.org || ipData.isp}`;
-          activeProxyList.push(finalResult);
+          activeProxyList.push(
+            `${res.result?.proxy},${res.result?.port},${res.result?.country},${res.result?.asOrganization}`
+          );
 
-          if (kvPair[ipData.countryCode] == undefined) kvPair[ipData.countryCode] = [];
-          if (kvPair[ipData.countryCode].length < 100) {
-            kvPair[ipData.countryCode].push(`${proxyIP}:${proxyPort}`);
+          if (kvPair[res.result.country] == undefined) kvPair[res.result.country] = [];
+          if (kvPair[res.result.country].length < 100) {
+            kvPair[res.result.country].push(`${res.result.proxy}:${res.result.port}`);
           }
 
           proxySaved += 1;
-          stats.totalProxies++;
-          
-          // Track unique IPs
-          if (!ipDataCache.has(proxyIP)) {
-            stats.uniqueIPs++;
-          }
-          
-          console.log(`[${i}/${proxyList.length}] ✅ Saved: ${finalResult}`);
+          console.log(`[${i}/${proxyList.length}] Proxy disimpan:`, proxySaved);
         }
         // Note: If proxy is not active, isCurrentlyActive remains false
       })
@@ -838,14 +522,6 @@ async function writeProxyHistory(history: ProxyHistory): Promise<void> {
     await Bun.sleep(1);
   }
 
-  console.log("\n🔍 Processing missing IPs with batch API...");
-  
-  // Batch lookup missing IPs
-  await batchLookupMissingIPs();
-  
-  // Update proxy list with API results
-  await updateProxyListWithAPIResults();
-
   uniqueRawProxies.sort(sortByCountry);
   activeProxyList.sort(sortByCountry);
 
@@ -856,14 +532,9 @@ async function writeProxyHistory(history: ProxyHistory): Promise<void> {
   await Bun.write(RAW_PROXY_LIST_FILE, uniqueRawProxies.join("\n"));
   await Bun.write(PROXY_LIST_FILE, activeProxyList.join("\n"));
 
-  // Show final statistics
-  showFinalStatistics();
-
-  console.log(`\n⏱️ Waktu proses: ${(Bun.nanoseconds() / 1000000000).toFixed(2)} detik`);
-  console.log(`📊 Total pemeriksaan yang telah dilakukan: ${proxyHistory.totalChecksRun}`);
-  console.log(`📁 Riwayat proxy disimpan ke: ${ACTIVE_PROXY_HISTORY_FILE}`);
-  console.log(`💾 Proxy saved: ${proxySaved}`);
-  
+  console.log(`Waktu proses: ${(Bun.nanoseconds() / 1000000000).toFixed(2)} detik`);
+  console.log(`Total pemeriksaan yang telah dilakukan: ${proxyHistory.totalChecksRun}`);
+  console.log(`Riwayat proxy disimpan ke: ${ACTIVE_PROXY_HISTORY_FILE}`);
   process.exit(0);
 })();
 
