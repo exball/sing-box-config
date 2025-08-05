@@ -2,10 +2,10 @@
     "outbounds": [
         {
             "type": "trojan",
-            "tag": "63 🇸🇬 Oracle Public Cloud WS TLS [proxy]",
+            "tag": "25 🇸🇬 3NT SOLUTIONS LLP WS TLS [proxy]",
             "server": "quiz.int.vidio.com",
             "server_port": 443,
-            "password": "92b32923-86af-4063-b730-efb98c63bf6e",
+            "password": "d6eaeac3-2304-46d9-bb25-04a49f527390",
             "network": "tcp",
             "tls": {
                 "enabled": true,
@@ -14,7 +14,99 @@
             },
             "transport": {
                 "type": "ws",
-                "path": "/168.138.170.211-53702",
+                "path": "/38.244.147.68-2053",
+                "headers": {
+                    "Host": "proxy.xtunnel.my.id"
+                }
+            },
+            "multiplex": {
+                "enabled": false
+            }
+        },
+        {
+            "type": "trojan",
+            "tag": "9 🇸🇬 6 COLLYER QUAY WS TLS [proxy]",
+            "server": "quiz.int.vidio.com",
+            "server_port": 443,
+            "password": "d6eaeac3-2304-46d9-bb25-04a49f527390",
+            "network": "tcp",
+            "tls": {
+                "enabled": true,
+                "insecure": true,
+                "server_name": "proxy.xtunnel.my.id"
+            },
+            "transport": {
+                "type": "ws",
+                "path": "/43.134.111.154-27223",
+                "headers": {
+                    "Host": "proxy.xtunnel.my.id"
+                }
+            },
+            "multiplex": {
+                "enabled": false
+            }
+        },
+        {
+            "type": "trojan",
+            "tag": "12 🇸🇬 Akamai Connected Cloud / Linode WS TLS [proxy]",
+            "server": "quiz.int.vidio.com",
+            "server_port": 443,
+            "password": "d6eaeac3-2304-46d9-bb25-04a49f527390",
+            "network": "tcp",
+            "tls": {
+                "enabled": true,
+                "insecure": true,
+                "server_name": "proxy.xtunnel.my.id"
+            },
+            "transport": {
+                "type": "ws",
+                "path": "/192.46.231.158-443",
+                "headers": {
+                    "Host": "proxy.xtunnel.my.id"
+                }
+            },
+            "multiplex": {
+                "enabled": false
+            }
+        },
+        {
+            "type": "trojan",
+            "tag": "83 🇸🇬 Alibaba Cloud (Singapore) Private Limited WS TLS [proxy]",
+            "server": "quiz.int.vidio.com",
+            "server_port": 443,
+            "password": "d6eaeac3-2304-46d9-bb25-04a49f527390",
+            "network": "tcp",
+            "tls": {
+                "enabled": true,
+                "insecure": true,
+                "server_name": "proxy.xtunnel.my.id"
+            },
+            "transport": {
+                "type": "ws",
+                "path": "/8.219.56.26-40011",
+                "headers": {
+                    "Host": "proxy.xtunnel.my.id"
+                }
+            },
+            "multiplex": {
+                "enabled": false
+            }
+        },
+        {
+            "type": "trojan",
+            "tag": "37 🇸🇬 Alibaba Cloud LLC WS TLS [proxy]",
+            "server": "quiz.int.vidio.com",
+            "server_port": 443,
+            "password": "d6eaeac3-2304-46d9-bb25-04a49f527390",
+            "network": "tcp",
+            "tls": {
+                "enabled": true,
+                "insecure": true,
+                "server_name": "proxy.xtunnel.my.id"
+            },
+            "transport": {
+                "type": "ws",
+                "path": "/47.236.185.184-7000",
                 "headers": {
                     "Host": "proxy.xtunnel.my.id"
                 }

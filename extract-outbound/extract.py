@@ -703,7 +703,7 @@ def process_single_config(config, format_type="bfr", format_file="sing_outbound.
     print(f"- Protokol: {', '.join(protocols)}")
     print(f"- Security: {', '.join(securities)}")
     print(f"- Format: {format_type}")
-    print(f"- Max proxies per provider (selain ID): {max_proxies_per_provider}")
+    print(f"- Max proxies per provider: {max_proxies_per_provider}")
     print(f"- Output file: {output_name}")
     
     # Dictionary untuk menyimpan outbound berdasarkan negara, protokol, dan keamanan
@@ -816,9 +816,8 @@ def process_single_config(config, format_type="bfr", format_file="sing_outbound.
                     # Filter outbound berdasarkan protokol dan keamanan
                     filtered_outbounds = []
                     
-                    # Untuk negara selain Indonesia, kelompokkan proxy berdasarkan provider
-                    if country != "ID":
-                        provider_proxies = defaultdict(list)
+                    # Kelompokkan proxy berdasarkan provider untuk semua negara (termasuk Indonesia)
+                    provider_proxies = defaultdict(list)
                     
                     for outbound in outbounds:
                         # Filter berdasarkan format
@@ -866,14 +865,8 @@ def process_single_config(config, format_type="bfr", format_file="sing_outbound.
                                     if proxy_type in outbound_format:
                                         outbound_copy = apply_clash_format(outbound_copy, outbound_format[proxy_type])
                                 
-                                # Logika untuk memfilter proxy:
-                                # 1. Untuk Indonesia (ID): Ambil semua proxy
-                                # 2. Untuk negara lain: Kelompokkan berdasarkan provider untuk sistem rotasi
-                                if country == "ID":
-                                    filtered_outbounds.append(outbound_copy)
-                                else:
-                                    # Kelompokkan proxy berdasarkan provider
-                                    provider_proxies[provider_name].append(outbound_copy)
+                                # Kelompokkan proxy berdasarkan provider untuk sistem rotasi
+                                provider_proxies[provider_name].append(outbound_copy)
                         else:
                             # Filter untuk sing-box format
                             if (outbound.get("type") == protocol and 
@@ -917,39 +910,32 @@ def process_single_config(config, format_type="bfr", format_file="sing_outbound.
                                 if outbound_format:
                                     outbound_copy = apply_outbound_format(outbound_copy, outbound_format)
                                 
-                                # Logika untuk memfilter proxy:
-                                # 1. Untuk Indonesia (ID): Ambil semua proxy
-                                # 2. Untuk negara lain: Kelompokkan berdasarkan provider untuk sistem rotasi
-                                if country == "ID":
-                                    filtered_outbounds.append(outbound_copy)
-                                else:
-                                    # Kelompokkan proxy berdasarkan provider
-                                    provider_proxies[provider_name].append(outbound_copy)
+                                # Kelompokkan proxy berdasarkan provider untuk sistem rotasi
+                                provider_proxies[provider_name].append(outbound_copy)
                     
-                    # Untuk negara selain Indonesia, gunakan sistem rotasi per provider
-                    if country != "ID":
-                        category_key = f"{country}_{protocol}_{security}"
-                        
-                        # Ambil hanya sejumlah provider sesuai max_proxies_per_provider
-                        # dan ambil 1 proxy dari setiap provider yang dipilih
-                        available_providers = [(name, proxies) for name, proxies in provider_proxies.items() if proxies]
-                        
-                        # Pilih provider dengan sistem rotasi
-                        selected_providers, proxy_history = get_next_providers(
-                            available_providers, category_key, max_proxies_per_provider, proxy_history
+                    # Gunakan sistem rotasi per provider untuk semua negara (termasuk Indonesia)
+                    category_key = f"{country}_{protocol}_{security}"
+                    
+                    # Ambil hanya sejumlah provider sesuai max_proxies_per_provider
+                    # dan ambil 1 proxy dari setiap provider yang dipilih
+                    available_providers = [(name, proxies) for name, proxies in provider_proxies.items() if proxies]
+                    
+                    # Pilih provider dengan sistem rotasi
+                    selected_providers, proxy_history = get_next_providers(
+                        available_providers, category_key, max_proxies_per_provider, proxy_history
+                    )
+                    
+                    for provider_name, proxies in selected_providers:
+                        # Ambil hanya 1 proxy dari setiap provider dengan sistem rotasi
+                        selected_proxies, proxy_history = get_next_proxies_for_provider(
+                            provider_name, category_key, proxies, 1, proxy_history  # max_count = 1
                         )
                         
-                        for provider_name, proxies in selected_providers:
-                            # Ambil hanya 1 proxy dari setiap provider dengan sistem rotasi
-                            selected_proxies, proxy_history = get_next_proxies_for_provider(
-                                provider_name, category_key, proxies, 1, proxy_history  # max_count = 1
-                            )
-                            
-                            filtered_outbounds.extend(selected_proxies)
-                            
-                            # Debug info
-                            if selected_proxies:
-                                print(f"Added {len(selected_proxies)} {country} proxies from provider: {provider_name} (total available: {len(proxies)})")
+                        filtered_outbounds.extend(selected_proxies)
+                        
+                        # Debug info
+                        if selected_proxies:
+                            print(f"Added {len(selected_proxies)} {country} proxies from provider: {provider_name} (total available: {len(proxies)})")
                     
                     print(f"Found {len(filtered_outbounds)} {protocol} {security} proxies from {country}")
                     

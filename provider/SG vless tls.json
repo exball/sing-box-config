@@ -2,10 +2,10 @@
     "outbounds": [
         {
             "type": "vless",
-            "tag": "26 🇸🇬 Oracle Public Cloud WS TLS [proxy]",
+            "tag": "47 🇸🇬 SGP_VULTR_CUST WS TLS [proxy]",
             "server": "quiz.int.vidio.com",
             "server_port": 443,
-            "uuid": "8d4ed0da-85c2-4fe6-bf5a-88b15cec8ab9",
+            "uuid": "10f41b25-0762-4f13-9335-571f19c11c9a",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -17,7 +17,91 @@
                 "headers": {
                     "Host": "proxy.xtunnel.my.id"
                 },
-                "path": "/168.138.165.174-443",
+                "path": "/207.148.77.27-443",
+                "type": "ws"
+            }
+        },
+        {
+            "type": "vless",
+            "tag": "58 🇸🇬 Startup maintainer WS TLS [proxy]",
+            "server": "quiz.int.vidio.com",
+            "server_port": 443,
+            "uuid": "10f41b25-0762-4f13-9335-571f19c11c9a",
+            "network": "tcp",
+            "packet_encoding": "xudp",
+            "tls": {
+                "enabled": true,
+                "insecure": true,
+                "server_name": "proxy.xtunnel.my.id"
+            },
+            "transport": {
+                "headers": {
+                    "Host": "proxy.xtunnel.my.id"
+                },
+                "path": "/185.115.207.218-443",
+                "type": "ws"
+            }
+        },
+        {
+            "type": "vless",
+            "tag": "17 🇸🇬 The Constant Company WS TLS [proxy]",
+            "server": "quiz.int.vidio.com",
+            "server_port": 443,
+            "uuid": "10f41b25-0762-4f13-9335-571f19c11c9a",
+            "network": "tcp",
+            "packet_encoding": "xudp",
+            "tls": {
+                "enabled": true,
+                "insecure": true,
+                "server_name": "proxy.xtunnel.my.id"
+            },
+            "transport": {
+                "headers": {
+                    "Host": "proxy.xtunnel.my.id"
+                },
+                "path": "/149.28.139.245-20205",
+                "type": "ws"
+            }
+        },
+        {
+            "type": "vless",
+            "tag": "93 🇸🇬 UCUL-SG WS TLS [proxy]",
+            "server": "quiz.int.vidio.com",
+            "server_port": 443,
+            "uuid": "10f41b25-0762-4f13-9335-571f19c11c9a",
+            "network": "tcp",
+            "packet_encoding": "xudp",
+            "tls": {
+                "enabled": true,
+                "insecure": true,
+                "server_name": "proxy.xtunnel.my.id"
+            },
+            "transport": {
+                "headers": {
+                    "Host": "proxy.xtunnel.my.id"
+                },
+                "path": "/164.52.2.99-443",
+                "type": "ws"
+            }
+        },
+        {
+            "type": "vless",
+            "tag": "18 🇸🇬 Vultr Holdings WS TLS [proxy]",
+            "server": "quiz.int.vidio.com",
+            "server_port": 443,
+            "uuid": "10f41b25-0762-4f13-9335-571f19c11c9a",
+            "network": "tcp",
+            "packet_encoding": "xudp",
+            "tls": {
+                "enabled": true,
+                "insecure": true,
+                "server_name": "proxy.xtunnel.my.id"
+            },
+            "transport": {
+                "headers": {
+                    "Host": "proxy.xtunnel.my.id"
+                },
+                "path": "/45.76.188.229-74",
                 "type": "ws"
             }
         }
