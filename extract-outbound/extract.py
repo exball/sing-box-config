@@ -93,9 +93,6 @@ def load_proxy_history():
                 "used_proxies": ["proxy_id1", "proxy_id2", ...],
                 "last_index": 5
             }
-        },
-        "used_ip_ports": {
-            "country_protocol_security": ["ip:port1", "ip:port2", ...]
         }
     }
     """
@@ -118,87 +115,6 @@ def save_proxy_history(history):
             json.dump(history, f, indent=2, ensure_ascii=False)
     except Exception as e:
         print(f"Warning: Error saving proxy history: {e}")
-
-def get_ip_port_from_proxy(proxy):
-    """
-    Ekstrak IP:Port dari proxy outbound.
-    """
-    server = proxy.get("server", "")
-    port = proxy.get("server_port", "")
-    return f"{server}:{port}"
-
-def is_ip_port_used(ip_port, category_key, history):
-    """
-    Cek apakah IP:Port sudah pernah digunakan untuk kategori tertentu.
-    """
-    used_ip_ports = history.get("used_ip_ports", {})
-    category_used = used_ip_ports.get(category_key, [])
-    return ip_port in category_used
-
-def add_used_ip_port(ip_port, category_key, history):
-    """
-    Tambahkan IP:Port ke daftar yang sudah digunakan.
-    """
-    if "used_ip_ports" not in history:
-        history["used_ip_ports"] = {}
-    
-    if category_key not in history["used_ip_ports"]:
-        history["used_ip_ports"][category_key] = []
-    
-    if ip_port not in history["used_ip_ports"][category_key]:
-        history["used_ip_ports"][category_key].append(ip_port)
-    
-    return history
-
-def filter_unused_proxies(proxies, category_key, history):
-    """
-    Filter proxy yang belum pernah digunakan berdasarkan IP:Port.
-    """
-    unused_proxies = []
-    for proxy in proxies:
-        ip_port = get_ip_port_from_proxy(proxy)
-        if not is_ip_port_used(ip_port, category_key, history):
-            unused_proxies.append(proxy)
-    
-    return unused_proxies
-
-def get_next_providers_with_ip_tracking(available_providers, category_key, max_count, history):
-    """
-    Pilih multiple provider dengan sistem rotasi seperti fungsi asli, 
-    tapi hanya dari provider yang memiliki proxy dengan IP:Port yang belum digunakan.
-    """
-    if not available_providers:
-        return [], history
-    
-    # Inisialisasi history untuk kategori ini jika belum ada
-    if category_key not in history:
-        history[category_key] = {
-            "used_providers": [],
-            "last_index": 0
-        }
-    
-    category_history = history[category_key]
-    last_index = category_history["last_index"]
-    
-    # Urutkan provider berdasarkan nama untuk konsistensi
-    sorted_providers = sorted(available_providers, key=lambda x: x[0])
-    
-    # Pilih provider dengan sistem rotasi
-    selected_providers = []
-    current_index = last_index
-    
-    for _ in range(min(max_count, len(sorted_providers))):
-        if current_index >= len(sorted_providers):
-            current_index = 0
-        
-        provider_name, proxies = sorted_providers[current_index]
-        selected_providers.append((provider_name, proxies))
-        current_index += 1
-    
-    # Update history dengan posisi index berikutnya
-    history[category_key]["last_index"] = current_index % len(sorted_providers)
-    
-    return selected_providers, history
 
 def get_next_providers(available_providers, category_key, max_count, history):
     """
@@ -787,7 +703,7 @@ def process_single_config(config, format_type="bfr", format_file="sing_outbound.
     print(f"- Protokol: {', '.join(protocols)}")
     print(f"- Security: {', '.join(securities)}")
     print(f"- Format: {format_type}")
-    print(f"- Max providers selected (semua negara): {max_proxies_per_provider}")
+    print(f"- Max proxies per provider (selain ID): {max_proxies_per_provider}")
     print(f"- Output file: {output_name}")
     
     # Dictionary untuk menyimpan outbound berdasarkan negara, protokol, dan keamanan
@@ -1001,56 +917,39 @@ def process_single_config(config, format_type="bfr", format_file="sing_outbound.
                                 if outbound_format:
                                     outbound_copy = apply_outbound_format(outbound_copy, outbound_format)
                                 
-                                # Kelompokkan proxy berdasarkan provider untuk sistem rotasi (semua negara)
-                                provider_proxies[provider_name].append(outbound_copy)
+                                # Logika untuk memfilter proxy:
+                                # 1. Untuk Indonesia (ID): Ambil semua proxy
+                                # 2. Untuk negara lain: Kelompokkan berdasarkan provider untuk sistem rotasi
+                                if country == "ID":
+                                    filtered_outbounds.append(outbound_copy)
+                                else:
+                                    # Kelompokkan proxy berdasarkan provider
+                                    provider_proxies[provider_name].append(outbound_copy)
                     
-                    # Gunakan sistem rotasi per provider dengan tracking IP:Port untuk semua negara
-                    category_key = f"{country}_{protocol}_{security}"
-                    
-                    # Ambil semua provider yang tersedia
-                    available_providers = [(name, proxies) for name, proxies in provider_proxies.items() if proxies]
-                    
-                    # Filter provider yang memiliki proxy dengan IP:Port yang belum digunakan
-                    providers_with_unused = []
-                    for provider_name, proxies in available_providers:
-                        unused_proxies = filter_unused_proxies(proxies, category_key, proxy_history)
-                        if unused_proxies:
-                            providers_with_unused.append((provider_name, unused_proxies))
-                    
-                    # Jika tidak ada provider dengan proxy yang belum digunakan, reset history
-                    if not providers_with_unused:
-                        print(f"Semua IP:Port untuk kategori {category_key} sudah digunakan. Reset history...")
-                        if "used_ip_ports" in proxy_history and category_key in proxy_history["used_ip_ports"]:
-                            del proxy_history["used_ip_ports"][category_key]
+                    # Untuk negara selain Indonesia, gunakan sistem rotasi per provider
+                    if country != "ID":
+                        category_key = f"{country}_{protocol}_{security}"
                         
-                        # Coba lagi setelah reset
-                        for provider_name, proxies in available_providers:
-                            unused_proxies = filter_unused_proxies(proxies, category_key, proxy_history)
-                            if unused_proxies:
-                                providers_with_unused.append((provider_name, unused_proxies))
-                    
-                    if providers_with_unused:
-                        # Pilih multiple provider dengan sistem rotasi (seperti sistem asli)
-                        selected_providers, proxy_history = get_next_providers_with_ip_tracking(
-                            providers_with_unused, category_key, max_proxies_per_provider, proxy_history
+                        # Ambil hanya sejumlah provider sesuai max_proxies_per_provider
+                        # dan ambil 1 proxy dari setiap provider yang dipilih
+                        available_providers = [(name, proxies) for name, proxies in provider_proxies.items() if proxies]
+                        
+                        # Pilih provider dengan sistem rotasi
+                        selected_providers, proxy_history = get_next_providers(
+                            available_providers, category_key, max_proxies_per_provider, proxy_history
                         )
                         
                         for provider_name, proxies in selected_providers:
-                            # Ambil 1 proxy dari setiap provider dengan IP:Port yang belum digunakan
-                            unused_proxies = filter_unused_proxies(proxies, category_key, proxy_history)
-                            if unused_proxies:
-                                selected_proxy = unused_proxies[0]  # Ambil 1 proxy pertama
-                                
-                                # Tambahkan IP:Port yang digunakan ke history
-                                ip_port = get_ip_port_from_proxy(selected_proxy)
-                                proxy_history = add_used_ip_port(ip_port, category_key, proxy_history)
-                                
-                                filtered_outbounds.append(selected_proxy)
-                                
-                                # Debug info
-                                print(f"Added 1 {country} proxy from provider: {provider_name} (IP:Port: {ip_port})")
-                    else:
-                        print(f"No unused proxies available for {country} {protocol} {security}")
+                            # Ambil hanya 1 proxy dari setiap provider dengan sistem rotasi
+                            selected_proxies, proxy_history = get_next_proxies_for_provider(
+                                provider_name, category_key, proxies, 1, proxy_history  # max_count = 1
+                            )
+                            
+                            filtered_outbounds.extend(selected_proxies)
+                            
+                            # Debug info
+                            if selected_proxies:
+                                print(f"Added {len(selected_proxies)} {country} proxies from provider: {provider_name} (total available: {len(proxies)})")
                     
                     print(f"Found {len(filtered_outbounds)} {protocol} {security} proxies from {country}")
                     
@@ -1202,10 +1101,7 @@ def main():
         print("Protocol= vless")
         print("Security= tls")
         print("Output_Name= ID vless tls")
-        print("Max_Proxies_Per_Provider= 5  # Optional: max providers selected for ALL countries (default: 1)")
-        print("                              # Each selected provider gives 1 proxy with unused IP:Port")
-        print("                              # Same provider can be selected again with different IP:Port")
-        print("                              # Now applies to ALL countries including Indonesia (ID)")
+        print("Max_Proxies_Per_Provider= 1  # Optional: max proxies per provider for non-ID countries (default: 1)")
         print("\nAvailable country codes:")
         print("ID (Indonesia), SG (Singapore), US (United States), JP (Japan), KR (South Korea),")
         print("HK (Hong Kong), TW (Taiwan), GB (United Kingdom), DE (Germany), FR (France),")
