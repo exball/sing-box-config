@@ -17,6 +17,11 @@ interface ProxyTestResult {
     port: number;
     delay: number;
     country: string;
+    countryCode: string;
+    isp: string;
+    org: string;
+    as: string;
+    asname: string;
     asOrganization: string;
   };
 }
@@ -339,7 +344,7 @@ async function processBatchResults(results: any[]): Promise<void> {
   }
   
   // Update JSON files
-  for (const [countryCode, newData] of countryUpdates) {
+  for (const [countryCode, newData] of Array.from(countryUpdates)) {
     await updateCountryJSONFile(countryCode, newData);
   }
 }
@@ -495,7 +500,10 @@ export async function checkProxy(proxyAddress: string, proxyPort: number): Promi
     const parsedIpInfo = JSON.parse(ipinfo as string);
     const parsedMyIp = JSON.parse(myip as string);
 
+    // Check if proxy is active by comparing IPs
     if (parsedIpInfo.ip && parsedIpInfo.ip !== parsedMyIp.ip) {
+      // Proxy is active! But use INPUT IP instead of resolver response
+      // This solves IPv6 issues and ensures consistent IPv4 usage
       result = {
         error: false,
         result: {
@@ -503,7 +511,15 @@ export async function checkProxy(proxyAddress: string, proxyPort: number): Promi
           port: proxyPort,
           proxyip: true,
           delay: finish - start,
-          ...parsedIpInfo,
+          ip: proxyAddress,  // ← Use input IP, not resolver response
+          // Keep other useful info from resolver (but override IP)
+          country: parsedIpInfo.country || "Unknown",
+          countryCode: parsedIpInfo.countryCode || "Unknown",
+          isp: parsedIpInfo.isp || "Unknown ISP",
+          org: parsedIpInfo.org || "Unknown Provider",
+          as: parsedIpInfo.as || "Unknown AS",
+          asname: parsedIpInfo.asname || "Unknown ASName",
+          asOrganization: parsedIpInfo.asOrganization || parsedIpInfo.org || "Unknown Provider"
         },
       };
     }
