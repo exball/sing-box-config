@@ -62,10 +62,24 @@ jobs:
         echo "📊 Validation Results:"
         echo "===================="
         
+        # Check if rawProxyList.txt was updated
+        if [ -f "rawProxyList.txt" ]; then
+          echo "📝 rawProxyList.txt updated:"
+          echo "   Size: $(wc -c < rawProxyList.txt) bytes"
+          echo "   Lines: $(wc -l < rawProxyList.txt) lines"
+        fi
+        
+        # Check backup files
+        backup_files=$(ls rawProxyList_backup_*.txt 2>/dev/null | wc -l)
+        if [ $backup_files -gt 0 ]; then
+          latest_backup=$(ls -t rawProxyList_backup_*.txt | head -1)
+          echo "💾 Backup created: $latest_backup"
+        fi
+        
         # Count files in proxy_data directory
         if [ -d "proxy_data" ]; then
           country_files=$(find proxy_data -name "*.json" | wc -l)
-          echo "📁 Country JSON files created: $country_files"
+          echo "📁 Country JSON files: $country_files"
           
           # Show some statistics
           if [ $country_files -gt 0 ]; then
@@ -79,23 +93,12 @@ jobs:
             done | sort -k2 -nr | head -5
           fi
         fi
-        
-        # Check if output file was created
-        output_files=$(ls proxy-validated-rawProxyList-*.txt 2>/dev/null | wc -l)
-        echo "📄 Validation output files: $output_files"
-        
-        if [ $output_files -gt 0 ]; then
-          latest_output=$(ls -t proxy-validated-rawProxyList-*.txt | head -1)
-          echo "📋 Latest output file: $latest_output"
-          echo "📏 Output file size: $(wc -c < "$latest_output") bytes"
-          echo "📊 Output line count: $(wc -l < "$latest_output") lines"
-        fi
 
     - name: Commit and push changes
       uses: stefanzweifel/git-auto-commit-action@v5
       with:
-        commit_message: "🤖 Weekly proxy validation [automated]"
-        file_pattern: "proxy-scaner/proxy_data/*.json proxy-scaner/proxy-validated-rawProxyList-*.txt"
+        commit_message: "🤖 Weekly proxy validation - Updated rawProxyList.txt [automated]"
+        file_pattern: "proxy-scaner/rawProxyList.txt proxy-scaner/proxy_data/*.json proxy-scaner/rawProxyList_backup_*.txt"
         commit_user_name: "GitHub Actions Bot"
         commit_user_email: "actions@github.com"
         commit_author: "GitHub Actions Bot <actions@github.com>"
@@ -142,31 +145,38 @@ jobs:
           fi
         fi
         
-        # Output file info
-        output_files=$(ls proxy-validated-rawProxyList-*.txt 2>/dev/null | wc -l)
-        if [ $output_files -gt 0 ]; then
-          latest_output=$(ls -t proxy-validated-rawProxyList-*.txt | head -1)
-          output_size=$(wc -c < "$latest_output")
-          output_lines=$(wc -l < "$latest_output")
+        # Updated rawProxyList.txt info
+        if [ -f "rawProxyList.txt" ]; then
+          updated_size=$(wc -c < rawProxyList.txt)
+          updated_lines=$(wc -l < rawProxyList.txt)
           
-          echo "## 📤 Output File" >> $GITHUB_STEP_SUMMARY
-          echo "- **File:** $latest_output" >> $GITHUB_STEP_SUMMARY
-          echo "- **Size:** $output_size bytes" >> $GITHUB_STEP_SUMMARY
-          echo "- **Lines:** $output_lines" >> $GITHUB_STEP_SUMMARY
+          echo "## 📝 Updated File" >> $GITHUB_STEP_SUMMARY
+          echo "- **File:** rawProxyList.txt" >> $GITHUB_STEP_SUMMARY
+          echo "- **Size:** $updated_size bytes" >> $GITHUB_STEP_SUMMARY
+          echo "- **Lines:** $updated_lines" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+        fi
+        
+        # Backup file info
+        backup_files=$(ls rawProxyList_backup_*.txt 2>/dev/null | wc -l)
+        if [ $backup_files -gt 0 ]; then
+          latest_backup=$(ls -t rawProxyList_backup_*.txt | head -1)
+          echo "## 💾 Backup File" >> $GITHUB_STEP_SUMMARY
+          echo "- **File:** $latest_backup" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
         fi
         
         echo "## ✅ Status" >> $GITHUB_STEP_SUMMARY
         echo "Proxy validation completed successfully!" >> $GITHUB_STEP_SUMMARY
 
-    - name: Cleanup old validation files (keep last 5)
+    - name: Cleanup old backup files (keep last 5)
       run: |
         cd proxy-scaner
         
-        # Keep only the 5 most recent validation output files
-        ls -t proxy-validated-rawProxyList-*.txt 2>/dev/null | tail -n +6 | xargs rm -f 2>/dev/null || true
+        # Keep only the 5 most recent backup files
+        ls -t rawProxyList_backup_*.txt 2>/dev/null | tail -n +6 | xargs rm -f 2>/dev/null || true
         
-        echo "🧹 Cleanup completed - kept 5 most recent validation files"
+        echo "🧹 Cleanup completed - kept 5 most recent backup files"
 
     - name: Final Summary
       run: |
@@ -175,18 +185,24 @@ jobs:
         echo "🕐 Execution Time: $(date -u)"
         echo "📁 Working Directory: proxy-scaner/"
         echo "🔧 Script Used: proxy_validator.py"
-        echo "📥 Input File: rawProxyList.txt"
+        echo "📝 Updated File: rawProxyList.txt"
         
         cd proxy-scaner
         
         # Show final statistics
+        if [ -f "rawProxyList.txt" ]; then
+          echo "📊 Updated rawProxyList.txt:"
+          echo "   Size: $(wc -c < rawProxyList.txt) bytes"
+          echo "   Lines: $(wc -l < rawProxyList.txt) lines"
+        fi
+        
         if [ -d "proxy_data" ]; then
           country_count=$(find proxy_data -name "*.json" | wc -l)
           echo "🌍 Countries Processed: $country_count"
         fi
         
-        output_count=$(ls proxy-validated-rawProxyList-*.txt 2>/dev/null | wc -l)
-        echo "📄 Output Files Generated: $output_count"
+        backup_count=$(ls rawProxyList_backup_*.txt 2>/dev/null | wc -l)
+        echo "💾 Backup Files: $backup_count"
         
         echo "=================================================="
         echo "🎉 Proxy validation workflow completed!"

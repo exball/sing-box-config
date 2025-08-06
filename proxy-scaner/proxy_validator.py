@@ -27,7 +27,8 @@ class ProxyValidatorEnhanced:
         self.RATE_LIMIT = 15  # requests per minute
         self.REQUEST_DELAY = 60 / self.RATE_LIMIT + 1  # ~5 seconds with buffer
         self.input_file = "rawProxyList.txt"  # Fixed input file
-        self.output_file = None  # Will be generated based on timestamp
+        self.backup_file = None  # Will be generated for backup
+        self.update_input_file = True  # Update rawProxyList.txt with validated data
         self.temp_dir = "temp_batches"
         self.progress_file = "validation_progress.json"
         self.proxy_data_dir = "proxy_data"  # Directory for country-based proxy data
@@ -92,6 +93,88 @@ class ProxyValidatorEnhanced:
         except Exception as e:
             self.log(f"Error reading input file: {e}")
             sys.exit(1)
+    
+    def create_backup(self):
+        """Create backup of rawProxyList.txt before updating"""
+        try:
+            timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+            self.backup_file = f"rawProxyList_backup_{timestamp}.txt"
+            
+            # Copy original file to backup
+            import shutil
+            shutil.copy2(self.input_file, self.backup_file)
+            
+            self.log(f"✅ Backup created: {self.backup_file}")
+            return True
+            
+        except Exception as e:
+            self.log(f"❌ Error creating backup: {e}")
+            return False
+    
+    def update_raw_proxy_list(self, validated_proxies: List[Dict]):
+        """Update rawProxyList.txt with validated data"""
+        try:
+            self.log("🔄 Updating rawProxyList.txt with validated data...")
+            
+            # Track data changes and enrichments
+            for proxy in validated_proxies:
+                original_country = proxy.get('original_country', 'UNKNOWN')
+                original_org = proxy.get('original_org', 'UNKNOWN')
+                new_country = proxy['country_code']
+                new_org = proxy['org']
+                
+                # Track country changes/enrichments
+                if original_country == 'UNKNOWN' and new_country != 'UNKNOWN':
+                    self.stats['enriched_country'] += 1
+                elif original_country != 'UNKNOWN' and original_country != new_country:
+                    self.stats['corrected_country'] += 1
+                
+                # Track Organization changes/enrichments
+                if original_org == 'UNKNOWN' and new_org != 'Unknown Organization':
+                    self.stats['enriched_org'] += 1
+                elif original_org != 'UNKNOWN' and original_org != new_org:
+                    self.stats['corrected_org'] += 1
+            
+            # Sort proxies by country code for consistency
+            validated_proxies.sort(key=lambda x: (x['country_code'], x['ip']))
+            
+            # Write updated data to rawProxyList.txt
+            with open(self.input_file, 'w', encoding='utf-8') as f:
+                for proxy in validated_proxies:
+                    f.write(f"{proxy['ip']},{proxy['port']},{proxy['country_code']},{proxy['org']}\n")
+            
+            self.log(f"✅ rawProxyList.txt updated with {len(validated_proxies)} validated proxies")
+            
+            # Show file statistics
+            file_size = os.path.getsize(self.input_file)
+            self.log(f"📊 Updated file size: {file_size:,} bytes")
+            
+            # Show country distribution
+            country_stats = {}
+            for proxy in validated_proxies:
+                country = proxy['country_code']
+                country_stats[country] = country_stats.get(country, 0) + 1
+            
+            self.log(f"🌍 Countries distribution:")
+            for country, count in sorted(country_stats.items()):
+                percentage = (count / len(validated_proxies)) * 100
+                self.log(f"   - {country}: {count:,} ({percentage:.1f}%)")
+            
+            return True
+            
+        except Exception as e:
+            self.log(f"❌ Error updating rawProxyList.txt: {e}")
+            
+            # Try to restore from backup if update failed
+            if self.backup_file and os.path.exists(self.backup_file):
+                try:
+                    import shutil
+                    shutil.copy2(self.backup_file, self.input_file)
+                    self.log(f"🔄 Restored from backup: {self.backup_file}")
+                except Exception as restore_error:
+                    self.log(f"❌ Failed to restore from backup: {restore_error}")
+            
+            return False
     
 
 
@@ -625,21 +708,21 @@ class ProxyValidatorEnhanced:
             self.log("Cleaned up progress file")
     
     def run(self):
-        """Main execution flow for automated proxy validation"""
+        """Main execution flow for automated proxy validation with rawProxyList.txt update"""
         try:
             start_time = time.time()
             
             self.log("Starting AUTOMATED proxy validation process...")
-            self.log("Features: Fixed input file (rawProxyList.txt), automatic data saving")
+            self.log("Features: Update rawProxyList.txt with validated data, save country data")
             
             # Step 0: Check input file
             self.check_input_file()
             
-            # Generate output filename based on timestamp
-            timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-            self.output_file = f"proxy-validated-rawProxyList-{timestamp}.txt"
+            # Step 0.5: Create backup of original file
+            if not self.create_backup():
+                self.log("❌ Failed to create backup, aborting...")
+                sys.exit(1)
             
-            self.log(f"Output will be saved to: {self.output_file}")
             self.log(f"Proxy data by country will be saved to: {self.proxy_data_dir}/")
             
             # Step 1: Load and parse proxies
@@ -658,19 +741,32 @@ class ProxyValidatorEnhanced:
             
             validated_proxies = self.validate_all_batches(total_batches)
             
-            # Step 5: Save proxy data by country (if enabled)
+            # Step 5: Save proxy data by country
             self.save_proxy_data_by_country(validated_proxies)
             
-            # Step 6: Sort and save results
-            self.sort_and_save_results(validated_proxies)
+            # Step 6: Update rawProxyList.txt with validated data
+            if not self.update_raw_proxy_list(validated_proxies):
+                self.log("❌ Failed to update rawProxyList.txt")
+                sys.exit(1)
             
             # Step 7: Cleanup
             self.cleanup_temp_files()
             
             # Final summary
             total_time = (time.time() - start_time) / 60
-            self.log(f"\nValidation completed successfully in {total_time:.1f} minutes!")
-            self.log(f"Results saved to: {self.output_file}")
+            self.log(f"\n✅ Validation completed successfully in {total_time:.1f} minutes!")
+            self.log(f"📝 rawProxyList.txt updated with validated data")
+            self.log(f"💾 Backup saved as: {self.backup_file}")
+            self.log(f"🌍 Country data saved to: {self.proxy_data_dir}/")
+            
+            # Show final statistics
+            self.log(f"\n📊 Final Statistics:")
+            self.log(f"   Total lines processed: {self.stats['total_lines']}")
+            self.log(f"   Valid proxies saved: {self.stats['processed_ips']}")
+            self.log(f"   Duplicates removed: {self.stats['duplicates_removed']}")
+            self.log(f"   Invalid IPs skipped: {self.stats['invalid_ips']}")
+            self.log(f"   Country data enriched: {self.stats['enriched_country']}")
+            self.log(f"   Organization data enriched: {self.stats['enriched_org']}")
             
         except KeyboardInterrupt:
             self.log("\nProcess interrupted by user. Progress saved - you can resume later.")
