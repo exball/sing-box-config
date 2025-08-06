@@ -1,0 +1,192 @@
+name: Weekly Proxy Validation
+
+on:
+  schedule:
+    # Runs every Sunday at 02:00 UTC (09:00 WIB)
+    - cron: '0 2 * * 0'
+  workflow_dispatch: # Allow manual trigger
+
+permissions:
+  contents: write  # Memberikan izin untuk menulis ke repository
+
+jobs:
+  validate-proxies:
+    runs-on: ubuntu-latest
+    concurrency:
+      group: proxy-validation
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      with:
+        token: ${{ secrets.GIT_TOKEN }}
+        fetch-depth: 0
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+
+    - name: Install Python dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install requests
+
+    - name: Check if rawProxyList.txt exists
+      run: |
+        if [ ! -f "proxy-scaner/rawProxyList.txt" ]; then
+          echo "❌ rawProxyList.txt not found!"
+          echo "Please ensure rawProxyList.txt exists in proxy-scaner directory"
+          exit 1
+        fi
+        echo "✅ rawProxyList.txt found"
+        echo "File size: $(wc -c < proxy-scaner/rawProxyList.txt) bytes"
+        echo "Line count: $(wc -l < proxy-scaner/rawProxyList.txt) lines"
+
+    - name: Create proxy_data directory if not exists
+      run: |
+        mkdir -p proxy-scaner/proxy_data
+        echo "✅ proxy_data directory ready"
+
+    - name: Run proxy validation
+      run: |
+        cd proxy-scaner
+        echo "🚀 Starting proxy validation process..."
+        python proxy_validator.py
+      env:
+        PYTHONUNBUFFERED: 1
+
+    - name: Check validation results
+      run: |
+        cd proxy-scaner
+        echo "📊 Validation Results:"
+        echo "===================="
+        
+        # Count files in proxy_data directory
+        if [ -d "proxy_data" ]; then
+          country_files=$(find proxy_data -name "*.json" | wc -l)
+          echo "📁 Country JSON files created: $country_files"
+          
+          # Show some statistics
+          if [ $country_files -gt 0 ]; then
+            echo "📈 Top 5 countries by IP count:"
+            for file in proxy_data/*.json; do
+              if [ -f "$file" ]; then
+                country=$(basename "$file" .json)
+                count=$(jq length "$file" 2>/dev/null || echo "0")
+                echo "  - $country: $count IPs"
+              fi
+            done | sort -k2 -nr | head -5
+          fi
+        fi
+        
+        # Check if output file was created
+        output_files=$(ls proxy-validated-rawProxyList-*.txt 2>/dev/null | wc -l)
+        echo "📄 Validation output files: $output_files"
+        
+        if [ $output_files -gt 0 ]; then
+          latest_output=$(ls -t proxy-validated-rawProxyList-*.txt | head -1)
+          echo "📋 Latest output file: $latest_output"
+          echo "📏 Output file size: $(wc -c < "$latest_output") bytes"
+          echo "📊 Output line count: $(wc -l < "$latest_output") lines"
+        fi
+
+    - name: Commit and push changes
+      uses: stefanzweifel/git-auto-commit-action@v5
+      with:
+        commit_message: "🤖 Weekly proxy validation [automated]"
+        file_pattern: "proxy-scaner/proxy_data/*.json proxy-scaner/proxy-validated-rawProxyList-*.txt"
+        commit_user_name: "GitHub Actions Bot"
+        commit_user_email: "actions@github.com"
+        commit_author: "GitHub Actions Bot <actions@github.com>"
+
+    - name: Create workflow summary
+      run: |
+        cd proxy-scaner
+        echo "# 🤖 Weekly Proxy Validation Summary" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "**Execution Time:** $(date -u)" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        
+        # Input file info
+        if [ -f "rawProxyList.txt" ]; then
+          input_size=$(wc -c < rawProxyList.txt)
+          input_lines=$(wc -l < rawProxyList.txt)
+          echo "## 📥 Input File" >> $GITHUB_STEP_SUMMARY
+          echo "- **File:** rawProxyList.txt" >> $GITHUB_STEP_SUMMARY
+          echo "- **Size:** $input_size bytes" >> $GITHUB_STEP_SUMMARY
+          echo "- **Lines:** $input_lines" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+        fi
+        
+        # Country data info
+        if [ -d "proxy_data" ]; then
+          country_count=$(find proxy_data -name "*.json" | wc -l)
+          echo "## 🌍 Country Data" >> $GITHUB_STEP_SUMMARY
+          echo "- **Countries processed:** $country_count" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          
+          if [ $country_count -gt 0 ]; then
+            echo "### Top Countries by IP Count" >> $GITHUB_STEP_SUMMARY
+            echo "| Country | IP Count |" >> $GITHUB_STEP_SUMMARY
+            echo "|---------|----------|" >> $GITHUB_STEP_SUMMARY
+            
+            for file in proxy_data/*.json; do
+              if [ -f "$file" ]; then
+                country=$(basename "$file" .json)
+                count=$(jq length "$file" 2>/dev/null || echo "0")
+                echo "| $country | $count |" >> $GITHUB_STEP_SUMMARY
+              fi
+            done | sort -k3 -nr | head -10
+            echo "" >> $GITHUB_STEP_SUMMARY
+          fi
+        fi
+        
+        # Output file info
+        output_files=$(ls proxy-validated-rawProxyList-*.txt 2>/dev/null | wc -l)
+        if [ $output_files -gt 0 ]; then
+          latest_output=$(ls -t proxy-validated-rawProxyList-*.txt | head -1)
+          output_size=$(wc -c < "$latest_output")
+          output_lines=$(wc -l < "$latest_output")
+          
+          echo "## 📤 Output File" >> $GITHUB_STEP_SUMMARY
+          echo "- **File:** $latest_output" >> $GITHUB_STEP_SUMMARY
+          echo "- **Size:** $output_size bytes" >> $GITHUB_STEP_SUMMARY
+          echo "- **Lines:** $output_lines" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+        fi
+        
+        echo "## ✅ Status" >> $GITHUB_STEP_SUMMARY
+        echo "Proxy validation completed successfully!" >> $GITHUB_STEP_SUMMARY
+
+    - name: Cleanup old validation files (keep last 5)
+      run: |
+        cd proxy-scaner
+        
+        # Keep only the 5 most recent validation output files
+        ls -t proxy-validated-rawProxyList-*.txt 2>/dev/null | tail -n +6 | xargs rm -f 2>/dev/null || true
+        
+        echo "🧹 Cleanup completed - kept 5 most recent validation files"
+
+    - name: Final Summary
+      run: |
+        echo "✅ Weekly Proxy Validation Completed Successfully!"
+        echo "=================================================="
+        echo "🕐 Execution Time: $(date -u)"
+        echo "📁 Working Directory: proxy-scaner/"
+        echo "🔧 Script Used: proxy_validator.py"
+        echo "📥 Input File: rawProxyList.txt"
+        
+        cd proxy-scaner
+        
+        # Show final statistics
+        if [ -d "proxy_data" ]; then
+          country_count=$(find proxy_data -name "*.json" | wc -l)
+          echo "🌍 Countries Processed: $country_count"
+        fi
+        
+        output_count=$(ls proxy-validated-rawProxyList-*.txt 2>/dev/null | wc -l)
+        echo "📄 Output Files Generated: $output_count"
+        
+        echo "=================================================="
+        echo "🎉 Proxy validation workflow completed!"
