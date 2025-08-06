@@ -2,10 +2,10 @@
     "outbounds": [
         {
             "type": "trojan",
-            "tag": "33 🇸🇬 DigitalOcean WS TLS [proxy]",
+            "tag": "34 🇸🇬 DigitalOcean WS TLS [proxy]",
             "server": "quiz.int.vidio.com",
             "server_port": 443,
-            "password": "135d82be-66f3-494c-9cc4-905deddcb099",
+            "password": "fa2297a1-2ae1-489c-b20f-e420c1cf3add",
             "network": "tcp",
             "tls": {
                 "enabled": true,
@@ -14,7 +14,7 @@
             },
             "transport": {
                 "type": "ws",
-                "path": "/134.209.96.76-32225",
+                "path": "/104.248.145.216-443",
                 "headers": {
                     "Host": "proxy.ex-vpn.my.id"
                 }
@@ -25,10 +25,10 @@
         },
         {
             "type": "trojan",
-            "tag": "42 🇸🇬 Vultr Holdings WS TLS [proxy]",
+            "tag": "97 🇸🇬 Digital Ocean WS TLS [proxy]",
             "server": "quiz.int.vidio.com",
             "server_port": 443,
-            "password": "135d82be-66f3-494c-9cc4-905deddcb099",
+            "password": "fa2297a1-2ae1-489c-b20f-e420c1cf3add",
             "network": "tcp",
             "tls": {
                 "enabled": true,
@@ -37,7 +37,7 @@
             },
             "transport": {
                 "type": "ws",
-                "path": "/45.32.116.252-20205",
+                "path": "/152.42.178.179-443",
                 "headers": {
                     "Host": "proxy.ex-vpn.my.id"
                 }
@@ -48,10 +48,56 @@
         },
         {
             "type": "trojan",
-            "tag": "52 🇸🇬 Linode WS TLS [proxy]",
+            "tag": "91 🇸🇬 Oracle Corporation WS TLS [proxy]",
             "server": "quiz.int.vidio.com",
             "server_port": 443,
-            "password": "135d82be-66f3-494c-9cc4-905deddcb099",
+            "password": "fa2297a1-2ae1-489c-b20f-e420c1cf3add",
+            "network": "tcp",
+            "tls": {
+                "enabled": true,
+                "insecure": true,
+                "server_name": "proxy.ex-vpn.my.id"
+            },
+            "transport": {
+                "type": "ws",
+                "path": "/129.150.46.98-21223",
+                "headers": {
+                    "Host": "proxy.ex-vpn.my.id"
+                }
+            },
+            "multiplex": {
+                "enabled": false
+            }
+        },
+        {
+            "type": "trojan",
+            "tag": "38 🇸🇬 Vultr Holdings WS TLS [proxy]",
+            "server": "quiz.int.vidio.com",
+            "server_port": 443,
+            "password": "fa2297a1-2ae1-489c-b20f-e420c1cf3add",
+            "network": "tcp",
+            "tls": {
+                "enabled": true,
+                "insecure": true,
+                "server_name": "proxy.ex-vpn.my.id"
+            },
+            "transport": {
+                "type": "ws",
+                "path": "/45.76.183.217-49292",
+                "headers": {
+                    "Host": "proxy.ex-vpn.my.id"
+                }
+            },
+            "multiplex": {
+                "enabled": false
+            }
+        },
+        {
+            "type": "trojan",
+            "tag": "60 🇸🇬 Linode WS TLS [proxy]",
+            "server": "quiz.int.vidio.com",
+            "server_port": 443,
+            "password": "fa2297a1-2ae1-489c-b20f-e420c1cf3add",
             "network": "tcp",
             "tls": {
                 "enabled": true,
@@ -61,52 +107,6 @@
             "transport": {
                 "type": "ws",
                 "path": "/139.177.185.196-443",
-                "headers": {
-                    "Host": "proxy.ex-vpn.my.id"
-                }
-            },
-            "multiplex": {
-                "enabled": false
-            }
-        },
-        {
-            "type": "trojan",
-            "tag": "78 🇸🇬 Digital Ocean WS TLS [proxy]",
-            "server": "quiz.int.vidio.com",
-            "server_port": 443,
-            "password": "135d82be-66f3-494c-9cc4-905deddcb099",
-            "network": "tcp",
-            "tls": {
-                "enabled": true,
-                "insecure": true,
-                "server_name": "proxy.ex-vpn.my.id"
-            },
-            "transport": {
-                "type": "ws",
-                "path": "/152.42.160.107-386",
-                "headers": {
-                    "Host": "proxy.ex-vpn.my.id"
-                }
-            },
-            "multiplex": {
-                "enabled": false
-            }
-        },
-        {
-            "type": "trojan",
-            "tag": "16 🇸🇬 Tencent Cloud Computing WS TLS [proxy]",
-            "server": "quiz.int.vidio.com",
-            "server_port": 443,
-            "password": "135d82be-66f3-494c-9cc4-905deddcb099",
-            "network": "tcp",
-            "tls": {
-                "enabled": true,
-                "insecure": true,
-                "server_name": "proxy.ex-vpn.my.id"
-            },
-            "transport": {
-                "type": "ws",
-                "path": "/43.153.230.118-32297",
                 "headers": {
                     "Host": "proxy.ex-vpn.my.id"
                 }
