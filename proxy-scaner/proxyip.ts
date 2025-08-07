@@ -179,7 +179,7 @@ function getResolverDomain(): string {
 }
 
 const IP_RESOLVER_PATH = "/";
-const CONCURRENCY = 200;
+const CONCURRENCY = 99;
 
 const CHECK_QUEUE: string[] = [];
 
