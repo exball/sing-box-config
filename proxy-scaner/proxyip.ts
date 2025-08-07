@@ -602,16 +602,21 @@ async function readProxyHistory(): Promise<ProxyHistory> {
 
       // Parse total checks run
       const totalChecksLine = lines[0];
-      const totalChecksMatch = totalChecksLine.match(/total checks run = (\d+)/);
+      const totalChecksMatch = totalChecksLine.match(/Total checks run = (\d+)/);
       const totalChecksRun = totalChecksMatch ? parseInt(totalChecksMatch[1]) : 0;
 
       const proxies: { [key: string]: ProxyHistoryEntry } = {};
       
-      // Parse proxy entries (skip first line, separator line, country headers, and statistics)
-      for (let i = 2; i < lines.length; i++) {
+      // Parse proxy entries (skip first line, country summary, separator line, country headers, and statistics)
+      for (let i = 1; i < lines.length; i++) {
         const line = lines[i];
         const trimmedLine = line.trim();
-        if (trimmedLine === '' || trimmedLine.startsWith('----------') || trimmedLine.startsWith('#') || line.startsWith('  - ')) continue;
+        if (trimmedLine === '' || 
+            trimmedLine.startsWith('----------') || 
+            trimmedLine.startsWith('--------------------') || 
+            trimmedLine.startsWith('#') || 
+            line.startsWith('  - ') ||
+            trimmedLine.startsWith('- ') && trimmedLine.includes(' = ') && trimmedLine.includes(' Active')) continue;
         
         const parts = trimmedLine.split(' = ');
         if (parts.length === 2) {
@@ -644,8 +649,37 @@ async function writeProxyHistory(history: ProxyHistory): Promise<void> {
   const lines: string[] = [];
   
   // Add total checks run
-  lines.push(`total checks run = ${history.totalChecksRun}`);
-  lines.push('----------');
+  lines.push(`Total checks run = ${history.totalChecksRun}`);
+  lines.push('');
+  
+  // Calculate and add country summary
+  const countrySummary = new Map<string, { total: number; active: number }>();
+  
+  // Group proxies by country and calculate statistics
+  for (const [key, entry] of Object.entries(history.proxies)) {
+    const countryName = countryMapping[entry.country] || entry.country;
+    
+    if (!countrySummary.has(countryName)) {
+      countrySummary.set(countryName, { total: 0, active: 0 });
+    }
+    
+    const summary = countrySummary.get(countryName)!;
+    summary.total++;
+    if (entry.isCurrentlyActive) {
+      summary.active++;
+    }
+  }
+  
+  // Sort countries alphabetically and add summary
+  const sortedCountries = Array.from(countrySummary.entries()).sort((a, b) => a[0].localeCompare(b[0]));
+  
+  for (const [countryName, stats] of sortedCountries) {
+    lines.push(`- ${countryName} = ${stats.active} Active`);
+  }
+  
+  lines.push('');
+  lines.push('--------------------');
+  lines.push('');
   
   // Sort proxies by country then by activeCount (descending) then by address
   const sortedEntries = Object.entries(history.proxies).sort((a, b) => {
