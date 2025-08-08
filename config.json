@@ -110,14 +110,16 @@
       "tag": "tproxy-in",
       "listen": "::",
       "listen_port": 9898,
-      "sniff": true
+      "sniff": true,
+      "sniff_override_destination": true
     },
     {
       "type": "redirect",
       "tag": "redirect-in",
       "listen": "::",
       "listen_port": 9797,
-      "sniff": true
+      "sniff": true,
+      "sniff_override_destination": true
     }
   ],
   "outbounds": [
@@ -292,6 +294,66 @@
           "cn"
         ],
         "outbound": "direct"
+      },
+      {
+        "domain": [
+          "whatsapp.net",
+          "whatsapp.com",
+          "wa.me"
+        ],
+        "outbound": "best latency vmess"
+      },
+      {
+        "domain_suffix": [
+          "whatsapp.net",
+          "whatsapp.com",
+          "wa.me"
+        ],
+        "outbound": "best latency vmess"
+      },
+      {
+        "port": [
+          3478,
+          3482
+        ],
+        "protocol": "udp",
+        "outbound": "best latency vmess"
+      },
+      {
+        "port": [
+          443,
+          5222
+        ],
+        "domain_suffix": [
+          "whatsapp.net",
+          "whatsapp.com"
+        ],
+        "outbound": "best latency vmess"
+      },
+      {
+        "process_name": [
+          "com.whatsapp",
+          "com.whatsapp.w4b"
+        ],
+        "outbound": "best latency vmess"
+      },
+      {
+        "ip_cidr": [
+          "31.13.64.0/18",
+          "31.13.24.0/21",
+          "66.220.144.0/20",
+          "69.63.176.0/20",
+          "69.171.224.0/19",
+          "74.119.76.0/22",
+          "103.4.96.0/22",
+          "129.134.0.0/17",
+          "157.240.0.0/17",
+          "173.252.64.0/18",
+          "179.60.192.0/22",
+          "185.60.216.0/22",
+          "204.15.20.0/22"
+        ],
+        "outbound": "best latency vmess"
       }
     ],
     "final": "server",
