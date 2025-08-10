@@ -555,12 +555,130 @@ class ProxyValidatorEnhanced:
         
         return all_validated
     
+    def _convert_to_grouped_format(self, existing_data: List[Dict]) -> List[Dict]:
+        """Convert existing data from old format to new grouped format"""
+        if not existing_data:
+            return []
+        
+        # Check if data is already in grouped format
+        # Data is considered grouped if at least one entry has query as list or 
+        # if all entries have the expected grouped structure
+        is_already_grouped = False
+        for item in existing_data:
+            query = item.get('query')
+            if isinstance(query, list) or (isinstance(query, str) and 
+                all(key in item for key in ['country', 'countryCode', 'isp', 'org', 'as', 'asname'])):
+                is_already_grouped = True
+                break
+        
+        if is_already_grouped:
+            return existing_data
+        
+        # Group existing data by metadata
+        return self._group_proxies_by_metadata(existing_data)
+    
+    def _group_proxies_by_metadata(self, proxies_data: List[Dict]) -> List[Dict]:
+        """Group proxies by identical metadata (country, isp, org, as, asname)"""
+        grouped = {}
+        
+        for proxy in proxies_data:
+            # Create a key based on metadata (excluding query/IP)
+            metadata_key = (
+                proxy.get('country', ''),
+                proxy.get('countryCode', ''),
+                proxy.get('isp', ''),
+                proxy.get('org', ''),
+                proxy.get('as', ''),
+                proxy.get('asname', '')
+            )
+            
+            if metadata_key not in grouped:
+                # Create new group with metadata
+                grouped[metadata_key] = {
+                    'query': [],
+                    'country': proxy.get('country', ''),
+                    'countryCode': proxy.get('countryCode', ''),
+                    'isp': proxy.get('isp', ''),
+                    'org': proxy.get('org', ''),
+                    'as': proxy.get('as', ''),
+                    'asname': proxy.get('asname', '')
+                }
+            
+            # Add IP to the group
+            ip = proxy.get('query', '')
+            if ip and ip not in grouped[metadata_key]['query']:
+                grouped[metadata_key]['query'].append(ip)
+        
+        # Convert to list and optimize single IP entries
+        result = []
+        for group in grouped.values():
+            if len(group['query']) == 1:
+                # If only one IP, store as string instead of array
+                group['query'] = group['query'][0]
+            result.append(group)
+        
+        return result
+    
+    def _merge_grouped_data(self, existing_data: List[Dict], new_data: List[Dict]) -> List[Dict]:
+        """Merge new grouped data with existing grouped data, avoiding duplicates"""
+        # Create a dictionary for existing groups keyed by metadata
+        existing_groups = {}
+        
+        for group in existing_data:
+            metadata_key = (
+                group.get('country', ''),
+                group.get('countryCode', ''),
+                group.get('isp', ''),
+                group.get('org', ''),
+                group.get('as', ''),
+                group.get('asname', '')
+            )
+            existing_groups[metadata_key] = group
+        
+        # Process new data
+        for new_group in new_data:
+            metadata_key = (
+                new_group.get('country', ''),
+                new_group.get('countryCode', ''),
+                new_group.get('isp', ''),
+                new_group.get('org', ''),
+                new_group.get('as', ''),
+                new_group.get('asname', '')
+            )
+            
+            if metadata_key in existing_groups:
+                # Merge IPs with existing group
+                existing_group = existing_groups[metadata_key]
+                
+                # Convert existing query to list if it's a string
+                if isinstance(existing_group['query'], str):
+                    existing_group['query'] = [existing_group['query']]
+                
+                # Convert new query to list if it's a string
+                new_ips = new_group['query']
+                if isinstance(new_ips, str):
+                    new_ips = [new_ips]
+                
+                # Add new IPs that don't already exist
+                for ip in new_ips:
+                    if ip not in existing_group['query']:
+                        existing_group['query'].append(ip)
+                
+                # Optimize: convert back to string if only one IP
+                if len(existing_group['query']) == 1:
+                    existing_group['query'] = existing_group['query'][0]
+            else:
+                # Add new group
+                existing_groups[metadata_key] = new_group
+        
+        return list(existing_groups.values())
+
     def save_proxy_data_by_country(self, validated_proxies: List[Dict]):
-        """Save proxy data by country in JSON format"""
+        """Save proxy data by country in JSON format with efficient grouping"""
         if not self.save_proxy_data:
             return
             
-        self.log("Menyimpan data proxy berdasarkan negara...")
+        self.log("Menyimpan data proxy berdasarkan negara dengan pengelompokan efisien...")
         
         # Create proxy_data directory if it doesn't exist
         if not os.path.exists(self.proxy_data_dir):
@@ -598,29 +716,27 @@ class ProxyValidatorEnhanced:
                     except:
                         existing_data = []
                 
-                # Merge new data with existing data (avoid duplicates by IP)
-                existing_ips = {item.get('query') for item in existing_data if isinstance(item, dict)}
-                new_data = []
-                current_batch_ips = set()
+                # Convert existing data to the new grouped format if needed
+                existing_grouped_data = self._convert_to_grouped_format(existing_data)
                 
-                for proxy_data in proxies_data:
-                    ip = proxy_data.get('query')
-                    # Skip if IP already exists in file or already processed in current batch
-                    if ip not in existing_ips and ip not in current_batch_ips:
-                        new_data.append(proxy_data)
-                        current_batch_ips.add(ip)
+                # Group new proxies by metadata (country, isp, org, as, asname)
+                new_grouped_data = self._group_proxies_by_metadata(proxies_data)
                 
-                # Combine and save
-                combined_data = existing_data + new_data
+                # Merge new grouped data with existing grouped data
+                merged_data = self._merge_grouped_data(existing_grouped_data, new_grouped_data)
                 
+                # Save the merged data
                 with open(filename, 'w', encoding='utf-8') as f:
-                    json.dump(combined_data, f, indent=2, ensure_ascii=False)
+                    json.dump(merged_data, f, indent=2, ensure_ascii=False)
                 
                 saved_countries += 1
-                total_proxies_saved += len(new_data)
+                new_ips_count = sum(len(group['query']) if isinstance(group['query'], list) else 1 
+                                  for group in new_grouped_data)
+                total_proxies_saved += new_ips_count
                 
-                if new_data:
-                    self.log(f"  - {country_code}: {len(new_data)} proxy baru disimpan ke {filename}")
+                if new_grouped_data:
+                    self.log(f"  - {country_code}: {new_ips_count} proxy baru disimpan ke {filename}")
+                    self.log(f"    Dikelompokkan menjadi {len(new_grouped_data)} grup metadata")
                 else:
                     self.log(f"  - {country_code}: Tidak ada data baru (semua sudah ada)")
                     
