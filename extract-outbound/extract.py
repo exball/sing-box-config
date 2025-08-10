@@ -446,6 +446,64 @@ def reset_provider_history(provider_name, country_code, history):
     
     return history
 
+def smart_reset_based_on_availability(country_code, available_providers, history):
+    """
+    Reset provider berdasarkan perbandingan total proxy vs used proxy.
+    Reset hanya provider yang benar-benar habis (total = used).
+    
+    Args:
+        country_code: Kode negara (ID, SG, JP, dll)
+        available_providers: List tuple (provider_name, proxies) dari API
+        history: Dictionary history
+    
+    Returns:
+        Updated history dan jumlah provider yang direset
+    """
+    country_key = f"{country_code} proxy"
+    reset_count = 0
+    reset_providers = []
+    
+    print(f"\n🔍 Analyzing provider availability for {country_code}:")
+    
+    for provider_name, all_proxies in available_providers:
+        # Hitung total proxy dari API
+        total_proxies = len(all_proxies)
+        
+        # Extract provider name (hapus suffix seperti " ws tls [proxy]")
+        clean_provider_name = provider_name
+        if " ws " in clean_provider_name and " [proxy]" in clean_provider_name:
+            clean_provider_name = clean_provider_name.split(" ws ")[0]
+        
+        # Hitung proxy yang sudah digunakan dari history
+        used_count = 0
+        if country_key in history and clean_provider_name in history[country_key]:
+            used_ip_ports = history[country_key][clean_provider_name].get("used_ip_ports", [])
+            used_count = len(used_ip_ports)
+        
+        available_count = total_proxies - used_count
+        
+        print(f"  📊 {clean_provider_name}: {total_proxies} total - {used_count} used = {available_count} available")
+        
+        # Reset jika semua proxy sudah digunakan (available <= 0 tapi total > 0)
+        if available_count <= 0 and total_proxies > 0:
+            print(f"  🔄 Resetting {clean_provider_name} (all proxies used)")
+            history = reset_provider_history(provider_name, country_code, history)
+            reset_count += 1
+            reset_providers.append(clean_provider_name)
+        elif available_count > 0:
+            print(f"  ✅ {clean_provider_name} still has {available_count} unused proxies")
+        else:
+            print(f"  ⚠️ {clean_provider_name} has no proxies from API")
+    
+    if reset_count > 0:
+        print(f"\n✅ Smart reset completed: {reset_count} providers reset")
+        print(f"🔄 Reset providers: {', '.join(reset_providers)}")
+        print("💡 These providers can now be used again immediately")
+    else:
+        print(f"\n✅ No reset needed - all providers still have available proxies")
+    
+    return history, reset_count
+
 def get_next_proxies_for_provider(provider_name, country_code, all_proxies, max_count, history):
     """
     Ambil proxy berikutnya untuk provider dengan sistem Country + Provider tracking.
@@ -1213,6 +1271,11 @@ def process_single_config(config, format_type="bfr", format_file="sing_outbound.
                     # Gunakan sistem Country + Provider tracking untuk semua negara
                     # Ambil provider yang tersedia
                     available_providers = [(name, proxies) for name, proxies in provider_proxies.items() if proxies]
+                    
+                    # Lakukan smart reset berdasarkan availability sebelum pemilihan provider
+                    proxy_history, reset_count = smart_reset_based_on_availability(
+                        country, available_providers, proxy_history
+                    )
                     
                     # Pilih provider dengan sistem Country + Provider tracking
                     # Sistem baru memungkinkan provider yang sama muncul berkali-kali jika punya IP:Port berbeda
