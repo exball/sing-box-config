@@ -2,113 +2,113 @@
     "outbounds": [
         {
             "type": "trojan",
+            "tag": "34 🇮🇩 Akamai Technologies WS TLS [proxy]",
+            "server": "quiz.int.vidio.com",
+            "server_port": 443,
+            "password": "9fcfe295-5c65-4a45-91e8-03472603b041",
+            "network": "tcp",
+            "tls": {
+                "enabled": true,
+                "insecure": true,
+                "server_name": "proxy.ex-vpn.my.id"
+            },
+            "transport": {
+                "type": "ws",
+                "path": "/172.232.238.52-32225",
+                "headers": {
+                    "Host": "proxy.ex-vpn.my.id"
+                }
+            },
+            "multiplex": {
+                "enabled": false
+            }
+        },
+        {
+            "type": "trojan",
+            "tag": "37 🇮🇩 Akamai Technologies WS TLS [proxy]",
+            "server": "quiz.int.vidio.com",
+            "server_port": 443,
+            "password": "9fcfe295-5c65-4a45-91e8-03472603b041",
+            "network": "tcp",
+            "tls": {
+                "enabled": true,
+                "insecure": true,
+                "server_name": "proxy.ex-vpn.my.id"
+            },
+            "transport": {
+                "type": "ws",
+                "path": "/172.232.238.56-443",
+                "headers": {
+                    "Host": "proxy.ex-vpn.my.id"
+                }
+            },
+            "multiplex": {
+                "enabled": false
+            }
+        },
+        {
+            "type": "trojan",
+            "tag": "20 🇮🇩 Akamai Technologies WS TLS [proxy]",
+            "server": "quiz.int.vidio.com",
+            "server_port": 443,
+            "password": "9fcfe295-5c65-4a45-91e8-03472603b041",
+            "network": "tcp",
+            "tls": {
+                "enabled": true,
+                "insecure": true,
+                "server_name": "proxy.ex-vpn.my.id"
+            },
+            "transport": {
+                "type": "ws",
+                "path": "/172.232.238.52-443",
+                "headers": {
+                    "Host": "proxy.ex-vpn.my.id"
+                }
+            },
+            "multiplex": {
+                "enabled": false
+            }
+        },
+        {
+            "type": "trojan",
+            "tag": "6 🇮🇩 Akamai Technologies WS TLS [proxy]",
+            "server": "quiz.int.vidio.com",
+            "server_port": 443,
+            "password": "9fcfe295-5c65-4a45-91e8-03472603b041",
+            "network": "tcp",
+            "tls": {
+                "enabled": true,
+                "insecure": true,
+                "server_name": "proxy.ex-vpn.my.id"
+            },
+            "transport": {
+                "type": "ws",
+                "path": "/172.232.234.20-32225",
+                "headers": {
+                    "Host": "proxy.ex-vpn.my.id"
+                }
+            },
+            "multiplex": {
+                "enabled": false
+            }
+        },
+        {
+            "type": "trojan",
             "tag": "15 🇮🇩 Akamai Technologies WS TLS [proxy]",
             "server": "quiz.int.vidio.com",
             "server_port": 443,
-            "password": "b0c7e980-bb16-49d7-88fd-d24a0cff6f6a",
+            "password": "9fcfe295-5c65-4a45-91e8-03472603b041",
             "network": "tcp",
             "tls": {
                 "enabled": true,
                 "insecure": true,
-                "server_name": "proxy.xtunnel.my.id"
+                "server_name": "proxy.ex-vpn.my.id"
             },
             "transport": {
                 "type": "ws",
-                "path": "/172.232.238.56-20205",
+                "path": "/172.232.234.20-386",
                 "headers": {
-                    "Host": "proxy.xtunnel.my.id"
-                }
-            },
-            "multiplex": {
-                "enabled": false
-            }
-        },
-        {
-            "type": "trojan",
-            "tag": "12 🇮🇩 Akamai Technologies WS TLS [proxy]",
-            "server": "quiz.int.vidio.com",
-            "server_port": 443,
-            "password": "b0c7e980-bb16-49d7-88fd-d24a0cff6f6a",
-            "network": "tcp",
-            "tls": {
-                "enabled": true,
-                "insecure": true,
-                "server_name": "proxy.xtunnel.my.id"
-            },
-            "transport": {
-                "type": "ws",
-                "path": "/172.232.234.166-32225",
-                "headers": {
-                    "Host": "proxy.xtunnel.my.id"
-                }
-            },
-            "multiplex": {
-                "enabled": false
-            }
-        },
-        {
-            "type": "trojan",
-            "tag": "10 🇮🇩 Akamai Technologies WS TLS [proxy]",
-            "server": "quiz.int.vidio.com",
-            "server_port": 443,
-            "password": "b0c7e980-bb16-49d7-88fd-d24a0cff6f6a",
-            "network": "tcp",
-            "tls": {
-                "enabled": true,
-                "insecure": true,
-                "server_name": "proxy.xtunnel.my.id"
-            },
-            "transport": {
-                "type": "ws",
-                "path": "/172.232.234.20-74",
-                "headers": {
-                    "Host": "proxy.xtunnel.my.id"
-                }
-            },
-            "multiplex": {
-                "enabled": false
-            }
-        },
-        {
-            "type": "trojan",
-            "tag": "9 🇮🇩 Akamai Technologies WS TLS [proxy]",
-            "server": "quiz.int.vidio.com",
-            "server_port": 443,
-            "password": "b0c7e980-bb16-49d7-88fd-d24a0cff6f6a",
-            "network": "tcp",
-            "tls": {
-                "enabled": true,
-                "insecure": true,
-                "server_name": "proxy.xtunnel.my.id"
-            },
-            "transport": {
-                "type": "ws",
-                "path": "/172.232.238.56-386",
-                "headers": {
-                    "Host": "proxy.xtunnel.my.id"
-                }
-            },
-            "multiplex": {
-                "enabled": false
-            }
-        },
-        {
-            "type": "trojan",
-            "tag": "4 🇮🇩 Akamai Technologies WS TLS [proxy]",
-            "server": "quiz.int.vidio.com",
-            "server_port": 443,
-            "password": "b0c7e980-bb16-49d7-88fd-d24a0cff6f6a",
-            "network": "tcp",
-            "tls": {
-                "enabled": true,
-                "insecure": true,
-                "server_name": "proxy.xtunnel.my.id"
-            },
-            "transport": {
-                "type": "ws",
-                "path": "/172.232.231.191-444",
-                "headers": {
-                    "Host": "proxy.xtunnel.my.id"
+                    "Host": "proxy.ex-vpn.my.id"
                 }
             },
             "multiplex": {
