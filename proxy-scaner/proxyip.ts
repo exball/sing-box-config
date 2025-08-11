@@ -258,7 +258,7 @@ async function getIPData(ip: string, countryCode: string): Promise<IPDataEntry> 
     
     // Cache individual IP data for future lookups
     ipDataCache.set(ip, individualIPData);
-    console.log(`✅ Found and cached ${ip} from ${countryCode}.json - ${ipData.as || ipData.asname}`);
+    console.log(`✅ Found and cached ${ip} from ${countryCode}.json - ${ipData.isp || ipData.asname}`);
     return individualIPData;
   } else {
     // 4. Tambah ke missing IPs untuk batch API nanti
@@ -360,7 +360,7 @@ async function processBatchResults(results: any[]): Promise<void> {
       
       // Update cache
       ipDataCache.set(result.query, ipData);
-      console.log(`✅ API result cached: ${result.query} - ${countryCode} - ${ipData.as || ipData.asname}`);
+      console.log(`✅ API result cached: ${result.query} - ${countryCode} - ${ipData.isp || ipData.asname}`);
     }
   }
   
@@ -539,7 +539,7 @@ async function updateProxyListWithAPIResults(): Promise<void> {
         // Check if we have updated data for this IP
         if (ipDataCache.has(ip)) {
           const ipData = ipDataCache.get(ip)!;
-          const updatedLine = `${ip},${port},${ipData.countryCode},${ipData.as || ipData.asname}`;
+          const updatedLine = `${ip},${port},${ipData.countryCode},${ipData.isp || ipData.asname}`;
           updatedLines.push(updatedLine);
           updatedCount++;
         } else {
@@ -985,8 +985,8 @@ async function writeProxyHistory(history: ProxyHistory): Promise<void> {
           proxyHistory.proxies[proxyKey].activeCount += 1;
           proxyHistory.proxies[proxyKey].isCurrentlyActive = true;
           
-          // Format output - Menggunakan AS sebagai prioritas utama, ASNAME sebagai cadangan
-          const finalResult = `${proxyIP},${proxyPort},${ipData.countryCode},${ipData.as || ipData.asname}`;
+          // Format output - Menggunakan ISP sebagai prioritas utama, ASNAME sebagai cadangan
+          const finalResult = `${proxyIP},${proxyPort},${ipData.countryCode},${ipData.isp || ipData.asname}`;
           activeProxyList.push(finalResult);
 
           if (kvPair[ipData.countryCode] == undefined) kvPair[ipData.countryCode] = [];
