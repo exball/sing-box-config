@@ -2,10 +2,10 @@
     "outbounds": [
         {
             "type": "vless",
-            "tag": "13 🇮🇩 Akamai Technologies WS NTLS [proxy]",
+            "tag": "3 🇮🇩 Akamai Technologies WS NTLS [proxy]",
             "server": "quiz.int.vidio.com",
             "server_port": 80,
-            "uuid": "385044fa-7939-414c-b81b-4215bb05244c",
+            "uuid": "3976daee-6b99-4784-b3b6-6ed2e4162c42",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -15,16 +15,73 @@
                 "headers": {
                     "Host": "proxy.ex-vpn.my.id"
                 },
-                "path": "/172.232.238.56-443",
+                "path": "/172.232.238.56-74",
                 "type": "ws"
             }
         },
         {
             "type": "vless",
-            "tag": "5 🇮🇩 M247 Europe SRL WS NTLS [proxy]",
+            "tag": "5 🇮🇩 PUSATMEDIA WS NTLS [proxy]",
             "server": "quiz.int.vidio.com",
             "server_port": 80,
-            "uuid": "385044fa-7939-414c-b81b-4215bb05244c",
+            "uuid": "3976daee-6b99-4784-b3b6-6ed2e4162c42",
+            "network": "tcp",
+            "packet_encoding": "xudp",
+            "tls": {
+                "insecure": true
+            },
+            "transport": {
+                "headers": {
+                    "Host": "proxy.ex-vpn.my.id"
+                },
+                "path": "/103.6.207.108-8080",
+                "type": "ws"
+            }
+        },
+        {
+            "type": "vless",
+            "tag": "2 🇮🇩 Alibaba.com Singapore E-Commerce Private Limited WS NTLS [proxy]",
+            "server": "quiz.int.vidio.com",
+            "server_port": 80,
+            "uuid": "3976daee-6b99-4784-b3b6-6ed2e4162c42",
+            "network": "tcp",
+            "packet_encoding": "xudp",
+            "tls": {
+                "insecure": true
+            },
+            "transport": {
+                "headers": {
+                    "Host": "proxy.ex-vpn.my.id"
+                },
+                "path": "/149.129.220.69-443",
+                "type": "ws"
+            }
+        },
+        {
+            "type": "vless",
+            "tag": "23 🇮🇩 Kaopu Cloud HK Limited WS NTLS [proxy]",
+            "server": "quiz.int.vidio.com",
+            "server_port": 80,
+            "uuid": "3976daee-6b99-4784-b3b6-6ed2e4162c42",
+            "network": "tcp",
+            "packet_encoding": "xudp",
+            "tls": {
+                "insecure": true
+            },
+            "transport": {
+                "headers": {
+                    "Host": "proxy.ex-vpn.my.id"
+                },
+                "path": "/156.244.1.250-8443",
+                "type": "ws"
+            }
+        },
+        {
+            "type": "vless",
+            "tag": "20 🇮🇩 M247 Europe SRL WS NTLS [proxy]",
+            "server": "quiz.int.vidio.com",
+            "server_port": 80,
+            "uuid": "3976daee-6b99-4784-b3b6-6ed2e4162c42",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -35,63 +92,6 @@
                     "Host": "proxy.ex-vpn.my.id"
                 },
                 "path": "/38.244.147.68-443",
-                "type": "ws"
-            }
-        },
-        {
-            "type": "vless",
-            "tag": "29 🇮🇩 Amazon.com WS NTLS [proxy]",
-            "server": "quiz.int.vidio.com",
-            "server_port": 80,
-            "uuid": "385044fa-7939-414c-b81b-4215bb05244c",
-            "network": "tcp",
-            "packet_encoding": "xudp",
-            "tls": {
-                "insecure": true
-            },
-            "transport": {
-                "headers": {
-                    "Host": "proxy.ex-vpn.my.id"
-                },
-                "path": "/43.218.77.16-443",
-                "type": "ws"
-            }
-        },
-        {
-            "type": "vless",
-            "tag": "32 🇮🇩 PUSATMEDIA WS NTLS [proxy]",
-            "server": "quiz.int.vidio.com",
-            "server_port": 80,
-            "uuid": "385044fa-7939-414c-b81b-4215bb05244c",
-            "network": "tcp",
-            "packet_encoding": "xudp",
-            "tls": {
-                "insecure": true
-            },
-            "transport": {
-                "headers": {
-                    "Host": "proxy.ex-vpn.my.id"
-                },
-                "path": "/103.6.207.108-19224",
-                "type": "ws"
-            }
-        },
-        {
-            "type": "vless",
-            "tag": "1 🇮🇩 PT Biznet Gio Nusantara WS NTLS [proxy]",
-            "server": "quiz.int.vidio.com",
-            "server_port": 80,
-            "uuid": "385044fa-7939-414c-b81b-4215bb05244c",
-            "network": "tcp",
-            "packet_encoding": "xudp",
-            "tls": {
-                "insecure": true
-            },
-            "transport": {
-                "headers": {
-                    "Host": "proxy.ex-vpn.my.id"
-                },
-                "path": "/103.197.189.133-443",
                 "type": "ws"
             }
         }
