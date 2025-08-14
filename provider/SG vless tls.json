@@ -2,10 +2,10 @@
     "outbounds": [
         {
             "type": "vless",
-            "tag": "13 🇸🇬 DigitalOcean WS TLS [proxy]",
+            "tag": "100 🇸🇬 DigitalOcean WS TLS [proxy]",
             "server": "quiz.int.vidio.com",
             "server_port": 443,
-            "uuid": "bdb4cb72-2da5-4444-bea2-21263e55a091",
+            "uuid": "0b322fdc-630b-4f4d-aab2-b95f9c3879fd",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -17,7 +17,28 @@
                 "headers": {
                     "Host": "proxy.xtunnel.my.id"
                 },
-                "path": "/209.97.172.130-8080",
+                "path": "/68.183.235.165-20205",
+                "type": "ws"
+            }
+        },
+        {
+            "type": "vless",
+            "tag": "55 🇸🇬 The Constant Company WS TLS [proxy]",
+            "server": "quiz.int.vidio.com",
+            "server_port": 443,
+            "uuid": "0b322fdc-630b-4f4d-aab2-b95f9c3879fd",
+            "network": "tcp",
+            "packet_encoding": "xudp",
+            "tls": {
+                "enabled": true,
+                "insecure": true,
+                "server_name": "proxy.xtunnel.my.id"
+            },
+            "transport": {
+                "headers": {
+                    "Host": "proxy.xtunnel.my.id"
+                },
+                "path": "/45.32.100.46-13802",
                 "type": "ws"
             }
         },
@@ -26,7 +47,7 @@
             "tag": "54 🇸🇬 Oracle Corporation WS TLS [proxy]",
             "server": "quiz.int.vidio.com",
             "server_port": 443,
-            "uuid": "bdb4cb72-2da5-4444-bea2-21263e55a091",
+            "uuid": "0b322fdc-630b-4f4d-aab2-b95f9c3879fd",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -38,16 +59,16 @@
                 "headers": {
                     "Host": "proxy.xtunnel.my.id"
                 },
-                "path": "/140.245.51.172-52295",
+                "path": "/158.178.236.14-61731",
                 "type": "ws"
             }
         },
         {
             "type": "vless",
-            "tag": "99 🇸🇬 The Constant Company WS TLS [proxy]",
+            "tag": "41 🇸🇬 Shenzhen Tencent Computer Systems Company Limited WS TLS [proxy]",
             "server": "quiz.int.vidio.com",
             "server_port": 443,
-            "uuid": "bdb4cb72-2da5-4444-bea2-21263e55a091",
+            "uuid": "0b322fdc-630b-4f4d-aab2-b95f9c3879fd",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -59,16 +80,16 @@
                 "headers": {
                     "Host": "proxy.xtunnel.my.id"
                 },
-                "path": "/45.32.121.244-443",
+                "path": "/43.156.67.197-28443",
                 "type": "ws"
             }
         },
         {
             "type": "vless",
-            "tag": "74 🇸🇬 Alibaba (US) Technology Co. WS TLS [proxy]",
+            "tag": "90 🇸🇬 Alibaba (US) Technology Co. WS TLS [proxy]",
             "server": "quiz.int.vidio.com",
             "server_port": 443,
-            "uuid": "bdb4cb72-2da5-4444-bea2-21263e55a091",
+            "uuid": "0b322fdc-630b-4f4d-aab2-b95f9c3879fd",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -80,28 +101,7 @@
                 "headers": {
                     "Host": "proxy.xtunnel.my.id"
                 },
-                "path": "/47.237.31.198-32222",
-                "type": "ws"
-            }
-        },
-        {
-            "type": "vless",
-            "tag": "18 🇸🇬 Akamai Technologies WS TLS [proxy]",
-            "server": "quiz.int.vidio.com",
-            "server_port": 443,
-            "uuid": "bdb4cb72-2da5-4444-bea2-21263e55a091",
-            "network": "tcp",
-            "packet_encoding": "xudp",
-            "tls": {
-                "enabled": true,
-                "insecure": true,
-                "server_name": "proxy.xtunnel.my.id"
-            },
-            "transport": {
-                "headers": {
-                    "Host": "proxy.xtunnel.my.id"
-                },
-                "path": "/192.46.231.158-20205",
+                "path": "/8.219.59.132-48130",
                 "type": "ws"
             }
         }
