@@ -2,10 +2,10 @@
     "outbounds": [
         {
             "type": "trojan",
-            "tag": "9 🇮🇩 Akamai Connected Cloud WS TLS [proxy]",
+            "tag": "24 🇮🇩 Akamai Connected Cloud WS TLS [proxy]",
             "server": "quiz.int.vidio.com",
             "server_port": 443,
-            "password": "95a0862c-2fae-4b2e-a4a8-f3d20c4a1e58",
+            "password": "f49e582e-b09b-4092-8f0f-e699b2388654",
             "network": "tcp",
             "tls": {
                 "enabled": true,
@@ -14,7 +14,7 @@
             },
             "transport": {
                 "type": "ws",
-                "path": "/172.232.238.56-32225",
+                "path": "/172.232.238.52-32225",
                 "headers": {
                     "Host": "proxy.ex-vpn.my.id"
                 }
@@ -25,33 +25,10 @@
         },
         {
             "type": "trojan",
-            "tag": "5 🇮🇩 PT Pusat Media Indonesia WS TLS [proxy]",
+            "tag": "5 🇮🇩 Kaopu Cloud HK Limited WS TLS [proxy]",
             "server": "quiz.int.vidio.com",
             "server_port": 443,
-            "password": "95a0862c-2fae-4b2e-a4a8-f3d20c4a1e58",
-            "network": "tcp",
-            "tls": {
-                "enabled": true,
-                "insecure": true,
-                "server_name": "proxy.ex-vpn.my.id"
-            },
-            "transport": {
-                "type": "ws",
-                "path": "/103.6.207.108-19224",
-                "headers": {
-                    "Host": "proxy.ex-vpn.my.id"
-                }
-            },
-            "multiplex": {
-                "enabled": false
-            }
-        },
-        {
-            "type": "trojan",
-            "tag": "36 🇮🇩 Kaopu Cloud HK Limited WS TLS [proxy]",
-            "server": "quiz.int.vidio.com",
-            "server_port": 443,
-            "password": "95a0862c-2fae-4b2e-a4a8-f3d20c4a1e58",
+            "password": "f49e582e-b09b-4092-8f0f-e699b2388654",
             "network": "tcp",
             "tls": {
                 "enabled": true,
@@ -71,10 +48,10 @@
         },
         {
             "type": "trojan",
-            "tag": "6 🇮🇩 PT Telekomunikasi Indonesia WS TLS [proxy]",
+            "tag": "28 🇮🇩 CV. Rumahweb Indonesia WS TLS [proxy]",
             "server": "quiz.int.vidio.com",
             "server_port": 443,
-            "password": "95a0862c-2fae-4b2e-a4a8-f3d20c4a1e58",
+            "password": "f49e582e-b09b-4092-8f0f-e699b2388654",
             "network": "tcp",
             "tls": {
                 "enabled": true,
@@ -83,7 +60,7 @@
             },
             "transport": {
                 "type": "ws",
-                "path": "/36.95.152.58-12137",
+                "path": "/203.194.112.119-8443",
                 "headers": {
                     "Host": "proxy.ex-vpn.my.id"
                 }
@@ -94,10 +71,10 @@
         },
         {
             "type": "trojan",
-            "tag": "7 🇮🇩 CV. Rumahweb Indonesia WS TLS [proxy]",
+            "tag": "34 🇮🇩 PT Pusat Media Indonesia WS TLS [proxy]",
             "server": "quiz.int.vidio.com",
             "server_port": 443,
-            "password": "95a0862c-2fae-4b2e-a4a8-f3d20c4a1e58",
+            "password": "f49e582e-b09b-4092-8f0f-e699b2388654",
             "network": "tcp",
             "tls": {
                 "enabled": true,
@@ -106,7 +83,30 @@
             },
             "transport": {
                 "type": "ws",
-                "path": "/203.194.112.119-8443",
+                "path": "/103.6.207.108-19224",
+                "headers": {
+                    "Host": "proxy.ex-vpn.my.id"
+                }
+            },
+            "multiplex": {
+                "enabled": false
+            }
+        },
+        {
+            "type": "trojan",
+            "tag": "11 🇮🇩 PT Telekomunikasi Indonesia WS TLS [proxy]",
+            "server": "quiz.int.vidio.com",
+            "server_port": 443,
+            "password": "f49e582e-b09b-4092-8f0f-e699b2388654",
+            "network": "tcp",
+            "tls": {
+                "enabled": true,
+                "insecure": true,
+                "server_name": "proxy.ex-vpn.my.id"
+            },
+            "transport": {
+                "type": "ws",
+                "path": "/36.95.152.58-12137",
                 "headers": {
                     "Host": "proxy.ex-vpn.my.id"
                 }
