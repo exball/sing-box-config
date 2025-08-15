@@ -41,13 +41,10 @@ interface ProxyHistory {
 }
 
 interface IPDataEntry {
-  query: string | string[];  // Support both single IP and array of IPs
-  country: string;
-  countryCode: string;
-  isp: string;
-  org: string;
-  as: string;
-  asname: string;
+  ip: string[];
+  country: string;      // country code, misal "ID"
+  asn: string;          // ASN number, misal "AS63949"
+  as_name: string;      // Organization/AS name
 }
 
 interface Statistics {
@@ -210,20 +207,8 @@ async function loadCountryData(countryCode: string): Promise<IPDataEntry[]> {
 // Find IP in specific country data
 async function findIPInCountryData(ip: string, countryCode: string): Promise<IPDataEntry | null> {
   const countryData = await loadCountryData(countryCode);
-  
-  // Cari IP dalam array data negara tersebut
-  // Support both old format (query as string) and new format (query as array)
-  const ipData = countryData.find(entry => {
-    if (typeof entry.query === 'string') {
-      // Old format: direct string comparison
-      return entry.query === ip;
-    } else if (Array.isArray(entry.query)) {
-      // New format: search in array
-      return entry.query.includes(ip);
-    }
-    return false;
-  });
-  
+  // Format baru: cari IP pada array 'ip'
+  const ipData = countryData.find(entry => Array.isArray(entry.ip) && entry.ip.includes(ip));
   if (ipData) {
     stats.jsonLookups++;
     return ipData;
@@ -234,49 +219,36 @@ async function findIPInCountryData(ip: string, countryCode: string): Promise<IPD
 
 // Cache-aware IP lookup
 async function getIPData(ip: string, countryCode: string): Promise<IPDataEntry> {
-  // 1. Cek cache IP dulu
   if (ipDataCache.has(ip)) {
     stats.cacheHits++;
     console.log(`🔄 Using cached data for IP: ${ip}`);
     return ipDataCache.get(ip)!;
   }
-  
   // 2. Cari di file JSON negara spesifik
   const ipData = await findIPInCountryData(ip, countryCode);
-  
   if (ipData) {
     // 3. Create individual IP data for caching (normalize from group data)
     const individualIPData: IPDataEntry = {
-      query: ip,  // Always store individual IP in cache
+      ip: [ip],
       country: ipData.country,
-      countryCode: ipData.countryCode,
-      isp: ipData.isp,
-      org: ipData.org,
-      as: ipData.as,
-      asname: ipData.asname
+      asn: ipData.asn,
+      as_name: ipData.as_name
     };
-    
-    // Cache individual IP data for future lookups
     ipDataCache.set(ip, individualIPData);
-    console.log(`✅ Found and cached ${ip} from ${countryCode}.json - ${ipData.isp || ipData.asname}`);
+    console.log(`✅ Found and cached ${ip} from ${countryCode}.json - ${ipData.as_name}`);
     return individualIPData;
   } else {
     // 4. Tambah ke missing IPs untuk batch API nanti
     missingIPsCache.add(ip);
     stats.missingIPs++;
     console.log(`❌ IP ${ip} not found in ${countryCode}.json - added to batch queue`);
-    
     // 5. Return fallback data sementara
     const fallbackData: IPDataEntry = {
-      query: ip,
+      ip: [ip],
       country: countryMapping[countryCode] || countryCode,
-      countryCode: countryCode,
-      isp: "Unknown ISP",
-      org: "Unknown Provider",
-      as: "Unknown AS",
-      asname: "Unknown ASName"
+      asn: "-",
+      as_name: "-"
     };
-    
     return fallbackData;
   }
 }
@@ -287,86 +259,88 @@ async function batchLookupMissingIPs(): Promise<void> {
     console.log("✅ No missing IPs to lookup via API");
     return;
   }
-  
-  console.log(`🔍 Starting batch API lookup for ${missingIPsCache.size} missing IPs`);
-  
+  console.log(`🔍 Starting batch IP lookup for ${missingIPsCache.size} missing IPs via ipinfo.io`);
   const missingIPs = Array.from(missingIPsCache);
-  const BATCH_SIZE = 90; // Sesuai proxy_validator.py
-  const API_URL = "http://ip-api.com/batch";
-  
+  const BATCH_SIZE = 250; // ipinfo.io batch limit
+  const API_URL = "https://ipinfo.io/batch";
   for (let i = 0; i < missingIPs.length; i += BATCH_SIZE) {
     const batch = missingIPs.slice(i, i + BATCH_SIZE);
-    
-    // Prepare batch request
-    const queries = batch.map(ip => ({
-      query: ip,
-      fields: "status,country,countryCode,isp,org,as,asname,query"
-    }));
-    
-    try {
-      console.log(`📡 API Batch ${Math.floor(i/BATCH_SIZE) + 1}: ${batch.length} IPs`);
-      
-      const response = await fetch(API_URL, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'User-Agent': 'ProxyScanner/1.0'
-        },
-        body: JSON.stringify(queries)
-      });
-      
-      if (response.ok) {
-        const results = await response.json();
-        await processBatchResults(results);
-        stats.batchAPIRequests++;
-        
-        // Rate limiting - wait 5 seconds between batches
-        if (i + BATCH_SIZE < missingIPs.length) {
-          console.log("⏳ Waiting 5 seconds for rate limiting...");
-          await new Promise(resolve => setTimeout(resolve, 5000));
+    const batchPayload: { [ip: string]: {} } = {};
+    batch.forEach(ip => { batchPayload[ip] = {}; });
+    let attempt = 0;
+    let success = false;
+    while (attempt < 5 && !success) {
+      attempt++;
+      try {
+        console.log(`📡 API Batch ${Math.floor(i/BATCH_SIZE) + 1}: ${batch.length} IPs (Attempt ${attempt})`);
+        const response = await fetch(API_URL, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'User-Agent': 'ProxyScanner/1.0'
+          },
+          body: JSON.stringify(batchPayload)
+        });
+        if (response.ok) {
+          const results = await response.json();
+          // results: { [ip: string]: {...} }
+          const processed: IPDataEntry[] = [];
+          for (const ip of Object.keys(results)) {
+            const data = results[ip];
+            processed.push({
+              ip: [ip],
+              country: data.country || '-',
+              asn: data.org ? data.org.split(' ')[0] : '-',
+              as_name: data.org ? data.org.split(' ').slice(1).join(' ') : '-'
+            });
+            ipDataCache.set(ip, processed[processed.length-1]);
+          }
+          await updateCountryJSONFileBatch(processed);
+          stats.batchAPIRequests++;
+          if (i + BATCH_SIZE < missingIPs.length) {
+            console.log("⏳ Waiting 5 seconds for rate limiting...");
+            await new Promise(resolve => setTimeout(resolve, 5000));
+          }
+          success = true;
+        } else {
+          console.log(`❌ API request failed: ${response.status} (Attempt ${attempt})`);
         }
-      } else {
-        console.log(`❌ API request failed: ${response.status}`);
+      } catch (error: any) {
+        console.log(`❌ Batch API error (Attempt ${attempt}):`, error.message);
       }
-      
-    } catch (error: any) {
-      console.log(`❌ Batch API error:`, error.message);
+      if (!success && attempt < 5) {
+        console.log("🔁 Retrying batch in 3 seconds...");
+        await new Promise(resolve => setTimeout(resolve, 3000));
+      }
+    }
+    if (!success) {
+      console.log(`❌ Batch failed after 5 attempts. Skipping this batch.`);
     }
   }
 }
 
-// Process batch results and update JSON files
-async function processBatchResults(results: any[]): Promise<void> {
+// Process batch results and update JSON files (ipinfo.io only)
+async function processBatchResults(results: { [ip: string]: any }): Promise<void> {
   const countryUpdates = new Map<string, IPDataEntry[]>();
-  
-  for (const result of results) {
-    if (result.status === 'success') {
-      const countryCode = result.countryCode;
-      const ipData: IPDataEntry = {
-        query: result.query,
-        country: result.country,
-        countryCode: result.countryCode,
-        isp: result.isp || 'Unknown ISP',
-        org: result.org || result.asname || 'Unknown Organization',
-        as: result.as || 'Unknown AS',
-        asname: result.asname || 'Unknown ASName'
-      };
-      
-      // Group by country for file updates
-      if (!countryUpdates.has(countryCode)) {
-        countryUpdates.set(countryCode, []);
-      }
-      countryUpdates.get(countryCode)!.push(ipData);
-      
-      // Update cache
-      ipDataCache.set(result.query, ipData);
-      console.log(`✅ API result cached: ${result.query} - ${countryCode} - ${ipData.isp || ipData.asname}`);
+  for (const ip of Object.keys(results)) {
+    const data = results[ip];
+    // ipinfo.io always returns the IP as the key
+    const country = data.country || '-';
+    const ipData: IPDataEntry = {
+      ip: [ip],
+      country: country,
+      asn: data.org ? data.org.split(' ')[0] : '-',
+      as_name: data.org ? data.org.split(' ').slice(1).join(' ') : '-'
+    };
+    if (!countryUpdates.has(country)) {
+      countryUpdates.set(country, []);
     }
+    countryUpdates.get(country)!.push(ipData);
+    ipDataCache.set(ip, ipData);
+    console.log(`✅ API result cached: ${ip} - ${country} - ${ipData.as_name}`);
   }
-  
-  // Update JSON files
-  for (const [countryCode, newData] of Array.from(countryUpdates)) {
-    await updateCountryJSONFile(countryCode, newData);
+  for (const [country, newData] of Array.from(countryUpdates)) {
+    await updateCountryJSONFile(country, newData);
   }
 }
 
@@ -375,9 +349,8 @@ function convertToGroupedFormat(data: IPDataEntry[]): IPDataEntry[] {
   if (!data || data.length === 0) return [];
   
   // Check if data is already in grouped format
-  const isAlreadyGrouped = data.some(item => Array.isArray(item.query));
+  const isAlreadyGrouped = data.some(item => Array.isArray(item.ip));
   if (isAlreadyGrouped) return data;
-  
   // Group by metadata
   return groupProxiesByMetadata(data);
 }
@@ -385,132 +358,87 @@ function convertToGroupedFormat(data: IPDataEntry[]): IPDataEntry[] {
 // Helper function to group proxies by metadata
 function groupProxiesByMetadata(proxiesData: IPDataEntry[]): IPDataEntry[] {
   const grouped = new Map<string, IPDataEntry>();
-  
   for (const proxy of proxiesData) {
-    // Create a key based on metadata (excluding query/IP)
-    const metadataKey = `${proxy.country}|${proxy.countryCode}|${proxy.isp}|${proxy.org}|${proxy.as}|${proxy.asname}`;
-    
+    // Key: country|asn|as_name
+    const metadataKey = `${proxy.country}|${proxy.asn}|${proxy.as_name}`;
     if (!grouped.has(metadataKey)) {
-      // Create new group with metadata
       grouped.set(metadataKey, {
-        query: [],
+        ip: [],
         country: proxy.country,
-        countryCode: proxy.countryCode,
-        isp: proxy.isp,
-        org: proxy.org,
-        as: proxy.as,
-        asname: proxy.asname
+        asn: proxy.asn,
+        as_name: proxy.as_name
       });
     }
-    
-    // Add IP to the group
     const group = grouped.get(metadataKey)!;
-    const ip = typeof proxy.query === 'string' ? proxy.query : proxy.query[0];
-    if (ip && !(group.query as string[]).includes(ip)) {
-      (group.query as string[]).push(ip);
+    for (const ip of proxy.ip) {
+      if (!group.ip.includes(ip)) group.ip.push(ip);
     }
   }
-  
-  // Convert to list and optimize single IP entries
-  const result: IPDataEntry[] = [];
-  for (const group of Array.from(grouped.values())) {
-    if ((group.query as string[]).length === 1) {
-      // If only one IP, store as string instead of array
-      group.query = (group.query as string[])[0];
-    }
-    result.push(group);
-  }
-  
-  return result;
+  return Array.from(grouped.values());
 }
 
 // Helper function to merge grouped data
 function mergeGroupedData(existingData: IPDataEntry[], newData: IPDataEntry[]): IPDataEntry[] {
-  // Create a map for existing groups keyed by metadata
   const existingGroups = new Map<string, IPDataEntry>();
-  
   for (const group of existingData) {
-    const metadataKey = `${group.country}|${group.countryCode}|${group.isp}|${group.org}|${group.as}|${group.asname}`;
+    const metadataKey = `${group.country}|${group.asn}|${group.as_name}`;
     existingGroups.set(metadataKey, group);
   }
-  
-  // Process new data
   for (const newGroup of newData) {
-    const metadataKey = `${newGroup.country}|${newGroup.countryCode}|${newGroup.isp}|${newGroup.org}|${newGroup.as}|${newGroup.asname}`;
-    
+    const metadataKey = `${newGroup.country}|${newGroup.asn}|${newGroup.as_name}`;
     if (existingGroups.has(metadataKey)) {
-      // Merge IPs with existing group
       const existingGroup = existingGroups.get(metadataKey)!;
-      
-      // Convert existing query to array if it's a string
-      if (typeof existingGroup.query === 'string') {
-        existingGroup.query = [existingGroup.query];
-      }
-      
-      // Convert new query to array if it's a string
-      let newIPs = newGroup.query;
-      if (typeof newIPs === 'string') {
-        newIPs = [newIPs];
-      }
-      
-      // Add new IPs that don't already exist
-      for (const ip of newIPs as string[]) {
-        if (!(existingGroup.query as string[]).includes(ip)) {
-          (existingGroup.query as string[]).push(ip);
-        }
-      }
-      
-      // Optimize: convert back to string if only one IP
-      if ((existingGroup.query as string[]).length === 1) {
-        existingGroup.query = (existingGroup.query as string[])[0];
+      for (const ip of newGroup.ip) {
+        if (!existingGroup.ip.includes(ip)) existingGroup.ip.push(ip);
       }
     } else {
-      // Add new group
       existingGroups.set(metadataKey, newGroup);
     }
   }
-  
   return Array.from(existingGroups.values());
 }
 
 // Update country JSON files with grouping support
 async function updateCountryJSONFile(countryCode: string, newData: IPDataEntry[]): Promise<void> {
   const filePath = `${PROXY_DATA_DIR}/${countryCode}.json`;
-  
   try {
-    // Load existing data
     let existingData: IPDataEntry[] = [];
     try {
       existingData = await Bun.file(filePath).json();
     } catch {
       existingData = [];
     }
-    
-    // Convert existing data to grouped format if needed
-    const existingGroupedData = convertToGroupedFormat(existingData);
-    
-    // Group new proxies by metadata
-    const newGroupedData = groupProxiesByMetadata(newData);
-    
-    // Merge new grouped data with existing grouped data
-    const mergedData = mergeGroupedData(existingGroupedData, newGroupedData);
-    
-    // Count new IPs added
-    const newIPsCount = newGroupedData.reduce((count, group) => {
-      return count + (Array.isArray(group.query) ? group.query.length : 1);
-    }, 0);
-    
-    if (newIPsCount > 0) {
-      // Save updated file
-      await Bun.write(filePath, JSON.stringify(mergedData, null, 2));
-      console.log(`📝 Updated ${countryCode}.json: +${newIPsCount} new IPs grouped into ${newGroupedData.length} metadata groups`);
-      
-      // Update cache
-      countryDataCache.set(countryCode, mergedData);
+    // Gabungkan IP ke grup metadata yang sama
+    for (const newEntry of newData) {
+      const match = existingData.find(e =>
+        e.country === newEntry.country &&
+        e.asn === newEntry.asn &&
+        e.as_name === newEntry.as_name
+      );
+      if (match) {
+        for (const ip of newEntry.ip) {
+          if (!match.ip.includes(ip)) match.ip.push(ip);
+        }
+      } else {
+        existingData.push(newEntry);
+      }
     }
-    
+    await Bun.write(filePath, JSON.stringify(existingData, null, 2));
+    countryDataCache.set(countryCode, existingData);
   } catch (error: any) {
     console.log(`❌ Error updating ${countryCode}.json:`, error.message);
+  }
+}
+
+// Helper untuk batch update banyak country sekaligus
+async function updateCountryJSONFileBatch(newData: IPDataEntry[]): Promise<void> {
+  const grouped: { [country: string]: IPDataEntry[] } = {};
+  for (const entry of newData) {
+    if (!grouped[entry.country]) grouped[entry.country] = [];
+    grouped[entry.country].push(entry);
+  }
+  for (const country of Object.keys(grouped)) {
+    await updateCountryJSONFile(country, grouped[country]);
   }
 }
 
@@ -539,7 +467,7 @@ async function updateProxyListWithAPIResults(): Promise<void> {
         // Check if we have updated data for this IP
         if (ipDataCache.has(ip)) {
           const ipData = ipDataCache.get(ip)!;
-          const updatedLine = `${ip},${port},${ipData.countryCode},${ipData.isp || ipData.asname}`;
+          const updatedLine = `${ip},${port},${ipData.country},${ipData.as_name}`;
           updatedLines.push(updatedLine);
           updatedCount++;
         } else {
@@ -985,13 +913,13 @@ async function writeProxyHistory(history: ProxyHistory): Promise<void> {
           proxyHistory.proxies[proxyKey].activeCount += 1;
           proxyHistory.proxies[proxyKey].isCurrentlyActive = true;
           
-          // Format output - Menggunakan ISP sebagai prioritas utama, ASNAME sebagai cadangan
-          const finalResult = `${proxyIP},${proxyPort},${ipData.countryCode},${ipData.isp || ipData.asname}`;
+          // Format output - gunakan as_name dan country (format baru)
+          const finalResult = `${proxyIP},${proxyPort},${ipData.country},${ipData.as_name}`;
           activeProxyList.push(finalResult);
 
-          if (kvPair[ipData.countryCode] == undefined) kvPair[ipData.countryCode] = [];
-          if (kvPair[ipData.countryCode].length < 100) {
-            kvPair[ipData.countryCode].push(`${proxyIP}:${proxyPort}`);
+          if (kvPair[ipData.country] == undefined) kvPair[ipData.country] = [];
+          if (kvPair[ipData.country].length < 100) {
+            kvPair[ipData.country].push(`${proxyIP}:${proxyPort}`);
           }
 
           proxySaved += 1;

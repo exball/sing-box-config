@@ -47,7 +47,7 @@ API_TOKENS = [
 API_URL = "https://ipinfo.io/batch"  # IPinfo.io batch API endpoint
 
 # Batch Processing Configuration
-BATCH_SIZE = 800  # Jumlah IP per batch (max: 1000 untuk IPinfo.io)
+BATCH_SIZE = 900  # Jumlah IP per batch (max: 1000 untuk IPinfo.io)
                   # Rekomendasi: 500 (optimal untuk stabilitas dan kecepatan)
                   # Semakin besar = lebih cepat, tapi lebih berisiko timeout
                   # Semakin kecil = lebih lambat, tapi lebih stabil
@@ -104,6 +104,7 @@ import glob
 import re
 from typing import List, Dict, Tuple, Optional
 from datetime import datetime
+import traceback
 import random
 
 class ProxyValidatorIPinfo:
@@ -341,16 +342,18 @@ class ProxyValidatorIPinfo:
         print("Data akan disimpan dalam format JSON di direktori 'proxy_data/'")
         print("dengan file terpisah untuk setiap negara.")
         print()
-        print("Contoh format data yang akan disimpan:")
-        print('''{
-    "query": "129.151.128.105",
-    "country": "United Arab Emirates", 
-    "countryCode": "AE",
-    "isp": "Oracle Corporation",
-    "org": "Oracle Corporation",
-    "as": "AS31898 Oracle Corporation",
-    "asname": "ORACLE-BMC-31898"
-}''')
+        print('''[
+            {
+                "ip": [
+                    "45.196.29.0",
+                    "45.196.29.1",
+                    "45.196.29.2"
+                ],
+                "country": "ID",
+                "asn": "AS13335",
+                "as_name": "Cloudflare, Inc."
+            }
+        ]''')
         print("="*60)
         
         while True:
@@ -849,76 +852,71 @@ class ProxyValidatorIPinfo:
         return all_validated
     
     def save_proxy_data_by_country(self, validated_proxies: List[Dict]):
-        """Save proxy data by country in JSON format"""
+        """Save proxy data by country in JSON format, grouped by identical metadata (ASN, AS Name, ISP, org, etc)."""
         if not self.save_proxy_data:
             return
-            
-        self.log("Menyimpan data proxy berdasarkan negara...")
-        
+
+        self.log("Menyimpan data proxy berdasarkan negara (grouped)...")
+
         # Create proxy_data directory if it doesn't exist
         if not os.path.exists(self.proxy_data_dir):
             os.makedirs(self.proxy_data_dir)
             self.log(f"Direktori {self.proxy_data_dir}/ dibuat")
-        
-        # Group proxies by country
+
+        # Group proxies by country, then by (asn, as_name, isp, org, etc)
         country_data = {}
         for proxy in validated_proxies:
             if 'api_data' in proxy:
+                api = proxy['api_data']
                 country_code = proxy['country_code']
+                asn = api.get('asn', 'Unknown ASN')
+                as_name = api.get('as_name', 'Unknown AS Name')
+                isp = api.get('isp', 'Unknown ISP')
+                org = api.get('org', 'Unknown Org')
+                # Key: (asn, as_name, isp, org)
+                group_key = (asn, as_name, isp, org)
                 if country_code not in country_data:
-                    country_data[country_code] = []
-                
-                # Add the API data to country group
-                country_data[country_code].append(proxy['api_data'])
-        
-        # Save each country's data to separate JSON files
+                    country_data[country_code] = {}
+                if group_key not in country_data[country_code]:
+                    country_data[country_code][group_key] = []
+                # Simpan IP (atau list IP) ke grup
+                ip = api.get('ip')
+                if ip:
+                    country_data[country_code][group_key].append(ip)
+
         saved_countries = 0
         total_proxies_saved = 0
-        
-        for country_code, proxies_data in country_data.items():
+
+        for country_code, group_dict in country_data.items():
             if country_code == 'UNKNOWN':
                 filename = f"{self.proxy_data_dir}/UNKNOWN.json"
             else:
                 filename = f"{self.proxy_data_dir}/{country_code}.json"
-            
+
+            # Build grouped data list
+            grouped_list = []
+            for (asn, as_name, isp, org), ip_list in group_dict.items():
+                grouped_list.append({
+                    "ip": ip_list,
+                    "country": country_code,
+                    "asn": asn,
+                    "as_name": as_name,
+                    "isp": isp,
+                    "org": org
+                })
+                total_proxies_saved += len(ip_list)
+
             try:
-                # Load existing data if file exists
-                existing_data = []
-                if os.path.exists(filename):
-                    try:
-                        with open(filename, 'r', encoding='utf-8') as f:
-                            existing_data = json.load(f)
-                    except:
-                        existing_data = []
-                
-                # Add new data to existing data
-                all_data = existing_data + proxies_data
-                
-                # Remove duplicates based on IP
-                seen_ips = set()
-                unique_data = []
-                for item in all_data:
-                    ip = item.get('ip')
-                    if ip and ip not in seen_ips:
-                        seen_ips.add(ip)
-                        unique_data.append(item)
-                
-                # Save the data
                 with open(filename, 'w', encoding='utf-8') as f:
-                    json.dump(unique_data, f, indent=2, ensure_ascii=False)
-                
+                    json.dump(grouped_list, f, indent=2, ensure_ascii=False)
                 saved_countries += 1
-                new_proxies_count = len(proxies_data)
-                total_proxies_saved += new_proxies_count
-                
-                self.log(f"  - {country_code}: {new_proxies_count} proxy disimpan ke {filename}")
-                    
+                self.log(f"  - {country_code}: {len(grouped_list)} grup, {sum(len(g['ip']) for g in grouped_list)} IP disimpan ke {filename}")
             except Exception as e:
                 self.log(f"Error menyimpan data untuk negara {country_code}: {e}")
-        
+
         self.log(f"Data proxy berhasil disimpan:")
         self.log(f"  - {saved_countries} file negara")
-        self.log(f"  - {total_proxies_saved} proxy ditambahkan")
+        self.log(f"  - {total_proxies_saved} IP ditambahkan (grouped)")
         self.log(f"  - Lokasi: {self.proxy_data_dir}/")
     
     def save_results(self, validated_proxies: List[Dict]):
@@ -1025,100 +1023,70 @@ class ProxyValidatorIPinfo:
             self.log("Cleaned up progress file")
     
     def run(self):
-        """Main execution flow with file selection"""
+        """Main execution flow otomatis untuk workflow GitHub Actions"""
         try:
+            import shutil
+            import time
             start_time = time.time()
-            
-            # Display current configuration
-            self.log("Starting IPinfo.io proxy validation process...")
-            self.log("Features: File selection, flexible parsing, data enrichment/correction")
-            self.log(f"Using IPinfo.io API with batch processing up to {self.BATCH_SIZE} IPs per request")
-            self.display_configuration()
-            
-            # Step 1: File selection
-            txt_files = self.scan_txt_files()
-            if not txt_files:
-                self.log("No .txt files found in current directory!")
+            self.log("=== Proxy Validator IPinfo (Non-Interaktif, Mode Otomatis) ===")
+            # Cek file input
+            if not os.path.exists("rawProxyList.txt"):
+                self.log(f"Error: rawProxyList.txt tidak ditemukan!")
+                self.log("Pastikan rawProxyList.txt tersedia di direktori kerja.")
                 return
-            
-            selected_file = self.select_file(txt_files)
-            if not selected_file:
-                self.log("No file selected. Exiting...")
-                return
-            
-            self.input_file = selected_file
-            
-            # Step 2: Ask about proxy data saving
-            self.ask_save_proxy_data_option()
-            
-            # Step 3: Set output filename
-            base_name = os.path.splitext(os.path.basename(self.input_file))[0]
+
+            # Backup file sebelum update
             timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-            self.output_file = f"proxy-validated-ipinfo-{base_name}-{timestamp}.txt"
-            
-            self.log(f"Output will be saved to: {self.output_file}")
-            if self.save_proxy_data:
-                self.log(f"Proxy data by country will be saved to: {self.proxy_data_dir}/")
-            
-            # Step 4: Load and process proxies
+            backup_file = f"rawProxyList_backup_{timestamp}.txt"
+            shutil.copy2("rawProxyList.txt", backup_file)
+            self.log(f"✅ Backup dibuat: {backup_file}")
+
+            # Set input/output file
+            self.input_file = "rawProxyList.txt"
+            self.output_file = "rawProxyList.txt"
+            self.save_proxy_data = True
+
+            # Load proxies
             proxies = self.load_proxies()
             if not proxies:
                 self.log("No valid proxies found!")
                 return
-            
-            self.log(f"File parsing completed:")
-            self.log(f"  - Total lines read: {self.stats['total_lines']:,}")
-            self.log(f"  - IPs skipped (no port): {self.stats['skipped_no_port']:,}")
-            self.log(f"  - Invalid IPs: {self.stats['invalid_ips']:,}")
-            self.log(f"  - IPs to process: {len(proxies):,}")
-            
-            # Step 5: Remove duplicates
-            unique_proxies = self.remove_duplicates(proxies)
-            
-            # Step 6: Select best token for the job
-            if len(self.API_TOKENS) > 1 and self.AUTO_SWITCH_TOKENS:
-                # Calculate needed requests (unique IPs, not total proxies)
-                unique_ips = set()
-                for proxy in unique_proxies:
-                    ip, port, country, org = proxy  # Unpack tuple
-                    unique_ips.add(ip)
-                needed_requests = len(unique_ips)
-                
-                self.log(f"Need to validate {needed_requests:,} unique IPs from {len(unique_proxies):,} total proxies")
-                
-                # Find best token
-                best_token_index = self.get_best_token_for_requests(needed_requests)
-                if best_token_index != self.current_token_index:
-                    self.switch_token(best_token_index)
-            else:
-                self.log(f"Using Token 1: ...{self.current_token[-8:]} (single token or auto-switch disabled)")
-            
-            # Step 7: Create batches and validate
-            batch_count = self.create_batch_files(unique_proxies)
-            validated_proxies = self.validate_all_batches(batch_count)
-            
-            # Step 7: Save proxy data by country if requested
-            if self.save_proxy_data:
-                self.save_proxy_data_by_country(validated_proxies)
-            
-            # Step 8: Save results and print summary
-            self.save_results(validated_proxies)
-            self.print_summary(validated_proxies)
-            
-            # Step 9: Cleanup
+
+            proxies = self.remove_duplicates(proxies)
+            total_batches = self.create_batch_files(proxies)
+            validated_proxies = self.validate_all_batches(total_batches)
+
+            # Simpan data per negara
+            self.save_proxy_data_by_country(validated_proxies)
+
+            # Simpan hasil ke output file (rawProxyList.txt)
+            with open(self.output_file, 'w', encoding='utf-8') as f:
+                for proxy in validated_proxies:
+                    ip = proxy.get('query', '')
+                    port = proxy.get('port', '')
+                    country = proxy.get('country', '')
+                    org = proxy.get('org', '')
+                    f.write(f"{ip}:{port},{country},{org}\n")
+            self.log(f"✅ rawProxyList.txt diupdate dengan {len(validated_proxies)} proxy tervalidasi")
+
+            # Statistik negara
+            country_stats = {}
+            for proxy in validated_proxies:
+                code = proxy.get('countryCode', 'XX')
+                country_stats[code] = country_stats.get(code, 0) + 1
+            self.log(f"🌍 Distribusi negara:")
+            for country, count in sorted(country_stats.items()):
+                self.log(f"  - {country}: {count}")
+
             self.cleanup_temp_files()
-            
-            # Final summary
             total_time = (time.time() - start_time) / 60
             self.log(f"\nValidation completed successfully in {total_time:.1f} minutes!")
             self.log(f"Results saved to: {self.output_file}")
-            
+
         except KeyboardInterrupt:
-            self.log("\nProcess interrupted by user. Progress saved - you can resume later.")
-            sys.exit(1)
+            self.log("Dibatalkan oleh user.")
         except Exception as e:
-            self.log(f"Unexpected error: {e}")
-            import traceback
+            self.log(f"Terjadi error fatal: {e}")
             traceback.print_exc()
             sys.exit(1)
 

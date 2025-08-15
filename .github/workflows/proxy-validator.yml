@@ -52,7 +52,7 @@ jobs:
       run: |
         cd proxy-scaner
         echo "🚀 Starting proxy validation process..."
-        python proxy_validator.py
+        python proxy_validator_ipinfo.py
       env:
         PYTHONUNBUFFERED: 1
 
