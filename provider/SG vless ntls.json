@@ -2,10 +2,10 @@
     "outbounds": [
         {
             "type": "vless",
-            "tag": "91 🇸🇬 DigitalOcean WS NTLS [proxy]",
+            "tag": "55 🇸🇬 DigitalOcean WS NTLS [proxy]",
             "server": "quiz.int.vidio.com",
             "server_port": 80,
-            "uuid": "23754415-9bf7-4483-a66b-a3d9d13f887c",
+            "uuid": "9938739a-c788-477d-80d5-9f45944ac4d7",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -13,9 +13,28 @@
             },
             "transport": {
                 "headers": {
-                    "Host": "proxy.ex-vpn.my.id"
+                    "Host": "proxy.exbal.my.id"
                 },
-                "path": "/68.183.227.236-20205",
+                "path": "/68.183.227.180-74",
+                "type": "ws"
+            }
+        },
+        {
+            "type": "vless",
+            "tag": "73 🇸🇬 Oracle Corporation WS NTLS [proxy]",
+            "server": "quiz.int.vidio.com",
+            "server_port": 80,
+            "uuid": "9938739a-c788-477d-80d5-9f45944ac4d7",
+            "network": "tcp",
+            "packet_encoding": "xudp",
+            "tls": {
+                "insecure": true
+            },
+            "transport": {
+                "headers": {
+                    "Host": "proxy.exbal.my.id"
+                },
+                "path": "/168.138.181.188-61731",
                 "type": "ws"
             }
         },
@@ -24,7 +43,7 @@
             "tag": "38 🇸🇬 The Constant Company WS NTLS [proxy]",
             "server": "quiz.int.vidio.com",
             "server_port": 80,
-            "uuid": "23754415-9bf7-4483-a66b-a3d9d13f887c",
+            "uuid": "9938739a-c788-477d-80d5-9f45944ac4d7",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -32,18 +51,18 @@
             },
             "transport": {
                 "headers": {
-                    "Host": "proxy.ex-vpn.my.id"
+                    "Host": "proxy.exbal.my.id"
                 },
-                "path": "/45.32.106.141-20205",
+                "path": "/207.148.124.166-74",
                 "type": "ws"
             }
         },
         {
             "type": "vless",
-            "tag": "68 🇸🇬 Tencent Building WS NTLS [proxy]",
+            "tag": "29 🇸🇬 Tencent Building WS NTLS [proxy]",
             "server": "quiz.int.vidio.com",
             "server_port": 80,
-            "uuid": "23754415-9bf7-4483-a66b-a3d9d13f887c",
+            "uuid": "9938739a-c788-477d-80d5-9f45944ac4d7",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -51,18 +70,18 @@
             },
             "transport": {
                 "headers": {
-                    "Host": "proxy.ex-vpn.my.id"
+                    "Host": "proxy.exbal.my.id"
                 },
-                "path": "/43.134.8.58-28443",
+                "path": "/43.156.181.203-443",
                 "type": "ws"
             }
         },
         {
             "type": "vless",
-            "tag": "13 🇸🇬 Oracle Corporation WS NTLS [proxy]",
+            "tag": "80 🇸🇬 Alibaba (US) Technology Co. WS NTLS [proxy]",
             "server": "quiz.int.vidio.com",
             "server_port": 80,
-            "uuid": "23754415-9bf7-4483-a66b-a3d9d13f887c",
+            "uuid": "9938739a-c788-477d-80d5-9f45944ac4d7",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -70,28 +89,9 @@
             },
             "transport": {
                 "headers": {
-                    "Host": "proxy.ex-vpn.my.id"
+                    "Host": "proxy.exbal.my.id"
                 },
-                "path": "/158.178.243.152-61731",
-                "type": "ws"
-            }
-        },
-        {
-            "type": "vless",
-            "tag": "16 🇸🇬 Alibaba (US) Technology Co. WS NTLS [proxy]",
-            "server": "quiz.int.vidio.com",
-            "server_port": 80,
-            "uuid": "23754415-9bf7-4483-a66b-a3d9d13f887c",
-            "network": "tcp",
-            "packet_encoding": "xudp",
-            "tls": {
-                "insecure": true
-            },
-            "transport": {
-                "headers": {
-                    "Host": "proxy.ex-vpn.my.id"
-                },
-                "path": "/47.245.111.245-58620",
+                "path": "/8.219.59.132-48130",
                 "type": "ws"
             }
         }
