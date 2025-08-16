@@ -2,10 +2,10 @@
     "outbounds": [
         {
             "type": "vless",
-            "tag": "27 🇮🇩 Akamai Connected Cloud WS TLS [proxy]",
+            "tag": "4 🇮🇩 Akamai Connected Cloud WS TLS [proxy]",
             "server": "quiz.int.vidio.com",
             "server_port": 443,
-            "uuid": "c775a1eb-ee90-40d0-80e4-5b6479ab4dda",
+            "uuid": "3ebdd145-0224-431d-bf86-fd37c5351c34",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -17,16 +17,37 @@
                 "headers": {
                     "Host": "proxy.ex-vpn.my.id"
                 },
-                "path": "/172.232.238.52-20205",
+                "path": "/172.232.231.191-10443",
                 "type": "ws"
             }
         },
         {
             "type": "vless",
-            "tag": "3 🇮🇩 CV. Rumahweb Indonesia WS TLS [proxy]",
+            "tag": "41 🇮🇩 Kaopu Cloud HK Limited WS TLS [proxy]",
             "server": "quiz.int.vidio.com",
             "server_port": 443,
-            "uuid": "c775a1eb-ee90-40d0-80e4-5b6479ab4dda",
+            "uuid": "3ebdd145-0224-431d-bf86-fd37c5351c34",
+            "network": "tcp",
+            "packet_encoding": "xudp",
+            "tls": {
+                "enabled": true,
+                "insecure": true,
+                "server_name": "proxy.ex-vpn.my.id"
+            },
+            "transport": {
+                "headers": {
+                    "Host": "proxy.ex-vpn.my.id"
+                },
+                "path": "/154.205.159.72-2053",
+                "type": "ws"
+            }
+        },
+        {
+            "type": "vless",
+            "tag": "19 🇮🇩 CV. Rumahweb Indonesia WS TLS [proxy]",
+            "server": "quiz.int.vidio.com",
+            "server_port": 443,
+            "uuid": "3ebdd145-0224-431d-bf86-fd37c5351c34",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -44,10 +65,31 @@
         },
         {
             "type": "vless",
-            "tag": "7 🇮🇩 PT Telekomunikasi Indonesia WS TLS [proxy]",
+            "tag": "9 🇮🇩 PT Semut Data Indonesia WS TLS [proxy]",
             "server": "quiz.int.vidio.com",
             "server_port": 443,
-            "uuid": "c775a1eb-ee90-40d0-80e4-5b6479ab4dda",
+            "uuid": "3ebdd145-0224-431d-bf86-fd37c5351c34",
+            "network": "tcp",
+            "packet_encoding": "xudp",
+            "tls": {
+                "enabled": true,
+                "insecure": true,
+                "server_name": "proxy.ex-vpn.my.id"
+            },
+            "transport": {
+                "headers": {
+                    "Host": "proxy.ex-vpn.my.id"
+                },
+                "path": "/103.146.63.149-443",
+                "type": "ws"
+            }
+        },
+        {
+            "type": "vless",
+            "tag": "24 🇮🇩 PT Telekomunikasi Indonesia WS TLS [proxy]",
+            "server": "quiz.int.vidio.com",
+            "server_port": 443,
+            "uuid": "3ebdd145-0224-431d-bf86-fd37c5351c34",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -60,48 +102,6 @@
                     "Host": "proxy.ex-vpn.my.id"
                 },
                 "path": "/36.95.152.58-12137",
-                "type": "ws"
-            }
-        },
-        {
-            "type": "vless",
-            "tag": "11 🇮🇩 PT Pusat Media Indonesia WS TLS [proxy]",
-            "server": "quiz.int.vidio.com",
-            "server_port": 443,
-            "uuid": "c775a1eb-ee90-40d0-80e4-5b6479ab4dda",
-            "network": "tcp",
-            "packet_encoding": "xudp",
-            "tls": {
-                "enabled": true,
-                "insecure": true,
-                "server_name": "proxy.ex-vpn.my.id"
-            },
-            "transport": {
-                "headers": {
-                    "Host": "proxy.ex-vpn.my.id"
-                },
-                "path": "/103.6.207.108-19224",
-                "type": "ws"
-            }
-        },
-        {
-            "type": "vless",
-            "tag": "18 🇮🇩 Kaopu Cloud HK Limited WS TLS [proxy]",
-            "server": "quiz.int.vidio.com",
-            "server_port": 443,
-            "uuid": "c775a1eb-ee90-40d0-80e4-5b6479ab4dda",
-            "network": "tcp",
-            "packet_encoding": "xudp",
-            "tls": {
-                "enabled": true,
-                "insecure": true,
-                "server_name": "proxy.ex-vpn.my.id"
-            },
-            "transport": {
-                "headers": {
-                    "Host": "proxy.ex-vpn.my.id"
-                },
-                "path": "/156.244.1.250-8443",
                 "type": "ws"
             }
         }
