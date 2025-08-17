@@ -116,24 +116,26 @@
         "best latency cf",
         "Vmess Tls",
         "Vmess Ntls",
-        "ID vless tls",
-        "ID vless ntls",
-        "SG vless tls",
-        "SG vless ntls",
-        "ID trojan tls",
-        "SG trojan tls",
-        "backup"
+        "ID vless",
+        "SG vless",
+        "ID trojan",
+        "SG trojan",
+        "TH vless",
+        "MY vless",
+        "VN vless",
+        "Backup"
       ],
       "providers": [
         "Vmess Tls",
         "Vmess Ntls",
-        "ID vless tls",
-        "ID vless ntls",
-        "SG vless tls",
-        "SG vless ntls",
-        "ID trojan tls",
-        "SG trojan tls",
-        "backup"
+        "ID vless",
+        "SG vless",
+        "ID trojan",
+        "SG trojan",
+        "TH vless",
+        "MY vless",
+        "VN vless",
+        "Backup"
       ]
     },
     {
@@ -156,13 +158,14 @@
       "type": "urltest",
       "tag": "best latency cf",
       "outbounds": [
-        "ID vless tls",
-        "ID vless ntls",
-        "SG vless tls",
-        "SG vless ntls",
-        "ID trojan tls",
-        "SG trojan tls",
-        "backup"
+        "ID vless",
+        "SG vless",
+        "ID trojan",
+        "SG trojan",
+        "TH vless",
+        "MY vless",
+        "VN vless",
+        "Backup"
       ]
     },
     {
@@ -193,50 +196,57 @@
     },
     {
       "type": "urltest",
-      "tag": "ID vless tls",
-      "providers": "ID vless tls",
+      "tag": "ID vless",
+      "providers": "ID vless",
       "url": "https://www.gstatic.com/generate_204",
       "interval": "1m0s"
     },
     {
       "type": "urltest",
-      "tag": "ID vless ntls",
-      "providers": "ID vless ntls",
+      "tag": "SG vless",
+      "providers": "SG vless",
       "url": "https://www.gstatic.com/generate_204",
       "interval": "1m0s"
     },
     {
       "type": "urltest",
-      "tag": "SG vless tls",
-      "providers": "SG vless tls",
+      "tag": "ID trojan",
+      "providers": "ID trojan",
       "url": "https://www.gstatic.com/generate_204",
       "interval": "1m0s"
     },
     {
       "type": "urltest",
-      "tag": "SG vless ntls",
-      "providers": "SG vless ntls",
+      "tag": "SG trojan",
+      "providers": "SG trojan",
       "url": "https://www.gstatic.com/generate_204",
       "interval": "1m0s"
     },
     {
       "type": "urltest",
-      "tag": "ID trojan tls",
-      "providers": "ID trojan tls",
+      "tag": "TH vless",
+      "providers": "TH vless",
       "url": "https://www.gstatic.com/generate_204",
       "interval": "1m0s"
     },
     {
       "type": "urltest",
-      "tag": "SG trojan tls",
-      "providers": "SG trojan tls",
+      "tag": "MY vless",
+      "providers": "MY vless",
       "url": "https://www.gstatic.com/generate_204",
       "interval": "1m0s"
     },
     {
       "type": "urltest",
-      "tag": "backup",
-      "providers": "backup",
+      "tag": "VN vless",
+      "providers": "VN vless",
+      "url": "https://www.gstatic.com/generate_204",
+      "interval": "1m0s"
+    },
+    {
+      "type": "urltest",
+      "tag": "Backup",
+      "providers": "Backup",
       "url": "https://www.gstatic.com/generate_204",
       "interval": "1m0s"
     }
@@ -364,38 +374,43 @@
     },
     {
       "type": "local",
-      "path": "./provider/ID vless tls.json",
-      "tag": "ID vless tls"
+      "path": "./provider/ID vless.json",
+      "tag": "ID vless"
     },
     {
       "type": "local",
-      "path": "./provider/ID vless ntls.json",
-      "tag": "ID vless ntls"
+      "path": "./provider/SG vless.json",
+      "tag": "SG vless"
     },
     {
       "type": "local",
-      "path": "./provider/SG vless tls.json",
-      "tag": "SG vless tls"
+      "path": "./provider/ID trojan.json",
+      "tag": "ID trojan"
     },
     {
       "type": "local",
-      "path": "./provider/SG vless ntls.json",
-      "tag": "SG vless ntls"
+      "path": "./provider/SG trojan.json",
+      "tag": "SG trojan"
     },
     {
       "type": "local",
-      "path": "./provider/ID trojan tls.json",
-      "tag": "ID trojan tls"
+      "path": "./provider/TH vless.json",
+      "tag": "TH vless"
     },
     {
       "type": "local",
-      "path": "./provider/SG trojan tls.json",
-      "tag": "SG trojan tls"
+      "path": "./provider/MY vless.json",
+      "tag": "MY vless"
     },
     {
       "type": "local",
-      "path": "./provider/backup.json",
-      "tag": "backup"
+      "path": "./provider/VN vless.json",
+      "tag": "VN vless"
+    },
+    {
+      "type": "local",
+      "path": "./provider/Backup.json",
+      "tag": "Backup"
     }
   ],
   "experimental": {

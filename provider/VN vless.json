@@ -2,10 +2,10 @@
     "outbounds": [
         {
             "type": "vless",
-            "tag": "1 🇮🇩 Akamai Connected Cloud WS TLS [proxy]",
+            "tag": "1 🇻🇳 VNPT Corp WS TLS [proxy]",
             "server": "quiz.int.vidio.com",
             "server_port": 443,
-            "uuid": "80513b9b-dcd7-4e2b-b557-d44e6d2bd5c8",
+            "uuid": "a236752d-35af-4fa5-850d-21aedd2224d9",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -17,16 +17,16 @@
                 "headers": {
                     "Host": "proxy.ex-vpn.my.id"
                 },
-                "path": "/172.232.238.52-74",
+                "path": "/103.15.90.134-49678",
                 "type": "ws"
             }
         },
         {
             "type": "vless",
-            "tag": "3 🇮🇩 Google LLC WS TLS [proxy]",
+            "tag": "2 🇻🇳 UCLOUD INFORMATION TECHNOLOGY (HK) LIMITED WS TLS [proxy]",
             "server": "quiz.int.vidio.com",
             "server_port": 443,
-            "uuid": "80513b9b-dcd7-4e2b-b557-d44e6d2bd5c8",
+            "uuid": "a236752d-35af-4fa5-850d-21aedd2224d9",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -38,70 +38,45 @@
                 "headers": {
                     "Host": "proxy.ex-vpn.my.id"
                 },
-                "path": "/34.101.86.59-443",
+                "path": "/152.32.255.24-587",
                 "type": "ws"
             }
         },
         {
             "type": "vless",
-            "tag": "4 🇮🇩 PT MITRA VISIONER PRATAMA WS TLS [proxy]",
+            "tag": "1 🇻🇳 VNPT Corp WS NTLS [proxy]",
             "server": "quiz.int.vidio.com",
-            "server_port": 443,
-            "uuid": "80513b9b-dcd7-4e2b-b557-d44e6d2bd5c8",
+            "server_port": 80,
+            "uuid": "2af34a67-fc25-4c36-ba7c-141ab09c5d5c",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
-                "enabled": true,
-                "insecure": true,
-                "server_name": "proxy.ex-vpn.my.id"
+                "insecure": true
             },
             "transport": {
                 "headers": {
                     "Host": "proxy.ex-vpn.my.id"
                 },
-                "path": "/206.84.101.83-8443",
+                "path": "/103.15.90.134-49678",
                 "type": "ws"
             }
         },
         {
             "type": "vless",
-            "tag": "6 🇮🇩 INDO Internet. PT WS TLS [proxy]",
+            "tag": "2 🇻🇳 UCLOUD INFORMATION TECHNOLOGY (HK) LIMITED WS NTLS [proxy]",
             "server": "quiz.int.vidio.com",
-            "server_port": 443,
-            "uuid": "80513b9b-dcd7-4e2b-b557-d44e6d2bd5c8",
+            "server_port": 80,
+            "uuid": "2af34a67-fc25-4c36-ba7c-141ab09c5d5c",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
-                "enabled": true,
-                "insecure": true,
-                "server_name": "proxy.ex-vpn.my.id"
+                "insecure": true
             },
             "transport": {
                 "headers": {
                     "Host": "proxy.ex-vpn.my.id"
                 },
-                "path": "/117.54.114.103-443",
-                "type": "ws"
-            }
-        },
-        {
-            "type": "vless",
-            "tag": "8 🇮🇩 Alibaba (US) Technology Co.. Ltd. WS TLS [proxy]",
-            "server": "quiz.int.vidio.com",
-            "server_port": 443,
-            "uuid": "80513b9b-dcd7-4e2b-b557-d44e6d2bd5c8",
-            "network": "tcp",
-            "packet_encoding": "xudp",
-            "tls": {
-                "enabled": true,
-                "insecure": true,
-                "server_name": "proxy.ex-vpn.my.id"
-            },
-            "transport": {
-                "headers": {
-                    "Host": "proxy.ex-vpn.my.id"
-                },
-                "path": "/149.129.250.8-443",
+                "path": "/152.32.255.24-587",
                 "type": "ws"
             }
         }
