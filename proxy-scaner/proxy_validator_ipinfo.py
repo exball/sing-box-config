@@ -76,7 +76,7 @@ BACKOFF_JITTER = 5    # Random jitter maksimal (detik)
                       # Retry 3: ~31-35 detik
 
 # Rate Limiting Configuration
-RATE_LIMIT_MONTHLY = 50000  # Limit bulanan untuk free plan IPinfo.io
+RATE_LIMIT_MONTHLY = 500000  # Limit bulanan untuk free plan IPinfo.io
 RATE_LIMIT_JITTER = 2       # Random jitter untuk delay antar batch (detik)
 
 # Token Management Configuration
