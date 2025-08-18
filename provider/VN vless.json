@@ -2,10 +2,10 @@
     "outbounds": [
         {
             "type": "vless",
-            "tag": "6 🇻🇳 Kaopu Cloud HK Limited WS TLS [proxy]",
+            "tag": "3 🇻🇳 Kaopu Cloud HK Limited WS TLS [proxy]",
             "server": "quiz.int.vidio.com",
             "server_port": 443,
-            "uuid": "967a3721-47d1-44e7-89f6-e140e2d05650",
+            "uuid": "32989dca-0b8d-42f2-abce-3fcf7a8f07df",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -17,28 +17,7 @@
                 "headers": {
                     "Host": "proxy.exbal.my.id"
                 },
-                "path": "/154.93.48.111-34237",
-                "type": "ws"
-            }
-        },
-        {
-            "type": "vless",
-            "tag": "3 🇻🇳 VNPT Corp WS TLS [proxy]",
-            "server": "quiz.int.vidio.com",
-            "server_port": 443,
-            "uuid": "967a3721-47d1-44e7-89f6-e140e2d05650",
-            "network": "tcp",
-            "packet_encoding": "xudp",
-            "tls": {
-                "enabled": true,
-                "insecure": true,
-                "server_name": "proxy.exbal.my.id"
-            },
-            "transport": {
-                "headers": {
-                    "Host": "proxy.exbal.my.id"
-                },
-                "path": "/103.197.184.193-37461",
+                "path": "/38.54.14.61-33813",
                 "type": "ws"
             }
         },
@@ -47,7 +26,7 @@
             "tag": "2 🇻🇳 VIETNAM POSTS AND TELECOMMUNICATIONS GROUP WS TLS [proxy]",
             "server": "quiz.int.vidio.com",
             "server_port": 443,
-            "uuid": "967a3721-47d1-44e7-89f6-e140e2d05650",
+            "uuid": "32989dca-0b8d-42f2-abce-3fcf7a8f07df",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -65,29 +44,31 @@
         },
         {
             "type": "vless",
-            "tag": "8 🇻🇳 Kaopu Cloud HK Limited WS NTLS [proxy]",
+            "tag": "6 🇻🇳 VNPT Corp WS TLS [proxy]",
             "server": "quiz.int.vidio.com",
-            "server_port": 80,
-            "uuid": "5d5a8310-f714-43d9-a7d4-33d81e504dae",
+            "server_port": 443,
+            "uuid": "32989dca-0b8d-42f2-abce-3fcf7a8f07df",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
-                "insecure": true
+                "enabled": true,
+                "insecure": true,
+                "server_name": "proxy.exbal.my.id"
             },
             "transport": {
                 "headers": {
                     "Host": "proxy.exbal.my.id"
                 },
-                "path": "/154.93.48.189-34237",
+                "path": "/103.197.184.193-37461",
                 "type": "ws"
             }
         },
         {
             "type": "vless",
-            "tag": "3 🇻🇳 VNPT Corp WS NTLS [proxy]",
+            "tag": "8 🇻🇳 Kaopu Cloud HK Limited WS NTLS [proxy]",
             "server": "quiz.int.vidio.com",
             "server_port": 80,
-            "uuid": "5d5a8310-f714-43d9-a7d4-33d81e504dae",
+            "uuid": "137fc300-4f6f-46ed-b3ae-a9d2cd4b46bb",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -97,7 +78,26 @@
                 "headers": {
                     "Host": "proxy.exbal.my.id"
                 },
-                "path": "/103.15.90.134-49678",
+                "path": "/154.93.48.111-34237",
+                "type": "ws"
+            }
+        },
+        {
+            "type": "vless",
+            "tag": "7 🇻🇳 VNPT Corp WS NTLS [proxy]",
+            "server": "quiz.int.vidio.com",
+            "server_port": 80,
+            "uuid": "137fc300-4f6f-46ed-b3ae-a9d2cd4b46bb",
+            "network": "tcp",
+            "packet_encoding": "xudp",
+            "tls": {
+                "insecure": true
+            },
+            "transport": {
+                "headers": {
+                    "Host": "proxy.exbal.my.id"
+                },
+                "path": "/103.197.184.193-37461",
                 "type": "ws"
             }
         },
@@ -106,7 +106,7 @@
             "tag": "2 🇻🇳 UCLOUD INFORMATION TECHNOLOGY (HK) LIMITED WS NTLS [proxy]",
             "server": "quiz.int.vidio.com",
             "server_port": 80,
-            "uuid": "5d5a8310-f714-43d9-a7d4-33d81e504dae",
+            "uuid": "137fc300-4f6f-46ed-b3ae-a9d2cd4b46bb",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
