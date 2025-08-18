@@ -50,7 +50,7 @@
     ],
     "rules": [
       {
-        "outbound": "direct",
+        "outbound": "any",
         "server": "local",
         "disable_cache": true
       },
@@ -253,15 +253,6 @@
   ],
   "route": {
     "rules": [
-      {
-        "ip_cidr": [
-          "192.168.0.0/16",
-          "10.0.0.0/8",
-          "172.16.0.0/12",
-          "192.168.43.0/24"
-        ],
-        "outbound": "direct"
-      },
       {
         "type": "logical",
         "mode": "or",
