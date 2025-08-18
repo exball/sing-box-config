@@ -2,81 +2,20 @@
     "outbounds": [
         {
             "type": "vless",
-            "tag": "2 🇹🇭 Siamdata Communication Co..Ltd. WS TLS [proxy]",
+            "tag": "5 🇹🇭 Siamdata Communication Co. WS TLS [proxy]",
             "server": "quiz.int.vidio.com",
             "server_port": 443,
-            "uuid": "ff5fbf59-8b24-4a0d-b01e-f93cf98579b6",
+            "uuid": "be43f424-66bb-4b05-a6ab-84922bfa3da2",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
                 "enabled": true,
                 "insecure": true,
-                "server_name": "proxy.ex-vpn.my.id"
+                "server_name": "proxy.exbal.my.id"
             },
             "transport": {
                 "headers": {
-                    "Host": "proxy.ex-vpn.my.id"
-                },
-                "path": "/212.80.213.140-31557",
-                "type": "ws"
-            }
-        },
-        {
-            "type": "vless",
-            "tag": "10 🇹🇭 TRUE INTERNET Co..Ltd. WS TLS [proxy]",
-            "server": "quiz.int.vidio.com",
-            "server_port": 443,
-            "uuid": "ff5fbf59-8b24-4a0d-b01e-f93cf98579b6",
-            "network": "tcp",
-            "packet_encoding": "xudp",
-            "tls": {
-                "enabled": true,
-                "insecure": true,
-                "server_name": "proxy.ex-vpn.my.id"
-            },
-            "transport": {
-                "headers": {
-                    "Host": "proxy.ex-vpn.my.id"
-                },
-                "path": "/171.103.232.58-20475",
-                "type": "ws"
-            }
-        },
-        {
-            "type": "vless",
-            "tag": "14 🇹🇭 CAT Telecom Public Company Limited WS TLS [proxy]",
-            "server": "quiz.int.vidio.com",
-            "server_port": 443,
-            "uuid": "ff5fbf59-8b24-4a0d-b01e-f93cf98579b6",
-            "network": "tcp",
-            "packet_encoding": "xudp",
-            "tls": {
-                "enabled": true,
-                "insecure": true,
-                "server_name": "proxy.ex-vpn.my.id"
-            },
-            "transport": {
-                "headers": {
-                    "Host": "proxy.ex-vpn.my.id"
-                },
-                "path": "/45.136.238.235-24370",
-                "type": "ws"
-            }
-        },
-        {
-            "type": "vless",
-            "tag": "1 🇹🇭 Siamdata Communication Co..Ltd. WS NTLS [proxy]",
-            "server": "quiz.int.vidio.com",
-            "server_port": 80,
-            "uuid": "bf782818-af91-4e87-a694-76379ff71fb8",
-            "network": "tcp",
-            "packet_encoding": "xudp",
-            "tls": {
-                "insecure": true
-            },
-            "transport": {
-                "headers": {
-                    "Host": "proxy.ex-vpn.my.id"
+                    "Host": "proxy.exbal.my.id"
                 },
                 "path": "/45.154.26.81-2053",
                 "type": "ws"
@@ -84,18 +23,41 @@
         },
         {
             "type": "vless",
-            "tag": "2 🇹🇭 CAT Telecom Public Company Limited WS NTLS [proxy]",
+            "tag": "7 🇹🇭 TRUE INTERNET Co. WS TLS [proxy]",
             "server": "quiz.int.vidio.com",
-            "server_port": 80,
-            "uuid": "bf782818-af91-4e87-a694-76379ff71fb8",
+            "server_port": 443,
+            "uuid": "be43f424-66bb-4b05-a6ab-84922bfa3da2",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
-                "insecure": true
+                "enabled": true,
+                "insecure": true,
+                "server_name": "proxy.exbal.my.id"
             },
             "transport": {
                 "headers": {
-                    "Host": "proxy.ex-vpn.my.id"
+                    "Host": "proxy.exbal.my.id"
+                },
+                "path": "/171.103.232.58-20475",
+                "type": "ws"
+            }
+        },
+        {
+            "type": "vless",
+            "tag": "15 🇹🇭 CAT Telecom Public Company Limited WS TLS [proxy]",
+            "server": "quiz.int.vidio.com",
+            "server_port": 443,
+            "uuid": "be43f424-66bb-4b05-a6ab-84922bfa3da2",
+            "network": "tcp",
+            "packet_encoding": "xudp",
+            "tls": {
+                "enabled": true,
+                "insecure": true,
+                "server_name": "proxy.exbal.my.id"
+            },
+            "transport": {
+                "headers": {
+                    "Host": "proxy.exbal.my.id"
                 },
                 "path": "/45.136.238.235-24370",
                 "type": "ws"
@@ -103,10 +65,10 @@
         },
         {
             "type": "vless",
-            "tag": "13 🇹🇭 TRUE INTERNET Co..Ltd. WS NTLS [proxy]",
+            "tag": "9 🇹🇭 Siamdata Communication Co. WS NTLS [proxy]",
             "server": "quiz.int.vidio.com",
             "server_port": 80,
-            "uuid": "bf782818-af91-4e87-a694-76379ff71fb8",
+            "uuid": "ca678cbc-0062-41b4-b5a9-49d1592c0655",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -114,9 +76,47 @@
             },
             "transport": {
                 "headers": {
-                    "Host": "proxy.ex-vpn.my.id"
+                    "Host": "proxy.exbal.my.id"
                 },
-                "path": "/171.103.13.77-25645",
+                "path": "/212.80.213.140-31557",
+                "type": "ws"
+            }
+        },
+        {
+            "type": "vless",
+            "tag": "8 🇹🇭 TRUE INTERNET Co. WS NTLS [proxy]",
+            "server": "quiz.int.vidio.com",
+            "server_port": 80,
+            "uuid": "ca678cbc-0062-41b4-b5a9-49d1592c0655",
+            "network": "tcp",
+            "packet_encoding": "xudp",
+            "tls": {
+                "insecure": true
+            },
+            "transport": {
+                "headers": {
+                    "Host": "proxy.exbal.my.id"
+                },
+                "path": "/171.103.164.62-30921",
+                "type": "ws"
+            }
+        },
+        {
+            "type": "vless",
+            "tag": "15 🇹🇭 CAT Telecom Public Company Limited WS NTLS [proxy]",
+            "server": "quiz.int.vidio.com",
+            "server_port": 80,
+            "uuid": "ca678cbc-0062-41b4-b5a9-49d1592c0655",
+            "network": "tcp",
+            "packet_encoding": "xudp",
+            "tls": {
+                "insecure": true
+            },
+            "transport": {
+                "headers": {
+                    "Host": "proxy.exbal.my.id"
+                },
+                "path": "/45.136.238.235-24370",
                 "type": "ws"
             }
         }
