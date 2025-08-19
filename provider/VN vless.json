@@ -2,10 +2,10 @@
     "outbounds": [
         {
             "type": "vless",
-            "tag": "1 🇻🇳 Kaopu Cloud HK Limited WS TLS [proxy]",
+            "tag": "2 🇻🇳 Kaopu Cloud HK Limited WS TLS [proxy]",
             "server": "quiz.int.vidio.com",
             "server_port": 443,
-            "uuid": "7b7466e6-ab4c-4848-a187-e4074cf1dc8e",
+            "uuid": "8492ffee-b7bd-4270-8c03-dc8eae1a0eb0",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -17,16 +17,16 @@
                 "headers": {
                     "Host": "proxy.ex-vpn.my.id"
                 },
-                "path": "/154.93.48.189-34237",
+                "path": "/154.93.48.111-34237",
                 "type": "ws"
             }
         },
         {
             "type": "vless",
-            "tag": "2 🇻🇳 VNPT Corp WS TLS [proxy]",
+            "tag": "1 🇻🇳 VNPT Corp WS TLS [proxy]",
             "server": "quiz.int.vidio.com",
             "server_port": 443,
-            "uuid": "7b7466e6-ab4c-4848-a187-e4074cf1dc8e",
+            "uuid": "8492ffee-b7bd-4270-8c03-dc8eae1a0eb0",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -47,7 +47,7 @@
             "tag": "3 🇻🇳 TRUMVPS COMPANY LIMITED WS TLS [proxy]",
             "server": "quiz.int.vidio.com",
             "server_port": 443,
-            "uuid": "7b7466e6-ab4c-4848-a187-e4074cf1dc8e",
+            "uuid": "8492ffee-b7bd-4270-8c03-dc8eae1a0eb0",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -65,10 +65,10 @@
         },
         {
             "type": "vless",
-            "tag": "5 🇻🇳 VNPT Corp WS NTLS [proxy]",
+            "tag": "8 🇻🇳 VNPT Corp WS NTLS [proxy]",
             "server": "quiz.int.vidio.com",
             "server_port": 80,
-            "uuid": "ac69725a-341d-4ed6-840a-ac95894a93c8",
+            "uuid": "2c45381d-c2dc-4c36-b740-328f5a35213e",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -78,16 +78,35 @@
                 "headers": {
                     "Host": "proxy.ex-vpn.my.id"
                 },
-                "path": "/103.197.184.193-37461",
+                "path": "/103.15.90.134-49678",
                 "type": "ws"
             }
         },
         {
             "type": "vless",
-            "tag": "1 🇻🇳 TRUMVPS COMPANY LIMITED WS NTLS [proxy]",
+            "tag": "2 🇻🇳 Kaopu Cloud HK Limited WS NTLS [proxy]",
             "server": "quiz.int.vidio.com",
             "server_port": 80,
-            "uuid": "ac69725a-341d-4ed6-840a-ac95894a93c8",
+            "uuid": "2c45381d-c2dc-4c36-b740-328f5a35213e",
+            "network": "tcp",
+            "packet_encoding": "xudp",
+            "tls": {
+                "insecure": true
+            },
+            "transport": {
+                "headers": {
+                    "Host": "proxy.ex-vpn.my.id"
+                },
+                "path": "/38.54.14.61-33813",
+                "type": "ws"
+            }
+        },
+        {
+            "type": "vless",
+            "tag": "3 🇻🇳 TRUMVPS COMPANY LIMITED WS NTLS [proxy]",
+            "server": "quiz.int.vidio.com",
+            "server_port": 80,
+            "uuid": "2c45381d-c2dc-4c36-b740-328f5a35213e",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -98,25 +117,6 @@
                     "Host": "proxy.ex-vpn.my.id"
                 },
                 "path": "/160.191.165.40-19957",
-                "type": "ws"
-            }
-        },
-        {
-            "type": "vless",
-            "tag": "2 🇻🇳 VIETNAM POSTS AND TELECOMMUNICATIONS GROUP WS NTLS [proxy]",
-            "server": "quiz.int.vidio.com",
-            "server_port": 80,
-            "uuid": "ac69725a-341d-4ed6-840a-ac95894a93c8",
-            "network": "tcp",
-            "packet_encoding": "xudp",
-            "tls": {
-                "insecure": true
-            },
-            "transport": {
-                "headers": {
-                    "Host": "proxy.ex-vpn.my.id"
-                },
-                "path": "/103.137.184.5-443",
                 "type": "ws"
             }
         }
