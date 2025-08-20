@@ -2,10 +2,31 @@
     "outbounds": [
         {
             "type": "vless",
+            "tag": "1 🇲🇾 Evoxt Enterprise WS TLS [proxy]",
+            "server": "quiz.int.vidio.com",
+            "server_port": 443,
+            "uuid": "c4b3644c-38a2-44b8-bc72-17ddab480149",
+            "network": "tcp",
+            "packet_encoding": "xudp",
+            "tls": {
+                "enabled": true,
+                "insecure": true,
+                "server_name": "proxy.exbal.my.id"
+            },
+            "transport": {
+                "headers": {
+                    "Host": "proxy.exbal.my.id"
+                },
+                "path": "/155.254.60.225-443",
+                "type": "ws"
+            }
+        },
+        {
+            "type": "vless",
             "tag": "4 🇲🇾 Microsoft Corporation WS TLS [proxy]",
             "server": "quiz.int.vidio.com",
             "server_port": 443,
-            "uuid": "9c4fc205-27cb-4dbb-87e5-293706dc4b08",
+            "uuid": "c4b3644c-38a2-44b8-bc72-17ddab480149",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -17,16 +38,16 @@
                 "headers": {
                     "Host": "proxy.exbal.my.id"
                 },
-                "path": "/20.17.104.31-443",
+                "path": "/20.17.107.137-443",
                 "type": "ws"
             }
         },
         {
             "type": "vless",
-            "tag": "1 🇲🇾 Alibaba (US) Technology Co. WS TLS [proxy]",
+            "tag": "9 🇲🇾 Alibaba (US) Technology Co. WS TLS [proxy]",
             "server": "quiz.int.vidio.com",
             "server_port": 443,
-            "uuid": "9c4fc205-27cb-4dbb-87e5-293706dc4b08",
+            "uuid": "c4b3644c-38a2-44b8-bc72-17ddab480149",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -38,37 +59,16 @@
                 "headers": {
                     "Host": "proxy.exbal.my.id"
                 },
-                "path": "/47.250.139.59-443",
+                "path": "/47.250.153.156-443",
                 "type": "ws"
             }
         },
         {
             "type": "vless",
-            "tag": "2 🇲🇾 TM TECHNOLOGY SERVICES SDN. BHD. WS TLS [proxy]",
-            "server": "quiz.int.vidio.com",
-            "server_port": 443,
-            "uuid": "9c4fc205-27cb-4dbb-87e5-293706dc4b08",
-            "network": "tcp",
-            "packet_encoding": "xudp",
-            "tls": {
-                "enabled": true,
-                "insecure": true,
-                "server_name": "proxy.exbal.my.id"
-            },
-            "transport": {
-                "headers": {
-                    "Host": "proxy.exbal.my.id"
-                },
-                "path": "/58.27.117.24-443",
-                "type": "ws"
-            }
-        },
-        {
-            "type": "vless",
-            "tag": "2 🇲🇾 TM TECHNOLOGY SERVICES SDN. BHD. WS NTLS [proxy]",
+            "tag": "14 🇲🇾 Evoxt Enterprise WS NTLS [proxy]",
             "server": "quiz.int.vidio.com",
             "server_port": 80,
-            "uuid": "09321914-3e06-445d-9a6f-a9619a55bda0",
+            "uuid": "f74aeefa-0b25-42d7-aaec-612742e259f8",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -78,16 +78,35 @@
                 "headers": {
                     "Host": "proxy.exbal.my.id"
                 },
-                "path": "/58.27.117.24-443",
+                "path": "/23.27.53.119-35209",
                 "type": "ws"
             }
         },
         {
             "type": "vless",
-            "tag": "1 🇲🇾 Alibaba (US) Technology Co. WS NTLS [proxy]",
+            "tag": "2 🇲🇾 Microsoft Corporation WS NTLS [proxy]",
             "server": "quiz.int.vidio.com",
             "server_port": 80,
-            "uuid": "09321914-3e06-445d-9a6f-a9619a55bda0",
+            "uuid": "f74aeefa-0b25-42d7-aaec-612742e259f8",
+            "network": "tcp",
+            "packet_encoding": "xudp",
+            "tls": {
+                "insecure": true
+            },
+            "transport": {
+                "headers": {
+                    "Host": "proxy.exbal.my.id"
+                },
+                "path": "/20.17.107.137-443",
+                "type": "ws"
+            }
+        },
+        {
+            "type": "vless",
+            "tag": "7 🇲🇾 Alibaba (US) Technology Co. WS NTLS [proxy]",
+            "server": "quiz.int.vidio.com",
+            "server_port": 80,
+            "uuid": "f74aeefa-0b25-42d7-aaec-612742e259f8",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -98,25 +117,6 @@
                     "Host": "proxy.exbal.my.id"
                 },
                 "path": "/47.250.139.59-443",
-                "type": "ws"
-            }
-        },
-        {
-            "type": "vless",
-            "tag": "9 🇲🇾 Evoxt Enterprise WS NTLS [proxy]",
-            "server": "quiz.int.vidio.com",
-            "server_port": 80,
-            "uuid": "09321914-3e06-445d-9a6f-a9619a55bda0",
-            "network": "tcp",
-            "packet_encoding": "xudp",
-            "tls": {
-                "insecure": true
-            },
-            "transport": {
-                "headers": {
-                    "Host": "proxy.exbal.my.id"
-                },
-                "path": "/23.27.200.223-443",
                 "type": "ws"
             }
         }
