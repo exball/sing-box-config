@@ -2,10 +2,10 @@
     "outbounds": [
         {
             "type": "vless",
-            "tag": "18 🇲🇾 Shinjiru Technology Sdn Bhd WS TLS [proxy]",
+            "tag": "6 🇲🇾 Shinjiru Technology Sdn Bhd WS TLS [proxy]",
             "server": "quiz.int.vidio.com",
             "server_port": 443,
-            "uuid": "03ef5323-6f97-4484-8d7b-5d4e6bb1deea",
+            "uuid": "ee160862-a08a-435a-84b2-a2dfaa55f6ec",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -17,16 +17,37 @@
                 "headers": {
                     "Host": "proxy.ex-vpn.my.id"
                 },
-                "path": "/111.90.147.240-12306",
+                "path": "/111.90.147.240-32225",
                 "type": "ws"
             }
         },
         {
             "type": "vless",
-            "tag": "8 🇲🇾 Alibaba (US) Technology Co. WS TLS [proxy]",
+            "tag": "17 🇲🇾 TM TECHNOLOGY SERVICES SDN. BHD. WS TLS [proxy]",
             "server": "quiz.int.vidio.com",
             "server_port": 443,
-            "uuid": "03ef5323-6f97-4484-8d7b-5d4e6bb1deea",
+            "uuid": "ee160862-a08a-435a-84b2-a2dfaa55f6ec",
+            "network": "tcp",
+            "packet_encoding": "xudp",
+            "tls": {
+                "enabled": true,
+                "insecure": true,
+                "server_name": "proxy.ex-vpn.my.id"
+            },
+            "transport": {
+                "headers": {
+                    "Host": "proxy.ex-vpn.my.id"
+                },
+                "path": "/58.27.117.24-443",
+                "type": "ws"
+            }
+        },
+        {
+            "type": "vless",
+            "tag": "15 🇲🇾 Alibaba (US) Technology Co. WS TLS [proxy]",
+            "server": "quiz.int.vidio.com",
+            "server_port": 443,
+            "uuid": "ee160862-a08a-435a-84b2-a2dfaa55f6ec",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -44,31 +65,10 @@
         },
         {
             "type": "vless",
-            "tag": "17 🇲🇾 TM TECHNOLOGY SERVICES SDN. BHD. WS TLS [proxy]",
-            "server": "quiz.int.vidio.com",
-            "server_port": 443,
-            "uuid": "03ef5323-6f97-4484-8d7b-5d4e6bb1deea",
-            "network": "tcp",
-            "packet_encoding": "xudp",
-            "tls": {
-                "enabled": true,
-                "insecure": true,
-                "server_name": "proxy.ex-vpn.my.id"
-            },
-            "transport": {
-                "headers": {
-                    "Host": "proxy.ex-vpn.my.id"
-                },
-                "path": "/60.52.2.32-443",
-                "type": "ws"
-            }
-        },
-        {
-            "type": "vless",
-            "tag": "6 🇲🇾 Shinjiru Technology Sdn Bhd WS NTLS [proxy]",
+            "tag": "14 🇲🇾 Shinjiru Technology Sdn Bhd WS NTLS [proxy]",
             "server": "quiz.int.vidio.com",
             "server_port": 80,
-            "uuid": "15870d42-99bd-4086-9351-137ef85f7801",
+            "uuid": "3597ef65-2c78-43d3-861d-0f656ba5a762",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -78,16 +78,35 @@
                 "headers": {
                     "Host": "proxy.ex-vpn.my.id"
                 },
-                "path": "/111.90.147.240-74",
+                "path": "/111.90.147.240-386",
                 "type": "ws"
             }
         },
         {
             "type": "vless",
-            "tag": "5 🇲🇾 Alibaba (US) Technology Co. WS NTLS [proxy]",
+            "tag": "1 🇲🇾 Kaopu Cloud HK Limited WS NTLS [proxy]",
             "server": "quiz.int.vidio.com",
             "server_port": 80,
-            "uuid": "15870d42-99bd-4086-9351-137ef85f7801",
+            "uuid": "3597ef65-2c78-43d3-861d-0f656ba5a762",
+            "network": "tcp",
+            "packet_encoding": "xudp",
+            "tls": {
+                "insecure": true
+            },
+            "transport": {
+                "headers": {
+                    "Host": "proxy.ex-vpn.my.id"
+                },
+                "path": "/38.60.193.247-13300",
+                "type": "ws"
+            }
+        },
+        {
+            "type": "vless",
+            "tag": "2 🇲🇾 Alibaba (US) Technology Co. WS NTLS [proxy]",
+            "server": "quiz.int.vidio.com",
+            "server_port": 80,
+            "uuid": "3597ef65-2c78-43d3-861d-0f656ba5a762",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -98,25 +117,6 @@
                     "Host": "proxy.ex-vpn.my.id"
                 },
                 "path": "/47.250.139.59-443",
-                "type": "ws"
-            }
-        },
-        {
-            "type": "vless",
-            "tag": "17 🇲🇾 TM TECHNOLOGY SERVICES SDN. BHD. WS NTLS [proxy]",
-            "server": "quiz.int.vidio.com",
-            "server_port": 80,
-            "uuid": "15870d42-99bd-4086-9351-137ef85f7801",
-            "network": "tcp",
-            "packet_encoding": "xudp",
-            "tls": {
-                "insecure": true
-            },
-            "transport": {
-                "headers": {
-                    "Host": "proxy.ex-vpn.my.id"
-                },
-                "path": "/58.27.117.24-443",
                 "type": "ws"
             }
         }
