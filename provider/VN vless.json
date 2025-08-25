@@ -2,10 +2,10 @@
     "outbounds": [
         {
             "type": "vless",
-            "tag": "4 🇻🇳 Kaopu Cloud HK Limited WS TLS [proxy]",
+            "tag": "2 🇻🇳 Kaopu Cloud HK Limited WS TLS [proxy]",
             "server": "quiz.int.vidio.com",
             "server_port": 443,
-            "uuid": "d3a852fb-d54a-4017-8ff8-fde07e313fba",
+            "uuid": "3c593712-051a-49ef-8f04-63fa8ffc2dab",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -23,10 +23,10 @@
         },
         {
             "type": "vless",
-            "tag": "5 🇻🇳 VNPT Corp WS TLS [proxy]",
+            "tag": "4 🇻🇳 VNPT Corp WS TLS [proxy]",
             "server": "quiz.int.vidio.com",
             "server_port": 443,
-            "uuid": "d3a852fb-d54a-4017-8ff8-fde07e313fba",
+            "uuid": "3c593712-051a-49ef-8f04-63fa8ffc2dab",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -44,10 +44,10 @@
         },
         {
             "type": "vless",
-            "tag": "1 🇻🇳 UCLOUD INFORMATION TECHNOLOGY (HK) LIMITED WS TLS [proxy]",
+            "tag": "1 🇻🇳 TRUMVPS COMPANY LIMITED WS TLS [proxy]",
             "server": "quiz.int.vidio.com",
             "server_port": 443,
-            "uuid": "d3a852fb-d54a-4017-8ff8-fde07e313fba",
+            "uuid": "3c593712-051a-49ef-8f04-63fa8ffc2dab",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -59,16 +59,35 @@
                 "headers": {
                     "Host": "proxy.xtunnel.my.id"
                 },
-                "path": "/152.32.255.24-587",
+                "path": "/160.191.165.40-19957",
                 "type": "ws"
             }
         },
         {
             "type": "vless",
-            "tag": "7 🇻🇳 VNPT Corp WS NTLS [proxy]",
+            "tag": "5 🇻🇳 Kaopu Cloud HK Limited WS NTLS [proxy]",
             "server": "quiz.int.vidio.com",
             "server_port": 80,
-            "uuid": "124d2ca9-674c-47e1-aa64-8c7e1d38b2e4",
+            "uuid": "76df3208-0b38-4581-bddd-3f61d7012b8c",
+            "network": "tcp",
+            "packet_encoding": "xudp",
+            "tls": {
+                "insecure": true
+            },
+            "transport": {
+                "headers": {
+                    "Host": "proxy.xtunnel.my.id"
+                },
+                "path": "/154.93.48.189-34237",
+                "type": "ws"
+            }
+        },
+        {
+            "type": "vless",
+            "tag": "1 🇻🇳 VNPT Corp WS NTLS [proxy]",
+            "server": "quiz.int.vidio.com",
+            "server_port": 80,
+            "uuid": "76df3208-0b38-4581-bddd-3f61d7012b8c",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -84,10 +103,10 @@
         },
         {
             "type": "vless",
-            "tag": "2 🇻🇳 VIETNAM POSTS AND TELECOMMUNICATIONS GROUP WS NTLS [proxy]",
+            "tag": "2 🇻🇳 Thien Quang Digital technology joint stock company WS NTLS [proxy]",
             "server": "quiz.int.vidio.com",
             "server_port": 80,
-            "uuid": "124d2ca9-674c-47e1-aa64-8c7e1d38b2e4",
+            "uuid": "76df3208-0b38-4581-bddd-3f61d7012b8c",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -97,26 +116,7 @@
                 "headers": {
                     "Host": "proxy.xtunnel.my.id"
                 },
-                "path": "/103.137.184.5-443",
-                "type": "ws"
-            }
-        },
-        {
-            "type": "vless",
-            "tag": "6 🇻🇳 Kaopu Cloud HK Limited WS NTLS [proxy]",
-            "server": "quiz.int.vidio.com",
-            "server_port": 80,
-            "uuid": "124d2ca9-674c-47e1-aa64-8c7e1d38b2e4",
-            "network": "tcp",
-            "packet_encoding": "xudp",
-            "tls": {
-                "insecure": true
-            },
-            "transport": {
-                "headers": {
-                    "Host": "proxy.xtunnel.my.id"
-                },
-                "path": "/154.93.48.189-34237",
+                "path": "/160.250.64.161-12865",
                 "type": "ws"
             }
         }
