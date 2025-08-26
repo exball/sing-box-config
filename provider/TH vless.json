@@ -2,10 +2,10 @@
     "outbounds": [
         {
             "type": "vless",
-            "tag": "9 🇹🇭 Siamdata Communication Co. WS TLS [proxy]",
+            "tag": "3 🇹🇭 Siamdata Communication Co. WS TLS [proxy]",
             "server": "quiz.int.vidio.com",
             "server_port": 443,
-            "uuid": "2fa2adef-22b2-4994-8eae-25e91eb3df2a",
+            "uuid": "03f5fe92-262d-45fe-ac9f-5fd85a9cb509",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -17,81 +17,22 @@
                 "headers": {
                     "Host": "proxy.ex-vpn.my.id"
                 },
-                "path": "/212.80.213.140-31557",
+                "path": "/212.80.215.251-28294",
                 "type": "ws"
             }
         },
         {
             "type": "vless",
-            "tag": "10 🇹🇭 TRUE INTERNET Co. WS TLS [proxy]",
+            "tag": "13 🇹🇭 TRUE INTERNET Co. WS TLS [proxy]",
             "server": "quiz.int.vidio.com",
             "server_port": 443,
-            "uuid": "2fa2adef-22b2-4994-8eae-25e91eb3df2a",
+            "uuid": "03f5fe92-262d-45fe-ac9f-5fd85a9cb509",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
                 "enabled": true,
                 "insecure": true,
                 "server_name": "proxy.ex-vpn.my.id"
-            },
-            "transport": {
-                "headers": {
-                    "Host": "proxy.ex-vpn.my.id"
-                },
-                "path": "/171.103.232.58-20475",
-                "type": "ws"
-            }
-        },
-        {
-            "type": "vless",
-            "tag": "6 🇹🇭 Siamdata Communication Co. WS TLS [proxy]",
-            "server": "quiz.int.vidio.com",
-            "server_port": 443,
-            "uuid": "2fa2adef-22b2-4994-8eae-25e91eb3df2a",
-            "network": "tcp",
-            "packet_encoding": "xudp",
-            "tls": {
-                "enabled": true,
-                "insecure": true,
-                "server_name": "proxy.ex-vpn.my.id"
-            },
-            "transport": {
-                "headers": {
-                    "Host": "proxy.ex-vpn.my.id"
-                },
-                "path": "/212.80.215.251-10409",
-                "type": "ws"
-            }
-        },
-        {
-            "type": "vless",
-            "tag": "5 🇹🇭 Siamdata Communication Co. WS NTLS [proxy]",
-            "server": "quiz.int.vidio.com",
-            "server_port": 80,
-            "uuid": "8ad43e43-c257-4d88-b3e9-e0de9d0f3df0",
-            "network": "tcp",
-            "packet_encoding": "xudp",
-            "tls": {
-                "insecure": true
-            },
-            "transport": {
-                "headers": {
-                    "Host": "proxy.ex-vpn.my.id"
-                },
-                "path": "/45.91.134.225-5060",
-                "type": "ws"
-            }
-        },
-        {
-            "type": "vless",
-            "tag": "12 🇹🇭 TRUE INTERNET Co. WS NTLS [proxy]",
-            "server": "quiz.int.vidio.com",
-            "server_port": 80,
-            "uuid": "8ad43e43-c257-4d88-b3e9-e0de9d0f3df0",
-            "network": "tcp",
-            "packet_encoding": "xudp",
-            "tls": {
-                "insecure": true
             },
             "transport": {
                 "headers": {
@@ -103,10 +44,31 @@
         },
         {
             "type": "vless",
-            "tag": "1 🇹🇭 Siamdata Communication Co. WS NTLS [proxy]",
+            "tag": "11 🇹🇭 Siamdata Communication Co. WS TLS [proxy]",
+            "server": "quiz.int.vidio.com",
+            "server_port": 443,
+            "uuid": "03f5fe92-262d-45fe-ac9f-5fd85a9cb509",
+            "network": "tcp",
+            "packet_encoding": "xudp",
+            "tls": {
+                "enabled": true,
+                "insecure": true,
+                "server_name": "proxy.ex-vpn.my.id"
+            },
+            "transport": {
+                "headers": {
+                    "Host": "proxy.ex-vpn.my.id"
+                },
+                "path": "/45.136.253.18-33273",
+                "type": "ws"
+            }
+        },
+        {
+            "type": "vless",
+            "tag": "12 🇹🇭 Siamdata Communication Co. WS NTLS [proxy]",
             "server": "quiz.int.vidio.com",
             "server_port": 80,
-            "uuid": "8ad43e43-c257-4d88-b3e9-e0de9d0f3df0",
+            "uuid": "17dd489c-3ae3-4ee2-ae6c-ca2d5b11471d",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -116,7 +78,45 @@
                 "headers": {
                     "Host": "proxy.ex-vpn.my.id"
                 },
-                "path": "/103.117.151.111-2053",
+                "path": "/45.154.26.81-8443",
+                "type": "ws"
+            }
+        },
+        {
+            "type": "vless",
+            "tag": "6 🇹🇭 TRUE INTERNET Co. WS NTLS [proxy]",
+            "server": "quiz.int.vidio.com",
+            "server_port": 80,
+            "uuid": "17dd489c-3ae3-4ee2-ae6c-ca2d5b11471d",
+            "network": "tcp",
+            "packet_encoding": "xudp",
+            "tls": {
+                "insecure": true
+            },
+            "transport": {
+                "headers": {
+                    "Host": "proxy.ex-vpn.my.id"
+                },
+                "path": "/171.103.232.58-20475",
+                "type": "ws"
+            }
+        },
+        {
+            "type": "vless",
+            "tag": "15 🇹🇭 Siamdata Communication Co. WS NTLS [proxy]",
+            "server": "quiz.int.vidio.com",
+            "server_port": 80,
+            "uuid": "17dd489c-3ae3-4ee2-ae6c-ca2d5b11471d",
+            "network": "tcp",
+            "packet_encoding": "xudp",
+            "tls": {
+                "insecure": true
+            },
+            "transport": {
+                "headers": {
+                    "Host": "proxy.ex-vpn.my.id"
+                },
+                "path": "/43.229.149.251-8443",
                 "type": "ws"
             }
         }
