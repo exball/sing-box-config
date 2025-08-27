@@ -2,10 +2,31 @@
     "outbounds": [
         {
             "type": "vless",
-            "tag": "2 🇹🇭 TRUE INTERNET Co. WS TLS [proxy]",
+            "tag": "4 🇹🇭 Siamdata Communication Co. WS TLS [proxy]",
             "server": "quiz.int.vidio.com",
             "server_port": 443,
-            "uuid": "9d052bf2-6c58-45a9-a3da-fbfe4d99405a",
+            "uuid": "74059281-1299-4a0d-961c-0e88d59c532e",
+            "network": "tcp",
+            "packet_encoding": "xudp",
+            "tls": {
+                "enabled": true,
+                "insecure": true,
+                "server_name": "proxy.ex-vpn.my.id"
+            },
+            "transport": {
+                "headers": {
+                    "Host": "proxy.ex-vpn.my.id"
+                },
+                "path": "/103.117.151.111-2053",
+                "type": "ws"
+            }
+        },
+        {
+            "type": "vless",
+            "tag": "1 🇹🇭 TRUE INTERNET Co. WS TLS [proxy]",
+            "server": "quiz.int.vidio.com",
+            "server_port": 443,
+            "uuid": "74059281-1299-4a0d-961c-0e88d59c532e",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -23,10 +44,10 @@
         },
         {
             "type": "vless",
-            "tag": "6 🇹🇭 Siamdata Communication Co. WS TLS [proxy]",
+            "tag": "8 🇹🇭 Siamdata Communication Co. WS TLS [proxy]",
             "server": "quiz.int.vidio.com",
             "server_port": 443,
-            "uuid": "9d052bf2-6c58-45a9-a3da-fbfe4d99405a",
+            "uuid": "74059281-1299-4a0d-961c-0e88d59c532e",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -38,37 +59,16 @@
                 "headers": {
                     "Host": "proxy.ex-vpn.my.id"
                 },
-                "path": "/45.136.253.18-33273",
+                "path": "/212.80.213.140-31557",
                 "type": "ws"
             }
         },
         {
             "type": "vless",
-            "tag": "4 🇹🇭 TRUE INTERNET Co. WS TLS [proxy]",
-            "server": "quiz.int.vidio.com",
-            "server_port": 443,
-            "uuid": "9d052bf2-6c58-45a9-a3da-fbfe4d99405a",
-            "network": "tcp",
-            "packet_encoding": "xudp",
-            "tls": {
-                "enabled": true,
-                "insecure": true,
-                "server_name": "proxy.ex-vpn.my.id"
-            },
-            "transport": {
-                "headers": {
-                    "Host": "proxy.ex-vpn.my.id"
-                },
-                "path": "/171.103.164.62-30921",
-                "type": "ws"
-            }
-        },
-        {
-            "type": "vless",
-            "tag": "2 🇹🇭 Siamdata Communication Co. WS NTLS [proxy]",
+            "tag": "12 🇹🇭 Siamdata Communication Co. WS NTLS [proxy]",
             "server": "quiz.int.vidio.com",
             "server_port": 80,
-            "uuid": "6fdd4957-3514-4919-a642-c39b8983fb2e",
+            "uuid": "f185f5a9-858b-437f-94f5-d3f1eb0d22f0",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -78,16 +78,16 @@
                 "headers": {
                     "Host": "proxy.ex-vpn.my.id"
                 },
-                "path": "/45.154.26.81-8443",
+                "path": "/45.154.26.81-2053",
                 "type": "ws"
             }
         },
         {
             "type": "vless",
-            "tag": "1 🇹🇭 TRUE INTERNET Co. WS NTLS [proxy]",
+            "tag": "8 🇹🇭 TRUE INTERNET Co. WS NTLS [proxy]",
             "server": "quiz.int.vidio.com",
             "server_port": 80,
-            "uuid": "6fdd4957-3514-4919-a642-c39b8983fb2e",
+            "uuid": "f185f5a9-858b-437f-94f5-d3f1eb0d22f0",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -106,7 +106,7 @@
             "tag": "10 🇹🇭 Siamdata Communication Co. WS NTLS [proxy]",
             "server": "quiz.int.vidio.com",
             "server_port": 80,
-            "uuid": "6fdd4957-3514-4919-a642-c39b8983fb2e",
+            "uuid": "f185f5a9-858b-437f-94f5-d3f1eb0d22f0",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -116,7 +116,7 @@
                 "headers": {
                     "Host": "proxy.ex-vpn.my.id"
                 },
-                "path": "/45.136.253.18-33273",
+                "path": "/103.99.11.15-22413",
                 "type": "ws"
             }
         }
