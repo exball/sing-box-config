@@ -2,62 +2,100 @@
     "outbounds": [
         {
             "type": "vless",
-            "tag": "10 🇲🇾 Alibaba (US) Technology Co. WS TLS [proxy]",
+            "tag": "1 🇲🇾 Shinjiru Technology Sdn Bhd WS TLS [proxy]",
             "server": "quiz.int.vidio.com",
             "server_port": 443,
-            "uuid": "accb55b3-3f45-4077-b83b-26374fc0bbca",
+            "uuid": "22e2c55d-460b-4935-83a6-24c0c2039323",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
                 "enabled": true,
                 "insecure": true,
-                "server_name": "proxy.exbal.my.id"
+                "server_name": "proxy.xtunnel.my.id"
             },
             "transport": {
                 "headers": {
-                    "Host": "proxy.exbal.my.id"
+                    "Host": "proxy.xtunnel.my.id"
                 },
-                "path": "/47.250.139.59-443",
+                "path": "/111.90.147.240-20205",
                 "type": "ws"
             }
         },
         {
             "type": "vless",
-            "tag": "2 🇲🇾 Evoxt Enterprise WS TLS [proxy]",
+            "tag": "2 🇲🇾 Kaopu Cloud HK Limited WS TLS [proxy]",
             "server": "quiz.int.vidio.com",
             "server_port": 443,
-            "uuid": "accb55b3-3f45-4077-b83b-26374fc0bbca",
+            "uuid": "22e2c55d-460b-4935-83a6-24c0c2039323",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
                 "enabled": true,
                 "insecure": true,
-                "server_name": "proxy.exbal.my.id"
+                "server_name": "proxy.xtunnel.my.id"
             },
             "transport": {
                 "headers": {
-                    "Host": "proxy.exbal.my.id"
+                    "Host": "proxy.xtunnel.my.id"
                 },
-                "path": "/23.27.53.119-35209",
+                "path": "/38.54.98.54-31842",
                 "type": "ws"
             }
         },
         {
             "type": "vless",
-            "tag": "5 🇲🇾 Kaopu Cloud HK Limited WS TLS [proxy]",
+            "tag": "5 🇲🇾 Terabix WS TLS [proxy]",
             "server": "quiz.int.vidio.com",
             "server_port": 443,
-            "uuid": "accb55b3-3f45-4077-b83b-26374fc0bbca",
+            "uuid": "22e2c55d-460b-4935-83a6-24c0c2039323",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
                 "enabled": true,
                 "insecure": true,
-                "server_name": "proxy.exbal.my.id"
+                "server_name": "proxy.xtunnel.my.id"
             },
             "transport": {
                 "headers": {
-                    "Host": "proxy.exbal.my.id"
+                    "Host": "proxy.xtunnel.my.id"
+                },
+                "path": "/163.61.102.13-443",
+                "type": "ws"
+            }
+        },
+        {
+            "type": "vless",
+            "tag": "11 🇲🇾 Shinjiru Technology Sdn Bhd WS NTLS [proxy]",
+            "server": "quiz.int.vidio.com",
+            "server_port": 80,
+            "uuid": "8af89121-90a5-44cd-84ce-a21400a7472c",
+            "network": "tcp",
+            "packet_encoding": "xudp",
+            "tls": {
+                "insecure": true
+            },
+            "transport": {
+                "headers": {
+                    "Host": "proxy.xtunnel.my.id"
+                },
+                "path": "/111.90.147.240-386",
+                "type": "ws"
+            }
+        },
+        {
+            "type": "vless",
+            "tag": "3 🇲🇾 Kaopu Cloud HK Limited WS NTLS [proxy]",
+            "server": "quiz.int.vidio.com",
+            "server_port": 80,
+            "uuid": "8af89121-90a5-44cd-84ce-a21400a7472c",
+            "network": "tcp",
+            "packet_encoding": "xudp",
+            "tls": {
+                "insecure": true
+            },
+            "transport": {
+                "headers": {
+                    "Host": "proxy.xtunnel.my.id"
                 },
                 "path": "/38.60.193.247-13300",
                 "type": "ws"
@@ -65,10 +103,10 @@
         },
         {
             "type": "vless",
-            "tag": "4 🇲🇾 Alibaba (US) Technology Co. WS NTLS [proxy]",
+            "tag": "1 🇲🇾 Terabix WS NTLS [proxy]",
             "server": "quiz.int.vidio.com",
             "server_port": 80,
-            "uuid": "7bffeaba-fc8b-456a-8a95-964ab250395e",
+            "uuid": "8af89121-90a5-44cd-84ce-a21400a7472c",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -76,47 +114,9 @@
             },
             "transport": {
                 "headers": {
-                    "Host": "proxy.exbal.my.id"
+                    "Host": "proxy.xtunnel.my.id"
                 },
-                "path": "/47.250.139.59-443",
-                "type": "ws"
-            }
-        },
-        {
-            "type": "vless",
-            "tag": "6 🇲🇾 Kaopu Cloud HK Limited WS NTLS [proxy]",
-            "server": "quiz.int.vidio.com",
-            "server_port": 80,
-            "uuid": "7bffeaba-fc8b-456a-8a95-964ab250395e",
-            "network": "tcp",
-            "packet_encoding": "xudp",
-            "tls": {
-                "insecure": true
-            },
-            "transport": {
-                "headers": {
-                    "Host": "proxy.exbal.my.id"
-                },
-                "path": "/38.60.193.247-13300",
-                "type": "ws"
-            }
-        },
-        {
-            "type": "vless",
-            "tag": "7 🇲🇾 Evoxt Enterprise WS NTLS [proxy]",
-            "server": "quiz.int.vidio.com",
-            "server_port": 80,
-            "uuid": "7bffeaba-fc8b-456a-8a95-964ab250395e",
-            "network": "tcp",
-            "packet_encoding": "xudp",
-            "tls": {
-                "insecure": true
-            },
-            "transport": {
-                "headers": {
-                    "Host": "proxy.exbal.my.id"
-                },
-                "path": "/23.27.200.223-443",
+                "path": "/163.61.102.13-443",
                 "type": "ws"
             }
         }
