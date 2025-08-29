@@ -2,20 +2,20 @@
     "outbounds": [
         {
             "type": "vless",
-            "tag": "5 🇻🇳 VNPT Corp WS TLS [proxy]",
+            "tag": "8 🇻🇳 VNPT Corp WS TLS [proxy]",
             "server": "quiz.int.vidio.com",
             "server_port": 443,
-            "uuid": "4f2237c0-db97-4bd6-a1b1-fdd4d52080d7",
+            "uuid": "90e44bbe-0503-4d51-9e3f-14a12a46b987",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
                 "enabled": true,
                 "insecure": true,
-                "server_name": "proxy.exbal.my.id"
+                "server_name": "proxy.xtunnel.my.id"
             },
             "transport": {
                 "headers": {
-                    "Host": "proxy.exbal.my.id"
+                    "Host": "proxy.xtunnel.my.id"
                 },
                 "path": "/103.197.184.193-37461",
                 "type": "ws"
@@ -23,20 +23,20 @@
         },
         {
             "type": "vless",
-            "tag": "1 🇻🇳 Kaopu Cloud HK Limited WS TLS [proxy]",
+            "tag": "7 🇻🇳 Kaopu Cloud HK Limited WS TLS [proxy]",
             "server": "quiz.int.vidio.com",
             "server_port": 443,
-            "uuid": "4f2237c0-db97-4bd6-a1b1-fdd4d52080d7",
+            "uuid": "90e44bbe-0503-4d51-9e3f-14a12a46b987",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
                 "enabled": true,
                 "insecure": true,
-                "server_name": "proxy.exbal.my.id"
+                "server_name": "proxy.xtunnel.my.id"
             },
             "transport": {
                 "headers": {
-                    "Host": "proxy.exbal.my.id"
+                    "Host": "proxy.xtunnel.my.id"
                 },
                 "path": "/154.93.48.189-34237",
                 "type": "ws"
@@ -44,22 +44,41 @@
         },
         {
             "type": "vless",
-            "tag": "2 🇻🇳 Thien Quang Digital technology joint stock company WS TLS [proxy]",
+            "tag": "1 🇻🇳 Thien Quang Digital technology joint stock company WS TLS [proxy]",
             "server": "quiz.int.vidio.com",
             "server_port": 443,
-            "uuid": "4f2237c0-db97-4bd6-a1b1-fdd4d52080d7",
+            "uuid": "90e44bbe-0503-4d51-9e3f-14a12a46b987",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
                 "enabled": true,
                 "insecure": true,
-                "server_name": "proxy.exbal.my.id"
+                "server_name": "proxy.xtunnel.my.id"
             },
             "transport": {
                 "headers": {
-                    "Host": "proxy.exbal.my.id"
+                    "Host": "proxy.xtunnel.my.id"
                 },
                 "path": "/160.250.64.161-12865",
+                "type": "ws"
+            }
+        },
+        {
+            "type": "vless",
+            "tag": "5 🇻🇳 VNPT Corp WS NTLS [proxy]",
+            "server": "quiz.int.vidio.com",
+            "server_port": 80,
+            "uuid": "1af7396d-ed74-469d-a573-90b51c50b2f0",
+            "network": "tcp",
+            "packet_encoding": "xudp",
+            "tls": {
+                "insecure": true
+            },
+            "transport": {
+                "headers": {
+                    "Host": "proxy.xtunnel.my.id"
+                },
+                "path": "/103.15.90.134-49678",
                 "type": "ws"
             }
         },
@@ -68,7 +87,7 @@
             "tag": "2 🇻🇳 Kaopu Cloud HK Limited WS NTLS [proxy]",
             "server": "quiz.int.vidio.com",
             "server_port": 80,
-            "uuid": "53d90dbf-b0dd-42a8-8c28-3ea7f9ef1585",
+            "uuid": "1af7396d-ed74-469d-a573-90b51c50b2f0",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -76,18 +95,18 @@
             },
             "transport": {
                 "headers": {
-                    "Host": "proxy.exbal.my.id"
+                    "Host": "proxy.xtunnel.my.id"
                 },
-                "path": "/154.93.48.111-34237",
+                "path": "/38.54.14.61-33813",
                 "type": "ws"
             }
         },
         {
             "type": "vless",
-            "tag": "1 🇻🇳 Thien Quang Digital technology joint stock company WS NTLS [proxy]",
+            "tag": "4 🇻🇳 TRUMVPS COMPANY LIMITED WS NTLS [proxy]",
             "server": "quiz.int.vidio.com",
             "server_port": 80,
-            "uuid": "53d90dbf-b0dd-42a8-8c28-3ea7f9ef1585",
+            "uuid": "1af7396d-ed74-469d-a573-90b51c50b2f0",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -95,28 +114,9 @@
             },
             "transport": {
                 "headers": {
-                    "Host": "proxy.exbal.my.id"
+                    "Host": "proxy.xtunnel.my.id"
                 },
-                "path": "/160.250.64.161-12865",
-                "type": "ws"
-            }
-        },
-        {
-            "type": "vless",
-            "tag": "7 🇻🇳 VNPT Corp WS NTLS [proxy]",
-            "server": "quiz.int.vidio.com",
-            "server_port": 80,
-            "uuid": "53d90dbf-b0dd-42a8-8c28-3ea7f9ef1585",
-            "network": "tcp",
-            "packet_encoding": "xudp",
-            "tls": {
-                "insecure": true
-            },
-            "transport": {
-                "headers": {
-                    "Host": "proxy.exbal.my.id"
-                },
-                "path": "/103.15.90.134-49678",
+                "path": "/160.191.165.40-19957",
                 "type": "ws"
             }
         }

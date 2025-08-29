@@ -2,41 +2,20 @@
     "outbounds": [
         {
             "type": "vless",
-            "tag": "8 🇹🇭 Siamdata Communication Co. WS TLS [proxy]",
-            "server": "quiz.int.vidio.com",
-            "server_port": 443,
-            "uuid": "553215bc-b80a-4d68-bad9-fd945db9cc82",
-            "network": "tcp",
-            "packet_encoding": "xudp",
-            "tls": {
-                "enabled": true,
-                "insecure": true,
-                "server_name": "proxy.exbal.my.id"
-            },
-            "transport": {
-                "headers": {
-                    "Host": "proxy.exbal.my.id"
-                },
-                "path": "/45.154.26.81-2053",
-                "type": "ws"
-            }
-        },
-        {
-            "type": "vless",
             "tag": "2 🇹🇭 TRUE INTERNET Co. WS TLS [proxy]",
             "server": "quiz.int.vidio.com",
             "server_port": 443,
-            "uuid": "553215bc-b80a-4d68-bad9-fd945db9cc82",
+            "uuid": "2b66c0c7-f8df-412c-84ed-5febf989ec93",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
                 "enabled": true,
                 "insecure": true,
-                "server_name": "proxy.exbal.my.id"
+                "server_name": "proxy.xtunnel.my.id"
             },
             "transport": {
                 "headers": {
-                    "Host": "proxy.exbal.my.id"
+                    "Host": "proxy.xtunnel.my.id"
                 },
                 "path": "/171.103.164.62-30921",
                 "type": "ws"
@@ -44,58 +23,41 @@
         },
         {
             "type": "vless",
-            "tag": "14 🇹🇭 Siamdata Communication Co. WS TLS [proxy]",
+            "tag": "6 🇹🇭 Siamdata Communication Co. WS TLS [proxy]",
             "server": "quiz.int.vidio.com",
             "server_port": 443,
-            "uuid": "553215bc-b80a-4d68-bad9-fd945db9cc82",
+            "uuid": "2b66c0c7-f8df-412c-84ed-5febf989ec93",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
                 "enabled": true,
                 "insecure": true,
-                "server_name": "proxy.exbal.my.id"
+                "server_name": "proxy.xtunnel.my.id"
             },
             "transport": {
                 "headers": {
-                    "Host": "proxy.exbal.my.id"
+                    "Host": "proxy.xtunnel.my.id"
                 },
-                "path": "/43.229.149.251-2053",
+                "path": "/45.144.167.223-27125",
                 "type": "ws"
             }
         },
         {
             "type": "vless",
-            "tag": "5 🇹🇭 Siamdata Communication Co. WS NTLS [proxy]",
+            "tag": "11 🇹🇭 TRUE INTERNET Co. WS TLS [proxy]",
             "server": "quiz.int.vidio.com",
-            "server_port": 80,
-            "uuid": "87a5e691-954b-468e-b4fe-ba0a753d9538",
+            "server_port": 443,
+            "uuid": "2b66c0c7-f8df-412c-84ed-5febf989ec93",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
-                "insecure": true
+                "enabled": true,
+                "insecure": true,
+                "server_name": "proxy.xtunnel.my.id"
             },
             "transport": {
                 "headers": {
-                    "Host": "proxy.exbal.my.id"
-                },
-                "path": "/212.80.215.251-28294",
-                "type": "ws"
-            }
-        },
-        {
-            "type": "vless",
-            "tag": "9 🇹🇭 TRUE INTERNET Co. WS NTLS [proxy]",
-            "server": "quiz.int.vidio.com",
-            "server_port": 80,
-            "uuid": "87a5e691-954b-468e-b4fe-ba0a753d9538",
-            "network": "tcp",
-            "packet_encoding": "xudp",
-            "tls": {
-                "insecure": true
-            },
-            "transport": {
-                "headers": {
-                    "Host": "proxy.exbal.my.id"
+                    "Host": "proxy.xtunnel.my.id"
                 },
                 "path": "/171.103.232.58-20475",
                 "type": "ws"
@@ -103,10 +65,10 @@
         },
         {
             "type": "vless",
-            "tag": "1 🇹🇭 Siamdata Communication Co. WS NTLS [proxy]",
+            "tag": "8 🇹🇭 Siamdata Communication Co. WS NTLS [proxy]",
             "server": "quiz.int.vidio.com",
             "server_port": 80,
-            "uuid": "87a5e691-954b-468e-b4fe-ba0a753d9538",
+            "uuid": "03b9265c-722f-49f4-af94-737b62916d7b",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -114,9 +76,47 @@
             },
             "transport": {
                 "headers": {
-                    "Host": "proxy.exbal.my.id"
+                    "Host": "proxy.xtunnel.my.id"
                 },
-                "path": "/103.117.151.111-2053",
+                "path": "/45.136.253.18-33273",
+                "type": "ws"
+            }
+        },
+        {
+            "type": "vless",
+            "tag": "14 🇹🇭 TRUE INTERNET Co. WS NTLS [proxy]",
+            "server": "quiz.int.vidio.com",
+            "server_port": 80,
+            "uuid": "03b9265c-722f-49f4-af94-737b62916d7b",
+            "network": "tcp",
+            "packet_encoding": "xudp",
+            "tls": {
+                "insecure": true
+            },
+            "transport": {
+                "headers": {
+                    "Host": "proxy.xtunnel.my.id"
+                },
+                "path": "/171.103.232.58-20475",
+                "type": "ws"
+            }
+        },
+        {
+            "type": "vless",
+            "tag": "9 🇹🇭 Siamdata Communication Co. WS NTLS [proxy]",
+            "server": "quiz.int.vidio.com",
+            "server_port": 80,
+            "uuid": "03b9265c-722f-49f4-af94-737b62916d7b",
+            "network": "tcp",
+            "packet_encoding": "xudp",
+            "tls": {
+                "insecure": true
+            },
+            "transport": {
+                "headers": {
+                    "Host": "proxy.xtunnel.my.id"
+                },
+                "path": "/43.229.149.251-2053",
                 "type": "ws"
             }
         }
