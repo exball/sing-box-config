@@ -2,10 +2,10 @@
     "outbounds": [
         {
             "type": "vless",
-            "tag": "31 🇮🇩 Akamai Connected Cloud WS TLS [proxy]",
+            "tag": "16 🇮🇩 Akamai Connected Cloud WS TLS [proxy]",
             "server": "quiz.int.vidio.com",
             "server_port": 443,
-            "uuid": "c5a1c704-abdb-4047-8123-b8d223974dc4",
+            "uuid": "54d52b0e-1c13-43cb-8706-f5811773adf7",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -17,16 +17,16 @@
                 "headers": {
                     "Host": "proxy.xtunnel.my.id"
                 },
-                "path": "/172.232.238.52-443",
+                "path": "/172.232.238.56-74",
                 "type": "ws"
             }
         },
         {
             "type": "vless",
-            "tag": "1 🇮🇩 PT Pusat Media Indonesia WS TLS [proxy]",
+            "tag": "14 🇮🇩 PT Pusat Media Indonesia WS TLS [proxy]",
             "server": "quiz.int.vidio.com",
             "server_port": 443,
-            "uuid": "c5a1c704-abdb-4047-8123-b8d223974dc4",
+            "uuid": "54d52b0e-1c13-43cb-8706-f5811773adf7",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -44,10 +44,10 @@
         },
         {
             "type": "vless",
-            "tag": "23 🇮🇩 Amazon.com WS TLS [proxy]",
+            "tag": "1 🇮🇩 PT MITRA VISIONER PRATAMA WS TLS [proxy]",
             "server": "quiz.int.vidio.com",
             "server_port": 443,
-            "uuid": "c5a1c704-abdb-4047-8123-b8d223974dc4",
+            "uuid": "54d52b0e-1c13-43cb-8706-f5811773adf7",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -59,37 +59,16 @@
                 "headers": {
                     "Host": "proxy.xtunnel.my.id"
                 },
-                "path": "/43.218.77.16-443",
+                "path": "/206.84.101.83-8443",
                 "type": "ws"
             }
         },
         {
             "type": "vless",
-            "tag": "27 🇮🇩 CV. Rumahweb Indonesia WS TLS [proxy]",
+            "tag": "3 🇮🇩 PT Telekomunikasi Indonesia WS TLS [proxy]",
             "server": "quiz.int.vidio.com",
             "server_port": 443,
-            "uuid": "c5a1c704-abdb-4047-8123-b8d223974dc4",
-            "network": "tcp",
-            "packet_encoding": "xudp",
-            "tls": {
-                "enabled": true,
-                "insecure": true,
-                "server_name": "proxy.xtunnel.my.id"
-            },
-            "transport": {
-                "headers": {
-                    "Host": "proxy.xtunnel.my.id"
-                },
-                "path": "/203.194.112.119-2053",
-                "type": "ws"
-            }
-        },
-        {
-            "type": "vless",
-            "tag": "2 🇮🇩 PT Telekomunikasi Indonesia WS TLS [proxy]",
-            "server": "quiz.int.vidio.com",
-            "server_port": 443,
-            "uuid": "c5a1c704-abdb-4047-8123-b8d223974dc4",
+            "uuid": "54d52b0e-1c13-43cb-8706-f5811773adf7",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -107,29 +86,31 @@
         },
         {
             "type": "vless",
-            "tag": "32 🇮🇩 Akamai Connected Cloud WS NTLS [proxy]",
+            "tag": "7 🇮🇩 CV. Rumahweb Indonesia WS TLS [proxy]",
             "server": "quiz.int.vidio.com",
-            "server_port": 80,
-            "uuid": "a6a3a290-21d4-4f35-bc17-a29a026e85b5",
+            "server_port": 443,
+            "uuid": "54d52b0e-1c13-43cb-8706-f5811773adf7",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
-                "insecure": true
+                "enabled": true,
+                "insecure": true,
+                "server_name": "proxy.xtunnel.my.id"
             },
             "transport": {
                 "headers": {
                     "Host": "proxy.xtunnel.my.id"
                 },
-                "path": "/172.232.238.52-12306",
+                "path": "/203.194.112.119-8443",
                 "type": "ws"
             }
         },
         {
             "type": "vless",
-            "tag": "4 🇮🇩 Kaopu Cloud HK Limited WS NTLS [proxy]",
+            "tag": "19 🇮🇩 Akamai Connected Cloud WS NTLS [proxy]",
             "server": "quiz.int.vidio.com",
             "server_port": 80,
-            "uuid": "a6a3a290-21d4-4f35-bc17-a29a026e85b5",
+            "uuid": "24867412-11ff-4604-a9d8-a46f39b2e5a4",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -139,45 +120,7 @@
                 "headers": {
                     "Host": "proxy.xtunnel.my.id"
                 },
-                "path": "/156.244.1.250-8443",
-                "type": "ws"
-            }
-        },
-        {
-            "type": "vless",
-            "tag": "5 🇮🇩 PT Pusat Media Indonesia WS NTLS [proxy]",
-            "server": "quiz.int.vidio.com",
-            "server_port": 80,
-            "uuid": "a6a3a290-21d4-4f35-bc17-a29a026e85b5",
-            "network": "tcp",
-            "packet_encoding": "xudp",
-            "tls": {
-                "insecure": true
-            },
-            "transport": {
-                "headers": {
-                    "Host": "proxy.xtunnel.my.id"
-                },
-                "path": "/103.6.207.108-19224",
-                "type": "ws"
-            }
-        },
-        {
-            "type": "vless",
-            "tag": "7 🇮🇩 Amazon.com WS NTLS [proxy]",
-            "server": "quiz.int.vidio.com",
-            "server_port": 80,
-            "uuid": "a6a3a290-21d4-4f35-bc17-a29a026e85b5",
-            "network": "tcp",
-            "packet_encoding": "xudp",
-            "tls": {
-                "insecure": true
-            },
-            "transport": {
-                "headers": {
-                    "Host": "proxy.xtunnel.my.id"
-                },
-                "path": "/43.218.77.16-1443",
+                "path": "/172.232.238.56-12306",
                 "type": "ws"
             }
         },
@@ -186,7 +129,7 @@
             "tag": "10 🇮🇩 CV. Rumahweb Indonesia WS NTLS [proxy]",
             "server": "quiz.int.vidio.com",
             "server_port": 80,
-            "uuid": "a6a3a290-21d4-4f35-bc17-a29a026e85b5",
+            "uuid": "24867412-11ff-4604-a9d8-a46f39b2e5a4",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -197,6 +140,63 @@
                     "Host": "proxy.xtunnel.my.id"
                 },
                 "path": "/203.194.112.119-8443",
+                "type": "ws"
+            }
+        },
+        {
+            "type": "vless",
+            "tag": "2 🇮🇩 Evoxt Enterprise WS NTLS [proxy]",
+            "server": "quiz.int.vidio.com",
+            "server_port": 80,
+            "uuid": "24867412-11ff-4604-a9d8-a46f39b2e5a4",
+            "network": "tcp",
+            "packet_encoding": "xudp",
+            "tls": {
+                "insecure": true
+            },
+            "transport": {
+                "headers": {
+                    "Host": "proxy.xtunnel.my.id"
+                },
+                "path": "/142.111.15.104-443",
+                "type": "ws"
+            }
+        },
+        {
+            "type": "vless",
+            "tag": "27 🇮🇩 Amazon.com WS NTLS [proxy]",
+            "server": "quiz.int.vidio.com",
+            "server_port": 80,
+            "uuid": "24867412-11ff-4604-a9d8-a46f39b2e5a4",
+            "network": "tcp",
+            "packet_encoding": "xudp",
+            "tls": {
+                "insecure": true
+            },
+            "transport": {
+                "headers": {
+                    "Host": "proxy.xtunnel.my.id"
+                },
+                "path": "/43.218.77.16-443",
+                "type": "ws"
+            }
+        },
+        {
+            "type": "vless",
+            "tag": "4 🇮🇩 PT Pusat Media Indonesia WS NTLS [proxy]",
+            "server": "quiz.int.vidio.com",
+            "server_port": 80,
+            "uuid": "24867412-11ff-4604-a9d8-a46f39b2e5a4",
+            "network": "tcp",
+            "packet_encoding": "xudp",
+            "tls": {
+                "insecure": true
+            },
+            "transport": {
+                "headers": {
+                    "Host": "proxy.xtunnel.my.id"
+                },
+                "path": "/103.6.207.108-19224",
                 "type": "ws"
             }
         }
