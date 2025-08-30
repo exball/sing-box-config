@@ -2,10 +2,10 @@
     "outbounds": [
         {
             "type": "vless",
-            "tag": "9 🇻🇳 Kaopu Cloud HK Limited WS TLS [proxy]",
+            "tag": "1 🇻🇳 Kaopu Cloud HK Limited WS TLS [proxy]",
             "server": "quiz.int.vidio.com",
             "server_port": 443,
-            "uuid": "7a747b4d-9019-416a-9a32-80fac4227e74",
+            "uuid": "25d11ca7-fe90-4af4-acf6-6703381be6ca",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -17,16 +17,37 @@
                 "headers": {
                     "Host": "proxy.xtunnel.my.id"
                 },
-                "path": "/154.93.48.189-34237",
+                "path": "/38.54.14.61-33813",
                 "type": "ws"
             }
         },
         {
             "type": "vless",
-            "tag": "1 🇻🇳 VNPT Corp WS TLS [proxy]",
+            "tag": "2 🇻🇳 VIETNAM POSTS AND TELECOMMUNICATIONS GROUP WS TLS [proxy]",
             "server": "quiz.int.vidio.com",
             "server_port": 443,
-            "uuid": "7a747b4d-9019-416a-9a32-80fac4227e74",
+            "uuid": "25d11ca7-fe90-4af4-acf6-6703381be6ca",
+            "network": "tcp",
+            "packet_encoding": "xudp",
+            "tls": {
+                "enabled": true,
+                "insecure": true,
+                "server_name": "proxy.xtunnel.my.id"
+            },
+            "transport": {
+                "headers": {
+                    "Host": "proxy.xtunnel.my.id"
+                },
+                "path": "/103.137.184.5-443",
+                "type": "ws"
+            }
+        },
+        {
+            "type": "vless",
+            "tag": "3 🇻🇳 VNPT Corp WS TLS [proxy]",
+            "server": "quiz.int.vidio.com",
+            "server_port": 443,
+            "uuid": "25d11ca7-fe90-4af4-acf6-6703381be6ca",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -44,31 +65,10 @@
         },
         {
             "type": "vless",
-            "tag": "3 🇻🇳 Thien Quang Digital technology joint stock company WS TLS [proxy]",
-            "server": "quiz.int.vidio.com",
-            "server_port": 443,
-            "uuid": "7a747b4d-9019-416a-9a32-80fac4227e74",
-            "network": "tcp",
-            "packet_encoding": "xudp",
-            "tls": {
-                "enabled": true,
-                "insecure": true,
-                "server_name": "proxy.xtunnel.my.id"
-            },
-            "transport": {
-                "headers": {
-                    "Host": "proxy.xtunnel.my.id"
-                },
-                "path": "/160.250.64.161-12865",
-                "type": "ws"
-            }
-        },
-        {
-            "type": "vless",
-            "tag": "5 🇻🇳 Kaopu Cloud HK Limited WS NTLS [proxy]",
+            "tag": "8 🇻🇳 Kaopu Cloud HK Limited WS NTLS [proxy]",
             "server": "quiz.int.vidio.com",
             "server_port": 80,
-            "uuid": "6c015507-071f-4a3e-a2ae-62763a39ec21",
+            "uuid": "cb791c67-6e9a-4276-b2fe-b26d3d3cc74f",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -84,10 +84,10 @@
         },
         {
             "type": "vless",
-            "tag": "6 🇻🇳 VNPT Corp WS NTLS [proxy]",
+            "tag": "5 🇻🇳 VNPT Corp WS NTLS [proxy]",
             "server": "quiz.int.vidio.com",
             "server_port": 80,
-            "uuid": "6c015507-071f-4a3e-a2ae-62763a39ec21",
+            "uuid": "cb791c67-6e9a-4276-b2fe-b26d3d3cc74f",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -97,16 +97,16 @@
                 "headers": {
                     "Host": "proxy.xtunnel.my.id"
                 },
-                "path": "/103.15.90.134-49678",
+                "path": "/103.197.184.193-37461",
                 "type": "ws"
             }
         },
         {
             "type": "vless",
-            "tag": "1 🇻🇳 VIETNAM POSTS AND TELECOMMUNICATIONS GROUP WS NTLS [proxy]",
+            "tag": "1 🇻🇳 UCLOUD INFORMATION TECHNOLOGY (HK) LIMITED WS NTLS [proxy]",
             "server": "quiz.int.vidio.com",
             "server_port": 80,
-            "uuid": "6c015507-071f-4a3e-a2ae-62763a39ec21",
+            "uuid": "cb791c67-6e9a-4276-b2fe-b26d3d3cc74f",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -116,7 +116,7 @@
                 "headers": {
                     "Host": "proxy.xtunnel.my.id"
                 },
-                "path": "/103.137.184.5-443",
+                "path": "/152.32.255.24-587",
                 "type": "ws"
             }
         }
