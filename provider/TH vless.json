@@ -2,100 +2,41 @@
     "outbounds": [
         {
             "type": "vless",
-            "tag": "4 🇹🇭 Siamdata Communication Co. WS TLS [proxy]",
+            "tag": "10 🇹🇭 Siamdata Communication Co. WS TLS [proxy]",
             "server": "quiz.int.vidio.com",
             "server_port": 443,
-            "uuid": "0b6ef6c2-4bed-4232-8317-e6f5e2dedf77",
+            "uuid": "b3e89ddd-d437-4380-859f-f5d650ab5c3b",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
                 "enabled": true,
                 "insecure": true,
-                "server_name": "proxy.exbal.my.id"
+                "server_name": "proxy.xtunnel.my.id"
             },
             "transport": {
                 "headers": {
-                    "Host": "proxy.exbal.my.id"
+                    "Host": "proxy.xtunnel.my.id"
                 },
-                "path": "/45.136.253.18-33273",
+                "path": "/103.99.11.15-22413",
                 "type": "ws"
             }
         },
         {
             "type": "vless",
-            "tag": "3 🇹🇭 TRUE INTERNET Co. WS TLS [proxy]",
+            "tag": "14 🇹🇭 TRUE INTERNET Co. WS TLS [proxy]",
             "server": "quiz.int.vidio.com",
             "server_port": 443,
-            "uuid": "0b6ef6c2-4bed-4232-8317-e6f5e2dedf77",
+            "uuid": "b3e89ddd-d437-4380-859f-f5d650ab5c3b",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
                 "enabled": true,
                 "insecure": true,
-                "server_name": "proxy.exbal.my.id"
+                "server_name": "proxy.xtunnel.my.id"
             },
             "transport": {
                 "headers": {
-                    "Host": "proxy.exbal.my.id"
-                },
-                "path": "/171.103.232.58-20475",
-                "type": "ws"
-            }
-        },
-        {
-            "type": "vless",
-            "tag": "9 🇹🇭 Siamdata Communication Co. WS TLS [proxy]",
-            "server": "quiz.int.vidio.com",
-            "server_port": 443,
-            "uuid": "0b6ef6c2-4bed-4232-8317-e6f5e2dedf77",
-            "network": "tcp",
-            "packet_encoding": "xudp",
-            "tls": {
-                "enabled": true,
-                "insecure": true,
-                "server_name": "proxy.exbal.my.id"
-            },
-            "transport": {
-                "headers": {
-                    "Host": "proxy.exbal.my.id"
-                },
-                "path": "/212.80.213.140-31557",
-                "type": "ws"
-            }
-        },
-        {
-            "type": "vless",
-            "tag": "11 🇹🇭 Siamdata Communication Co. WS NTLS [proxy]",
-            "server": "quiz.int.vidio.com",
-            "server_port": 80,
-            "uuid": "224916c7-ecd8-4d06-a23e-6f4041082c7c",
-            "network": "tcp",
-            "packet_encoding": "xudp",
-            "tls": {
-                "insecure": true
-            },
-            "transport": {
-                "headers": {
-                    "Host": "proxy.exbal.my.id"
-                },
-                "path": "/43.229.149.251-2053",
-                "type": "ws"
-            }
-        },
-        {
-            "type": "vless",
-            "tag": "6 🇹🇭 TRUE INTERNET Co. WS NTLS [proxy]",
-            "server": "quiz.int.vidio.com",
-            "server_port": 80,
-            "uuid": "224916c7-ecd8-4d06-a23e-6f4041082c7c",
-            "network": "tcp",
-            "packet_encoding": "xudp",
-            "tls": {
-                "insecure": true
-            },
-            "transport": {
-                "headers": {
-                    "Host": "proxy.exbal.my.id"
+                    "Host": "proxy.xtunnel.my.id"
                 },
                 "path": "/171.103.164.62-30921",
                 "type": "ws"
@@ -103,10 +44,31 @@
         },
         {
             "type": "vless",
-            "tag": "7 🇹🇭 Siamdata Communication Co. WS NTLS [proxy]",
+            "tag": "7 🇹🇭 Siamdata Communication Co. WS TLS [proxy]",
+            "server": "quiz.int.vidio.com",
+            "server_port": 443,
+            "uuid": "b3e89ddd-d437-4380-859f-f5d650ab5c3b",
+            "network": "tcp",
+            "packet_encoding": "xudp",
+            "tls": {
+                "enabled": true,
+                "insecure": true,
+                "server_name": "proxy.xtunnel.my.id"
+            },
+            "transport": {
+                "headers": {
+                    "Host": "proxy.xtunnel.my.id"
+                },
+                "path": "/45.154.26.81-8443",
+                "type": "ws"
+            }
+        },
+        {
+            "type": "vless",
+            "tag": "3 🇹🇭 Siamdata Communication Co. WS NTLS [proxy]",
             "server": "quiz.int.vidio.com",
             "server_port": 80,
-            "uuid": "224916c7-ecd8-4d06-a23e-6f4041082c7c",
+            "uuid": "bd8f5be4-b8fa-4d0b-bfb1-b0087da0050a",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -114,9 +76,47 @@
             },
             "transport": {
                 "headers": {
-                    "Host": "proxy.exbal.my.id"
+                    "Host": "proxy.xtunnel.my.id"
                 },
-                "path": "/103.117.151.111-2053",
+                "path": "/43.229.149.251-8443",
+                "type": "ws"
+            }
+        },
+        {
+            "type": "vless",
+            "tag": "12 🇹🇭 TRUE INTERNET Co. WS NTLS [proxy]",
+            "server": "quiz.int.vidio.com",
+            "server_port": 80,
+            "uuid": "bd8f5be4-b8fa-4d0b-bfb1-b0087da0050a",
+            "network": "tcp",
+            "packet_encoding": "xudp",
+            "tls": {
+                "insecure": true
+            },
+            "transport": {
+                "headers": {
+                    "Host": "proxy.xtunnel.my.id"
+                },
+                "path": "/171.103.232.58-20475",
+                "type": "ws"
+            }
+        },
+        {
+            "type": "vless",
+            "tag": "14 🇹🇭 Siamdata Communication Co. WS NTLS [proxy]",
+            "server": "quiz.int.vidio.com",
+            "server_port": 80,
+            "uuid": "bd8f5be4-b8fa-4d0b-bfb1-b0087da0050a",
+            "network": "tcp",
+            "packet_encoding": "xudp",
+            "tls": {
+                "insecure": true
+            },
+            "transport": {
+                "headers": {
+                    "Host": "proxy.xtunnel.my.id"
+                },
+                "path": "/212.80.215.251-10409",
                 "type": "ws"
             }
         }
