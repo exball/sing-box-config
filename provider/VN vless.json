@@ -2,10 +2,10 @@
     "outbounds": [
         {
             "type": "vless",
-            "tag": "1 🇻🇳 Kaopu Cloud HK Limited WS TLS [proxy]",
+            "tag": "3 🇻🇳 VNPT Corp WS TLS [proxy]",
             "server": "quiz.int.vidio.com",
             "server_port": 443,
-            "uuid": "03e3fa24-504b-4cc9-875b-0410fa7a287a",
+            "uuid": "1d10f9df-8f03-470c-b6b2-b3952cd3966b",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -17,16 +17,16 @@
                 "headers": {
                     "Host": "proxy.xtunnel.my.id"
                 },
-                "path": "/38.54.14.61-33813",
+                "path": "/103.15.90.134-49678",
                 "type": "ws"
             }
         },
         {
             "type": "vless",
-            "tag": "5 🇻🇳 VNPT Corp WS TLS [proxy]",
+            "tag": "9 🇻🇳 Kaopu Cloud HK Limited WS TLS [proxy]",
             "server": "quiz.int.vidio.com",
             "server_port": 443,
-            "uuid": "03e3fa24-504b-4cc9-875b-0410fa7a287a",
+            "uuid": "1d10f9df-8f03-470c-b6b2-b3952cd3966b",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -38,16 +38,16 @@
                 "headers": {
                     "Host": "proxy.xtunnel.my.id"
                 },
-                "path": "/103.197.184.193-37461",
+                "path": "/154.93.48.111-34237",
                 "type": "ws"
             }
         },
         {
             "type": "vless",
-            "tag": "2 🇻🇳 UCLOUD INFORMATION TECHNOLOGY (HK) LIMITED WS TLS [proxy]",
+            "tag": "4 🇻🇳 UCLOUD INFORMATION TECHNOLOGY (HK) LIMITED WS TLS [proxy]",
             "server": "quiz.int.vidio.com",
             "server_port": 443,
-            "uuid": "03e3fa24-504b-4cc9-875b-0410fa7a287a",
+            "uuid": "1d10f9df-8f03-470c-b6b2-b3952cd3966b",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -65,10 +65,29 @@
         },
         {
             "type": "vless",
-            "tag": "1 🇻🇳 Thien Quang Digital technology joint stock company WS NTLS [proxy]",
+            "tag": "1 🇻🇳 Kaopu Cloud HK Limited WS NTLS [proxy]",
             "server": "quiz.int.vidio.com",
             "server_port": 80,
-            "uuid": "2b2ab4ee-9d26-48cc-ac62-ba76a555162a",
+            "uuid": "83e89dfd-8b16-4940-ae90-f8e627ab8587",
+            "network": "tcp",
+            "packet_encoding": "xudp",
+            "tls": {
+                "insecure": true
+            },
+            "transport": {
+                "headers": {
+                    "Host": "proxy.xtunnel.my.id"
+                },
+                "path": "/154.93.48.189-34237",
+                "type": "ws"
+            }
+        },
+        {
+            "type": "vless",
+            "tag": "2 🇻🇳 Thien Quang Digital technology joint stock company WS NTLS [proxy]",
+            "server": "quiz.int.vidio.com",
+            "server_port": 80,
+            "uuid": "83e89dfd-8b16-4940-ae90-f8e627ab8587",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -84,10 +103,10 @@
         },
         {
             "type": "vless",
-            "tag": "7 🇻🇳 VNPT Corp WS NTLS [proxy]",
+            "tag": "3 🇻🇳 VNPT Corp WS NTLS [proxy]",
             "server": "quiz.int.vidio.com",
             "server_port": 80,
-            "uuid": "2b2ab4ee-9d26-48cc-ac62-ba76a555162a",
+            "uuid": "83e89dfd-8b16-4940-ae90-f8e627ab8587",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -97,26 +116,7 @@
                 "headers": {
                     "Host": "proxy.xtunnel.my.id"
                 },
-                "path": "/103.15.90.134-49678",
-                "type": "ws"
-            }
-        },
-        {
-            "type": "vless",
-            "tag": "3 🇻🇳 TRUMVPS COMPANY LIMITED WS NTLS [proxy]",
-            "server": "quiz.int.vidio.com",
-            "server_port": 80,
-            "uuid": "2b2ab4ee-9d26-48cc-ac62-ba76a555162a",
-            "network": "tcp",
-            "packet_encoding": "xudp",
-            "tls": {
-                "insecure": true
-            },
-            "transport": {
-                "headers": {
-                    "Host": "proxy.xtunnel.my.id"
-                },
-                "path": "/160.191.165.40-19957",
+                "path": "/103.197.184.193-37461",
                 "type": "ws"
             }
         }
