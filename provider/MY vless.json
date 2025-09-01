@@ -2,41 +2,81 @@
     "outbounds": [
         {
             "type": "vless",
-            "tag": "5 🇲🇾 Alibaba (US) Technology Co. WS TLS [proxy]",
+            "tag": "1 🇲🇾 Evoxt Enterprise WS TLS [proxy]",
             "server": "quiz.int.vidio.com",
             "server_port": 443,
-            "uuid": "b8a15412-b8a9-4484-acb7-03fb973803aa",
+            "uuid": "11826c73-1e68-4655-b9b9-cec0ee983ed6",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
                 "enabled": true,
                 "insecure": true,
-                "server_name": "proxy.xtunnel.my.id"
+                "server_name": "proxy.ex-vpn.my.id"
             },
             "transport": {
                 "headers": {
-                    "Host": "proxy.xtunnel.my.id"
+                    "Host": "proxy.ex-vpn.my.id"
                 },
-                "path": "/47.250.153.156-443",
+                "path": "/23.27.200.223-443",
                 "type": "ws"
             }
         },
         {
             "type": "vless",
-            "tag": "4 🇲🇾 Evoxt Enterprise WS TLS [proxy]",
+            "tag": "2 🇲🇾 Microsoft Corporation WS TLS [proxy]",
             "server": "quiz.int.vidio.com",
             "server_port": 443,
-            "uuid": "b8a15412-b8a9-4484-acb7-03fb973803aa",
+            "uuid": "11826c73-1e68-4655-b9b9-cec0ee983ed6",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
                 "enabled": true,
                 "insecure": true,
-                "server_name": "proxy.xtunnel.my.id"
+                "server_name": "proxy.ex-vpn.my.id"
             },
             "transport": {
                 "headers": {
-                    "Host": "proxy.xtunnel.my.id"
+                    "Host": "proxy.ex-vpn.my.id"
+                },
+                "path": "/20.17.107.137-443",
+                "type": "ws"
+            }
+        },
+        {
+            "type": "vless",
+            "tag": "3 🇲🇾 Kaopu Cloud HK Limited WS TLS [proxy]",
+            "server": "quiz.int.vidio.com",
+            "server_port": 443,
+            "uuid": "11826c73-1e68-4655-b9b9-cec0ee983ed6",
+            "network": "tcp",
+            "packet_encoding": "xudp",
+            "tls": {
+                "enabled": true,
+                "insecure": true,
+                "server_name": "proxy.ex-vpn.my.id"
+            },
+            "transport": {
+                "headers": {
+                    "Host": "proxy.ex-vpn.my.id"
+                },
+                "path": "/38.60.193.247-13300",
+                "type": "ws"
+            }
+        },
+        {
+            "type": "vless",
+            "tag": "2 🇲🇾 Evoxt Enterprise WS NTLS [proxy]",
+            "server": "quiz.int.vidio.com",
+            "server_port": 80,
+            "uuid": "b0cba714-8b73-498f-8c1a-271da6f14495",
+            "network": "tcp",
+            "packet_encoding": "xudp",
+            "tls": {
+                "insecure": true
+            },
+            "transport": {
+                "headers": {
+                    "Host": "proxy.ex-vpn.my.id"
                 },
                 "path": "/23.27.53.119-35209",
                 "type": "ws"
@@ -44,31 +84,10 @@
         },
         {
             "type": "vless",
-            "tag": "6 🇲🇾 Microsoft Corporation WS TLS [proxy]",
-            "server": "quiz.int.vidio.com",
-            "server_port": 443,
-            "uuid": "b8a15412-b8a9-4484-acb7-03fb973803aa",
-            "network": "tcp",
-            "packet_encoding": "xudp",
-            "tls": {
-                "enabled": true,
-                "insecure": true,
-                "server_name": "proxy.xtunnel.my.id"
-            },
-            "transport": {
-                "headers": {
-                    "Host": "proxy.xtunnel.my.id"
-                },
-                "path": "/20.17.104.31-443",
-                "type": "ws"
-            }
-        },
-        {
-            "type": "vless",
-            "tag": "4 🇲🇾 Microsoft Corporation WS NTLS [proxy]",
+            "tag": "6 🇲🇾 Microsoft Corporation WS NTLS [proxy]",
             "server": "quiz.int.vidio.com",
             "server_port": 80,
-            "uuid": "d20d90ea-3c9f-40d8-b55d-bae8fc0e8a40",
+            "uuid": "b0cba714-8b73-498f-8c1a-271da6f14495",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -76,18 +95,18 @@
             },
             "transport": {
                 "headers": {
-                    "Host": "proxy.xtunnel.my.id"
+                    "Host": "proxy.ex-vpn.my.id"
                 },
-                "path": "/20.17.104.31-443",
+                "path": "/20.17.107.137-443",
                 "type": "ws"
             }
         },
         {
             "type": "vless",
-            "tag": "1 🇲🇾 Terabix WS NTLS [proxy]",
+            "tag": "1 🇲🇾 Alibaba (US) Technology Co. WS NTLS [proxy]",
             "server": "quiz.int.vidio.com",
             "server_port": 80,
-            "uuid": "d20d90ea-3c9f-40d8-b55d-bae8fc0e8a40",
+            "uuid": "b0cba714-8b73-498f-8c1a-271da6f14495",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -95,28 +114,9 @@
             },
             "transport": {
                 "headers": {
-                    "Host": "proxy.xtunnel.my.id"
+                    "Host": "proxy.ex-vpn.my.id"
                 },
-                "path": "/163.61.102.13-443",
-                "type": "ws"
-            }
-        },
-        {
-            "type": "vless",
-            "tag": "2 🇲🇾 TM TECHNOLOGY SERVICES SDN. BHD. WS NTLS [proxy]",
-            "server": "quiz.int.vidio.com",
-            "server_port": 80,
-            "uuid": "d20d90ea-3c9f-40d8-b55d-bae8fc0e8a40",
-            "network": "tcp",
-            "packet_encoding": "xudp",
-            "tls": {
-                "insecure": true
-            },
-            "transport": {
-                "headers": {
-                    "Host": "proxy.xtunnel.my.id"
-                },
-                "path": "/58.27.117.24-443",
+                "path": "/47.250.139.59-443",
                 "type": "ws"
             }
         }
