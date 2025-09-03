@@ -1,3 +1,32 @@
+// Daftar token dari proxy_validator_ipinfo.py
+const API_TOKENS = [
+  "78b59887616e57",
+  "ea23036aa3f797",
+  "2c18bfaab2f28c",
+  "c89402dd5554ac",
+  "df780be2632088",
+  "878e3e53210405",
+  "04b42435d8eded"
+];
+
+const TOKEN_INDEX_FILE = ".ipinfo_token_index";
+
+// Fungsi untuk membaca indeks token terakhir dari file dan rotasi
+async function getNextTokenIndex(): Promise<number> {
+  let idx = 0;
+  try {
+    const file = Bun.file(TOKEN_INDEX_FILE);
+    if (await file.exists()) {
+      const content = await file.text();
+      const lastIdx = parseInt(content.trim());
+      if (!isNaN(lastIdx)) {
+        idx = (lastIdx + 1) % API_TOKENS.length;
+      }
+    }
+  } catch {}
+  await Bun.write(TOKEN_INDEX_FILE, idx.toString());
+  return idx;
+}
 import * as tls from "tls";
 
 interface ProxyStruct {
@@ -224,7 +253,6 @@ async function findIPInCountryData(ip: string, countryCode: string): Promise<IPD
 async function getIPData(ip: string, countryCode: string): Promise<IPDataEntry> {
   if (ipDataCache.has(ip)) {
     stats.cacheHits++;
-    console.log(`🔄 Using cached data for IP: ${ip}`);
     return ipDataCache.get(ip)!;
   }
   // 2. Cari di file JSON negara spesifik
@@ -237,9 +265,8 @@ async function getIPData(ip: string, countryCode: string): Promise<IPDataEntry> 
       asn: ipData.asn,
       as_name: ipData.as_name
     };
-    ipDataCache.set(ip, individualIPData);
-    console.log(`✅ Found and cached ${ip} from ${countryCode}.json - ${ipData.as_name}`);
-    return individualIPData;
+  ipDataCache.set(ip, individualIPData);
+  return individualIPData;
   } else {
     // 4. Tambah ke missing IPs untuk batch API nanti
     missingIPsCache.add(ip);
@@ -265,11 +292,13 @@ async function batchLookupMissingIPs(): Promise<void> {
   console.log(`🔍 Starting batch IP lookup for ${missingIPsCache.size} missing IPs via ipinfo.io`);
   const missingIPs = Array.from(missingIPsCache);
   const BATCH_SIZE = 250; // ipinfo.io batch limit
-  const API_URL = "https://ipinfo.io/batch";
+    // Ambil indeks token berikutnya
+    const tokenIdx = await getNextTokenIndex();
+    const API_TOKEN = API_TOKENS[tokenIdx];
+    console.log(`🔑 Menggunakan IPinfo Token #${tokenIdx + 1}: ...${API_TOKEN.slice(-8)}`);
+  const API_URL = `https://api.ipinfo.io/batch/lite?token=${API_TOKEN}`;
   for (let i = 0; i < missingIPs.length; i += BATCH_SIZE) {
     const batch = missingIPs.slice(i, i + BATCH_SIZE);
-    const batchPayload: { [ip: string]: {} } = {};
-    batch.forEach(ip => { batchPayload[ip] = {}; });
     let attempt = 0;
     let success = false;
     while (attempt < 5 && !success) {
@@ -279,10 +308,10 @@ async function batchLookupMissingIPs(): Promise<void> {
         const response = await fetch(API_URL, {
           method: 'POST',
           headers: {
-            'Content-Type': 'application/json',
+            'Content-Type': 'text/plain',
             'User-Agent': 'ProxyScanner/1.0'
           },
-          body: JSON.stringify(batchPayload)
+          body: batch.join('\n')
         });
         if (response.ok) {
           const results = await response.json();
