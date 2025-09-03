@@ -1,3 +1,124 @@
 {
-    "outbounds": []
+    "outbounds": [
+        {
+            "type": "vless",
+            "tag": "4 🇻🇳 VNPT Corp WS TLS [proxy]",
+            "server": "quiz.int.vidio.com",
+            "server_port": 443,
+            "uuid": "544d24c8-5248-4f7a-830d-b56b441c3ecf",
+            "network": "tcp",
+            "packet_encoding": "xudp",
+            "tls": {
+                "enabled": true,
+                "insecure": true,
+                "server_name": "proxy.xtunnel.my.id"
+            },
+            "transport": {
+                "headers": {
+                    "Host": "proxy.xtunnel.my.id"
+                },
+                "path": "/103.197.184.193-37461",
+                "type": "ws"
+            }
+        },
+        {
+            "type": "vless",
+            "tag": "1 🇻🇳 UCLOUD INFORMATION TECHNOLOGY (HK) LIMITED WS TLS [proxy]",
+            "server": "quiz.int.vidio.com",
+            "server_port": 443,
+            "uuid": "544d24c8-5248-4f7a-830d-b56b441c3ecf",
+            "network": "tcp",
+            "packet_encoding": "xudp",
+            "tls": {
+                "enabled": true,
+                "insecure": true,
+                "server_name": "proxy.xtunnel.my.id"
+            },
+            "transport": {
+                "headers": {
+                    "Host": "proxy.xtunnel.my.id"
+                },
+                "path": "/152.32.255.24-587",
+                "type": "ws"
+            }
+        },
+        {
+            "type": "vless",
+            "tag": "8 🇻🇳 Kaopu Cloud HK Limited WS TLS [proxy]",
+            "server": "quiz.int.vidio.com",
+            "server_port": 443,
+            "uuid": "544d24c8-5248-4f7a-830d-b56b441c3ecf",
+            "network": "tcp",
+            "packet_encoding": "xudp",
+            "tls": {
+                "enabled": true,
+                "insecure": true,
+                "server_name": "proxy.xtunnel.my.id"
+            },
+            "transport": {
+                "headers": {
+                    "Host": "proxy.xtunnel.my.id"
+                },
+                "path": "/38.54.14.61-33813",
+                "type": "ws"
+            }
+        },
+        {
+            "type": "vless",
+            "tag": "1 🇻🇳 Kaopu Cloud HK Limited WS NTLS [proxy]",
+            "server": "quiz.int.vidio.com",
+            "server_port": 80,
+            "uuid": "089366bf-8afb-414f-81eb-72ca18342cf0",
+            "network": "tcp",
+            "packet_encoding": "xudp",
+            "tls": {
+                "insecure": true
+            },
+            "transport": {
+                "headers": {
+                    "Host": "proxy.xtunnel.my.id"
+                },
+                "path": "/154.93.48.189-34237",
+                "type": "ws"
+            }
+        },
+        {
+            "type": "vless",
+            "tag": "2 🇻🇳 UCLOUD INFORMATION TECHNOLOGY (HK) LIMITED WS NTLS [proxy]",
+            "server": "quiz.int.vidio.com",
+            "server_port": 80,
+            "uuid": "089366bf-8afb-414f-81eb-72ca18342cf0",
+            "network": "tcp",
+            "packet_encoding": "xudp",
+            "tls": {
+                "insecure": true
+            },
+            "transport": {
+                "headers": {
+                    "Host": "proxy.xtunnel.my.id"
+                },
+                "path": "/152.32.255.24-587",
+                "type": "ws"
+            }
+        },
+        {
+            "type": "vless",
+            "tag": "3 🇻🇳 Thien Quang Digital technology joint stock company WS NTLS [proxy]",
+            "server": "quiz.int.vidio.com",
+            "server_port": 80,
+            "uuid": "089366bf-8afb-414f-81eb-72ca18342cf0",
+            "network": "tcp",
+            "packet_encoding": "xudp",
+            "tls": {
+                "insecure": true
+            },
+            "transport": {
+                "headers": {
+                    "Host": "proxy.xtunnel.my.id"
+                },
+                "path": "/160.250.64.161-12865",
+                "type": "ws"
+            }
+        }
+    ]
 }
