@@ -1041,12 +1041,19 @@ def process_single_config(config, format_type="bfr", format_file="sing_outbound.
     
     # Ambil outbound untuk setiap kombinasi negara, protokol, dan keamanan
     # Dapatkan URL dasar berdasarkan waktu saat ini
-    base_url = get_proxy_base_url()
+    base_idx, base_url = get_proxy_base_url()
     
     for country in countries:
         for protocol in protocols:
             for security in securities:
                 url = f"{base_url}/api/{format_type}?cc={country}&protocols={protocol}&securities={security}&limit=100"
+# Tambahkan fungsi untuk menyimpan proxy history
+def save_proxy_history(history):
+    try:
+        with open(HISTORY_FILE, "w", encoding="utf-8") as f:
+            json.dump(history, f, indent=2, ensure_ascii=False)
+    except Exception as e:
+        print(f"Warning: Gagal menyimpan proxy history: {e}")
                 
                 try:
                     print(f"Fetching {protocol} {security} proxies from {country}...")
