@@ -20,40 +20,48 @@ outbound_format = None
 # File untuk menyimpan history proxy yang sudah diambil
 HISTORY_FILE = "proxy_history.json"
 
-# URL untuk mengambil proxy (3 domain dengan pembagian 8 jam)
-PROXY_URL_PERIOD1 = "https://proxy.ex-vpn.my.id"    # Digunakan dari 00:00-07:59 (UTC+8)
-PROXY_URL_PERIOD2 = "https://proxy.exbal.my.id"     # Digunakan dari 08:00-15:59 (UTC+8)
-PROXY_URL_PERIOD3 = "https://proxy.xtunnel.my.id"   # Digunakan dari 16:00-23:59 (UTC+8)
+ # URL untuk mengambil proxy (4 domain dengan pembagian 6 jam)
+PROXY_URL_PERIOD1 = "https://vpn.ex-vpn.my.id"      # Digunakan dari 00:00-05:59 (UTC+8)
+PROXY_URL_PERIOD2 = "https://vpn.exbal.my.id"       # Digunakan dari 06:00-11:59 (UTC+8)
+PROXY_URL_PERIOD3 = "https://proxy.xtunnel.my.id"   # Digunakan dari 12:00-17:59 (UTC+8)
+PROXY_URL_PERIOD4 = "https://vpn.ex27.my.id"        # Digunakan dari 18:00-23:59 (UTC+8)
 
-# Fungsi untuk mendapatkan URL proxy berdasarkan waktu saat ini (UTC+8)
+# List semua domain resolver untuk fallback
+PROXY_URL_PERIODS = [
+    PROXY_URL_PERIOD1,
+    PROXY_URL_PERIOD2,
+    PROXY_URL_PERIOD3,
+    PROXY_URL_PERIOD4
+]
+
+ # Fungsi untuk mendapatkan URL proxy berdasarkan waktu saat ini (UTC+8)
 def get_proxy_base_url():
     """
     Mengembalikan URL dasar untuk mengambil proxy berdasarkan waktu saat ini.
-    Pembagian 3 domain dengan periode 8 jam masing-masing:
-    - Dari jam 00:00-07:59 (UTC+8): menggunakan proxy.ex-vpn.my.id
-    - Dari jam 08:00-15:59 (UTC+8): menggunakan proxy.exbal.my.id
-    - Dari jam 16:00-23:59 (UTC+8): menggunakan proxy.xtunnel.my.id
+    Pembagian 4 domain dengan periode 6 jam masing-masing:
+    - Dari jam 00:00-05:59 (UTC+8): menggunakan vpn.ex-vpn.my.id
+    - Dari jam 06:00-11:59 (UTC+8): menggunakan vpn.exbal.my.id
+    - Dari jam 12:00-17:59 (UTC+8): menggunakan proxy.xtunnel.my.id
+    - Dari jam 18:00-23:59 (UTC+8): menggunakan vpn.ex27.my.id
     """
     # Dapatkan waktu saat ini dalam UTC
     utc_now = datetime.now(pytz.UTC)
-    
     # Konversi ke zona waktu UTC+8
     tz_utc8 = pytz.timezone('Asia/Singapore')  # Singapore menggunakan UTC+8
     now_utc8 = utc_now.astimezone(tz_utc8)
-    
     # Ambil jam dalam format 24 jam
     current_hour = now_utc8.hour
-    
-    # Tentukan URL berdasarkan jam (pembagian 8 jam per domain)
-    if 0 <= current_hour < 8:
-        print(f"Waktu saat ini: {now_utc8.strftime('%H:%M:%S')} (UTC+8) - Menggunakan {PROXY_URL_PERIOD1}")
-        return PROXY_URL_PERIOD1
-    elif 8 <= current_hour < 16:
-        print(f"Waktu saat ini: {now_utc8.strftime('%H:%M:%S')} (UTC+8) - Menggunakan {PROXY_URL_PERIOD2}")
-        return PROXY_URL_PERIOD2
+    # Tentukan index domain berdasarkan jam (pembagian 6 jam per domain)
+    if 0 <= current_hour < 6:
+        idx = 0
+    elif 6 <= current_hour < 12:
+        idx = 1
+    elif 12 <= current_hour < 18:
+        idx = 2
     else:
-        print(f"Waktu saat ini: {now_utc8.strftime('%H:%M:%S')} (UTC+8) - Menggunakan {PROXY_URL_PERIOD3}")
-        return PROXY_URL_PERIOD3
+        idx = 3
+    print(f"Waktu saat ini: {now_utc8.strftime('%H:%M:%S')} (UTC+8) - Menggunakan {PROXY_URL_PERIODS[idx]}")
+    return idx, PROXY_URL_PERIODS[idx]
 
 # Fungsi untuk mendapatkan emoji bendera berdasarkan kode negara
 def get_flag_emoji(country_code):
@@ -104,162 +112,107 @@ def migrate_old_history_format(history):
         if isinstance(value, dict):
             # Cek apakah ini sudah format baru (country -> provider -> data)
             if key.endswith(" proxy"):
-                # Sudah format baru - copy langsung
-                migrated_history[key] = value
-                continue
-            
-            # Format lama (provider -> category -> data)
-            # Extract provider name (hapus suffix seperti " ws tls [proxy]")
-            provider_name = key
-            if " ws " in provider_name and " [proxy]" in provider_name:
-                # Ambil bagian sebelum " ws "
-                provider_name = provider_name.split(" ws ")[0]
-            
-            for category_key, category_data in value.items():
-                # Parse category_key untuk mendapatkan country
-                if "_" in category_key:
-                    country_code = category_key.split("_")[0]
-                    country_name = f"{country_code} proxy"
-                    
-                    # Inisialisasi country jika belum ada
-                    if country_name not in migrated_history:
-                        migrated_history[country_name] = {}
-                    
-                    # Jika masih menggunakan format lama dengan last_index atau sudah format baru
-                    if isinstance(category_data, dict):
-                        if "last_index" in category_data:
-                            # Format lama - konversi ke format baru
-                            migrated_history[country_name][provider_name] = {
-                                "used_ip_ports": [],  # Mulai dengan list kosong
-                                "last_reset": datetime.now().isoformat()
-                            }
-                            print(f"🔄 Migrated old history format for '{country_name}' provider '{provider_name}'")
-                        elif "used_ip_ports" in category_data:
-                            # Sudah format baru - merge dengan existing data
-                            if provider_name not in migrated_history[country_name]:
-                                migrated_history[country_name][provider_name] = {
-                                    "used_ip_ports": [],
-                                    "last_reset": datetime.now().isoformat()
-                                }
-                            
-                            # Merge used_ip_ports (hindari duplikasi)
-                            existing_ips = set(migrated_history[country_name][provider_name]["used_ip_ports"])
-                            new_ips = set(category_data.get("used_ip_ports", []))
-                            merged_ips = list(existing_ips.union(new_ips))
-                            migrated_history[country_name][provider_name]["used_ip_ports"] = merged_ips
-    
-    return migrated_history
+                # Ambil outbound untuk setiap kombinasi negara, protokol, dan keamanan
+                # Dapatkan index dan URL dasar berdasarkan waktu saat ini
+                base_idx, base_url = get_proxy_base_url()
 
-def load_proxy_history():
-    """
-    Load history proxy yang sudah diambil dari file dan migrasi jika diperlukan.
-    Format baru: {
-        "provider_name": {
-            "country_protocol_security": {
-                "used_ip_ports": ["IP1:PORT1", "IP2:PORT2", ...],
-                "last_reset": "2024-01-01T00:00:00"
-            }
-        }
-    }
-    """
-    if not os.path.exists(HISTORY_FILE):
-        return {}
-    
-    try:
-        with open(HISTORY_FILE, 'r', encoding='utf-8') as f:
-            history = json.load(f)
-            
-        # Migrasi format lama ke format baru jika diperlukan
-        migrated_history = migrate_old_history_format(history)
-        
-        # Jika ada perubahan, simpan format baru
-        if migrated_history != history:
-            print("📋 Migrating proxy history to new IP:Port tracking format...")
-            save_proxy_history(migrated_history)
-            return migrated_history
-            
-        return history
-    except Exception as e:
-        print(f"Warning: Error loading proxy history: {e}")
-        return {}
+                for country in countries:
+                    for protocol in protocols:
+                        for security in securities:
+                            # Fallback: urutkan domain mulai dari base_idx, lalu berikutnya
+                            tried_domains = []
+                            success = False
+                            for offset in range(len(PROXY_URL_PERIODS)):
+                                idx = (base_idx + offset) % len(PROXY_URL_PERIODS)
+                                url_base = PROXY_URL_PERIODS[idx]
+                                url = f"{url_base}/api/{format_type}?cc={country}&protocols={protocol}&securities={security}&limit=100"
+                                tried_domains.append(url_base)
+                                try:
+                                    print(f"Fetching {protocol} {security} proxies from {country} using domain {url_base}...")
+                                    response = fetch_with_retry(url)
+                                    response_text = response.text
 
-def save_proxy_history(history):
-    """
-    Simpan history proxy ke file.
-    """
-    try:
-        with open(HISTORY_FILE, 'w', encoding='utf-8') as f:
-            json.dump(history, f, indent=2, ensure_ascii=False)
-    except Exception as e:
-        print(f"Warning: Error saving proxy history: {e}")
+                                    # Parse response berdasarkan format
+                                    if format_type == "bfr":
+                                        json_match = re.search(r'(\{[\s\S]*\})', response_text)
+                                        if not json_match:
+                                            print(f"Warning: Could not find JSON configuration in BFR response for {country}")
+                                            continue
+                                        json_str = json_match.group(1)
+                                        try:
+                                            config = json.loads(json_str)
+                                        except json.JSONDecodeError as e:
+                                            print(f"Warning: Error parsing JSON for {country}: {e}")
+                                            continue
+                                    elif format_type == "raw":
+                                        print(f"Warning: Raw format tidak mendukung ekstraksi outbound untuk {country}")
+                                        continue
+                                    elif format_type == "clash":
+                                        try:
+                                            config_yaml = yaml.safe_load(response_text)
+                                            if "proxies" not in config_yaml:
+                                                continue
+                                            clash_format = load_clash_format(format_file)
+                                            formatted_proxies = []
+                                            for proxy in config_yaml["proxies"]:
+                                                pass  # ...existing code...
+                                            config_yaml["proxies"] = formatted_proxies
+                                            config = config_yaml
+                                            if not config["proxies"]:
+                                                continue
+                                        except ImportError:
+                                            print(f"Warning: PyYAML not installed, cannot parse clash format for {country}")
+                                            continue
+                                        except yaml.YAMLError as e:
+                                            print(f"Warning: Error parsing YAML for {country}: {e}")
+                                            continue
+                                    elif format_type in ["sfa", "v2ray"]:
+                                        print(f"Warning: Format {format_type} tidak mendukung ekstraksi outbound untuk {country}")
+                                        continue
+                                    else:
+                                        print(f"Warning: Format {format_type} tidak didukung untuk {country}")
+                                        continue
 
-def get_providers_with_unused_proxies(available_providers, country_code, history):
-    """
-    Dapatkan provider yang masih memiliki proxy dengan IP:Port yang belum digunakan.
-    Menggunakan sistem Country + Provider tracking.
-    
-    Args:
-        available_providers: List tuple (provider_name, proxies)
-        country_code: Kode negara (ID, SG, JP, dll)
-        history: Dictionary history
-    
-    Returns:
-        List tuple (provider_name, proxies, unused_count) yang memiliki proxy belum digunakan
-    """
-    providers_with_unused = []
-    
-    for provider_name, proxies in available_providers:
-        unused_proxies = get_unused_proxies_for_provider(provider_name, country_code, proxies, history)
-        if unused_proxies:
-            providers_with_unused.append((provider_name, proxies, len(unused_proxies)))
-    
-    return providers_with_unused
+                                    # Ekstrak bagian Outbound atau Proxies
+                                    if format_type == "clash":
+                                        if "proxies" not in config:
+                                            print(f"Warning: No 'proxies' section found in configuration for {country}")
+                                            continue
+                                        outbounds = config["proxies"]
+                                    else:
+                                        if "outbounds" not in config:
+                                            print(f"Warning: No 'outbounds' section found in configuration for {country}")
+                                            continue
+                                        outbounds = config["outbounds"]
 
-def get_next_providers(available_providers, country_code, max_count, history):
-    """
-    Pilih provider berikutnya dengan sistem Country + Provider tracking.
-    Provider bisa dipilih berkali-kali selama memiliki proxy dengan IP:Port yang berbeda.
-    
-    Args:
-        available_providers: List tuple (provider_name, proxies)
-        country_code: Kode negara (ID, SG, JP, dll)
-        max_count: Jumlah maksimal proxy yang ingin dipilih (bukan provider)
-        history: Dictionary history
-    
-    Returns:
-        List provider yang dipilih dan history yang diupdate
-    """
-    if not available_providers:
-        return [], history
-    
-    # Dapatkan provider yang masih memiliki proxy belum digunakan
-    providers_with_unused = get_providers_with_unused_proxies(available_providers, country_code, history)
-    
-    if not providers_with_unused:
-        print(f"⚠️ Tidak ada provider dengan proxy baru untuk negara '{country_code}', mencoba reset beberapa provider...")
-        # Coba reset provider yang tidak memiliki proxy unused
-        for provider_name, proxies in available_providers:
-            unused_proxies = get_unused_proxies_for_provider(provider_name, country_code, proxies, history)
-            if not unused_proxies and proxies:  # Provider ada proxy tapi semua sudah digunakan
-                history = reset_provider_history(provider_name, country_code, history)
-        
-        # Coba lagi setelah reset
-        providers_with_unused = get_providers_with_unused_proxies(available_providers, country_code, history)
-    
-    if not providers_with_unused:
-        print(f"❌ Tidak ada provider yang valid untuk negara '{country_code}'")
-        return [], history
-    
-    # Urutkan provider berdasarkan jumlah proxy yang belum digunakan (descending)
-    # Ini memberikan prioritas pada provider dengan lebih banyak pilihan
-    providers_with_unused.sort(key=lambda x: x[2], reverse=True)
-    
-    selected_providers = []
-    total_proxies_needed = max_count
-    
-    # Pilih provider sampai kebutuhan proxy terpenuhi
-    for provider_name, all_proxies, unused_count in providers_with_unused:
-        if total_proxies_needed <= 0:
+                                    # ...existing code for filtering and processing outbounds...
+                                    filtered_outbounds = []
+                                    provider_proxies = defaultdict(list)
+                                    for outbound in outbounds:
+                                        pass  # ...existing code...
+                                    available_providers = [(name, proxies) for name, proxies in provider_proxies.items() if proxies]
+                                    proxy_history, reset_count = smart_reset_based_on_availability(
+                                        country, available_providers, proxy_history
+                                    )
+                                    selected_providers, proxy_history = get_next_providers(
+                                        available_providers, country, max_proxies_per_provider, proxy_history
+                                    )
+                                    for provider_name, proxies in selected_providers:
+                                        selected_proxies, proxy_history = get_next_proxies_for_provider(
+                                            provider_name, country, proxies, 1, proxy_history
+                                        )
+                                        filtered_outbounds.extend(selected_proxies)
+                                    print(f"Found {len(filtered_outbounds)} {protocol} {security} proxies from {country}")
+                                    category_key = f"{country}_{protocol}_{security}"
+                                    outbounds_by_category[category_key].extend(filtered_outbounds)
+                                    all_outbounds.extend(filtered_outbounds)
+                                    success = True
+                                    break  # Berhasil, keluar dari loop fallback
+                                except Exception as e:
+                                    print(f"Error processing {country} {protocol} {security} with domain {url_base}: {e}")
+                                    continue
+                            if not success:
+                                print(f"❌ Semua domain gagal diakses untuk {country} {protocol} {security}. Domain yang dicoba: {', '.join(tried_domains)}")
             break
             
         # Tentukan berapa proxy yang akan diambil dari provider ini
