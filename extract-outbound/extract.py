@@ -776,20 +776,19 @@ def read_config_file(file_path):
     return configs, global_format
 
 def load_clash_format(format_file="clash_proxies.ini"):
-    """
-    Membaca format proxy clash dari file konfigurasi format.
-    File format berisi template untuk setiap jenis proxy dalam format YAML.
-    """
-    format_data = {}
-    
-    if not os.path.exists(format_file):
-        print(f"Warning: Format file '{format_file}' tidak ditemukan.")
-        return format_data
-    
     try:
-        import yaml
         with open(format_file, 'r', encoding='utf-8') as f:
             format_data = yaml.safe_load(f)
+    except ImportError:
+        print(f"Error: PyYAML tidak tersedia, tidak bisa membaca format file '{format_file}'")
+        return {}
+    except yaml.YAMLError as e:
+        print(f"Error: Format file '{format_file}' tidak valid YAML: {e}")
+        return {}
+    except Exception as e:
+        print(f"Error: Gagal membaca format file '{format_file}': {e}")
+        return {}
+    return format_data if format_data else {}
     except ImportError:
         print(f"Error: PyYAML tidak tersedia, tidak bisa membaca format file '{format_file}'")
         return {}
