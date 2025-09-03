@@ -1,3 +1,20 @@
+# Tambahkan fungsi untuk memuat proxy history
+import json
+import os
+
+def load_proxy_history():
+    """
+    Memuat proxy history dari file HISTORY_FILE.
+    Jika file tidak ada, kembalikan dict kosong.
+    """
+    if not os.path.exists(HISTORY_FILE):
+        return {}
+    try:
+        with open(HISTORY_FILE, "r", encoding="utf-8") as f:
+            return json.load(f)
+    except Exception as e:
+        print(f"Warning: Gagal memuat proxy history: {e}")
+        return {}
 #!/usr/bin/env python3
 import json
 import re
