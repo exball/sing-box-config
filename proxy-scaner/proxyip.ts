@@ -161,17 +161,20 @@ function getResolverDomain(): string {
   // Konversi ke UTC+8 (tambah 8 jam ke UTC)
   const utcPlus8 = new Date(now.getTime() + (8 * 60 * 60 * 1000));
   const hour = utcPlus8.getUTCHours();
-  
-  // Pembagian 3 domain dengan periode 8 jam masing-masing:
-  // 00:00-07:59 UTC+8 → resolver.ex-vpn.my.id
-  // 08:00-15:59 UTC+8 → resolver.exbal.my.id  
-  // 16:00-23:59 UTC+8 → resolver.xtunnel.my.id
-  if (hour >= 0 && hour < 8) {
-    return "resolver.ex-vpn.my.id";
-  } else if (hour >= 8 && hour < 16) {
-    return "resolver.exbal.my.id";
+
+  // Pembagian 4 domain dengan periode 6 jam masing-masing:
+  // 00:00-05:59 UTC+8 → ip.resolver1.workers.dev
+  // 06:00-11:59 UTC+8 → ip.resolver2.workers.dev
+  // 12:00-17:59 UTC+8 → ip.resolver3.workers.dev
+  // 18:00-23:59 UTC+8 → ip.resolver4.workers.dev
+  if (hour >= 0 && hour < 6) {
+    return "ip.resolver1.workers.dev";
+  } else if (hour >= 6 && hour < 12) {
+    return "ip.resolver2.workers.dev";
+  } else if (hour >= 12 && hour < 18) {
+    return "ip.resolver3.workers.dev";
   } else {
-    return "resolver.xtunnel.my.id";
+    return "ip.resolver4.workers.dev";
   }
 }
 
