@@ -197,13 +197,13 @@ function getResolverDomain(): string {
   // 12:00-17:59 UTC+8 → ip.resolver3.workers.dev
   // 18:00-23:59 UTC+8 → ip.resolver4.workers.dev
   if (hour >= 0 && hour < 6) {
-    return "ip.resolver1.workers.dev";
+    return "resolver.exbal.my.id";
   } else if (hour >= 6 && hour < 12) {
-    return "ip.resolver2.workers.dev";
+    return "resolver.ex-vpn.my.id";
   } else if (hour >= 12 && hour < 18) {
-    return "ip.resolver3.workers.dev";
+    return "resolver.xtunnel.my.id";
   } else {
-    return "ip.resolver4.workers.dev";
+    return "resolver.ex27.my.id";
   }
 }
 
