@@ -2,20 +2,41 @@
     "outbounds": [
         {
             "type": "vless",
-            "tag": "9 🇻🇳 VNPT Corp WS TLS [proxy]",
+            "tag": "1 🇻🇳 Thien Quang Digital technology joint stock company WS TLS [vpn]",
             "server": "quiz.int.vidio.com",
             "server_port": 443,
-            "uuid": "79331d6f-a71e-4ec9-b476-7abced9d2c09",
+            "uuid": "040e31f0-0ffe-470b-a11d-0b6653b1fcc4",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
                 "enabled": true,
                 "insecure": true,
-                "server_name": "proxy.xtunnel.my.id"
+                "server_name": "vpn.ex27.my.id"
             },
             "transport": {
                 "headers": {
-                    "Host": "proxy.xtunnel.my.id"
+                    "Host": "vpn.ex27.my.id"
+                },
+                "path": "/160.250.64.161-12865",
+                "type": "ws"
+            }
+        },
+        {
+            "type": "vless",
+            "tag": "8 🇻🇳 VNPT Corp WS TLS [vpn]",
+            "server": "quiz.int.vidio.com",
+            "server_port": 443,
+            "uuid": "040e31f0-0ffe-470b-a11d-0b6653b1fcc4",
+            "network": "tcp",
+            "packet_encoding": "xudp",
+            "tls": {
+                "enabled": true,
+                "insecure": true,
+                "server_name": "vpn.ex27.my.id"
+            },
+            "transport": {
+                "headers": {
+                    "Host": "vpn.ex27.my.id"
                 },
                 "path": "/103.197.184.193-37461",
                 "type": "ws"
@@ -23,20 +44,39 @@
         },
         {
             "type": "vless",
-            "tag": "2 🇻🇳 UCLOUD INFORMATION TECHNOLOGY (HK) LIMITED WS TLS [proxy]",
+            "tag": "5 🇻🇳 Kaopu Cloud HK Limited WS TLS [vpn]",
             "server": "quiz.int.vidio.com",
             "server_port": 443,
-            "uuid": "79331d6f-a71e-4ec9-b476-7abced9d2c09",
+            "uuid": "040e31f0-0ffe-470b-a11d-0b6653b1fcc4",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
                 "enabled": true,
                 "insecure": true,
-                "server_name": "proxy.xtunnel.my.id"
+                "server_name": "vpn.ex27.my.id"
             },
             "transport": {
                 "headers": {
-                    "Host": "proxy.xtunnel.my.id"
+                    "Host": "vpn.ex27.my.id"
+                },
+                "path": "/154.93.48.111-34237",
+                "type": "ws"
+            }
+        },
+        {
+            "type": "vless",
+            "tag": "1 🇻🇳 UCLOUD INFORMATION TECHNOLOGY (HK) LIMITED WS NTLS [vpn]",
+            "server": "quiz.int.vidio.com",
+            "server_port": 80,
+            "uuid": "661a944a-a0d7-4552-bf97-226a04dc543c",
+            "network": "tcp",
+            "packet_encoding": "xudp",
+            "tls": {
+                "insecure": true
+            },
+            "transport": {
+                "headers": {
+                    "Host": "vpn.ex27.my.id"
                 },
                 "path": "/152.32.255.24-587",
                 "type": "ws"
@@ -44,31 +84,10 @@
         },
         {
             "type": "vless",
-            "tag": "3 🇻🇳 Thien Quang Digital technology joint stock company WS TLS [proxy]",
-            "server": "quiz.int.vidio.com",
-            "server_port": 443,
-            "uuid": "79331d6f-a71e-4ec9-b476-7abced9d2c09",
-            "network": "tcp",
-            "packet_encoding": "xudp",
-            "tls": {
-                "enabled": true,
-                "insecure": true,
-                "server_name": "proxy.xtunnel.my.id"
-            },
-            "transport": {
-                "headers": {
-                    "Host": "proxy.xtunnel.my.id"
-                },
-                "path": "/160.250.64.161-12865",
-                "type": "ws"
-            }
-        },
-        {
-            "type": "vless",
-            "tag": "8 🇻🇳 VNPT Corp WS NTLS [proxy]",
+            "tag": "5 🇻🇳 Kaopu Cloud HK Limited WS NTLS [vpn]",
             "server": "quiz.int.vidio.com",
             "server_port": 80,
-            "uuid": "57eb7b7d-7728-4dcb-940e-c387a17d96c3",
+            "uuid": "661a944a-a0d7-4552-bf97-226a04dc543c",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -76,18 +95,18 @@
             },
             "transport": {
                 "headers": {
-                    "Host": "proxy.xtunnel.my.id"
+                    "Host": "vpn.ex27.my.id"
                 },
-                "path": "/103.15.90.134-49678",
+                "path": "/154.93.48.189-34237",
                 "type": "ws"
             }
         },
         {
             "type": "vless",
-            "tag": "1 🇻🇳 Kaopu Cloud HK Limited WS NTLS [proxy]",
+            "tag": "3 🇻🇳 VIETNAM POSTS AND TELECOMMUNICATIONS GROUP WS NTLS [vpn]",
             "server": "quiz.int.vidio.com",
             "server_port": 80,
-            "uuid": "57eb7b7d-7728-4dcb-940e-c387a17d96c3",
+            "uuid": "661a944a-a0d7-4552-bf97-226a04dc543c",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -95,28 +114,9 @@
             },
             "transport": {
                 "headers": {
-                    "Host": "proxy.xtunnel.my.id"
+                    "Host": "vpn.ex27.my.id"
                 },
-                "path": "/38.54.14.61-33813",
-                "type": "ws"
-            }
-        },
-        {
-            "type": "vless",
-            "tag": "2 🇻🇳 Thien Quang Digital technology joint stock company WS NTLS [proxy]",
-            "server": "quiz.int.vidio.com",
-            "server_port": 80,
-            "uuid": "57eb7b7d-7728-4dcb-940e-c387a17d96c3",
-            "network": "tcp",
-            "packet_encoding": "xudp",
-            "tls": {
-                "insecure": true
-            },
-            "transport": {
-                "headers": {
-                    "Host": "proxy.xtunnel.my.id"
-                },
-                "path": "/160.250.64.161-12865",
+                "path": "/103.137.184.5-443",
                 "type": "ws"
             }
         }
