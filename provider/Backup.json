@@ -2,62 +2,119 @@
     "outbounds": [
         {
             "type": "vless",
-            "tag": "43 🇺🇸 Oracle Corporation WS TLS [vpn]",
+            "tag": "93 🇺🇸 HostPapa WS TLS [vpn]",
             "server": "quiz.int.vidio.com",
             "server_port": 443,
-            "uuid": "c10aee7f-4a35-42f1-81f5-561cf3e8f039",
+            "uuid": "31c24de2-a679-45e2-82f9-dba3ee63c063",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
                 "enabled": true,
                 "insecure": true,
-                "server_name": "vpn.ex-vpn.my.id"
+                "server_name": "vpn.exbal.my.id"
             },
             "transport": {
                 "headers": {
-                    "Host": "vpn.ex-vpn.my.id"
+                    "Host": "vpn.exbal.my.id"
                 },
-                "path": "/152.67.248.2-53300",
+                "path": "/107.173.147.41-35398",
                 "type": "ws"
             }
         },
         {
             "type": "vless",
-            "tag": "4 🇺🇸 HostPapa WS TLS [vpn]",
+            "tag": "91 🇺🇸 MULTACOM CORPORATION WS TLS [vpn]",
             "server": "quiz.int.vidio.com",
             "server_port": 443,
-            "uuid": "c10aee7f-4a35-42f1-81f5-561cf3e8f039",
+            "uuid": "31c24de2-a679-45e2-82f9-dba3ee63c063",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
                 "enabled": true,
                 "insecure": true,
-                "server_name": "vpn.ex-vpn.my.id"
+                "server_name": "vpn.exbal.my.id"
             },
             "transport": {
                 "headers": {
-                    "Host": "vpn.ex-vpn.my.id"
+                    "Host": "vpn.exbal.my.id"
                 },
-                "path": "/107.175.158.215-443",
+                "path": "/142.171.30.213-993",
                 "type": "ws"
             }
         },
         {
             "type": "vless",
-            "tag": "66 🇺🇸 MULTACOM CORPORATION WS TLS [vpn]",
+            "tag": "3 🇺🇸 Oracle Corporation WS TLS [vpn]",
             "server": "quiz.int.vidio.com",
             "server_port": 443,
-            "uuid": "c10aee7f-4a35-42f1-81f5-561cf3e8f039",
+            "uuid": "31c24de2-a679-45e2-82f9-dba3ee63c063",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
                 "enabled": true,
                 "insecure": true,
-                "server_name": "vpn.ex-vpn.my.id"
+                "server_name": "vpn.exbal.my.id"
             },
             "transport": {
                 "headers": {
-                    "Host": "vpn.ex-vpn.my.id"
+                    "Host": "vpn.exbal.my.id"
+                },
+                "path": "/141.148.187.195-443",
+                "type": "ws"
+            }
+        },
+        {
+            "type": "vless",
+            "tag": "17 🇺🇸 IT7 Networks Inc WS NTLS [vpn]",
+            "server": "quiz.int.vidio.com",
+            "server_port": 80,
+            "uuid": "4a81d11b-e639-46c1-9cd7-7c123e07d195",
+            "network": "tcp",
+            "packet_encoding": "xudp",
+            "tls": {
+                "insecure": true
+            },
+            "transport": {
+                "headers": {
+                    "Host": "vpn.exbal.my.id"
+                },
+                "path": "/65.49.192.225-58564",
+                "type": "ws"
+            }
+        },
+        {
+            "type": "vless",
+            "tag": "60 🇺🇸 Amazon.com WS NTLS [vpn]",
+            "server": "quiz.int.vidio.com",
+            "server_port": 80,
+            "uuid": "4a81d11b-e639-46c1-9cd7-7c123e07d195",
+            "network": "tcp",
+            "packet_encoding": "xudp",
+            "tls": {
+                "insecure": true
+            },
+            "transport": {
+                "headers": {
+                    "Host": "vpn.exbal.my.id"
+                },
+                "path": "/52.32.90.142-80",
+                "type": "ws"
+            }
+        },
+        {
+            "type": "vless",
+            "tag": "89 🇺🇸 MULTACOM CORPORATION WS NTLS [vpn]",
+            "server": "quiz.int.vidio.com",
+            "server_port": 80,
+            "uuid": "4a81d11b-e639-46c1-9cd7-7c123e07d195",
+            "network": "tcp",
+            "packet_encoding": "xudp",
+            "tls": {
+                "insecure": true
+            },
+            "transport": {
+                "headers": {
+                    "Host": "vpn.exbal.my.id"
                 },
                 "path": "/72.18.81.113-15320",
                 "type": "ws"
@@ -65,130 +122,73 @@
         },
         {
             "type": "vless",
-            "tag": "76 🇺🇸 HostPapa WS NTLS [vpn]",
-            "server": "quiz.int.vidio.com",
-            "server_port": 80,
-            "uuid": "b26488dc-11e4-4ba3-92a0-b2178f0c7992",
-            "network": "tcp",
-            "packet_encoding": "xudp",
-            "tls": {
-                "insecure": true
-            },
-            "transport": {
-                "headers": {
-                    "Host": "vpn.ex-vpn.my.id"
-                },
-                "path": "/23.95.61.179-15160",
-                "type": "ws"
-            }
-        },
-        {
-            "type": "vless",
-            "tag": "72 🇺🇸 MULTACOM CORPORATION WS NTLS [vpn]",
-            "server": "quiz.int.vidio.com",
-            "server_port": 80,
-            "uuid": "b26488dc-11e4-4ba3-92a0-b2178f0c7992",
-            "network": "tcp",
-            "packet_encoding": "xudp",
-            "tls": {
-                "insecure": true
-            },
-            "transport": {
-                "headers": {
-                    "Host": "vpn.ex-vpn.my.id"
-                },
-                "path": "/142.171.202.202-21425",
-                "type": "ws"
-            }
-        },
-        {
-            "type": "vless",
-            "tag": "98 🇺🇸 Oracle Corporation WS NTLS [vpn]",
-            "server": "quiz.int.vidio.com",
-            "server_port": 80,
-            "uuid": "b26488dc-11e4-4ba3-92a0-b2178f0c7992",
-            "network": "tcp",
-            "packet_encoding": "xudp",
-            "tls": {
-                "insecure": true
-            },
-            "transport": {
-                "headers": {
-                    "Host": "vpn.ex-vpn.my.id"
-                },
-                "path": "/129.146.6.2-929",
-                "type": "ws"
-            }
-        },
-        {
-            "type": "vless",
-            "tag": "10 🇬🇧 OVH SAS WS TLS [vpn]",
+            "tag": "60 🇬🇧 PQ HOSTING PLUS S.R.L. WS TLS [vpn]",
             "server": "quiz.int.vidio.com",
             "server_port": 443,
-            "uuid": "dff1a723-707e-426c-8f44-80fac37a957a",
+            "uuid": "a197b98a-f332-4dea-8933-1dae37572c4e",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
                 "enabled": true,
                 "insecure": true,
-                "server_name": "vpn.ex-vpn.my.id"
+                "server_name": "vpn.exbal.my.id"
             },
             "transport": {
                 "headers": {
-                    "Host": "vpn.ex-vpn.my.id"
+                    "Host": "vpn.exbal.my.id"
                 },
-                "path": "/198.244.235.173-179",
+                "path": "/94.131.122.145-2053",
                 "type": "ws"
             }
         },
         {
             "type": "vless",
-            "tag": "51 🇬🇧 DigitalOcean WS TLS [vpn]",
+            "tag": "14 🇬🇧 OVH SAS WS TLS [vpn]",
             "server": "quiz.int.vidio.com",
             "server_port": 443,
-            "uuid": "dff1a723-707e-426c-8f44-80fac37a957a",
+            "uuid": "a197b98a-f332-4dea-8933-1dae37572c4e",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
                 "enabled": true,
                 "insecure": true,
-                "server_name": "vpn.ex-vpn.my.id"
+                "server_name": "vpn.exbal.my.id"
             },
             "transport": {
                 "headers": {
-                    "Host": "vpn.ex-vpn.my.id"
+                    "Host": "vpn.exbal.my.id"
                 },
-                "path": "/142.93.37.152-8880",
+                "path": "/91.199.32.39-2053",
                 "type": "ws"
             }
         },
         {
             "type": "vless",
-            "tag": "41 🇬🇧 Kamatera Inc WS TLS [vpn]",
+            "tag": "12 🇬🇧 Oracle Corporation WS TLS [vpn]",
             "server": "quiz.int.vidio.com",
             "server_port": 443,
-            "uuid": "dff1a723-707e-426c-8f44-80fac37a957a",
+            "uuid": "a197b98a-f332-4dea-8933-1dae37572c4e",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
                 "enabled": true,
                 "insecure": true,
-                "server_name": "vpn.ex-vpn.my.id"
+                "server_name": "vpn.exbal.my.id"
             },
             "transport": {
                 "headers": {
-                    "Host": "vpn.ex-vpn.my.id"
+                    "Host": "vpn.exbal.my.id"
                 },
-                "path": "/194.146.24.199-8443",
+                "path": "/141.147.106.18-10086",
                 "type": "ws"
             }
         },
         {
             "type": "vless",
-            "tag": "12 🇬🇧 OVH SAS WS NTLS [vpn]",
+            "tag": "7 🇬🇧 PQ HOSTING PLUS S.R.L. WS NTLS [vpn]",
             "server": "quiz.int.vidio.com",
             "server_port": 80,
-            "uuid": "ee6bfc9d-c88e-48de-b309-919d016bbde4",
+            "uuid": "18af2556-de44-4327-990f-c1607b1eb9d0",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -196,18 +196,18 @@
             },
             "transport": {
                 "headers": {
-                    "Host": "vpn.ex-vpn.my.id"
+                    "Host": "vpn.exbal.my.id"
                 },
-                "path": "/91.199.32.215-2053",
+                "path": "/94.131.122.72-443",
                 "type": "ws"
             }
         },
         {
             "type": "vless",
-            "tag": "38 🇬🇧 Kamatera Inc WS NTLS [vpn]",
+            "tag": "3 🇬🇧 Amazon.com WS NTLS [vpn]",
             "server": "quiz.int.vidio.com",
             "server_port": 80,
-            "uuid": "ee6bfc9d-c88e-48de-b309-919d016bbde4",
+            "uuid": "18af2556-de44-4327-990f-c1607b1eb9d0",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -215,18 +215,18 @@
             },
             "transport": {
                 "headers": {
-                    "Host": "vpn.ex-vpn.my.id"
+                    "Host": "vpn.exbal.my.id"
                 },
-                "path": "/185.127.17.163-1298",
+                "path": "/3.9.223.59-443",
                 "type": "ws"
             }
         },
         {
             "type": "vless",
-            "tag": "64 🇬🇧 DigitalOcean WS NTLS [vpn]",
+            "tag": "45 🇬🇧 OVH SAS WS NTLS [vpn]",
             "server": "quiz.int.vidio.com",
             "server_port": 80,
-            "uuid": "ee6bfc9d-c88e-48de-b309-919d016bbde4",
+            "uuid": "18af2556-de44-4327-990f-c1607b1eb9d0",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -234,9 +234,9 @@
             },
             "transport": {
                 "headers": {
-                    "Host": "vpn.ex-vpn.my.id"
+                    "Host": "vpn.exbal.my.id"
                 },
-                "path": "/178.128.161.11-443",
+                "path": "/51.89.128.93-12122",
                 "type": "ws"
             }
         }
