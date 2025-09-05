@@ -17,7 +17,7 @@ jobs:
       - name: Upload kvProxyList.json to KV Storage (exball231)
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CF_API_TOKEN_EXBALL231 }}
-          KV_STORAGE_ID: ${{ secrets.KV_ID_EXBALL231 }}
+          KV_STORAGE_ID: Proxy-Data
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CF_ACCOUNT_ID_EXBALL231 }}
         run: |
           curl -X PUT "https://api.cloudflare.com/client/v4/accounts/$CLOUDFLARE_ACCOUNT_ID/storage/kv/namespaces/$KV_STORAGE_ID/values/kvProxyList.json" \
@@ -27,7 +27,7 @@ jobs:
       - name: Upload proxyList.txt to KV Storage (exball231)
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CF_API_TOKEN_EXBALL231 }}
-          KV_STORAGE_ID: ${{ secrets.KV_ID_EXBALL231 }}
+          KV_STORAGE_ID: Proxy-Data
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CF_ACCOUNT_ID_EXBALL231 }}
         run: |
           curl -X PUT "https://api.cloudflare.com/client/v4/accounts/$CLOUDFLARE_ACCOUNT_ID/storage/kv/namespaces/$KV_STORAGE_ID/values/proxyList.txt" \
@@ -38,7 +38,7 @@ jobs:
       - name: Upload kvProxyList.json to KV Storage (exball649)
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CF_API_TOKEN_EXBALL649 }}
-          KV_STORAGE_ID: ${{ secrets.KV_ID_EXBALL649 }}
+          KV_STORAGE_ID: Proxy-Data
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CF_ACCOUNT_ID_EXBALL649 }}
         run: |
           curl -X PUT "https://api.cloudflare.com/client/v4/accounts/$CLOUDFLARE_ACCOUNT_ID/storage/kv/namespaces/$KV_STORAGE_ID/values/kvProxyList.json" \
@@ -48,7 +48,7 @@ jobs:
       - name: Upload proxyList.txt to KV Storage (exball649)
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CF_API_TOKEN_EXBALL649 }}
-          KV_STORAGE_ID: ${{ secrets.KV_ID_EXBALL649 }}
+          KV_STORAGE_ID: Proxy-Data
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CF_ACCOUNT_ID_EXBALL649 }}
         run: |
           curl -X PUT "https://api.cloudflare.com/client/v4/accounts/$CLOUDFLARE_ACCOUNT_ID/storage/kv/namespaces/$KV_STORAGE_ID/values/proxyList.txt" \
@@ -59,7 +59,7 @@ jobs:
       - name: Upload kvProxyList.json to KV Storage (exball689)
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CF_API_TOKEN_EXBALL689 }}
-          KV_STORAGE_ID: ${{ secrets.KV_ID_EXBALL689 }}
+          KV_STORAGE_ID: Proxy-Data
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CF_ACCOUNT_ID_EXBALL689 }}
         run: |
           curl -X PUT "https://api.cloudflare.com/client/v4/accounts/$CLOUDFLARE_ACCOUNT_ID/storage/kv/namespaces/$KV_STORAGE_ID/values/kvProxyList.json" \
@@ -69,7 +69,7 @@ jobs:
       - name: Upload proxyList.txt to KV Storage (exball689)
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CF_API_TOKEN_EXBALL689 }}
-          KV_STORAGE_ID: ${{ secrets.KV_ID_EXBALL689 }}
+          KV_STORAGE_ID: Proxy-Data
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CF_ACCOUNT_ID_EXBALL689 }}
         run: |
           curl -X PUT "https://api.cloudflare.com/client/v4/accounts/$CLOUDFLARE_ACCOUNT_ID/storage/kv/namespaces/$KV_STORAGE_ID/values/proxyList.txt" \
@@ -80,17 +80,17 @@ jobs:
       - name: Upload kvProxyList.json to KV Storage (ex_ball27389)
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CF_API_TOKEN_EX_BALL27389 }}
-          KV_STORAGE_ID: ${{ secrets.KV_ID_EX_BALL27389 }}
+          KV_STORAGE_ID: Proxy-Data
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CF_ACCOUNT_ID_EX_BALL27389 }}
         run: |
           curl -X PUT "https://api.cloudflare.com/client/v4/accounts/$CLOUDFLARE_ACCOUNT_ID/storage/kv/namespaces/$KV_STORAGE_ID/values/kvProxyList.json" \
             -H "Authorization: Bearer $CLOUDFLARE_API_TOKEN" \
             --data-binary "@proxy-scaner/kvProxyList.json"
-            
+
       - name: Upload proxyList.txt to KV Storage (ex_ball27389)
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CF_API_TOKEN_EX_BALL27389 }}
-          KV_STORAGE_ID: ${{ secrets.KV_ID_EX_BALL27389 }}
+          KV_STORAGE_ID: Proxy-Data
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CF_ACCOUNT_ID_EX_BALL27389 }}
         run: |
           curl -X PUT "https://api.cloudflare.com/client/v4/accounts/$CLOUDFLARE_ACCOUNT_ID/storage/kv/namespaces/$KV_STORAGE_ID/values/proxyList.txt" \
