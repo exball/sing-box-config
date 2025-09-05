@@ -2,10 +2,10 @@
     "outbounds": [
         {
             "type": "vless",
-            "tag": "32 🇮🇩 Akamai Connected Cloud WS TLS [vpn]",
+            "tag": "17 🇮🇩 Akamai Connected Cloud WS TLS [vpn]",
             "server": "quiz.int.vidio.com",
             "server_port": 443,
-            "uuid": "806034ac-b163-4a13-8ce3-ad269ae7777b",
+            "uuid": "f3c89e8a-c446-4d1c-9f86-1d8d3700d835",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -17,16 +17,16 @@
                 "headers": {
                     "Host": "vpn.ex-vpn.my.id"
                 },
-                "path": "/172.232.238.56-74",
+                "path": "/172.232.238.52-12306",
                 "type": "ws"
             }
         },
         {
             "type": "vless",
-            "tag": "29 🇮🇩 CV. Rumahweb Indonesia WS TLS [vpn]",
+            "tag": "4 🇮🇩 PT Telekomunikasi Indonesia WS TLS [vpn]",
             "server": "quiz.int.vidio.com",
             "server_port": 443,
-            "uuid": "806034ac-b163-4a13-8ce3-ad269ae7777b",
+            "uuid": "f3c89e8a-c446-4d1c-9f86-1d8d3700d835",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -38,16 +38,16 @@
                 "headers": {
                     "Host": "vpn.ex-vpn.my.id"
                 },
-                "path": "/203.194.112.119-8443",
+                "path": "/36.95.152.58-12137",
                 "type": "ws"
             }
         },
         {
             "type": "vless",
-            "tag": "3 🇮🇩 Amazon.com WS TLS [vpn]",
+            "tag": "11 🇮🇩 Alibaba (US) Technology Co. WS TLS [vpn]",
             "server": "quiz.int.vidio.com",
             "server_port": 443,
-            "uuid": "806034ac-b163-4a13-8ce3-ad269ae7777b",
+            "uuid": "f3c89e8a-c446-4d1c-9f86-1d8d3700d835",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -59,16 +59,37 @@
                 "headers": {
                     "Host": "vpn.ex-vpn.my.id"
                 },
-                "path": "/43.218.77.16-1443",
+                "path": "/149.129.250.8-443",
                 "type": "ws"
             }
         },
         {
             "type": "vless",
-            "tag": "6 🇮🇩 PT MITRA VISIONER PRATAMA WS TLS [vpn]",
+            "tag": "14 🇮🇩 Kaopu Cloud HK Limited WS TLS [vpn]",
             "server": "quiz.int.vidio.com",
             "server_port": 443,
-            "uuid": "806034ac-b163-4a13-8ce3-ad269ae7777b",
+            "uuid": "f3c89e8a-c446-4d1c-9f86-1d8d3700d835",
+            "network": "tcp",
+            "packet_encoding": "xudp",
+            "tls": {
+                "enabled": true,
+                "insecure": true,
+                "server_name": "vpn.ex-vpn.my.id"
+            },
+            "transport": {
+                "headers": {
+                    "Host": "vpn.ex-vpn.my.id"
+                },
+                "path": "/156.244.1.250-8443",
+                "type": "ws"
+            }
+        },
+        {
+            "type": "vless",
+            "tag": "20 🇮🇩 PT MITRA VISIONER PRATAMA WS TLS [vpn]",
+            "server": "quiz.int.vidio.com",
+            "server_port": 443,
+            "uuid": "f3c89e8a-c446-4d1c-9f86-1d8d3700d835",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -86,16 +107,71 @@
         },
         {
             "type": "vless",
-            "tag": "14 🇮🇩 PT Telekomunikasi Indonesia WS TLS [vpn]",
+            "tag": "19 🇮🇩 Akamai Connected Cloud WS NTLS [vpn]",
             "server": "quiz.int.vidio.com",
-            "server_port": 443,
-            "uuid": "806034ac-b163-4a13-8ce3-ad269ae7777b",
+            "server_port": 80,
+            "uuid": "fe6f670c-07b5-43d9-b7e2-c44a2593f4ea",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
-                "enabled": true,
-                "insecure": true,
-                "server_name": "vpn.ex-vpn.my.id"
+                "insecure": true
+            },
+            "transport": {
+                "headers": {
+                    "Host": "vpn.ex-vpn.my.id"
+                },
+                "path": "/172.232.238.52-12306",
+                "type": "ws"
+            }
+        },
+        {
+            "type": "vless",
+            "tag": "21 🇮🇩 Amazon.com WS NTLS [vpn]",
+            "server": "quiz.int.vidio.com",
+            "server_port": 80,
+            "uuid": "fe6f670c-07b5-43d9-b7e2-c44a2593f4ea",
+            "network": "tcp",
+            "packet_encoding": "xudp",
+            "tls": {
+                "insecure": true
+            },
+            "transport": {
+                "headers": {
+                    "Host": "vpn.ex-vpn.my.id"
+                },
+                "path": "/43.218.77.16-443",
+                "type": "ws"
+            }
+        },
+        {
+            "type": "vless",
+            "tag": "9 🇮🇩 PT MITRA VISIONER PRATAMA WS NTLS [vpn]",
+            "server": "quiz.int.vidio.com",
+            "server_port": 80,
+            "uuid": "fe6f670c-07b5-43d9-b7e2-c44a2593f4ea",
+            "network": "tcp",
+            "packet_encoding": "xudp",
+            "tls": {
+                "insecure": true
+            },
+            "transport": {
+                "headers": {
+                    "Host": "vpn.ex-vpn.my.id"
+                },
+                "path": "/206.84.101.83-8443",
+                "type": "ws"
+            }
+        },
+        {
+            "type": "vless",
+            "tag": "13 🇮🇩 PT Telekomunikasi Indonesia WS NTLS [vpn]",
+            "server": "quiz.int.vidio.com",
+            "server_port": 80,
+            "uuid": "fe6f670c-07b5-43d9-b7e2-c44a2593f4ea",
+            "network": "tcp",
+            "packet_encoding": "xudp",
+            "tls": {
+                "insecure": true
             },
             "transport": {
                 "headers": {
@@ -107,86 +183,10 @@
         },
         {
             "type": "vless",
-            "tag": "11 🇮🇩 Akamai Connected Cloud WS NTLS [vpn]",
+            "tag": "31 🇮🇩 Kaopu Cloud HK Limited WS NTLS [vpn]",
             "server": "quiz.int.vidio.com",
             "server_port": 80,
-            "uuid": "c45462e9-4cee-420f-abb2-fcf3ceae4c53",
-            "network": "tcp",
-            "packet_encoding": "xudp",
-            "tls": {
-                "insecure": true
-            },
-            "transport": {
-                "headers": {
-                    "Host": "vpn.ex-vpn.my.id"
-                },
-                "path": "/172.232.238.56-20205",
-                "type": "ws"
-            }
-        },
-        {
-            "type": "vless",
-            "tag": "3 🇮🇩 PT Telekomunikasi Indonesia WS NTLS [vpn]",
-            "server": "quiz.int.vidio.com",
-            "server_port": 80,
-            "uuid": "c45462e9-4cee-420f-abb2-fcf3ceae4c53",
-            "network": "tcp",
-            "packet_encoding": "xudp",
-            "tls": {
-                "insecure": true
-            },
-            "transport": {
-                "headers": {
-                    "Host": "vpn.ex-vpn.my.id"
-                },
-                "path": "/36.95.152.58-12137",
-                "type": "ws"
-            }
-        },
-        {
-            "type": "vless",
-            "tag": "5 🇮🇩 Amazon.com WS NTLS [vpn]",
-            "server": "quiz.int.vidio.com",
-            "server_port": 80,
-            "uuid": "c45462e9-4cee-420f-abb2-fcf3ceae4c53",
-            "network": "tcp",
-            "packet_encoding": "xudp",
-            "tls": {
-                "insecure": true
-            },
-            "transport": {
-                "headers": {
-                    "Host": "vpn.ex-vpn.my.id"
-                },
-                "path": "/43.218.77.16-1443",
-                "type": "ws"
-            }
-        },
-        {
-            "type": "vless",
-            "tag": "8 🇮🇩 INDO Internet WS NTLS [vpn]",
-            "server": "quiz.int.vidio.com",
-            "server_port": 80,
-            "uuid": "c45462e9-4cee-420f-abb2-fcf3ceae4c53",
-            "network": "tcp",
-            "packet_encoding": "xudp",
-            "tls": {
-                "insecure": true
-            },
-            "transport": {
-                "headers": {
-                    "Host": "vpn.ex-vpn.my.id"
-                },
-                "path": "/117.54.114.103-443",
-                "type": "ws"
-            }
-        },
-        {
-            "type": "vless",
-            "tag": "12 🇮🇩 Kaopu Cloud HK Limited WS NTLS [vpn]",
-            "server": "quiz.int.vidio.com",
-            "server_port": 80,
-            "uuid": "c45462e9-4cee-420f-abb2-fcf3ceae4c53",
+            "uuid": "fe6f670c-07b5-43d9-b7e2-c44a2593f4ea",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
