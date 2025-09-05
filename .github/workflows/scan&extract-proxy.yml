@@ -44,7 +44,88 @@ jobs:
           else
             echo "No changes detected, skipping commit and push."
           fi
-      
+
+      # Upload output files to Cloudflare KV Storage (4 akun)
+      - name: Upload kvProxyList.json to KV Storage (exball231)
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CF_API_TOKEN_EXBALL231 }}
+          KV_STORAGE_ID: ${{ secrets.KV_ID_EXBALL231 }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CF_ACCOUNT_ID_EXBALL231 }}
+        run: |
+          curl -X PUT "https://api.cloudflare.com/client/v4/accounts/$CLOUDFLARE_ACCOUNT_ID/storage/kv/namespaces/$KV_STORAGE_ID/values/kvProxyList.json" \
+            -H "Authorization: Bearer $CLOUDFLARE_API_TOKEN" \
+            --data-binary "@proxy-scaner/kvProxyList.json"
+
+      - name: Upload proxyList.txt to KV Storage (exball231)
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CF_API_TOKEN_EXBALL231 }}
+          KV_STORAGE_ID: ${{ secrets.KV_ID_EXBALL231 }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CF_ACCOUNT_ID_EXBALL231 }}
+        run: |
+          curl -X PUT "https://api.cloudflare.com/client/v4/accounts/$CLOUDFLARE_ACCOUNT_ID/storage/kv/namespaces/$KV_STORAGE_ID/values/proxyList.txt" \
+            -H "Authorization: Bearer $CLOUDFLARE_API_TOKEN" \
+            --data-binary "@proxy-scaner/proxyList.txt"
+
+      - name: Upload kvProxyList.json to KV Storage (exball649)
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CF_API_TOKEN_EXBALL649 }}
+          KV_STORAGE_ID: ${{ secrets.KV_ID_EXBALL649 }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CF_ACCOUNT_ID_EXBALL649 }}
+        run: |
+          curl -X PUT "https://api.cloudflare.com/client/v4/accounts/$CLOUDFLARE_ACCOUNT_ID/storage/kv/namespaces/$KV_STORAGE_ID/values/kvProxyList.json" \
+            -H "Authorization: Bearer $CLOUDFLARE_API_TOKEN" \
+            --data-binary "@proxy-scaner/kvProxyList.json"
+
+      - name: Upload proxyList.txt to KV Storage (exball649)
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CF_API_TOKEN_EXBALL649 }}
+          KV_STORAGE_ID: ${{ secrets.KV_ID_EXBALL649 }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CF_ACCOUNT_ID_EXBALL649 }}
+        run: |
+          curl -X PUT "https://api.cloudflare.com/client/v4/accounts/$CLOUDFLARE_ACCOUNT_ID/storage/kv/namespaces/$KV_STORAGE_ID/values/proxyList.txt" \
+            -H "Authorization: Bearer $CLOUDFLARE_API_TOKEN" \
+            --data-binary "@proxy-scaner/proxyList.txt"
+
+      - name: Upload kvProxyList.json to KV Storage (exball689)
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CF_API_TOKEN_EXBALL689 }}
+          KV_STORAGE_ID: ${{ secrets.KV_ID_EXBALL689 }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CF_ACCOUNT_ID_EXBALL689 }}
+        run: |
+          curl -X PUT "https://api.cloudflare.com/client/v4/accounts/$CLOUDFLARE_ACCOUNT_ID/storage/kv/namespaces/$KV_STORAGE_ID/values/kvProxyList.json" \
+            -H "Authorization: Bearer $CLOUDFLARE_API_TOKEN" \
+            --data-binary "@proxy-scaner/kvProxyList.json"
+
+      - name: Upload proxyList.txt to KV Storage (exball689)
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CF_API_TOKEN_EXBALL689 }}
+          KV_STORAGE_ID: ${{ secrets.KV_ID_EXBALL689 }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CF_ACCOUNT_ID_EXBALL689 }}
+        run: |
+          curl -X PUT "https://api.cloudflare.com/client/v4/accounts/$CLOUDFLARE_ACCOUNT_ID/storage/kv/namespaces/$KV_STORAGE_ID/values/proxyList.txt" \
+            -H "Authorization: Bearer $CLOUDFLARE_API_TOKEN" \
+            --data-binary "@proxy-scaner/proxyList.txt"
+
+      - name: Upload kvProxyList.json to KV Storage (ex_ball27389)
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CF_API_TOKEN_EX_BALL27389 }}
+          KV_STORAGE_ID: ${{ secrets.KV_ID_EX_BALL27389 }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CF_ACCOUNT_ID_EX_BALL27389 }}
+        run: |
+          curl -X PUT "https://api.cloudflare.com/client/v4/accounts/$CLOUDFLARE_ACCOUNT_ID/storage/kv/namespaces/$KV_STORAGE_ID/values/kvProxyList.json" \
+            -H "Authorization: Bearer $CLOUDFLARE_API_TOKEN" \
+            --data-binary "@proxy-scaner/kvProxyList.json"
+
+      - name: Upload proxyList.txt to KV Storage (ex_ball27389)
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CF_API_TOKEN_EX_BALL27389 }}
+          KV_STORAGE_ID: ${{ secrets.KV_ID_EX_BALL27389 }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CF_ACCOUNT_ID_EX_BALL27389 }}
+        run: |
+          curl -X PUT "https://api.cloudflare.com/client/v4/accounts/$CLOUDFLARE_ACCOUNT_ID/storage/kv/namespaces/$KV_STORAGE_ID/values/proxyList.txt" \
+            -H "Authorization: Bearer $CLOUDFLARE_API_TOKEN" \
+            --data-binary "@proxy-scaner/proxyList.txt"
+
       # Jeda 10 detik antara dua proses
       - name: Wait for 10 seconds
         run: sleep 10
@@ -150,21 +231,6 @@ jobs:
           if [ "$FILE_COUNT" -eq 0 ]; then
             echo "WARNING: No output files were created in provider directory!"
             exit 1
-          fi
-      
-      - name: Upload to Cloudflare R2
-        env:
-          ENABLE_UPLOAD: "false"  # Ubah menjadi "true" jika ingin mengaktifkan upload
-          R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
-          R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
-          R2_ACCOUNT_ID: ${{ secrets.R2_ACCOUNT_ID }}
-          R2_BUCKET_NAME: cloud
-          R2_FOLDER_NAME: sing-box_config
-        run: |
-          if [ "$ENABLE_UPLOAD" = "true" ]; then
-            cd extract-outbound && python upload_to_r2.py
-          else
-            echo "Upload to R2 is disabled"
           fi
       
       - name: Determine file pattern based on format
