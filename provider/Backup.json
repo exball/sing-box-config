@@ -2,10 +2,10 @@
     "outbounds": [
         {
             "type": "vless",
-            "tag": "2 🇺🇸 HostPapa WS TLS [vpn]",
+            "tag": "8 🇺🇸 Amazon.com WS TLS [vpn]",
             "server": "quiz.int.vidio.com",
             "server_port": 443,
-            "uuid": "fe16c967-875f-4bee-8164-3c1319fe04f3",
+            "uuid": "f440d6f6-1018-405a-838e-55e5ead52002",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -17,22 +17,100 @@
                 "headers": {
                     "Host": "vpn.ex27.my.id"
                 },
-                "path": "/107.173.87.79-8443",
+                "path": "/67.226.221.100-80",
                 "type": "ws"
             }
         },
         {
             "type": "vless",
-            "tag": "23 🇺🇸 MULTACOM CORPORATION WS TLS [vpn]",
+            "tag": "9 🇺🇸 Oracle Corporation WS TLS [vpn]",
             "server": "quiz.int.vidio.com",
             "server_port": 443,
-            "uuid": "fe16c967-875f-4bee-8164-3c1319fe04f3",
+            "uuid": "f440d6f6-1018-405a-838e-55e5ead52002",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
                 "enabled": true,
                 "insecure": true,
                 "server_name": "vpn.ex27.my.id"
+            },
+            "transport": {
+                "headers": {
+                    "Host": "vpn.ex27.my.id"
+                },
+                "path": "/129.153.112.108-3966",
+                "type": "ws"
+            }
+        },
+        {
+            "type": "vless",
+            "tag": "74 🇺🇸 HostPapa WS TLS [vpn]",
+            "server": "quiz.int.vidio.com",
+            "server_port": 443,
+            "uuid": "f440d6f6-1018-405a-838e-55e5ead52002",
+            "network": "tcp",
+            "packet_encoding": "xudp",
+            "tls": {
+                "enabled": true,
+                "insecure": true,
+                "server_name": "vpn.ex27.my.id"
+            },
+            "transport": {
+                "headers": {
+                    "Host": "vpn.ex27.my.id"
+                },
+                "path": "/107.174.242.151-34561",
+                "type": "ws"
+            }
+        },
+        {
+            "type": "vless",
+            "tag": "85 🇺🇸 HostPapa WS NTLS [vpn]",
+            "server": "quiz.int.vidio.com",
+            "server_port": 80,
+            "uuid": "da0c63e6-2c00-4a7c-a3e5-99587d1b3295",
+            "network": "tcp",
+            "packet_encoding": "xudp",
+            "tls": {
+                "insecure": true
+            },
+            "transport": {
+                "headers": {
+                    "Host": "vpn.ex27.my.id"
+                },
+                "path": "/198.46.143.134-443",
+                "type": "ws"
+            }
+        },
+        {
+            "type": "vless",
+            "tag": "11 🇺🇸 Oracle Corporation WS NTLS [vpn]",
+            "server": "quiz.int.vidio.com",
+            "server_port": 80,
+            "uuid": "da0c63e6-2c00-4a7c-a3e5-99587d1b3295",
+            "network": "tcp",
+            "packet_encoding": "xudp",
+            "tls": {
+                "insecure": true
+            },
+            "transport": {
+                "headers": {
+                    "Host": "vpn.ex27.my.id"
+                },
+                "path": "/192.9.145.87-13611",
+                "type": "ws"
+            }
+        },
+        {
+            "type": "vless",
+            "tag": "29 🇺🇸 MULTACOM CORPORATION WS NTLS [vpn]",
+            "server": "quiz.int.vidio.com",
+            "server_port": 80,
+            "uuid": "da0c63e6-2c00-4a7c-a3e5-99587d1b3295",
+            "network": "tcp",
+            "packet_encoding": "xudp",
+            "tls": {
+                "insecure": true
             },
             "transport": {
                 "headers": {
@@ -44,10 +122,10 @@
         },
         {
             "type": "vless",
-            "tag": "16 🇺🇸 Oracle Corporation WS TLS [vpn]",
+            "tag": "70 🇬🇧 PQ HOSTING PLUS S.R.L. WS TLS [vpn]",
             "server": "quiz.int.vidio.com",
             "server_port": 443,
-            "uuid": "fe16c967-875f-4bee-8164-3c1319fe04f3",
+            "uuid": "df5b5ef8-c917-4645-9b01-3e434a7375b9",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -59,16 +137,58 @@
                 "headers": {
                     "Host": "vpn.ex27.my.id"
                 },
-                "path": "/192.9.138.69-21009",
+                "path": "/95.164.37.32-2096",
                 "type": "ws"
             }
         },
         {
             "type": "vless",
-            "tag": "69 🇺🇸 HostPapa WS NTLS [vpn]",
+            "tag": "45 🇬🇧 DigitalOcean WS TLS [vpn]",
+            "server": "quiz.int.vidio.com",
+            "server_port": 443,
+            "uuid": "df5b5ef8-c917-4645-9b01-3e434a7375b9",
+            "network": "tcp",
+            "packet_encoding": "xudp",
+            "tls": {
+                "enabled": true,
+                "insecure": true,
+                "server_name": "vpn.ex27.my.id"
+            },
+            "transport": {
+                "headers": {
+                    "Host": "vpn.ex27.my.id"
+                },
+                "path": "/134.209.177.68-80",
+                "type": "ws"
+            }
+        },
+        {
+            "type": "vless",
+            "tag": "29 🇬🇧 Amazon.com WS TLS [vpn]",
+            "server": "quiz.int.vidio.com",
+            "server_port": 443,
+            "uuid": "df5b5ef8-c917-4645-9b01-3e434a7375b9",
+            "network": "tcp",
+            "packet_encoding": "xudp",
+            "tls": {
+                "enabled": true,
+                "insecure": true,
+                "server_name": "vpn.ex27.my.id"
+            },
+            "transport": {
+                "headers": {
+                    "Host": "vpn.ex27.my.id"
+                },
+                "path": "/67.226.223.75-80",
+                "type": "ws"
+            }
+        },
+        {
+            "type": "vless",
+            "tag": "31 🇬🇧 DigitalOcean WS NTLS [vpn]",
             "server": "quiz.int.vidio.com",
             "server_port": 80,
-            "uuid": "540a85b4-c143-4c19-9499-b28b717ffb57",
+            "uuid": "399fd255-79e0-435f-916e-696ef72c941b",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -78,16 +198,16 @@
                 "headers": {
                     "Host": "vpn.ex27.my.id"
                 },
-                "path": "/107.172.102.212-20700",
+                "path": "/138.68.141.220-8443",
                 "type": "ws"
             }
         },
         {
             "type": "vless",
-            "tag": "49 🇺🇸 Oracle Corporation WS NTLS [vpn]",
+            "tag": "27 🇬🇧 PQ HOSTING PLUS S.R.L. WS NTLS [vpn]",
             "server": "quiz.int.vidio.com",
             "server_port": 80,
-            "uuid": "540a85b4-c143-4c19-9499-b28b717ffb57",
+            "uuid": "399fd255-79e0-435f-916e-696ef72c941b",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -97,16 +217,16 @@
                 "headers": {
                     "Host": "vpn.ex27.my.id"
                 },
-                "path": "/138.2.235.230-22731",
+                "path": "/5.180.30.249-2053",
                 "type": "ws"
             }
         },
         {
             "type": "vless",
-            "tag": "99 🇺🇸 Amazon.com WS NTLS [vpn]",
+            "tag": "21 🇬🇧 Amazon.com WS NTLS [vpn]",
             "server": "quiz.int.vidio.com",
             "server_port": 80,
-            "uuid": "540a85b4-c143-4c19-9499-b28b717ffb57",
+            "uuid": "399fd255-79e0-435f-916e-696ef72c941b",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -116,70 +236,7 @@
                 "headers": {
                     "Host": "vpn.ex27.my.id"
                 },
-                "path": "/35.167.93.200-443",
-                "type": "ws"
-            }
-        },
-        {
-            "type": "vless",
-            "tag": "63 🇬🇧 DigitalOcean WS TLS [vpn]",
-            "server": "quiz.int.vidio.com",
-            "server_port": 443,
-            "uuid": "51217e37-2e2f-4f8f-845f-b06bd8060e27",
-            "network": "tcp",
-            "packet_encoding": "xudp",
-            "tls": {
-                "enabled": true,
-                "insecure": true,
-                "server_name": "vpn.ex27.my.id"
-            },
-            "transport": {
-                "headers": {
-                    "Host": "vpn.ex27.my.id"
-                },
-                "path": "/142.93.37.152-2086",
-                "type": "ws"
-            }
-        },
-        {
-            "type": "vless",
-            "tag": "44 🇬🇧 PQ HOSTING PLUS S.R.L. WS TLS [vpn]",
-            "server": "quiz.int.vidio.com",
-            "server_port": 443,
-            "uuid": "51217e37-2e2f-4f8f-845f-b06bd8060e27",
-            "network": "tcp",
-            "packet_encoding": "xudp",
-            "tls": {
-                "enabled": true,
-                "insecure": true,
-                "server_name": "vpn.ex27.my.id"
-            },
-            "transport": {
-                "headers": {
-                    "Host": "vpn.ex27.my.id"
-                },
-                "path": "/77.91.101.141-443",
-                "type": "ws"
-            }
-        },
-        {
-            "type": "vless",
-            "tag": "61 🇬🇧 The Constant Company WS TLS [vpn]",
-            "server": "quiz.int.vidio.com",
-            "server_port": 443,
-            "uuid": "51217e37-2e2f-4f8f-845f-b06bd8060e27",
-            "network": "tcp",
-            "packet_encoding": "xudp",
-            "tls": {
-                "enabled": true,
-                "insecure": true,
-                "server_name": "vpn.ex27.my.id"
-            },
-            "transport": {
-                "headers": {
-                    "Host": "vpn.ex27.my.id"
-                },
-                "path": "/45.63.97.160-51548",
+                "path": "/35.176.229.223-80",
                 "type": "ws"
             }
         }
