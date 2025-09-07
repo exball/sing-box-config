@@ -45,3 +45,14 @@ jobs:
               -H "Authorization: Bearer ${{ secrets[matrix.kv.token] }}" \
               --data-binary "@$file"
           done
+
+      - name: Trigger extract-proxy workflow
+        run: |
+          echo "Triggering extract-proxy.yml workflow via GitHub API..."
+          curl -X POST \
+            -H "Accept: application/vnd.github+json" \
+            -H "Authorization: Bearer ${{ secrets.GIT_TOKEN }}" \
+            https://api.github.com/repos/${{ github.repository }}/actions/workflows/extract-proxy.yml/dispatches \
+            -d '{"ref":"Master"}'
+        env:
+          GIT_TOKEN: ${{ secrets.GIT_TOKEN }}
