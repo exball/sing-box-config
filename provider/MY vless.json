@@ -2,10 +2,10 @@
     "outbounds": [
         {
             "type": "vless",
-            "tag": "8 🇲🇾 Shinjiru Technology Sdn Bhd WS TLS [vpn]",
+            "tag": "13 🇲🇾 Shinjiru Technology Sdn Bhd WS TLS [vpn]",
             "server": "quiz.int.vidio.com",
             "server_port": 443,
-            "uuid": "c25b0447-23e7-4e43-87a2-b4075d2190a3",
+            "uuid": "8e7faa2f-6ba3-468c-8957-f034e6233b8a",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -17,81 +17,22 @@
                 "headers": {
                     "Host": "vpn.ex-vpn.my.id"
                 },
-                "path": "/111.90.149.209-20205",
+                "path": "/111.90.149.209-386",
                 "type": "ws"
             }
         },
         {
             "type": "vless",
-            "tag": "3 🇲🇾 Microsoft Corporation WS TLS [vpn]",
+            "tag": "2 🇲🇾 Alibaba (US) Technology Co. WS TLS [vpn]",
             "server": "quiz.int.vidio.com",
             "server_port": 443,
-            "uuid": "c25b0447-23e7-4e43-87a2-b4075d2190a3",
+            "uuid": "8e7faa2f-6ba3-468c-8957-f034e6233b8a",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
                 "enabled": true,
                 "insecure": true,
                 "server_name": "vpn.ex-vpn.my.id"
-            },
-            "transport": {
-                "headers": {
-                    "Host": "vpn.ex-vpn.my.id"
-                },
-                "path": "/20.17.104.31-443",
-                "type": "ws"
-            }
-        },
-        {
-            "type": "vless",
-            "tag": "4 🇲🇾 Evoxt Enterprise WS TLS [vpn]",
-            "server": "quiz.int.vidio.com",
-            "server_port": 443,
-            "uuid": "c25b0447-23e7-4e43-87a2-b4075d2190a3",
-            "network": "tcp",
-            "packet_encoding": "xudp",
-            "tls": {
-                "enabled": true,
-                "insecure": true,
-                "server_name": "vpn.ex-vpn.my.id"
-            },
-            "transport": {
-                "headers": {
-                    "Host": "vpn.ex-vpn.my.id"
-                },
-                "path": "/23.27.53.119-35209",
-                "type": "ws"
-            }
-        },
-        {
-            "type": "vless",
-            "tag": "10 🇲🇾 Shinjiru Technology Sdn Bhd WS NTLS [vpn]",
-            "server": "quiz.int.vidio.com",
-            "server_port": 80,
-            "uuid": "3f0ad725-5eb2-4ab3-aa97-d3a62eae9752",
-            "network": "tcp",
-            "packet_encoding": "xudp",
-            "tls": {
-                "insecure": true
-            },
-            "transport": {
-                "headers": {
-                    "Host": "vpn.ex-vpn.my.id"
-                },
-                "path": "/111.90.149.209-74",
-                "type": "ws"
-            }
-        },
-        {
-            "type": "vless",
-            "tag": "4 🇲🇾 Alibaba (US) Technology Co. WS NTLS [vpn]",
-            "server": "quiz.int.vidio.com",
-            "server_port": 80,
-            "uuid": "3f0ad725-5eb2-4ab3-aa97-d3a62eae9752",
-            "network": "tcp",
-            "packet_encoding": "xudp",
-            "tls": {
-                "insecure": true
             },
             "transport": {
                 "headers": {
@@ -103,10 +44,31 @@
         },
         {
             "type": "vless",
-            "tag": "6 🇲🇾 Terabix WS NTLS [vpn]",
+            "tag": "3 🇲🇾 Terabix WS TLS [vpn]",
+            "server": "quiz.int.vidio.com",
+            "server_port": 443,
+            "uuid": "8e7faa2f-6ba3-468c-8957-f034e6233b8a",
+            "network": "tcp",
+            "packet_encoding": "xudp",
+            "tls": {
+                "enabled": true,
+                "insecure": true,
+                "server_name": "vpn.ex-vpn.my.id"
+            },
+            "transport": {
+                "headers": {
+                    "Host": "vpn.ex-vpn.my.id"
+                },
+                "path": "/163.61.102.13-443",
+                "type": "ws"
+            }
+        },
+        {
+            "type": "vless",
+            "tag": "7 🇲🇾 Shinjiru Technology Sdn Bhd WS NTLS [vpn]",
             "server": "quiz.int.vidio.com",
             "server_port": 80,
-            "uuid": "3f0ad725-5eb2-4ab3-aa97-d3a62eae9752",
+            "uuid": "36997b8d-9b4c-4b9e-90b4-c0297790776b",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -116,7 +78,45 @@
                 "headers": {
                     "Host": "vpn.ex-vpn.my.id"
                 },
-                "path": "/163.61.102.13-443",
+                "path": "/111.90.149.209-12306",
+                "type": "ws"
+            }
+        },
+        {
+            "type": "vless",
+            "tag": "1 🇲🇾 Microsoft Corporation WS NTLS [vpn]",
+            "server": "quiz.int.vidio.com",
+            "server_port": 80,
+            "uuid": "36997b8d-9b4c-4b9e-90b4-c0297790776b",
+            "network": "tcp",
+            "packet_encoding": "xudp",
+            "tls": {
+                "insecure": true
+            },
+            "transport": {
+                "headers": {
+                    "Host": "vpn.ex-vpn.my.id"
+                },
+                "path": "/20.17.107.137-443",
+                "type": "ws"
+            }
+        },
+        {
+            "type": "vless",
+            "tag": "2 🇲🇾 Evoxt Enterprise WS NTLS [vpn]",
+            "server": "quiz.int.vidio.com",
+            "server_port": 80,
+            "uuid": "36997b8d-9b4c-4b9e-90b4-c0297790776b",
+            "network": "tcp",
+            "packet_encoding": "xudp",
+            "tls": {
+                "insecure": true
+            },
+            "transport": {
+                "headers": {
+                    "Host": "vpn.ex-vpn.my.id"
+                },
+                "path": "/155.254.60.225-443",
                 "type": "ws"
             }
         }
