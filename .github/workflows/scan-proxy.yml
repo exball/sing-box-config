@@ -24,6 +24,7 @@ jobs:
           cd proxy-scaner && bun run ./proxyip.ts
       - name: Commit and push scan results
         run: |
+          set -e
           git config --global user.name "Github Actions"
           git config --global user.email "actions@github.com"
           if [ -n "$(git status --porcelain)" ]; then
