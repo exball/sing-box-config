@@ -10,21 +10,21 @@ jobs:
       matrix:
         kv:
           - name: exball231
-            token: ${{ secrets.CF_API_TOKEN_EXBALL231 }}
-            kv_id: ${{ secrets.KV_ID_EXBALL231 }}
-            account_id: ${{ secrets.CF_ACCOUNT_ID_EXBALL231 }}
+            token: CF_API_TOKEN_EXBALL231
+            kv_id: KV_ID_EXBALL231
+            account_id: CF_ACCOUNT_ID_EXBALL231
           - name: exball649
-            token: ${{ secrets.CF_API_TOKEN_EXBALL649 }}
-            kv_id: ${{ secrets.KV_ID_EXBALL649 }}
-            account_id: ${{ secrets.CF_ACCOUNT_ID_EXBALL649 }}
+            token: CF_API_TOKEN_EXBALL649
+            kv_id: KV_ID_EXBALL649
+            account_id: CF_ACCOUNT_ID_EXBALL649
           - name: exball689
-            token: ${{ secrets.CF_API_TOKEN_EXBALL689 }}
-            kv_id: ${{ secrets.KV_ID_EXBALL689 }}
-            account_id: ${{ secrets.CF_ACCOUNT_ID_EXBALL689 }}
+            token: CF_API_TOKEN_EXBALL689
+            kv_id: KV_ID_EXBALL689
+            account_id: CF_ACCOUNT_ID_EXBALL689
           - name: ex_ball27389
-            token: ${{ secrets.CF_API_TOKEN_EX_BALL27389 }}
-            kv_id: ${{ secrets.KV_ID_EX_BALL27389 }}
-            account_id: ${{ secrets.CF_ACCOUNT_ID_EX_BALL27389 }}
+            token: CF_API_TOKEN_EX_BALL27389
+            kv_id: KV_ID_EX_BALL27389
+            account_id: CF_ACCOUNT_ID_EX_BALL27389
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -33,15 +33,15 @@ jobs:
           fetch-depth: 0
       - name: Upload kvProxyList.json to KV Storage
         run: |
-          curl -X PUT "https://api.cloudflare.com/client/v4/accounts/${{ matrix.kv.account_id }}/storage/kv/namespaces/${{ matrix.kv.kv_id }}/values/kvProxyList.json" \
-            -H "Authorization: Bearer ${{ matrix.kv.token }}" \
+          curl -X PUT "https://api.cloudflare.com/client/v4/accounts/${{ secrets[matrix.kv.account_id] }}/storage/kv/namespaces/${{ secrets[matrix.kv.kv_id] }}/values/kvProxyList.json" \
+            -H "Authorization: Bearer ${{ secrets[matrix.kv.token] }}" \
             --data-binary "@proxy-scaner/kvProxyList.json"
 
       - name: Upload all proxy_list files to KV Storage
         run: |
           for file in proxy-scaner/proxy_list/*.txt; do
             fname=$(basename "$file")
-            curl -X PUT "https://api.cloudflare.com/client/v4/accounts/${{ matrix.kv.account_id }}/storage/kv/namespaces/${{ matrix.kv.kv_id }}/values/$fname" \
-              -H "Authorization: Bearer ${{ matrix.kv.token }}" \
+            curl -X PUT "https://api.cloudflare.com/client/v4/accounts/${{ secrets[matrix.kv.account_id] }}/storage/kv/namespaces/${{ secrets[matrix.kv.kv_id] }}/values/$fname" \
+              -H "Authorization: Bearer ${{ secrets[matrix.kv.token] }}" \
               --data-binary "@$file"
           done
