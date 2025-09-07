@@ -19,6 +19,9 @@ jobs:
       - name: Install dependencies
         run: |
           cd proxy-scaner && bun install
+      - name: Ensure output directory exists
+        run: |
+          mkdir -p proxy-scaner/proxy_list
       - name: Run Proxy Scanner
         run: |
           cd proxy-scaner && bun run ./proxyip.ts
