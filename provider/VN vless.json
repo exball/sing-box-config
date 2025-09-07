@@ -2,10 +2,10 @@
     "outbounds": [
         {
             "type": "vless",
-            "tag": "9 🇻🇳 Kaopu Cloud HK Limited WS TLS [vpn]",
+            "tag": "5 🇻🇳 VNPT Corp WS TLS [vpn]",
             "server": "quiz.int.vidio.com",
             "server_port": 443,
-            "uuid": "c30339ae-5bf8-4b90-abc7-6fa8624f27f5",
+            "uuid": "2a2bd8da-a234-48ae-8842-948c376e0d3d",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -17,16 +17,37 @@
                 "headers": {
                     "Host": "vpn.ex-vpn.my.id"
                 },
-                "path": "/154.93.48.111-34237",
+                "path": "/103.197.184.193-37461",
                 "type": "ws"
             }
         },
         {
             "type": "vless",
-            "tag": "1 🇻🇳 Thien Quang Digital technology joint stock company WS TLS [vpn]",
+            "tag": "4 🇻🇳 Kaopu Cloud HK Limited WS TLS [vpn]",
             "server": "quiz.int.vidio.com",
             "server_port": 443,
-            "uuid": "c30339ae-5bf8-4b90-abc7-6fa8624f27f5",
+            "uuid": "2a2bd8da-a234-48ae-8842-948c376e0d3d",
+            "network": "tcp",
+            "packet_encoding": "xudp",
+            "tls": {
+                "enabled": true,
+                "insecure": true,
+                "server_name": "vpn.ex-vpn.my.id"
+            },
+            "transport": {
+                "headers": {
+                    "Host": "vpn.ex-vpn.my.id"
+                },
+                "path": "/38.54.14.61-33813",
+                "type": "ws"
+            }
+        },
+        {
+            "type": "vless",
+            "tag": "3 🇻🇳 Thien Quang Digital technology joint stock company WS TLS [vpn]",
+            "server": "quiz.int.vidio.com",
+            "server_port": 443,
+            "uuid": "2a2bd8da-a234-48ae-8842-948c376e0d3d",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -44,31 +65,10 @@
         },
         {
             "type": "vless",
-            "tag": "2 🇻🇳 TRUMVPS COMPANY LIMITED WS TLS [vpn]",
-            "server": "quiz.int.vidio.com",
-            "server_port": 443,
-            "uuid": "c30339ae-5bf8-4b90-abc7-6fa8624f27f5",
-            "network": "tcp",
-            "packet_encoding": "xudp",
-            "tls": {
-                "enabled": true,
-                "insecure": true,
-                "server_name": "vpn.ex-vpn.my.id"
-            },
-            "transport": {
-                "headers": {
-                    "Host": "vpn.ex-vpn.my.id"
-                },
-                "path": "/160.191.165.40-19957",
-                "type": "ws"
-            }
-        },
-        {
-            "type": "vless",
-            "tag": "1 🇻🇳 Kaopu Cloud HK Limited WS NTLS [vpn]",
+            "tag": "7 🇻🇳 Kaopu Cloud HK Limited WS NTLS [vpn]",
             "server": "quiz.int.vidio.com",
             "server_port": 80,
-            "uuid": "d34cf037-25a0-46e2-aa7a-0f4a44065bfb",
+            "uuid": "919f96bc-3855-42a7-8542-7169462d6561",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -78,16 +78,16 @@
                 "headers": {
                     "Host": "vpn.ex-vpn.my.id"
                 },
-                "path": "/154.93.48.111-34237",
+                "path": "/38.54.14.61-33813",
                 "type": "ws"
             }
         },
         {
             "type": "vless",
-            "tag": "5 🇻🇳 VNPT Corp WS NTLS [vpn]",
+            "tag": "3 🇻🇳 VNPT Corp WS NTLS [vpn]",
             "server": "quiz.int.vidio.com",
             "server_port": 80,
-            "uuid": "d34cf037-25a0-46e2-aa7a-0f4a44065bfb",
+            "uuid": "919f96bc-3855-42a7-8542-7169462d6561",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -97,16 +97,16 @@
                 "headers": {
                     "Host": "vpn.ex-vpn.my.id"
                 },
-                "path": "/103.197.184.193-37461",
+                "path": "/103.15.90.134-49678",
                 "type": "ws"
             }
         },
         {
             "type": "vless",
-            "tag": "2 🇻🇳 TRUMVPS COMPANY LIMITED WS NTLS [vpn]",
+            "tag": "2 🇻🇳 Thien Quang Digital technology joint stock company WS NTLS [vpn]",
             "server": "quiz.int.vidio.com",
             "server_port": 80,
-            "uuid": "d34cf037-25a0-46e2-aa7a-0f4a44065bfb",
+            "uuid": "919f96bc-3855-42a7-8542-7169462d6561",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -116,7 +116,7 @@
                 "headers": {
                     "Host": "vpn.ex-vpn.my.id"
                 },
-                "path": "/160.191.165.40-19957",
+                "path": "/160.250.64.161-12865",
                 "type": "ws"
             }
         }
