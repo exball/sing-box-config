@@ -2,10 +2,29 @@
     "outbounds": [
         {
             "type": "vless",
-            "tag": "12 🇲🇾 Evoxt Enterprise WS NTLS [vpn]",
+            "tag": "3 🇲🇾 Shinjiru Technology Sdn Bhd WS NTLS [vpn]",
             "server": "quiz.int.vidio.com",
             "server_port": 80,
-            "uuid": "3527ff2d-de8a-45d2-98a0-795a8d10bd00",
+            "uuid": "91cb4e20-087a-487b-a7e0-9c4d01eb4b6a",
+            "network": "tcp",
+            "packet_encoding": "xudp",
+            "tls": {
+                "insecure": true
+            },
+            "transport": {
+                "headers": {
+                    "Host": "vpn.ex-vpn.my.id"
+                },
+                "path": "/111.90.149.209-443",
+                "type": "ws"
+            }
+        },
+        {
+            "type": "vless",
+            "tag": "8 🇲🇾 Evoxt Enterprise WS NTLS [vpn]",
+            "server": "quiz.int.vidio.com",
+            "server_port": 80,
+            "uuid": "91cb4e20-087a-487b-a7e0-9c4d01eb4b6a",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -21,10 +40,10 @@
         },
         {
             "type": "vless",
-            "tag": "3 🇲🇾 Shinjiru Technology Sdn Bhd WS NTLS [vpn]",
+            "tag": "9 🇲🇾 Microsoft Corporation WS NTLS [vpn]",
             "server": "quiz.int.vidio.com",
             "server_port": 80,
-            "uuid": "3527ff2d-de8a-45d2-98a0-795a8d10bd00",
+            "uuid": "91cb4e20-087a-487b-a7e0-9c4d01eb4b6a",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -34,26 +53,7 @@
                 "headers": {
                     "Host": "vpn.ex-vpn.my.id"
                 },
-                "path": "/111.90.149.209-386",
-                "type": "ws"
-            }
-        },
-        {
-            "type": "vless",
-            "tag": "5 🇲🇾 Microsoft Corporation WS NTLS [vpn]",
-            "server": "quiz.int.vidio.com",
-            "server_port": 80,
-            "uuid": "3527ff2d-de8a-45d2-98a0-795a8d10bd00",
-            "network": "tcp",
-            "packet_encoding": "xudp",
-            "tls": {
-                "insecure": true
-            },
-            "transport": {
-                "headers": {
-                    "Host": "vpn.ex-vpn.my.id"
-                },
-                "path": "/20.17.107.137-443",
+                "path": "/20.17.104.31-443",
                 "type": "ws"
             }
         }

@@ -2,10 +2,10 @@
     "outbounds": [
         {
             "type": "vless",
-            "tag": "71 🇸🇬 DigitalOcean WS TLS [vpn]",
+            "tag": "73 🇸🇬 DigitalOcean WS TLS [vpn]",
             "server": "quiz.int.vidio.com",
             "server_port": 443,
-            "uuid": "bae75c61-a1a5-4fab-815d-47c6340277c2",
+            "uuid": "be4029e7-21ac-4b16-ae2c-25a34db32db0",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -17,16 +17,16 @@
                 "headers": {
                     "Host": "vpn.ex-vpn.my.id"
                 },
-                "path": "/178.128.30.71-386",
+                "path": "/68.183.227.236-74",
                 "type": "ws"
             }
         },
         {
             "type": "vless",
-            "tag": "78 🇸🇬 The Constant Company WS TLS [vpn]",
+            "tag": "88 🇸🇬 Oracle Corporation WS TLS [vpn]",
             "server": "quiz.int.vidio.com",
             "server_port": 443,
-            "uuid": "bae75c61-a1a5-4fab-815d-47c6340277c2",
+            "uuid": "be4029e7-21ac-4b16-ae2c-25a34db32db0",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -38,16 +38,16 @@
                 "headers": {
                     "Host": "vpn.ex-vpn.my.id"
                 },
-                "path": "/45.32.121.217-74",
+                "path": "/152.69.216.238-14339",
                 "type": "ws"
             }
         },
         {
             "type": "vless",
-            "tag": "10 🇸🇬 Alibaba (US) Technology Co. WS TLS [vpn]",
+            "tag": "29 🇸🇬 Alibaba (US) Technology Co. WS TLS [vpn]",
             "server": "quiz.int.vidio.com",
             "server_port": 443,
-            "uuid": "bae75c61-a1a5-4fab-815d-47c6340277c2",
+            "uuid": "be4029e7-21ac-4b16-ae2c-25a34db32db0",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -59,16 +59,16 @@
                 "headers": {
                     "Host": "vpn.ex-vpn.my.id"
                 },
-                "path": "/8.219.56.26-40011",
+                "path": "/8.219.58.164-57373",
                 "type": "ws"
             }
         },
         {
             "type": "vless",
-            "tag": "69 🇸🇬 Akamai Connected Cloud WS TLS [vpn]",
+            "tag": "50 🇸🇬 Akamai Connected Cloud WS TLS [vpn]",
             "server": "quiz.int.vidio.com",
             "server_port": 443,
-            "uuid": "bae75c61-a1a5-4fab-815d-47c6340277c2",
+            "uuid": "be4029e7-21ac-4b16-ae2c-25a34db32db0",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -80,7 +80,83 @@
                 "headers": {
                     "Host": "vpn.ex-vpn.my.id"
                 },
-                "path": "/139.177.185.196-74",
+                "path": "/172.104.161.151-443",
+                "type": "ws"
+            }
+        },
+        {
+            "type": "vless",
+            "tag": "56 🇸🇬 DigitalOcean WS NTLS [vpn]",
+            "server": "quiz.int.vidio.com",
+            "server_port": 80,
+            "uuid": "6c329ca5-2152-4989-b0cd-1a3f70f9c7d6",
+            "network": "tcp",
+            "packet_encoding": "xudp",
+            "tls": {
+                "insecure": true
+            },
+            "transport": {
+                "headers": {
+                    "Host": "vpn.ex-vpn.my.id"
+                },
+                "path": "/134.209.96.76-443",
+                "type": "ws"
+            }
+        },
+        {
+            "type": "vless",
+            "tag": "61 🇸🇬 Oracle Corporation WS NTLS [vpn]",
+            "server": "quiz.int.vidio.com",
+            "server_port": 80,
+            "uuid": "6c329ca5-2152-4989-b0cd-1a3f70f9c7d6",
+            "network": "tcp",
+            "packet_encoding": "xudp",
+            "tls": {
+                "insecure": true
+            },
+            "transport": {
+                "headers": {
+                    "Host": "vpn.ex-vpn.my.id"
+                },
+                "path": "/138.2.89.64-32962",
+                "type": "ws"
+            }
+        },
+        {
+            "type": "vless",
+            "tag": "19 🇸🇬 The Constant Company WS NTLS [vpn]",
+            "server": "quiz.int.vidio.com",
+            "server_port": 80,
+            "uuid": "6c329ca5-2152-4989-b0cd-1a3f70f9c7d6",
+            "network": "tcp",
+            "packet_encoding": "xudp",
+            "tls": {
+                "insecure": true
+            },
+            "transport": {
+                "headers": {
+                    "Host": "vpn.ex-vpn.my.id"
+                },
+                "path": "/45.32.116.252-443",
+                "type": "ws"
+            }
+        },
+        {
+            "type": "vless",
+            "tag": "45 🇸🇬 Alibaba (US) Technology Co. WS NTLS [vpn]",
+            "server": "quiz.int.vidio.com",
+            "server_port": 80,
+            "uuid": "6c329ca5-2152-4989-b0cd-1a3f70f9c7d6",
+            "network": "tcp",
+            "packet_encoding": "xudp",
+            "tls": {
+                "insecure": true
+            },
+            "transport": {
+                "headers": {
+                    "Host": "vpn.ex-vpn.my.id"
+                },
+                "path": "/8.219.59.132-48130",
                 "type": "ws"
             }
         }
