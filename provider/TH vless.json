@@ -2,10 +2,73 @@
     "outbounds": [
         {
             "type": "vless",
+            "tag": "9 🇹🇭 Siamdata Communication Co. WS TLS [proxy]",
+            "server": "quiz.int.vidio.com",
+            "server_port": 443,
+            "uuid": "ad7e0430-170b-4052-bc23-d6a2a697d741",
+            "network": "tcp",
+            "packet_encoding": "xudp",
+            "tls": {
+                "enabled": true,
+                "insecure": true,
+                "server_name": "proxy.xtunnel.my.id"
+            },
+            "transport": {
+                "headers": {
+                    "Host": "proxy.xtunnel.my.id"
+                },
+                "path": "/45.154.26.81-8443",
+                "type": "ws"
+            }
+        },
+        {
+            "type": "vless",
+            "tag": "12 🇹🇭 TRUE INTERNET Co. WS TLS [proxy]",
+            "server": "quiz.int.vidio.com",
+            "server_port": 443,
+            "uuid": "ad7e0430-170b-4052-bc23-d6a2a697d741",
+            "network": "tcp",
+            "packet_encoding": "xudp",
+            "tls": {
+                "enabled": true,
+                "insecure": true,
+                "server_name": "proxy.xtunnel.my.id"
+            },
+            "transport": {
+                "headers": {
+                    "Host": "proxy.xtunnel.my.id"
+                },
+                "path": "/171.103.232.58-20475",
+                "type": "ws"
+            }
+        },
+        {
+            "type": "vless",
+            "tag": "4 🇹🇭 Siamdata Communication Co. WS TLS [proxy]",
+            "server": "quiz.int.vidio.com",
+            "server_port": 443,
+            "uuid": "ad7e0430-170b-4052-bc23-d6a2a697d741",
+            "network": "tcp",
+            "packet_encoding": "xudp",
+            "tls": {
+                "enabled": true,
+                "insecure": true,
+                "server_name": "proxy.xtunnel.my.id"
+            },
+            "transport": {
+                "headers": {
+                    "Host": "proxy.xtunnel.my.id"
+                },
+                "path": "/43.229.149.251-8443",
+                "type": "ws"
+            }
+        },
+        {
+            "type": "vless",
             "tag": "9 🇹🇭 Siamdata Communication Co. WS NTLS [proxy]",
             "server": "quiz.int.vidio.com",
             "server_port": 80,
-            "uuid": "2d478ba1-c9c4-40be-943e-70dc1e535f7b",
+            "uuid": "f86d3210-4a5a-4d21-9c71-77f88be9a530",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -15,16 +78,16 @@
                 "headers": {
                     "Host": "proxy.xtunnel.my.id"
                 },
-                "path": "/45.144.167.223-27125",
+                "path": "/45.154.26.81-2053",
                 "type": "ws"
             }
         },
         {
             "type": "vless",
-            "tag": "12 🇹🇭 TRUE INTERNET Co. WS NTLS [proxy]",
+            "tag": "3 🇹🇭 TRUE INTERNET Co. WS NTLS [proxy]",
             "server": "quiz.int.vidio.com",
             "server_port": 80,
-            "uuid": "2d478ba1-c9c4-40be-943e-70dc1e535f7b",
+            "uuid": "f86d3210-4a5a-4d21-9c71-77f88be9a530",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -40,10 +103,10 @@
         },
         {
             "type": "vless",
-            "tag": "13 🇹🇭 Siamdata Communication Co. WS NTLS [proxy]",
+            "tag": "4 🇹🇭 Siamdata Communication Co. WS NTLS [proxy]",
             "server": "quiz.int.vidio.com",
             "server_port": 80,
-            "uuid": "2d478ba1-c9c4-40be-943e-70dc1e535f7b",
+            "uuid": "f86d3210-4a5a-4d21-9c71-77f88be9a530",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -53,7 +116,7 @@
                 "headers": {
                     "Host": "proxy.xtunnel.my.id"
                 },
-                "path": "/45.144.167.46-19816",
+                "path": "/212.80.215.251-10409",
                 "type": "ws"
             }
         }
