@@ -859,7 +859,8 @@ async function writeProxyHistory(history: ProxyHistory): Promise<void> {
   const proxyList = await readProxyList();
   const proxyChecked: string[] = [];
   const uniqueRawProxies: string[] = [];
-  const activeProxyList: string[] = [];
+  // Output per negara
+  const activeProxyByCountry: { [country: string]: string[] } = {};
   const kvPair: any = {};
 
   // Tampilkan informasi domain resolver yang akan digunakan
@@ -947,7 +948,8 @@ async function writeProxyHistory(history: ProxyHistory): Promise<void> {
           
           // Format output - gunakan as_name dan country (format baru)
           const finalResult = `${proxyIP},${proxyPort},${ipData.country},${ipData.as_name}`;
-          activeProxyList.push(finalResult);
+          if (!activeProxyByCountry[ipData.country]) activeProxyByCountry[ipData.country] = [];
+          activeProxyByCountry[ipData.country].push(finalResult);
 
           if (kvPair[ipData.country] == undefined) kvPair[ipData.country] = [];
           if (kvPair[ipData.country].length < 100) {
@@ -989,14 +991,25 @@ async function writeProxyHistory(history: ProxyHistory): Promise<void> {
   await updateProxyListWithAPIResults();
 
   uniqueRawProxies.sort(sortByCountry);
-  activeProxyList.sort(sortByCountry);
-
   // Save proxy history
   await writeProxyHistory(proxyHistory);
 
   await Bun.write(KV_PAIR_PROXY_FILE, JSON.stringify(kvPair, null, "  "));
   await Bun.write(RAW_PROXY_LIST_FILE, uniqueRawProxies.join("\n"));
-  await Bun.write(PROXY_LIST_FILE, activeProxyList.join("\n"));
+
+  // Simpan proxy aktif ke file per negara di direktori proxy_list
+  const fs = Bun;
+  const proxyListDir = "./proxy_list";
+  try {
+    await fs.mkdir(proxyListDir);
+  } catch (e) {}
+  let totalSaved = 0;
+  for (const country of Object.keys(activeProxyByCountry)) {
+    const filePath = `${proxyListDir}/proxyList_${country}.txt`;
+    await fs.write(filePath, activeProxyByCountry[country].join("\n"));
+    totalSaved += activeProxyByCountry[country].length;
+    console.log(`💾 Proxy aktif negara ${country}: ${activeProxyByCountry[country].length} disimpan ke ${filePath}`);
+  }
 
   // Show final statistics
   showFinalStatistics();
@@ -1004,8 +1017,8 @@ async function writeProxyHistory(history: ProxyHistory): Promise<void> {
   console.log(`\n⏱️ Waktu proses: ${(Bun.nanoseconds() / 1000000000).toFixed(2)} detik`);
   console.log(`📊 Total pemeriksaan yang telah dilakukan: ${proxyHistory.totalChecksRun}`);
   console.log(`📁 Riwayat proxy disimpan ke: ${ACTIVE_PROXY_HISTORY_FILE}`);
-  console.log(`💾 Proxy saved: ${proxySaved}`);
-  
+  console.log(`💾 Proxy saved: ${totalSaved}`);
+
   process.exit(0);
 })();
 
