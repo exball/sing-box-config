@@ -46,6 +46,10 @@ jobs:
               --data-binary "@$file"
           done
 
+  trigger-extract-proxy:
+    runs-on: ubuntu-latest
+    needs: upload-kv-storage
+    steps:
       - name: Trigger extract-proxy workflow
         run: |
           echo "Triggering extract-proxy.yml workflow via GitHub API..."
