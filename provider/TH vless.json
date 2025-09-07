@@ -2,10 +2,10 @@
     "outbounds": [
         {
             "type": "vless",
-            "tag": "12 🇹🇭 Siamdata Communication Co. WS TLS [vpn]",
+            "tag": "8 🇹🇭 Siamdata Communication Co. WS TLS [vpn]",
             "server": "quiz.int.vidio.com",
             "server_port": 443,
-            "uuid": "e1dd7de8-1e0b-4b25-84e3-f412be5ba21b",
+            "uuid": "340d69c5-38ff-4a33-b66a-1d0999a93370",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -17,22 +17,81 @@
                 "headers": {
                     "Host": "vpn.ex-vpn.my.id"
                 },
-                "path": "/212.80.215.251-28294",
+                "path": "/45.91.134.225-5060",
                 "type": "ws"
             }
         },
         {
             "type": "vless",
-            "tag": "3 🇹🇭 TRUE INTERNET Co. WS TLS [vpn]",
+            "tag": "14 🇹🇭 TRUE INTERNET Co. WS TLS [vpn]",
             "server": "quiz.int.vidio.com",
             "server_port": 443,
-            "uuid": "e1dd7de8-1e0b-4b25-84e3-f412be5ba21b",
+            "uuid": "340d69c5-38ff-4a33-b66a-1d0999a93370",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
                 "enabled": true,
                 "insecure": true,
                 "server_name": "vpn.ex-vpn.my.id"
+            },
+            "transport": {
+                "headers": {
+                    "Host": "vpn.ex-vpn.my.id"
+                },
+                "path": "/171.103.164.62-30921",
+                "type": "ws"
+            }
+        },
+        {
+            "type": "vless",
+            "tag": "11 🇹🇭 Siamdata Communication Co. WS TLS [vpn]",
+            "server": "quiz.int.vidio.com",
+            "server_port": 443,
+            "uuid": "340d69c5-38ff-4a33-b66a-1d0999a93370",
+            "network": "tcp",
+            "packet_encoding": "xudp",
+            "tls": {
+                "enabled": true,
+                "insecure": true,
+                "server_name": "vpn.ex-vpn.my.id"
+            },
+            "transport": {
+                "headers": {
+                    "Host": "vpn.ex-vpn.my.id"
+                },
+                "path": "/212.80.213.140-31557",
+                "type": "ws"
+            }
+        },
+        {
+            "type": "vless",
+            "tag": "5 🇹🇭 Siamdata Communication Co. WS NTLS [vpn]",
+            "server": "quiz.int.vidio.com",
+            "server_port": 80,
+            "uuid": "ab8af802-1413-4ed1-a05b-0c00e23f1acc",
+            "network": "tcp",
+            "packet_encoding": "xudp",
+            "tls": {
+                "insecure": true
+            },
+            "transport": {
+                "headers": {
+                    "Host": "vpn.ex-vpn.my.id"
+                },
+                "path": "/45.144.167.223-27125",
+                "type": "ws"
+            }
+        },
+        {
+            "type": "vless",
+            "tag": "14 🇹🇭 TRUE INTERNET Co. WS NTLS [vpn]",
+            "server": "quiz.int.vidio.com",
+            "server_port": 80,
+            "uuid": "ab8af802-1413-4ed1-a05b-0c00e23f1acc",
+            "network": "tcp",
+            "packet_encoding": "xudp",
+            "tls": {
+                "insecure": true
             },
             "transport": {
                 "headers": {
@@ -44,31 +103,10 @@
         },
         {
             "type": "vless",
-            "tag": "4 🇹🇭 Siamdata Communication Co. WS TLS [vpn]",
-            "server": "quiz.int.vidio.com",
-            "server_port": 443,
-            "uuid": "e1dd7de8-1e0b-4b25-84e3-f412be5ba21b",
-            "network": "tcp",
-            "packet_encoding": "xudp",
-            "tls": {
-                "enabled": true,
-                "insecure": true,
-                "server_name": "vpn.ex-vpn.my.id"
-            },
-            "transport": {
-                "headers": {
-                    "Host": "vpn.ex-vpn.my.id"
-                },
-                "path": "/45.154.26.81-2053",
-                "type": "ws"
-            }
-        },
-        {
-            "type": "vless",
-            "tag": "14 🇹🇭 Siamdata Communication Co. WS NTLS [vpn]",
+            "tag": "9 🇹🇭 Siamdata Communication Co. WS NTLS [vpn]",
             "server": "quiz.int.vidio.com",
             "server_port": 80,
-            "uuid": "7da74227-a35f-4725-87a4-32b42a420e29",
+            "uuid": "ab8af802-1413-4ed1-a05b-0c00e23f1acc",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -78,45 +116,7 @@
                 "headers": {
                     "Host": "vpn.ex-vpn.my.id"
                 },
-                "path": "/45.136.253.18-33273",
-                "type": "ws"
-            }
-        },
-        {
-            "type": "vless",
-            "tag": "4 🇹🇭 TRUE INTERNET Co. WS NTLS [vpn]",
-            "server": "quiz.int.vidio.com",
-            "server_port": 80,
-            "uuid": "7da74227-a35f-4725-87a4-32b42a420e29",
-            "network": "tcp",
-            "packet_encoding": "xudp",
-            "tls": {
-                "insecure": true
-            },
-            "transport": {
-                "headers": {
-                    "Host": "vpn.ex-vpn.my.id"
-                },
-                "path": "/171.103.232.58-20475",
-                "type": "ws"
-            }
-        },
-        {
-            "type": "vless",
-            "tag": "11 🇹🇭 Siamdata Communication Co. WS NTLS [vpn]",
-            "server": "quiz.int.vidio.com",
-            "server_port": 80,
-            "uuid": "7da74227-a35f-4725-87a4-32b42a420e29",
-            "network": "tcp",
-            "packet_encoding": "xudp",
-            "tls": {
-                "insecure": true
-            },
-            "transport": {
-                "headers": {
-                    "Host": "vpn.ex-vpn.my.id"
-                },
-                "path": "/103.117.151.111-2053",
+                "path": "/43.229.149.251-8443",
                 "type": "ws"
             }
         }
