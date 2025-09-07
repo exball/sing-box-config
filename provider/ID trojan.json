@@ -2,10 +2,10 @@
     "outbounds": [
         {
             "type": "trojan",
-            "tag": "30 🇮🇩 Akamai Connected Cloud WS TLS [vpn]",
+            "tag": "36 🇮🇩 Akamai Connected Cloud WS TLS [vpn]",
             "server": "quiz.int.vidio.com",
             "server_port": 443,
-            "password": "74b1af3e-94a2-47d9-9283-62bd0661a948",
+            "password": "da6c6c9b-c4f0-4d5b-98e8-e5443cb02df0",
             "network": "tcp",
             "tls": {
                 "enabled": true,
@@ -14,7 +14,7 @@
             },
             "transport": {
                 "type": "ws",
-                "path": "/172.232.238.56-32225",
+                "path": "/172.232.234.166-20205",
                 "headers": {
                     "Host": "vpn.ex-vpn.my.id"
                 }
@@ -25,10 +25,10 @@
         },
         {
             "type": "trojan",
-            "tag": "9 🇮🇩 CV. Rumahweb Indonesia WS TLS [vpn]",
+            "tag": "20 🇮🇩 CV. Rumahweb Indonesia WS TLS [vpn]",
             "server": "quiz.int.vidio.com",
             "server_port": 443,
-            "password": "74b1af3e-94a2-47d9-9283-62bd0661a948",
+            "password": "da6c6c9b-c4f0-4d5b-98e8-e5443cb02df0",
             "network": "tcp",
             "tls": {
                 "enabled": true,
@@ -37,7 +37,7 @@
             },
             "transport": {
                 "type": "ws",
-                "path": "/203.194.112.119-2053",
+                "path": "/203.194.112.119-8443",
                 "headers": {
                     "Host": "vpn.ex-vpn.my.id"
                 }
@@ -48,10 +48,10 @@
         },
         {
             "type": "trojan",
-            "tag": "1 🇮🇩 PT MITRA VISIONER PRATAMA WS TLS [vpn]",
+            "tag": "1 🇮🇩 Kaopu Cloud HK Limited WS TLS [vpn]",
             "server": "quiz.int.vidio.com",
             "server_port": 443,
-            "password": "74b1af3e-94a2-47d9-9283-62bd0661a948",
+            "password": "da6c6c9b-c4f0-4d5b-98e8-e5443cb02df0",
             "network": "tcp",
             "tls": {
                 "enabled": true,
@@ -60,7 +60,7 @@
             },
             "transport": {
                 "type": "ws",
-                "path": "/206.84.101.83-8443",
+                "path": "/156.244.1.250-8443",
                 "headers": {
                     "Host": "vpn.ex-vpn.my.id"
                 }
@@ -71,33 +71,10 @@
         },
         {
             "type": "trojan",
-            "tag": "11 🇮🇩 PT Telekomunikasi Indonesia WS TLS [vpn]",
+            "tag": "12 🇮🇩 Amazon.com WS TLS [vpn]",
             "server": "quiz.int.vidio.com",
             "server_port": 443,
-            "password": "74b1af3e-94a2-47d9-9283-62bd0661a948",
-            "network": "tcp",
-            "tls": {
-                "enabled": true,
-                "insecure": true,
-                "server_name": "vpn.ex-vpn.my.id"
-            },
-            "transport": {
-                "type": "ws",
-                "path": "/36.95.152.58-12137",
-                "headers": {
-                    "Host": "vpn.ex-vpn.my.id"
-                }
-            },
-            "multiplex": {
-                "enabled": false
-            }
-        },
-        {
-            "type": "trojan",
-            "tag": "16 🇮🇩 Amazon.com WS TLS [vpn]",
-            "server": "quiz.int.vidio.com",
-            "server_port": 443,
-            "password": "74b1af3e-94a2-47d9-9283-62bd0661a948",
+            "password": "da6c6c9b-c4f0-4d5b-98e8-e5443cb02df0",
             "network": "tcp",
             "tls": {
                 "enabled": true,
@@ -117,18 +94,19 @@
         },
         {
             "type": "trojan",
-            "tag": "23 🇮🇩 Akamai Connected Cloud WS NTLS [vpn]",
+            "tag": "7 🇮🇩 PT MITRA VISIONER PRATAMA WS TLS [vpn]",
             "server": "quiz.int.vidio.com",
-            "server_port": 80,
-            "password": "5ca2289c-bb9f-4dc0-b96c-86e7e26bd93c",
+            "server_port": 443,
+            "password": "da6c6c9b-c4f0-4d5b-98e8-e5443cb02df0",
             "network": "tcp",
             "tls": {
+                "enabled": true,
                 "insecure": true,
                 "server_name": "vpn.ex-vpn.my.id"
             },
             "transport": {
                 "type": "ws",
-                "path": "/172.232.238.56-12306",
+                "path": "/206.84.101.83-8443",
                 "headers": {
                     "Host": "vpn.ex-vpn.my.id"
                 }
@@ -139,10 +117,54 @@
         },
         {
             "type": "trojan",
-            "tag": "7 🇮🇩 Amazon.com WS NTLS [vpn]",
+            "tag": "23 🇮🇩 Akamai Connected Cloud WS NTLS [vpn]",
             "server": "quiz.int.vidio.com",
             "server_port": 80,
-            "password": "5ca2289c-bb9f-4dc0-b96c-86e7e26bd93c",
+            "password": "7ad6a7ac-1bad-4f60-a109-c3f2a5c80a1b",
+            "network": "tcp",
+            "tls": {
+                "insecure": true,
+                "server_name": "vpn.ex-vpn.my.id"
+            },
+            "transport": {
+                "type": "ws",
+                "path": "/172.232.234.20-32225",
+                "headers": {
+                    "Host": "vpn.ex-vpn.my.id"
+                }
+            },
+            "multiplex": {
+                "enabled": false
+            }
+        },
+        {
+            "type": "trojan",
+            "tag": "13 🇮🇩 CV. Rumahweb Indonesia WS NTLS [vpn]",
+            "server": "quiz.int.vidio.com",
+            "server_port": 80,
+            "password": "7ad6a7ac-1bad-4f60-a109-c3f2a5c80a1b",
+            "network": "tcp",
+            "tls": {
+                "insecure": true,
+                "server_name": "vpn.ex-vpn.my.id"
+            },
+            "transport": {
+                "type": "ws",
+                "path": "/203.194.112.119-8443",
+                "headers": {
+                    "Host": "vpn.ex-vpn.my.id"
+                }
+            },
+            "multiplex": {
+                "enabled": false
+            }
+        },
+        {
+            "type": "trojan",
+            "tag": "19 🇮🇩 Amazon.com WS NTLS [vpn]",
+            "server": "quiz.int.vidio.com",
+            "server_port": 80,
+            "password": "7ad6a7ac-1bad-4f60-a109-c3f2a5c80a1b",
             "network": "tcp",
             "tls": {
                 "insecure": true,
@@ -161,10 +183,10 @@
         },
         {
             "type": "trojan",
-            "tag": "20 🇮🇩 CV. Rumahweb Indonesia WS NTLS [vpn]",
+            "tag": "2 🇮🇩 PT Telekomunikasi Indonesia WS NTLS [vpn]",
             "server": "quiz.int.vidio.com",
             "server_port": 80,
-            "password": "5ca2289c-bb9f-4dc0-b96c-86e7e26bd93c",
+            "password": "7ad6a7ac-1bad-4f60-a109-c3f2a5c80a1b",
             "network": "tcp",
             "tls": {
                 "insecure": true,
@@ -172,7 +194,7 @@
             },
             "transport": {
                 "type": "ws",
-                "path": "/203.194.112.119-2053",
+                "path": "/36.95.152.58-12137",
                 "headers": {
                     "Host": "vpn.ex-vpn.my.id"
                 }
@@ -183,10 +205,10 @@
         },
         {
             "type": "trojan",
-            "tag": "1 🇮🇩 Kaopu Cloud HK Limited WS NTLS [vpn]",
+            "tag": "5 🇮🇩 PT MITRA VISIONER PRATAMA WS NTLS [vpn]",
             "server": "quiz.int.vidio.com",
             "server_port": 80,
-            "password": "5ca2289c-bb9f-4dc0-b96c-86e7e26bd93c",
+            "password": "7ad6a7ac-1bad-4f60-a109-c3f2a5c80a1b",
             "network": "tcp",
             "tls": {
                 "insecure": true,
@@ -194,29 +216,7 @@
             },
             "transport": {
                 "type": "ws",
-                "path": "/156.244.1.250-8443",
-                "headers": {
-                    "Host": "vpn.ex-vpn.my.id"
-                }
-            },
-            "multiplex": {
-                "enabled": false
-            }
-        },
-        {
-            "type": "trojan",
-            "tag": "5 🇮🇩 Alibaba (US) Technology Co. WS NTLS [vpn]",
-            "server": "quiz.int.vidio.com",
-            "server_port": 80,
-            "password": "5ca2289c-bb9f-4dc0-b96c-86e7e26bd93c",
-            "network": "tcp",
-            "tls": {
-                "insecure": true,
-                "server_name": "vpn.ex-vpn.my.id"
-            },
-            "transport": {
-                "type": "ws",
-                "path": "/149.129.250.8-443",
+                "path": "/206.84.101.83-8443",
                 "headers": {
                     "Host": "vpn.ex-vpn.my.id"
                 }
