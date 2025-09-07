@@ -1,18 +1,9 @@
-name: Extract Proxy Only
+name: Extract Proxy
 
 on:
-  workflow_dispatch:  # Memungkinkan menjalankan workflow secara manual dari GitHub UI
-    inputs:
-      config_file:
-        description: 'Config file to use (default: config.ini)'
-        required: false
-        default: 'config.ini'
-        type: string
-      output_file:
-        description: 'Output file to use (default: sing_outbound.ini)'
-        required: false
-        default: 'sing_outbound.ini'
-        type: string
+  push:
+    branches:
+      - main
 
 
 permissions:
@@ -50,8 +41,8 @@ jobs:
           ls -la extract-outbound/extract.py || echo "❌ extract.py not found"
           
           echo "📋 Checking config files:"
-          ls -la extract-outbound/${{ github.event.inputs.config_file || 'config.ini' }} || echo "❌ Config file not found"
-          ls -la extract-outbound/${{ github.event.inputs.output_file || 'sing_outbound.ini' }} || echo "⚠️ Output file not found (will be created)"
+          ls -la extract-outbound/config.ini || echo "❌ Config file not found"
+          ls -la extract-outbound/sing_outbound.ini || echo "⚠️ Output file not found (will be created)"
           
           echo "📋 Checking provider directory:"
           ls -la provider/ || echo "⚠️ Provider directory not found (will be created)"
@@ -87,11 +78,11 @@ jobs:
         run: |
           echo "🚀 Starting proxy extraction..."
           echo "📁 Working directory: $(pwd)"
-          echo "📋 Config file: ${{ github.event.inputs.config_file || 'config.ini' }}"
-          echo "📋 Output file: ${{ github.event.inputs.output_file || 'sing_outbound.ini' }}"
+          echo "📋 Config file: config.ini"
+          echo "📋 Output file: sing_outbound.ini"
           
           cd extract-outbound
-          python extract.py -o "${{ github.event.inputs.output_file || 'sing_outbound.ini' }}" -f "${{ github.event.inputs.config_file || 'config.ini' }}"
+          python extract.py -o "sing_outbound.ini" -f "config.ini"
           cd ..
           
           echo "✅ Proxy extraction completed!"
@@ -102,7 +93,7 @@ jobs:
           echo "🔍 Checking extraction results..."
           
           # Read format from config.ini to determine what files to check
-          FORMAT=$(grep "^Format=" extract-outbound/${{ github.event.inputs.config_file || 'config.ini' }} | cut -d'=' -f2 | tr -d ' ' | tr -d '\r')
+          FORMAT=$(grep "^Format=" extract-outbound/config.ini | cut -d'=' -f2 | tr -d ' ' | tr -d '\r')
           echo "📋 Detected format: '$FORMAT'"
           
           # Check files based on format
@@ -174,8 +165,8 @@ jobs:
         run: |
           echo "🎉 Workflow completed successfully!"
           echo "📋 Configuration used:"
-          echo "  - Config file: ${{ github.event.inputs.config_file || 'config.ini' }}"
-          echo "  - Output file: ${{ github.event.inputs.output_file || 'sing_outbound.ini' }}"
+          echo "  - Config file: config.ini"
+          echo "  - Output file: sing_outbound.ini"
           echo "  - Format detected: ${{ steps.verify_results.outputs.format }}"
           echo "  - Files created: ${{ steps.verify_results.outputs.file_count }}"
 
