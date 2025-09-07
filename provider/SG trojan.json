@@ -2,10 +2,10 @@
     "outbounds": [
         {
             "type": "trojan",
-            "tag": "100 🇸🇬 DigitalOcean WS TLS [vpn]",
+            "tag": "71 🇸🇬 DigitalOcean WS TLS [vpn]",
             "server": "quiz.int.vidio.com",
             "server_port": 443,
-            "password": "e37bc71d-2fc3-40b8-9fbe-c6fc7098fc98",
+            "password": "eb2beb73-8116-4e95-8400-0747d10e49f3",
             "network": "tcp",
             "tls": {
                 "enabled": true,
@@ -14,7 +14,7 @@
             },
             "transport": {
                 "type": "ws",
-                "path": "/178.128.30.71-443",
+                "path": "/68.183.227.45-74",
                 "headers": {
                     "Host": "vpn.ex-vpn.my.id"
                 }
@@ -25,10 +25,10 @@
         },
         {
             "type": "trojan",
-            "tag": "23 🇸🇬 Oracle Corporation WS TLS [vpn]",
+            "tag": "79 🇸🇬 Oracle Corporation WS TLS [vpn]",
             "server": "quiz.int.vidio.com",
             "server_port": 443,
-            "password": "e37bc71d-2fc3-40b8-9fbe-c6fc7098fc98",
+            "password": "eb2beb73-8116-4e95-8400-0747d10e49f3",
             "network": "tcp",
             "tls": {
                 "enabled": true,
@@ -37,7 +37,7 @@
             },
             "transport": {
                 "type": "ws",
-                "path": "/146.235.19.79-28983",
+                "path": "/129.150.36.188-53435",
                 "headers": {
                     "Host": "vpn.ex-vpn.my.id"
                 }
@@ -48,10 +48,10 @@
         },
         {
             "type": "trojan",
-            "tag": "33 🇸🇬 The Constant Company WS TLS [vpn]",
+            "tag": "87 🇸🇬 The Constant Company WS TLS [vpn]",
             "server": "quiz.int.vidio.com",
             "server_port": 443,
-            "password": "e37bc71d-2fc3-40b8-9fbe-c6fc7098fc98",
+            "password": "eb2beb73-8116-4e95-8400-0747d10e49f3",
             "network": "tcp",
             "tls": {
                 "enabled": true,
@@ -60,7 +60,7 @@
             },
             "transport": {
                 "type": "ws",
-                "path": "/45.77.47.155-20205",
+                "path": "/45.76.178.150-443",
                 "headers": {
                     "Host": "vpn.ex-vpn.my.id"
                 }
@@ -71,107 +71,107 @@
         },
         {
             "type": "trojan",
-            "tag": "19 🇸🇬 Akamai Connected Cloud WS TLS [vpn]",
+            "tag": "54 🇸🇬 Tencent Building WS TLS [vpn]",
             "server": "quiz.int.vidio.com",
             "server_port": 443,
-            "password": "e37bc71d-2fc3-40b8-9fbe-c6fc7098fc98",
+            "password": "eb2beb73-8116-4e95-8400-0747d10e49f3",
             "network": "tcp",
             "tls": {
                 "enabled": true,
+                "insecure": true,
+                "server_name": "vpn.ex-vpn.my.id"
+            },
+            "transport": {
+                "type": "ws",
+                "path": "/43.134.8.58-28443",
+                "headers": {
+                    "Host": "vpn.ex-vpn.my.id"
+                }
+            },
+            "multiplex": {
+                "enabled": false
+            }
+        },
+        {
+            "type": "trojan",
+            "tag": "50 🇸🇬 DigitalOcean WS NTLS [vpn]",
+            "server": "quiz.int.vidio.com",
+            "server_port": 80,
+            "password": "229b45af-13dd-4101-86ce-5fe3e88f2963",
+            "network": "tcp",
+            "tls": {
+                "insecure": true,
+                "server_name": "vpn.ex-vpn.my.id"
+            },
+            "transport": {
+                "type": "ws",
+                "path": "/159.89.208.94-443",
+                "headers": {
+                    "Host": "vpn.ex-vpn.my.id"
+                }
+            },
+            "multiplex": {
+                "enabled": false
+            }
+        },
+        {
+            "type": "trojan",
+            "tag": "33 🇸🇬 Oracle Corporation WS NTLS [vpn]",
+            "server": "quiz.int.vidio.com",
+            "server_port": 80,
+            "password": "229b45af-13dd-4101-86ce-5fe3e88f2963",
+            "network": "tcp",
+            "tls": {
+                "insecure": true,
+                "server_name": "vpn.ex-vpn.my.id"
+            },
+            "transport": {
+                "type": "ws",
+                "path": "/213.35.108.135-12596",
+                "headers": {
+                    "Host": "vpn.ex-vpn.my.id"
+                }
+            },
+            "multiplex": {
+                "enabled": false
+            }
+        },
+        {
+            "type": "trojan",
+            "tag": "6 🇸🇬 The Constant Company WS NTLS [vpn]",
+            "server": "quiz.int.vidio.com",
+            "server_port": 80,
+            "password": "229b45af-13dd-4101-86ce-5fe3e88f2963",
+            "network": "tcp",
+            "tls": {
+                "insecure": true,
+                "server_name": "vpn.ex-vpn.my.id"
+            },
+            "transport": {
+                "type": "ws",
+                "path": "/45.76.188.229-443",
+                "headers": {
+                    "Host": "vpn.ex-vpn.my.id"
+                }
+            },
+            "multiplex": {
+                "enabled": false
+            }
+        },
+        {
+            "type": "trojan",
+            "tag": "85 🇸🇬 Akamai Connected Cloud WS NTLS [vpn]",
+            "server": "quiz.int.vidio.com",
+            "server_port": 80,
+            "password": "229b45af-13dd-4101-86ce-5fe3e88f2963",
+            "network": "tcp",
+            "tls": {
                 "insecure": true,
                 "server_name": "vpn.ex-vpn.my.id"
             },
             "transport": {
                 "type": "ws",
                 "path": "/139.177.185.88-20205",
-                "headers": {
-                    "Host": "vpn.ex-vpn.my.id"
-                }
-            },
-            "multiplex": {
-                "enabled": false
-            }
-        },
-        {
-            "type": "trojan",
-            "tag": "91 🇸🇬 DigitalOcean WS NTLS [vpn]",
-            "server": "quiz.int.vidio.com",
-            "server_port": 80,
-            "password": "2f6f4640-c260-4516-847a-a61697ac8b60",
-            "network": "tcp",
-            "tls": {
-                "insecure": true,
-                "server_name": "vpn.ex-vpn.my.id"
-            },
-            "transport": {
-                "type": "ws",
-                "path": "/128.199.70.244-22201",
-                "headers": {
-                    "Host": "vpn.ex-vpn.my.id"
-                }
-            },
-            "multiplex": {
-                "enabled": false
-            }
-        },
-        {
-            "type": "trojan",
-            "tag": "44 🇸🇬 Oracle Corporation WS NTLS [vpn]",
-            "server": "quiz.int.vidio.com",
-            "server_port": 80,
-            "password": "2f6f4640-c260-4516-847a-a61697ac8b60",
-            "network": "tcp",
-            "tls": {
-                "insecure": true,
-                "server_name": "vpn.ex-vpn.my.id"
-            },
-            "transport": {
-                "type": "ws",
-                "path": "/158.178.246.142-61731",
-                "headers": {
-                    "Host": "vpn.ex-vpn.my.id"
-                }
-            },
-            "multiplex": {
-                "enabled": false
-            }
-        },
-        {
-            "type": "trojan",
-            "tag": "21 🇸🇬 Akamai Connected Cloud WS NTLS [vpn]",
-            "server": "quiz.int.vidio.com",
-            "server_port": 80,
-            "password": "2f6f4640-c260-4516-847a-a61697ac8b60",
-            "network": "tcp",
-            "tls": {
-                "insecure": true,
-                "server_name": "vpn.ex-vpn.my.id"
-            },
-            "transport": {
-                "type": "ws",
-                "path": "/172.104.161.151-74",
-                "headers": {
-                    "Host": "vpn.ex-vpn.my.id"
-                }
-            },
-            "multiplex": {
-                "enabled": false
-            }
-        },
-        {
-            "type": "trojan",
-            "tag": "5 🇸🇬 The Constant Company WS NTLS [vpn]",
-            "server": "quiz.int.vidio.com",
-            "server_port": 80,
-            "password": "2f6f4640-c260-4516-847a-a61697ac8b60",
-            "network": "tcp",
-            "tls": {
-                "insecure": true,
-                "server_name": "vpn.ex-vpn.my.id"
-            },
-            "transport": {
-                "type": "ws",
-                "path": "/45.32.101.149-74",
                 "headers": {
                     "Host": "vpn.ex-vpn.my.id"
                 }
