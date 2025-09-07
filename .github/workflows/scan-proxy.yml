@@ -45,6 +45,6 @@ jobs:
             -H "Accept: application/vnd.github+json" \
             -H "Authorization: Bearer ${{ secrets.GIT_TOKEN }}" \
             https://api.github.com/repos/${{ github.repository }}/actions/workflows/upload-kv-storage.yml/dispatches \
-            -d '{"ref":"main"}'
+            -d '{"ref":"Master"}'
         env:
           GIT_TOKEN: ${{ secrets.GIT_TOKEN }}
