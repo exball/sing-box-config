@@ -36,6 +36,7 @@ jobs:
             git push origin Master --force
           else
             echo "No changes detected, skipping commit and push."
+          fi
 
       - name: Trigger upload-kv-storage workflow
         run: |
