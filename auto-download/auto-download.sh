@@ -746,9 +746,11 @@ download_files() {
 
 # Fungsi untuk menyimpan timestamp wake-up terakhir
 save_wake_up_time() {
-    local current_time=$(date +%s)
-    echo "$current_time" > "$WAKE_UP_DEBOUNCE_FILE" 2>/dev/null
-    LAST_WAKE_UP_TIME=$current_time
+    local unix_time=$(date +%s)
+    local time_str=$(date "+%H:%M:%S")
+    echo "$unix_time" > "$WAKE_UP_DEBOUNCE_FILE" 2>/dev/null
+    echo "$time_str" >> "$WAKE_UP_DEBOUNCE_FILE" 2>/dev/null
+    LAST_WAKE_UP_TIME="$unix_time"
 }
 
 # Fungsi untuk membaca timestamp wake-up terakhir
