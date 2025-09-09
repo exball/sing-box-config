@@ -2,10 +2,10 @@
     "outbounds": [
         {
             "type": "vless",
-            "tag": "3 🇹🇭 Siamdata Communication Co. WS TLS [vpn]",
+            "tag": "8 🇹🇭 Siamdata Communication Co. WS TLS [vpn]",
             "server": "quiz.int.vidio.com",
             "server_port": 443,
-            "uuid": "cb795d63-86d7-4b30-914c-2c8df3136d6a",
+            "uuid": "2c6483d2-e1c0-4033-aa9d-f4cca7520e3e",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -23,10 +23,10 @@
         },
         {
             "type": "vless",
-            "tag": "6 🇹🇭 TRUE INTERNET Co. WS TLS [vpn]",
+            "tag": "14 🇹🇭 TRUE INTERNET Co. WS TLS [vpn]",
             "server": "quiz.int.vidio.com",
             "server_port": 443,
-            "uuid": "cb795d63-86d7-4b30-914c-2c8df3136d6a",
+            "uuid": "2c6483d2-e1c0-4033-aa9d-f4cca7520e3e",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -44,10 +44,10 @@
         },
         {
             "type": "vless",
-            "tag": "7 🇹🇭 Siamdata Communication Co. WS TLS [vpn]",
+            "tag": "9 🇹🇭 Siamdata Communication Co. WS TLS [vpn]",
             "server": "quiz.int.vidio.com",
             "server_port": 443,
-            "uuid": "cb795d63-86d7-4b30-914c-2c8df3136d6a",
+            "uuid": "2c6483d2-e1c0-4033-aa9d-f4cca7520e3e",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -59,16 +59,35 @@
                 "headers": {
                     "Host": "vpn.exbal.my.id"
                 },
+                "path": "/212.80.215.251-28294",
+                "type": "ws"
+            }
+        },
+        {
+            "type": "vless",
+            "tag": "8 🇹🇭 Siamdata Communication Co. WS NTLS [vpn]",
+            "server": "quiz.int.vidio.com",
+            "server_port": 80,
+            "uuid": "a6093b5b-7567-4e14-99c1-b571063720a9",
+            "network": "tcp",
+            "packet_encoding": "xudp",
+            "tls": {
+                "insecure": true
+            },
+            "transport": {
+                "headers": {
+                    "Host": "vpn.exbal.my.id"
+                },
                 "path": "/45.144.167.223-27125",
                 "type": "ws"
             }
         },
         {
             "type": "vless",
-            "tag": "14 🇹🇭 Siamdata Communication Co. WS NTLS [vpn]",
+            "tag": "11 🇹🇭 TRUE INTERNET Co. WS NTLS [vpn]",
             "server": "quiz.int.vidio.com",
             "server_port": 80,
-            "uuid": "bfaf5be5-2444-4fc2-8692-a44df3c58a42",
+            "uuid": "a6093b5b-7567-4e14-99c1-b571063720a9",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -78,16 +97,16 @@
                 "headers": {
                     "Host": "vpn.exbal.my.id"
                 },
-                "path": "/43.229.149.251-2053",
+                "path": "/171.103.164.62-30921",
                 "type": "ws"
             }
         },
         {
             "type": "vless",
-            "tag": "10 🇹🇭 TRUE INTERNET Co. WS NTLS [vpn]",
+            "tag": "3 🇹🇭 Siamdata Communication Co. WS NTLS [vpn]",
             "server": "quiz.int.vidio.com",
             "server_port": 80,
-            "uuid": "bfaf5be5-2444-4fc2-8692-a44df3c58a42",
+            "uuid": "a6093b5b-7567-4e14-99c1-b571063720a9",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -97,26 +116,7 @@
                 "headers": {
                     "Host": "vpn.exbal.my.id"
                 },
-                "path": "/171.103.232.58-20475",
-                "type": "ws"
-            }
-        },
-        {
-            "type": "vless",
-            "tag": "4 🇹🇭 Siamdata Communication Co. WS NTLS [vpn]",
-            "server": "quiz.int.vidio.com",
-            "server_port": 80,
-            "uuid": "bfaf5be5-2444-4fc2-8692-a44df3c58a42",
-            "network": "tcp",
-            "packet_encoding": "xudp",
-            "tls": {
-                "insecure": true
-            },
-            "transport": {
-                "headers": {
-                    "Host": "vpn.exbal.my.id"
-                },
-                "path": "/45.154.26.81-8443",
+                "path": "/43.229.149.251-8443",
                 "type": "ws"
             }
         }
