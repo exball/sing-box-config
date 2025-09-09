@@ -2,62 +2,41 @@
     "outbounds": [
         {
             "type": "vless",
-            "tag": "8 🇻🇳 Kaopu Cloud HK Limited WS TLS [proxy]",
+            "tag": "4 🇻🇳 VNPT Corp WS TLS [vpn]",
             "server": "quiz.int.vidio.com",
             "server_port": 443,
-            "uuid": "abdc2d48-ae79-465d-b2fb-9222a00b43aa",
+            "uuid": "b4edbde0-024b-43fe-bc6c-a55eb2971bad",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
                 "enabled": true,
                 "insecure": true,
-                "server_name": "proxy.xtunnel.my.id"
+                "server_name": "vpn.ex27.my.id"
             },
             "transport": {
                 "headers": {
-                    "Host": "proxy.xtunnel.my.id"
+                    "Host": "vpn.ex27.my.id"
                 },
-                "path": "/154.93.48.189-34237",
+                "path": "/103.197.184.193-37461",
                 "type": "ws"
             }
         },
         {
             "type": "vless",
-            "tag": "1 🇻🇳 UCLOUD INFORMATION TECHNOLOGY (HK) LIMITED WS TLS [proxy]",
+            "tag": "1 🇻🇳 VIETNAM POSTS AND TELECOMMUNICATIONS GROUP WS TLS [vpn]",
             "server": "quiz.int.vidio.com",
             "server_port": 443,
-            "uuid": "abdc2d48-ae79-465d-b2fb-9222a00b43aa",
+            "uuid": "b4edbde0-024b-43fe-bc6c-a55eb2971bad",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
                 "enabled": true,
                 "insecure": true,
-                "server_name": "proxy.xtunnel.my.id"
+                "server_name": "vpn.ex27.my.id"
             },
             "transport": {
                 "headers": {
-                    "Host": "proxy.xtunnel.my.id"
-                },
-                "path": "/152.32.255.24-587",
-                "type": "ws"
-            }
-        },
-        {
-            "type": "vless",
-            "tag": "2 🇻🇳 VIETNAM POSTS AND TELECOMMUNICATIONS GROUP WS TLS [proxy]",
-            "server": "quiz.int.vidio.com",
-            "server_port": 443,
-            "uuid": "abdc2d48-ae79-465d-b2fb-9222a00b43aa",
-            "network": "tcp",
-            "packet_encoding": "xudp",
-            "tls": {
-                "enabled": true,
-                "insecure": true,
-                "server_name": "proxy.xtunnel.my.id"
-            },
-            "transport": {
-                "headers": {
-                    "Host": "proxy.xtunnel.my.id"
+                    "Host": "vpn.ex27.my.id"
                 },
                 "path": "/103.137.184.5-443",
                 "type": "ws"
@@ -65,37 +44,20 @@
         },
         {
             "type": "vless",
-            "tag": "6 🇻🇳 Kaopu Cloud HK Limited WS NTLS [proxy]",
+            "tag": "2 🇻🇳 UCLOUD INFORMATION TECHNOLOGY (HK) LIMITED WS TLS [vpn]",
             "server": "quiz.int.vidio.com",
-            "server_port": 80,
-            "uuid": "a6d87f08-b367-46f0-b369-c58054ed8a43",
+            "server_port": 443,
+            "uuid": "b4edbde0-024b-43fe-bc6c-a55eb2971bad",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
-                "insecure": true
+                "enabled": true,
+                "insecure": true,
+                "server_name": "vpn.ex27.my.id"
             },
             "transport": {
                 "headers": {
-                    "Host": "proxy.xtunnel.my.id"
-                },
-                "path": "/154.93.48.111-34237",
-                "type": "ws"
-            }
-        },
-        {
-            "type": "vless",
-            "tag": "3 🇻🇳 UCLOUD INFORMATION TECHNOLOGY (HK) LIMITED WS NTLS [proxy]",
-            "server": "quiz.int.vidio.com",
-            "server_port": 80,
-            "uuid": "a6d87f08-b367-46f0-b369-c58054ed8a43",
-            "network": "tcp",
-            "packet_encoding": "xudp",
-            "tls": {
-                "insecure": true
-            },
-            "transport": {
-                "headers": {
-                    "Host": "proxy.xtunnel.my.id"
+                    "Host": "vpn.ex27.my.id"
                 },
                 "path": "/152.32.255.24-587",
                 "type": "ws"
@@ -103,10 +65,10 @@
         },
         {
             "type": "vless",
-            "tag": "7 🇻🇳 VNPT Corp WS NTLS [proxy]",
+            "tag": "1 🇻🇳 Kaopu Cloud HK Limited WS NTLS [vpn]",
             "server": "quiz.int.vidio.com",
             "server_port": 80,
-            "uuid": "a6d87f08-b367-46f0-b369-c58054ed8a43",
+            "uuid": "6d43e12d-9af3-4048-b4a4-6ad42b2f1485",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -114,9 +76,47 @@
             },
             "transport": {
                 "headers": {
-                    "Host": "proxy.xtunnel.my.id"
+                    "Host": "vpn.ex27.my.id"
                 },
-                "path": "/103.15.90.134-49678",
+                "path": "/38.54.14.61-33813",
+                "type": "ws"
+            }
+        },
+        {
+            "type": "vless",
+            "tag": "4 🇻🇳 VNPT Corp WS NTLS [vpn]",
+            "server": "quiz.int.vidio.com",
+            "server_port": 80,
+            "uuid": "6d43e12d-9af3-4048-b4a4-6ad42b2f1485",
+            "network": "tcp",
+            "packet_encoding": "xudp",
+            "tls": {
+                "insecure": true
+            },
+            "transport": {
+                "headers": {
+                    "Host": "vpn.ex27.my.id"
+                },
+                "path": "/103.197.184.193-37461",
+                "type": "ws"
+            }
+        },
+        {
+            "type": "vless",
+            "tag": "3 🇻🇳 VIETNAM POSTS AND TELECOMMUNICATIONS GROUP WS NTLS [vpn]",
+            "server": "quiz.int.vidio.com",
+            "server_port": 80,
+            "uuid": "6d43e12d-9af3-4048-b4a4-6ad42b2f1485",
+            "network": "tcp",
+            "packet_encoding": "xudp",
+            "tls": {
+                "insecure": true
+            },
+            "transport": {
+                "headers": {
+                    "Host": "vpn.ex27.my.id"
+                },
+                "path": "/103.137.184.5-443",
                 "type": "ws"
             }
         }

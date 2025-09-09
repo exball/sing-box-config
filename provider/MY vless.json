@@ -2,81 +2,62 @@
     "outbounds": [
         {
             "type": "vless",
-            "tag": "12 🇲🇾 Shinjiru Technology Sdn Bhd WS TLS [proxy]",
+            "tag": "14 🇲🇾 Evoxt Enterprise WS TLS [vpn]",
             "server": "quiz.int.vidio.com",
             "server_port": 443,
-            "uuid": "830cc372-5eb2-4ede-9f50-f294e86768b3",
+            "uuid": "d09c05e7-02cc-4617-8c8d-b209c04c3827",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
                 "enabled": true,
                 "insecure": true,
-                "server_name": "proxy.xtunnel.my.id"
+                "server_name": "vpn.ex27.my.id"
             },
             "transport": {
                 "headers": {
-                    "Host": "proxy.xtunnel.my.id"
+                    "Host": "vpn.ex27.my.id"
                 },
-                "path": "/111.90.147.240-386",
+                "path": "/155.254.60.225-443",
                 "type": "ws"
             }
         },
         {
             "type": "vless",
-            "tag": "10 🇲🇾 Evoxt Enterprise WS TLS [proxy]",
+            "tag": "9 🇲🇾 Microsoft Corporation WS TLS [vpn]",
             "server": "quiz.int.vidio.com",
             "server_port": 443,
-            "uuid": "830cc372-5eb2-4ede-9f50-f294e86768b3",
+            "uuid": "d09c05e7-02cc-4617-8c8d-b209c04c3827",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
                 "enabled": true,
                 "insecure": true,
-                "server_name": "proxy.xtunnel.my.id"
+                "server_name": "vpn.ex27.my.id"
             },
             "transport": {
                 "headers": {
-                    "Host": "proxy.xtunnel.my.id"
+                    "Host": "vpn.ex27.my.id"
                 },
-                "path": "/23.27.53.119-35209",
+                "path": "/20.17.107.137-443",
                 "type": "ws"
             }
         },
         {
             "type": "vless",
-            "tag": "3 🇲🇾 Microsoft Corporation WS TLS [proxy]",
+            "tag": "8 🇲🇾 Shinjiru Technology Sdn Bhd WS TLS [vpn]",
             "server": "quiz.int.vidio.com",
             "server_port": 443,
-            "uuid": "830cc372-5eb2-4ede-9f50-f294e86768b3",
+            "uuid": "d09c05e7-02cc-4617-8c8d-b209c04c3827",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
                 "enabled": true,
                 "insecure": true,
-                "server_name": "proxy.xtunnel.my.id"
+                "server_name": "vpn.ex27.my.id"
             },
             "transport": {
                 "headers": {
-                    "Host": "proxy.xtunnel.my.id"
-                },
-                "path": "/20.17.104.31-443",
-                "type": "ws"
-            }
-        },
-        {
-            "type": "vless",
-            "tag": "3 🇲🇾 Shinjiru Technology Sdn Bhd WS NTLS [proxy]",
-            "server": "quiz.int.vidio.com",
-            "server_port": 80,
-            "uuid": "5a5905fb-82c0-4921-b314-2aa595aeaf92",
-            "network": "tcp",
-            "packet_encoding": "xudp",
-            "tls": {
-                "insecure": true
-            },
-            "transport": {
-                "headers": {
-                    "Host": "proxy.xtunnel.my.id"
+                    "Host": "vpn.ex27.my.id"
                 },
                 "path": "/111.90.147.240-74",
                 "type": "ws"
@@ -84,10 +65,10 @@
         },
         {
             "type": "vless",
-            "tag": "13 🇲🇾 Evoxt Enterprise WS NTLS [proxy]",
+            "tag": "9 🇲🇾 Shinjiru Technology Sdn Bhd WS NTLS [vpn]",
             "server": "quiz.int.vidio.com",
             "server_port": 80,
-            "uuid": "5a5905fb-82c0-4921-b314-2aa595aeaf92",
+            "uuid": "e79069d8-2707-4afb-947b-3a1dfdddaced",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -95,18 +76,18 @@
             },
             "transport": {
                 "headers": {
-                    "Host": "proxy.xtunnel.my.id"
+                    "Host": "vpn.ex27.my.id"
                 },
-                "path": "/23.27.200.223-443",
+                "path": "/111.90.147.240-443",
                 "type": "ws"
             }
         },
         {
             "type": "vless",
-            "tag": "11 🇲🇾 Microsoft Corporation WS NTLS [proxy]",
+            "tag": "1 🇲🇾 Microsoft Corporation WS NTLS [vpn]",
             "server": "quiz.int.vidio.com",
             "server_port": 80,
-            "uuid": "5a5905fb-82c0-4921-b314-2aa595aeaf92",
+            "uuid": "e79069d8-2707-4afb-947b-3a1dfdddaced",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -114,9 +95,28 @@
             },
             "transport": {
                 "headers": {
-                    "Host": "proxy.xtunnel.my.id"
+                    "Host": "vpn.ex27.my.id"
                 },
-                "path": "/20.17.107.137-443",
+                "path": "/20.17.104.31-443",
+                "type": "ws"
+            }
+        },
+        {
+            "type": "vless",
+            "tag": "3 🇲🇾 Terabix WS NTLS [vpn]",
+            "server": "quiz.int.vidio.com",
+            "server_port": 80,
+            "uuid": "e79069d8-2707-4afb-947b-3a1dfdddaced",
+            "network": "tcp",
+            "packet_encoding": "xudp",
+            "tls": {
+                "insecure": true
+            },
+            "transport": {
+                "headers": {
+                    "Host": "vpn.ex27.my.id"
+                },
+                "path": "/163.61.102.13-443",
                 "type": "ws"
             }
         }
