@@ -180,7 +180,6 @@ const countryMapping: { [key: string]: string } = {
 // File paths
 const KV_PAIR_PROXY_FILE = "./kvProxyList.json";
 const RAW_PROXY_LIST_FILE = "./rawProxyList.txt";
-const PROXY_LIST_FILE = "./proxyList.txt";
 const ACTIVE_PROXY_HISTORY_FILE = "./active-proxy-history.txt";
 const PROXY_DATA_DIR = "./proxy_data";
 
@@ -273,9 +272,10 @@ async function getIPData(ip: string, countryCode: string): Promise<IPDataEntry> 
     stats.missingIPs++;
     console.log(`❌ IP ${ip} not found in ${countryCode}.json - added to batch queue`);
     // 5. Return fallback data sementara
+    // Gunakan kode negara (mis. "ID") agar konsisten dengan penamaan file per-negara
     const fallbackData: IPDataEntry = {
       ip: [ip],
-      country: countryMapping[countryCode] || countryCode,
+      country: countryCode,
       asn: "-",
       as_name: "-"
     };
@@ -474,51 +474,7 @@ async function updateCountryJSONFileBatch(newData: IPDataEntry[]): Promise<void>
   }
 }
 
-// Update proxy entries that used fallback data
-async function updateProxyListWithAPIResults(): Promise<void> {
-  if (missingIPsCache.size === 0) {
-    return;
-  }
-  
-  console.log("🔄 Updating proxyList.txt with API results...");
-  
-  try {
-    // Read current proxyList.txt
-    const proxyListContent = await Bun.file(PROXY_LIST_FILE).text();
-    const lines = proxyListContent.split('\n').filter(line => line.trim());
-    
-    const updatedLines: string[] = [];
-    let updatedCount = 0;
-    
-    for (const line of lines) {
-      const parts = line.split(',');
-      if (parts.length >= 4) {
-        const ip = parts[0];
-        const port = parts[1];
-        
-        // Check if we have updated data for this IP
-        if (ipDataCache.has(ip)) {
-          const ipData = ipDataCache.get(ip)!;
-          const updatedLine = `${ip},${port},${ipData.country},${ipData.as_name}`;
-          updatedLines.push(updatedLine);
-          updatedCount++;
-        } else {
-          updatedLines.push(line);
-        }
-      } else {
-        updatedLines.push(line);
-      }
-    }
-    
-    if (updatedCount > 0) {
-      await Bun.write(PROXY_LIST_FILE, updatedLines.join('\n'));
-      console.log(`✅ Updated ${updatedCount} proxy entries with API data`);
-    }
-    
-  } catch (error: any) {
-    console.log(`❌ Error updating proxyList.txt:`, error.message);
-  }
-}
+// Removed legacy proxyList.txt update: now we only write per-country proxyList_<CC>.txt files after enrichment
 
 // Show final statistics
 function showFinalStatistics() {
@@ -859,8 +815,8 @@ async function writeProxyHistory(history: ProxyHistory): Promise<void> {
   const proxyList = await readProxyList();
   const proxyChecked: string[] = [];
   const uniqueRawProxies: string[] = [];
-  // Output per negara
-  const activeProxyByCountry: { [country: string]: string[] } = {};
+  // Kumpulkan hasil aktif selama scan; tulis per-negara SEKALI setelah batch API
+  const activeResults: { ip: string; port: number; countryCode: string }[] = [];
   const kvPair: any = {};
 
   // Tampilkan informasi domain resolver yang akan digunakan
@@ -946,10 +902,8 @@ async function writeProxyHistory(history: ProxyHistory): Promise<void> {
           proxyHistory.proxies[proxyKey].activeCount += 1;
           proxyHistory.proxies[proxyKey].isCurrentlyActive = true;
           
-          // Format output - gunakan as_name dan country (format baru)
-          const finalResult = `${proxyIP},${proxyPort},${ipData.country},${ipData.as_name}`;
-          if (!activeProxyByCountry[ipData.country]) activeProxyByCountry[ipData.country] = [];
-          activeProxyByCountry[ipData.country].push(finalResult);
+          // Tunda penulisan per-negara, kumpulkan hasil aktif terlebih dahulu
+          activeResults.push({ ip: proxyIP, port: proxyPort, countryCode: proxy.country });
 
           if (kvPair[ipData.country] == undefined) kvPair[ipData.country] = [];
           if (kvPair[ipData.country].length < 100) {
@@ -964,7 +918,7 @@ async function writeProxyHistory(history: ProxyHistory): Promise<void> {
             stats.uniqueIPs++;
           }
           
-          console.log(`[${i}/${proxyList.length}] ✅ Saved: ${finalResult}`);
+          console.log(`[${i}/${proxyList.length}] ✅ Saved: ${proxyIP}:${proxyPort} (${ipData.country})`);
         }
         // Note: If proxy is not active, isCurrentlyActive remains false
       })
@@ -987,8 +941,7 @@ async function writeProxyHistory(history: ProxyHistory): Promise<void> {
   // Batch lookup missing IPs
   await batchLookupMissingIPs();
   
-  // Update proxy list with API results
-  await updateProxyListWithAPIResults();
+  // Tidak perlu update proxyList.txt lagi
 
   uniqueRawProxies.sort(sortByCountry);
   // Save proxy history
@@ -997,18 +950,30 @@ async function writeProxyHistory(history: ProxyHistory): Promise<void> {
   await Bun.write(KV_PAIR_PROXY_FILE, JSON.stringify(kvPair, null, "  "));
   await Bun.write(RAW_PROXY_LIST_FILE, uniqueRawProxies.join("\n"));
 
-  // Simpan proxy aktif ke file per negara di direktori proxy_list
+  // Bangun hasil per-negara dari activeResults menggunakan metadata terbaru dari cache
   const fs = Bun;
   const proxyListDir = "./proxy_list";
   try {
     await fs.mkdir(proxyListDir);
   } catch (e) {}
+
+  const grouped: { [code: string]: string[] } = {};
+  for (const item of activeResults) {
+    const { ip, port, countryCode } = item;
+    const meta = ipDataCache.get(ip); // sudah dilengkapi oleh batchLookupMissingIPs()
+    const asName = meta?.as_name ?? "-";
+    const code = countryCode; // pastikan adalah kode negara (ID, CY, NZ, ...)
+    const line = `${ip},${port},${code},${asName}`;
+    if (!grouped[code]) grouped[code] = [];
+    grouped[code].push(line);
+  }
+
   let totalSaved = 0;
-  for (const country of Object.keys(activeProxyByCountry)) {
-    const filePath = `${proxyListDir}/proxyList_${country}.txt`;
-    await fs.write(filePath, activeProxyByCountry[country].join("\n"));
-    totalSaved += activeProxyByCountry[country].length;
-    console.log(`💾 Proxy aktif negara ${country}: ${activeProxyByCountry[country].length} disimpan ke ${filePath}`);
+  for (const code of Object.keys(grouped)) {
+    const filePath = `${proxyListDir}/proxyList_${code}.txt`;
+    await fs.write(filePath, grouped[code].join("\n"));
+    totalSaved += grouped[code].length;
+    console.log(`💾 Proxy aktif negara ${code}: ${grouped[code].length} disimpan ke ${filePath}`);
   }
 
   // Show final statistics
