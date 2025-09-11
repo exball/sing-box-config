@@ -118,8 +118,6 @@
         "Vmess Ntls",
         "ID vless",
         "SG vless",
-        "ID trojan",
-        "SG trojan",
         "TH vless",
         "MY vless",
         "VN vless",
@@ -130,8 +128,6 @@
         "Vmess Ntls",
         "ID vless",
         "SG vless",
-        "ID trojan",
-        "SG trojan",
         "TH vless",
         "MY vless",
         "VN vless",
@@ -160,8 +156,6 @@
       "outbounds": [
         "ID vless",
         "SG vless",
-        "ID trojan",
-        "SG trojan",
         "TH vless",
         "MY vless",
         "VN vless",
@@ -205,20 +199,6 @@
       "type": "urltest",
       "tag": "SG vless",
       "providers": "SG vless",
-      "url": "https://www.gstatic.com/generate_204",
-      "interval": "1m0s"
-    },
-    {
-      "type": "urltest",
-      "tag": "ID trojan",
-      "providers": "ID trojan",
-      "url": "https://www.gstatic.com/generate_204",
-      "interval": "1m0s"
-    },
-    {
-      "type": "urltest",
-      "tag": "SG trojan",
-      "providers": "SG trojan",
       "url": "https://www.gstatic.com/generate_204",
       "interval": "1m0s"
     },
@@ -373,16 +353,6 @@
       "type": "local",
       "path": "./provider/SG vless.json",
       "tag": "SG vless"
-    },
-    {
-      "type": "local",
-      "path": "./provider/ID trojan.json",
-      "tag": "ID trojan"
-    },
-    {
-      "type": "local",
-      "path": "./provider/SG trojan.json",
-      "tag": "SG trojan"
     },
     {
       "type": "local",
