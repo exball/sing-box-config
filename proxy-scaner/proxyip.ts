@@ -207,7 +207,12 @@ function getResolverDomain(): string {
 }
 
 const IP_RESOLVER_PATH = "/";
-const CONCURRENCY = 60;
+const CONCURRENCY = 80;
+
+// Multi-worker configuration
+const USE_WORKERS = true;
+const WORKERS = 2; // GitHub Actions default 2 vCPU
+const PER_WORKER_CONCURRENCY = 50; // requested
 
 const CHECK_QUEUE: string[] = [];
 
@@ -857,83 +862,148 @@ async function writeProxyHistory(history: ProxyHistory): Promise<void> {
 
   let proxySaved = 0;
 
-  for (let i = 0; i < proxyList.length; i++) {
-    const proxy = proxyList[i];
-    const proxyKey = `${proxy.address}:${proxy.port}`;
-    
-    // Initialize proxy in history if not exists, or update country/org info if changed
-    if (!proxyHistory.proxies[proxyKey]) {
-      proxyHistory.proxies[proxyKey] = {
-        address: proxy.address,
-        port: proxy.port,
-        country: proxy.country,
-        org: (proxy.org || "Unknown").replaceAll(/[+]/g, " "),
-        activeCount: 0,
-        isCurrentlyActive: false
-      };
-    } else {
-      // Update country and org info in case they changed in rawProxyList.txt
-      proxyHistory.proxies[proxyKey].country = proxy.country;
-      proxyHistory.proxies[proxyKey].org = (proxy.org || "Unknown").replaceAll(/[+]/g, " ");
+  if (USE_WORKERS) {
+    // Pre-pass: ensure uniqueRawProxies and history entries are updated
+    for (const proxy of proxyList) {
+      const proxyKey = `${proxy.address}:${proxy.port}`;
+      if (!proxyChecked.includes(proxyKey)) {
+        proxyChecked.push(proxyKey);
+        try {
+          uniqueRawProxies.push(`${proxy.address},${proxy.port},${proxy.country},${(proxy.org || "Unknown").replaceAll(/[+]/g, " ")}`);
+        } catch {}
+      }
+      if (!proxyHistory.proxies[proxyKey]) {
+        proxyHistory.proxies[proxyKey] = {
+          address: proxy.address,
+          port: proxy.port,
+          country: proxy.country,
+          org: (proxy.org || "Unknown").replaceAll(/[+]/g, " "),
+          activeCount: 0,
+          isCurrentlyActive: false
+        };
+      } else {
+        proxyHistory.proxies[proxyKey].country = proxy.country;
+        proxyHistory.proxies[proxyKey].org = (proxy.org || "Unknown").replaceAll(/[+]/g, " ");
+      }
     }
-    
-    if (!proxyChecked.includes(proxyKey)) {
-      proxyChecked.push(proxyKey);
-      try {
-        uniqueRawProxies.push(`${proxy.address},${proxy.port},${proxy.country},${(proxy.org || "Unknown").replaceAll(/[+]/g, " ")}`);
-      } catch (e: any) {
+
+    // Run multi-worker checks
+    const workerResults = await (async () => {
+      // shard
+      const size = Math.ceil(proxyList.length / WORKERS);
+      const shards = Array.from({ length: WORKERS }, (_, i) => proxyList.slice(i * size, (i + 1) * size));
+      const promises = shards.map((shard) => {
+        return new Promise<{ ip: string; port: number; countryCode: string }[]>((resolve) => {
+          const w = new Worker(new URL("./worker.ts", import.meta.url), { type: "module" });
+          w.onmessage = (ev: MessageEvent<any>) => {
+            if (ev.data?.type === "done") {
+              resolve(ev.data.results || []);
+              w.terminate();
+            }
+          };
+          w.postMessage({ proxies: shard, concurrency: PER_WORKER_CONCURRENCY });
+        });
+      });
+      const all = await Promise.all(promises);
+      return all.flat();
+    })();
+
+    for (const r of workerResults) {
+      const proxyKey = `${r.ip}:${r.port}`;
+      if (proxyHistory.proxies[proxyKey]) {
+        proxyHistory.proxies[proxyKey].activeCount += 1;
+        proxyHistory.proxies[proxyKey].isCurrentlyActive = true;
+      }
+      // Enrich in main: fills cache or missingIPs for batch
+      const ipData = await getIPData(r.ip, r.countryCode);
+      activeResults.push({ ip: r.ip, port: r.port, countryCode: r.countryCode });
+      if (kvPair[ipData.country] == undefined) kvPair[ipData.country] = [];
+      if (kvPair[ipData.country].length < 100) {
+        kvPair[ipData.country].push(`${r.ip}:${r.port}`);
+      }
+      proxySaved += 1;
+      stats.totalProxies++;
+      if (!ipDataCache.has(r.ip)) stats.uniqueIPs++;
+    }
+  } else {
+    for (let i = 0; i < proxyList.length; i++) {
+      const proxy = proxyList[i];
+      const proxyKey = `${proxy.address}:${proxy.port}`;
+      
+      // Initialize proxy in history if not exists, or update country/org info if changed
+      if (!proxyHistory.proxies[proxyKey]) {
+        proxyHistory.proxies[proxyKey] = {
+          address: proxy.address,
+          port: proxy.port,
+          country: proxy.country,
+          org: (proxy.org || "Unknown").replaceAll(/[+]/g, " "),
+          activeCount: 0,
+          isCurrentlyActive: false
+        };
+      } else {
+        // Update country and org info in case they changed in rawProxyList.txt
+        proxyHistory.proxies[proxyKey].country = proxy.country;
+        proxyHistory.proxies[proxyKey].org = (proxy.org || "Unknown").replaceAll(/[+]/g, " ");
+      }
+      
+      if (!proxyChecked.includes(proxyKey)) {
+        proxyChecked.push(proxyKey);
+        try {
+          uniqueRawProxies.push(`${proxy.address},${proxy.port},${proxy.country},${(proxy.org || "Unknown").replaceAll(/[+]/g, " ")}`);
+        } catch (e: any) {
+          continue;
+        }
+      } else {
         continue;
       }
-    } else {
-      continue;
+  
+      CHECK_QUEUE.push(proxyKey);
+      checkProxy(proxy.address, proxy.port)
+        .then(async (res) => {
+          if (!res.error && res.result?.proxyip === true) {
+            const proxyIP = res.result.ip;
+            const proxyPort = proxy.port; // Use port from rawProxyList
+            
+            // Get accurate IP data using country code hint
+            const ipData = await getIPData(proxyIP, proxy.country);
+            
+            // Update proxy history - increment active count and mark as currently active
+            proxyHistory.proxies[proxyKey].activeCount += 1;
+            proxyHistory.proxies[proxyKey].isCurrentlyActive = true;
+            
+            // Tunda penulisan per-negara, kumpulkan hasil aktif terlebih dahulu
+            activeResults.push({ ip: proxyIP, port: proxyPort, countryCode: proxy.country });
+  
+            if (kvPair[ipData.country] == undefined) kvPair[ipData.country] = [];
+            if (kvPair[ipData.country].length < 100) {
+              kvPair[ipData.country].push(`${proxyIP}:${proxyPort}`);
+            }
+  
+            proxySaved += 1;
+            stats.totalProxies++;
+            
+            // Track unique IPs
+            if (!ipDataCache.has(proxyIP)) {
+              stats.uniqueIPs++;
+            }
+            
+            console.log(`[${i}/${proxyList.length}] ✅ Saved: ${proxyIP}:${proxyPort} (${ipData.country})`);
+          }
+          // Note: If proxy is not active, isCurrentlyActive remains false
+        })
+        .finally(() => {
+          CHECK_QUEUE.pop();
+        });
+  
+      while (CHECK_QUEUE.length >= CONCURRENCY) {
+        await Bun.sleep(1);
+      }
     }
-
-    CHECK_QUEUE.push(proxyKey);
-    checkProxy(proxy.address, proxy.port)
-      .then(async (res) => {
-        if (!res.error && res.result?.proxyip === true) {
-          const proxyIP = res.result.ip;
-          const proxyPort = proxy.port; // Use port from rawProxyList
-          
-          // Get accurate IP data using country code hint
-          const ipData = await getIPData(proxyIP, proxy.country);
-          
-          // Update proxy history - increment active count and mark as currently active
-          proxyHistory.proxies[proxyKey].activeCount += 1;
-          proxyHistory.proxies[proxyKey].isCurrentlyActive = true;
-          
-          // Tunda penulisan per-negara, kumpulkan hasil aktif terlebih dahulu
-          activeResults.push({ ip: proxyIP, port: proxyPort, countryCode: proxy.country });
-
-          if (kvPair[ipData.country] == undefined) kvPair[ipData.country] = [];
-          if (kvPair[ipData.country].length < 100) {
-            kvPair[ipData.country].push(`${proxyIP}:${proxyPort}`);
-          }
-
-          proxySaved += 1;
-          stats.totalProxies++;
-          
-          // Track unique IPs
-          if (!ipDataCache.has(proxyIP)) {
-            stats.uniqueIPs++;
-          }
-          
-          console.log(`[${i}/${proxyList.length}] ✅ Saved: ${proxyIP}:${proxyPort} (${ipData.country})`);
-        }
-        // Note: If proxy is not active, isCurrentlyActive remains false
-      })
-      .finally(() => {
-        CHECK_QUEUE.pop();
-      });
-
-    while (CHECK_QUEUE.length >= CONCURRENCY) {
+  
+    // Waiting for all process to be completed
+    while (CHECK_QUEUE.length) {
       await Bun.sleep(1);
     }
-  }
-
-  // Waiting for all process to be completed
-  while (CHECK_QUEUE.length) {
-    await Bun.sleep(1);
   }
 
   console.log("\n🔍 Processing missing IPs with batch API...");
