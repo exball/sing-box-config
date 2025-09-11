@@ -25,6 +25,10 @@ jobs:
             token: CF_API_TOKEN_EX_BALL27389
             kv_id: KV_ID_EX_BALL27389
             account_id: CF_ACCOUNT_ID_EX_BALL27389
+          - name: BACKUP1
+            token: CF_API_TOKEN_BACKUP1
+            kv_id: KV_ID_BACKUP1
+            account_id: CF_ACCOUNT_ID_BACKUP1
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
