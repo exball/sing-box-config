@@ -2,10 +2,10 @@
     "outbounds": [
         {
             "type": "trojan",
-            "tag": "10 🇮🇩 Akamai Connected Cloud WS TLS [proxy]",
+            "tag": "13 🇮🇩 Akamai Connected Cloud WS TLS [proxy]",
             "server": "quiz.int.vidio.com",
             "server_port": 443,
-            "password": "89e5663d-6a4f-4a52-a79d-81951ca81a31",
+            "password": "58d423b3-a774-4e36-83af-7d31a770c2d3",
             "network": "tcp",
             "tls": {
                 "enabled": true,
@@ -14,7 +14,30 @@
             },
             "transport": {
                 "type": "ws",
-                "path": "/172.232.232.163-386",
+                "path": "/172.232.238.52-74",
+                "headers": {
+                    "Host": "proxy.xtunnel.my.id"
+                }
+            },
+            "multiplex": {
+                "enabled": false
+            }
+        },
+        {
+            "type": "trojan",
+            "tag": "4 🇮🇩 CV. Rumahweb Indonesia WS TLS [proxy]",
+            "server": "quiz.int.vidio.com",
+            "server_port": 443,
+            "password": "58d423b3-a774-4e36-83af-7d31a770c2d3",
+            "network": "tcp",
+            "tls": {
+                "enabled": true,
+                "insecure": true,
+                "server_name": "proxy.xtunnel.my.id"
+            },
+            "transport": {
+                "type": "ws",
+                "path": "/203.194.112.119-8443",
                 "headers": {
                     "Host": "proxy.xtunnel.my.id"
                 }
@@ -28,7 +51,7 @@
             "tag": "11 🇮🇩 Amazon.com WS TLS [proxy]",
             "server": "quiz.int.vidio.com",
             "server_port": 443,
-            "password": "89e5663d-6a4f-4a52-a79d-81951ca81a31",
+            "password": "58d423b3-a774-4e36-83af-7d31a770c2d3",
             "network": "tcp",
             "tls": {
                 "enabled": true,
@@ -48,10 +71,10 @@
         },
         {
             "type": "trojan",
-            "tag": "13 🇮🇩 PT Pusat Media Indonesia WS TLS [proxy]",
+            "tag": "6 🇮🇩 PT Pusat Media Indonesia WS TLS [proxy]",
             "server": "quiz.int.vidio.com",
             "server_port": 443,
-            "password": "89e5663d-6a4f-4a52-a79d-81951ca81a31",
+            "password": "58d423b3-a774-4e36-83af-7d31a770c2d3",
             "network": "tcp",
             "tls": {
                 "enabled": true,
@@ -71,10 +94,10 @@
         },
         {
             "type": "trojan",
-            "tag": "14 🇮🇩 PT Telekomunikasi Indonesia WS TLS [proxy]",
+            "tag": "21 🇮🇩 PT MITRA VISIONER PRATAMA WS TLS [proxy]",
             "server": "quiz.int.vidio.com",
             "server_port": 443,
-            "password": "89e5663d-6a4f-4a52-a79d-81951ca81a31",
+            "password": "58d423b3-a774-4e36-83af-7d31a770c2d3",
             "network": "tcp",
             "tls": {
                 "enabled": true,
@@ -83,30 +106,7 @@
             },
             "transport": {
                 "type": "ws",
-                "path": "/36.95.152.58-12137",
-                "headers": {
-                    "Host": "proxy.xtunnel.my.id"
-                }
-            },
-            "multiplex": {
-                "enabled": false
-            }
-        },
-        {
-            "type": "trojan",
-            "tag": "15 🇮🇩 CV. Rumahweb Indonesia WS TLS [proxy]",
-            "server": "quiz.int.vidio.com",
-            "server_port": 443,
-            "password": "89e5663d-6a4f-4a52-a79d-81951ca81a31",
-            "network": "tcp",
-            "tls": {
-                "enabled": true,
-                "insecure": true,
-                "server_name": "proxy.xtunnel.my.id"
-            },
-            "transport": {
-                "type": "ws",
-                "path": "/203.194.112.119-2053",
+                "path": "/206.84.101.83-8443",
                 "headers": {
                     "Host": "proxy.xtunnel.my.id"
                 }
@@ -120,7 +120,7 @@
             "tag": "23 🇮🇩 Akamai Connected Cloud WS NTLS [proxy]",
             "server": "quiz.int.vidio.com",
             "server_port": 80,
-            "password": "81a509b4-9757-4258-a208-0b82e2e80f6a",
+            "password": "b89dd964-5aa8-449b-9bb7-4f231b26fdd4",
             "network": "tcp",
             "tls": {
                 "insecure": true,
@@ -128,7 +128,7 @@
             },
             "transport": {
                 "type": "ws",
-                "path": "/172.232.232.163-74",
+                "path": "/172.232.238.56-486",
                 "headers": {
                     "Host": "proxy.xtunnel.my.id"
                 }
@@ -139,32 +139,10 @@
         },
         {
             "type": "trojan",
-            "tag": "9 🇮🇩 CV. Rumahweb Indonesia WS NTLS [proxy]",
+            "tag": "16 🇮🇩 PT Pusat Media Indonesia WS NTLS [proxy]",
             "server": "quiz.int.vidio.com",
             "server_port": 80,
-            "password": "81a509b4-9757-4258-a208-0b82e2e80f6a",
-            "network": "tcp",
-            "tls": {
-                "insecure": true,
-                "server_name": "proxy.xtunnel.my.id"
-            },
-            "transport": {
-                "type": "ws",
-                "path": "/203.194.112.119-2053",
-                "headers": {
-                    "Host": "proxy.xtunnel.my.id"
-                }
-            },
-            "multiplex": {
-                "enabled": false
-            }
-        },
-        {
-            "type": "trojan",
-            "tag": "31 🇮🇩 PT Pusat Media Indonesia WS NTLS [proxy]",
-            "server": "quiz.int.vidio.com",
-            "server_port": 80,
-            "password": "81a509b4-9757-4258-a208-0b82e2e80f6a",
+            "password": "b89dd964-5aa8-449b-9bb7-4f231b26fdd4",
             "network": "tcp",
             "tls": {
                 "insecure": true,
@@ -183,10 +161,10 @@
         },
         {
             "type": "trojan",
-            "tag": "2 🇮🇩 PT MITRA VISIONER PRATAMA WS NTLS [proxy]",
+            "tag": "6 🇮🇩 PT MITRA VISIONER PRATAMA WS NTLS [proxy]",
             "server": "quiz.int.vidio.com",
             "server_port": 80,
-            "password": "81a509b4-9757-4258-a208-0b82e2e80f6a",
+            "password": "b89dd964-5aa8-449b-9bb7-4f231b26fdd4",
             "network": "tcp",
             "tls": {
                 "insecure": true,
@@ -205,10 +183,10 @@
         },
         {
             "type": "trojan",
-            "tag": "4 🇮🇩 Amazon.com WS NTLS [proxy]",
+            "tag": "22 🇮🇩 Amazon.com WS NTLS [proxy]",
             "server": "quiz.int.vidio.com",
             "server_port": 80,
-            "password": "81a509b4-9757-4258-a208-0b82e2e80f6a",
+            "password": "b89dd964-5aa8-449b-9bb7-4f231b26fdd4",
             "network": "tcp",
             "tls": {
                 "insecure": true,
@@ -217,6 +195,28 @@
             "transport": {
                 "type": "ws",
                 "path": "/43.218.77.16-443",
+                "headers": {
+                    "Host": "proxy.xtunnel.my.id"
+                }
+            },
+            "multiplex": {
+                "enabled": false
+            }
+        },
+        {
+            "type": "trojan",
+            "tag": "13 🇮🇩 PT Telekomunikasi Indonesia WS NTLS [proxy]",
+            "server": "quiz.int.vidio.com",
+            "server_port": 80,
+            "password": "b89dd964-5aa8-449b-9bb7-4f231b26fdd4",
+            "network": "tcp",
+            "tls": {
+                "insecure": true,
+                "server_name": "proxy.xtunnel.my.id"
+            },
+            "transport": {
+                "type": "ws",
+                "path": "/36.95.152.58-12137",
                 "headers": {
                     "Host": "proxy.xtunnel.my.id"
                 }
