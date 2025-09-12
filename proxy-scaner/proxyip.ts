@@ -29,6 +29,10 @@ async function getNextTokenIndex(): Promise<number> {
 }
 import * as tls from "tls";
 
+// Timeout configuration (adjust here)
+export const FAST_TIMEOUT_MS = 3000;   // First pass timeout
+export const RETRY_TIMEOUT_MS = 8000;  // Retry pass timeout
+
 interface ProxyStruct {
   address: string;
   port: number;
@@ -496,7 +500,7 @@ function showFinalStatistics() {
   }
 }
 
-async function sendRequest(host: string, path: string, proxy: any = null) {
+async function sendRequest(host: string, path: string, proxy: any = null, timeoutMs: number = 5000) {
   return new Promise((resolve, reject) => {
     const options = {
       host: proxy ? proxy.host : host,
@@ -515,7 +519,7 @@ async function sendRequest(host: string, path: string, proxy: any = null) {
     const timeout = setTimeout(() => {
       socket.destroy();
       reject(new Error("socket timeout"));
-    }, 5000);
+    }, timeoutMs);
 
     socket.on("data", (data) => (responseBody += data.toString()));
     socket.on("end", () => {
@@ -524,13 +528,12 @@ async function sendRequest(host: string, path: string, proxy: any = null) {
       resolve(body);
     });
     socket.on("error", (error) => {
-      // console.log(error);
       reject(error);
     });
   });
 }
 
-export async function checkProxy(proxyAddress: string, proxyPort: number): Promise<ProxyTestResult> {
+export async function checkProxy(proxyAddress: string, proxyPort: number, timeoutMs: number = 3000): Promise<ProxyTestResult> {
   let result: ProxyTestResult = {
     message: "Unknown error",
     error: true,
@@ -542,8 +545,8 @@ export async function checkProxy(proxyAddress: string, proxyPort: number): Promi
   try {
     const start = new Date().getTime();
     const [ipinfo, myip] = await Promise.all([
-      sendRequest(currentResolverDomain, IP_RESOLVER_PATH, proxyInfo),
-      myGeoIpString == null ? sendRequest(currentResolverDomain, IP_RESOLVER_PATH, null) : myGeoIpString,
+      sendRequest(currentResolverDomain, IP_RESOLVER_PATH, proxyInfo, timeoutMs),
+      myGeoIpString == null ? sendRequest(currentResolverDomain, IP_RESOLVER_PATH, null, timeoutMs) : myGeoIpString,
     ]);
     const finish = new Date().getTime();
 
@@ -888,10 +891,9 @@ async function writeProxyHistory(history: ProxyHistory): Promise<void> {
     }
 
     // Run multi-worker checks
-    const workerResults = await (async () => {
-      // shard
-      const size = Math.ceil(proxyList.length / WORKERS);
-      const shards = Array.from({ length: WORKERS }, (_, i) => proxyList.slice(i * size, (i + 1) * size));
+    const runWorkers = async (proxies: typeof proxyList, timeoutMs: number) => {
+      const size = Math.ceil(proxies.length / WORKERS);
+      const shards = Array.from({ length: WORKERS }, (_, i) => proxies.slice(i * size, (i + 1) * size));
       const promises = shards.map((shard) => {
         return new Promise<{ ip: string; port: number; countryCode: string }[]>((resolve) => {
           const w = new Worker(new URL("./worker.ts", import.meta.url), { type: "module" });
@@ -901,29 +903,47 @@ async function writeProxyHistory(history: ProxyHistory): Promise<void> {
               w.terminate();
             }
           };
-          w.postMessage({ proxies: shard, concurrency: PER_WORKER_CONCURRENCY });
+          w.postMessage({ proxies: shard, concurrency: PER_WORKER_CONCURRENCY, timeoutMs });
         });
       });
       const all = await Promise.all(promises);
       return all.flat();
-    })();
+    };
 
-    for (const r of workerResults) {
-      const proxyKey = `${r.ip}:${r.port}`;
-      if (proxyHistory.proxies[proxyKey]) {
-        proxyHistory.proxies[proxyKey].activeCount += 1;
-        proxyHistory.proxies[proxyKey].isCurrentlyActive = true;
+    // First pass (FAST_TIMEOUT_MS)
+    const workerResultsFast = await runWorkers(proxyList, FAST_TIMEOUT_MS);
+
+    // Apply results
+    const applyResults = async (results: { ip: string; port: number; countryCode: string }[]) => {
+      for (const r of results) {
+        const proxyKey = `${r.ip}:${r.port}`;
+        if (proxyHistory.proxies[proxyKey]) {
+          proxyHistory.proxies[proxyKey].activeCount += 1;
+          proxyHistory.proxies[proxyKey].isCurrentlyActive = true;
+        }
+        // Enrich in main: fills cache or missingIPs for batch
+        const ipData = await getIPData(r.ip, r.countryCode);
+        activeResults.push({ ip: r.ip, port: r.port, countryCode: r.countryCode });
+        if (kvPair[ipData.country] == undefined) kvPair[ipData.country] = [];
+        if (kvPair[ipData.country].length < 100) {
+          kvPair[ipData.country].push(`${r.ip}:${r.port}`);
+        }
+        proxySaved += 1;
+        stats.totalProxies++;
+        if (!ipDataCache.has(r.ip)) stats.uniqueIPs++;
       }
-      // Enrich in main: fills cache or missingIPs for batch
-      const ipData = await getIPData(r.ip, r.countryCode);
-      activeResults.push({ ip: r.ip, port: r.port, countryCode: r.countryCode });
-      if (kvPair[ipData.country] == undefined) kvPair[ipData.country] = [];
-      if (kvPair[ipData.country].length < 100) {
-        kvPair[ipData.country].push(`${r.ip}:${r.port}`);
-      }
-      proxySaved += 1;
-      stats.totalProxies++;
-      if (!ipDataCache.has(r.ip)) stats.uniqueIPs++;
+    };
+
+    await applyResults(workerResultsFast);
+
+    // Build retry set: proxies that did not become active
+    const activeKeys = new Set(activeResults.map(x => `${x.ip}:${x.port}`));
+    const retryCandidates = proxyList.filter(p => !activeKeys.has(`${p.address}:${p.port}`));
+
+    if (retryCandidates.length > 0) {
+      console.log(`\n⏳ Retry pass (workers): ${retryCandidates.length} proxies with ${RETRY_TIMEOUT_MS / 1000}s timeout...`);
+      const workerResultsRetry = await runWorkers(retryCandidates as any, RETRY_TIMEOUT_MS);
+      await applyResults(workerResultsRetry);
     }
   } else {
     for (let i = 0; i < proxyList.length; i++) {
@@ -958,7 +978,7 @@ async function writeProxyHistory(history: ProxyHistory): Promise<void> {
       }
   
       CHECK_QUEUE.push(proxyKey);
-      checkProxy(proxy.address, proxy.port)
+      checkProxy(proxy.address, proxy.port, FAST_TIMEOUT_MS)
         .then(async (res) => {
           if (!res.error && res.result?.proxyip === true) {
             const proxyIP = res.result.ip;
@@ -991,6 +1011,9 @@ async function writeProxyHistory(history: ProxyHistory): Promise<void> {
           }
           // Note: If proxy is not active, isCurrentlyActive remains false
         })
+        .catch(async (e) => {
+          // ignore here; handled by error branch
+        })
         .finally(() => {
           CHECK_QUEUE.pop();
         });
@@ -1003,6 +1026,27 @@ async function writeProxyHistory(history: ProxyHistory): Promise<void> {
     // Waiting for all process to be completed
     while (CHECK_QUEUE.length) {
       await Bun.sleep(1);
+    }
+
+    // Retry pass (single-process mode only)
+    console.log(`\n⏳ Retry pass: Rechecking timeouts with ${RETRY_TIMEOUT_MS / 1000}s timeout...`);
+    const seenActive = new Set(Object.keys(proxyHistory.proxies).filter(k => proxyHistory.proxies[k].isCurrentlyActive));
+    const retryList = proxyList.filter(p => !seenActive.has(`${p.address}:${p.port}`));
+    for (const p of retryList) {
+      try {
+        const res = await checkProxy(p.address, p.port, RETRY_TIMEOUT_MS);
+        if (!res.error && res.result?.proxyip) {
+          const ipData = await getIPData(p.address, p.country);
+          const proxyKey = `${p.address}:${p.port}`;
+          proxyHistory.proxies[proxyKey].activeCount += 1;
+          proxyHistory.proxies[proxyKey].isCurrentlyActive = true;
+          activeResults.push({ ip: p.address, port: p.port, countryCode: p.country });
+          if (kvPair[ipData.country] == undefined) kvPair[ipData.country] = [];
+          if (kvPair[ipData.country].length < 100) kvPair[ipData.country].push(`${p.address}:${p.port}`);
+          stats.totalProxies++;
+          if (!ipDataCache.has(p.address)) stats.uniqueIPs++;
+        }
+      } catch {}
     }
   }
 

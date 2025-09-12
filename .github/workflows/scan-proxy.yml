@@ -28,14 +28,19 @@ jobs:
       - name: Commit and push scan results
         run: |
           set -e
-          git config --global user.name "Github Actions"
-          git config --global user.email "actions@github.com"
-          if [ -n "$(git status --porcelain)" ]; then
-            git add proxy-scaner/*.json proxy-scaner/*.txt proxy-scaner/active-proxy-history.txt proxy-scaner/proxy_list/*.txt
-            git commit -m "Update proxy scan results"
-            git push origin Master --force
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          # Stage only the relevant generated files
+          git add \
+            proxy-scaner/proxy_data/*.json \
+            proxy-scaner/proxy_list/*.txt \
+            proxy-scaner/active-proxy-history.txt || true
+          # Commit only if there are staged changes
+          if ! git diff --cached --quiet; then
+            git commit -m "chore: update proxy_data and proxy_list [skip ci]"
+            git push origin Master
           else
-            echo "No changes detected, skipping commit and push."
+            echo "No changes to commit."
           fi
 
       - name: Trigger upload-kv-storage workflow

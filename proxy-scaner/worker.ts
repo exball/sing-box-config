@@ -27,6 +27,10 @@ interface ProxyTestResult {
   };
 }
 
+// Timeout configuration (adjust here)
+export const FAST_TIMEOUT_MS = 3000;   // First pass timeout
+export const RETRY_TIMEOUT_MS = 8000;  // Retry pass timeout
+
 const IP_RESOLVER_PATH = "/";
 
 function getResolverDomain(): string {
@@ -39,7 +43,7 @@ function getResolverDomain(): string {
   return "resolver.ex27.my.id";
 }
 
-async function sendRequest(host: string, path: string, proxy: any = null) {
+async function sendRequest(host: string, path: string, proxy: any = null, timeoutMs: number = 5000) {
   return new Promise((resolve, reject) => {
     const options = {
       host: proxy ? proxy.host : host,
@@ -61,7 +65,7 @@ async function sendRequest(host: string, path: string, proxy: any = null) {
     const timeout = setTimeout(() => {
       socket.destroy();
       reject(new Error("socket timeout"));
-    }, 5000);
+    }, timeoutMs);
 
     socket.on("data", (data) => (responseBody += data.toString()));
     socket.on("end", () => {
@@ -75,7 +79,7 @@ async function sendRequest(host: string, path: string, proxy: any = null) {
 
 let myGeoIpString: any = null;
 
-async function checkProxy(proxyAddress: string, proxyPort: number): Promise<ProxyTestResult> {
+async function checkProxy(proxyAddress: string, proxyPort: number, timeoutMs: number = 3000): Promise<ProxyTestResult> {
   let result: ProxyTestResult = { error: true, message: "Unknown error" };
   const proxyInfo = { host: proxyAddress, port: proxyPort };
   const currentResolverDomain = getResolverDomain();
@@ -83,8 +87,8 @@ async function checkProxy(proxyAddress: string, proxyPort: number): Promise<Prox
   try {
     const start = Date.now();
     const [ipinfo, myip] = await Promise.all([
-      sendRequest(currentResolverDomain, IP_RESOLVER_PATH, proxyInfo),
-      myGeoIpString == null ? sendRequest(currentResolverDomain, IP_RESOLVER_PATH, null) : myGeoIpString,
+      sendRequest(currentResolverDomain, IP_RESOLVER_PATH, proxyInfo, timeoutMs),
+      myGeoIpString == null ? sendRequest(currentResolverDomain, IP_RESOLVER_PATH, null, timeoutMs) : myGeoIpString,
     ]);
     const finish = Date.now();
 
@@ -121,13 +125,13 @@ async function checkProxy(proxyAddress: string, proxyPort: number): Promise<Prox
 }
 
 // Web Worker API
-export type WorkerInit = { proxies: ProxyStruct[]; concurrency: number };
+export type WorkerInit = { proxies: ProxyStruct[]; concurrency: number; timeoutMs?: number };
 
 // Use loose typing to avoid requiring WebWorker lib in tsconfig
 const ctx: any = self as any;
 
 ctx.onmessage = async (ev: any) => {
-  const { proxies, concurrency } = ev.data as WorkerInit;
+  const { proxies, concurrency, timeoutMs = 3000 } = ev.data as WorkerInit;
   const results: { ip: string; port: number; countryCode: string }[] = [];
 
   let index = 0;
@@ -137,7 +141,7 @@ ctx.onmessage = async (ev: any) => {
       if (i >= proxies.length) break;
       const p = proxies[i];
       try {
-        const r = await checkProxy(p.address, p.port);
+        const r = await checkProxy(p.address, p.port, timeoutMs);
         if (!r.error && r.result?.proxyip) {
           results.push({ ip: r.result.ip, port: p.port, countryCode: p.country });
         }
