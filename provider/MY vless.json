@@ -2,52 +2,10 @@
     "outbounds": [
         {
             "type": "vless",
-            "tag": "5 🇲🇾 Microsoft Corporation WS TLS [proxy]",
+            "tag": "2 🇲🇾 Evoxt Enterprise WS TLS [proxy]",
             "server": "quiz.int.vidio.com",
             "server_port": 443,
-            "uuid": "6ef6a551-e947-4637-9f8b-ad9164b7b6aa",
-            "network": "tcp",
-            "packet_encoding": "xudp",
-            "tls": {
-                "enabled": true,
-                "insecure": true,
-                "server_name": "proxy.xtunnel.my.id"
-            },
-            "transport": {
-                "headers": {
-                    "Host": "proxy.xtunnel.my.id"
-                },
-                "path": "/20.17.104.31-443",
-                "type": "ws"
-            }
-        },
-        {
-            "type": "vless",
-            "tag": "2 🇲🇾 TM TECHNOLOGY SERVICES SDN. BHD. WS TLS [proxy]",
-            "server": "quiz.int.vidio.com",
-            "server_port": 443,
-            "uuid": "6ef6a551-e947-4637-9f8b-ad9164b7b6aa",
-            "network": "tcp",
-            "packet_encoding": "xudp",
-            "tls": {
-                "enabled": true,
-                "insecure": true,
-                "server_name": "proxy.xtunnel.my.id"
-            },
-            "transport": {
-                "headers": {
-                    "Host": "proxy.xtunnel.my.id"
-                },
-                "path": "/58.27.117.24-443",
-                "type": "ws"
-            }
-        },
-        {
-            "type": "vless",
-            "tag": "7 🇲🇾 Evoxt Enterprise WS TLS [proxy]",
-            "server": "quiz.int.vidio.com",
-            "server_port": 443,
-            "uuid": "6ef6a551-e947-4637-9f8b-ad9164b7b6aa",
+            "uuid": "9b69af5e-7fd6-4c16-8a64-a60b2d0b81f7",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -65,10 +23,52 @@
         },
         {
             "type": "vless",
-            "tag": "1 🇲🇾 Evoxt Enterprise WS NTLS [proxy]",
+            "tag": "1 🇲🇾 Kaopu Cloud HK Limited WS TLS [proxy]",
+            "server": "quiz.int.vidio.com",
+            "server_port": 443,
+            "uuid": "9b69af5e-7fd6-4c16-8a64-a60b2d0b81f7",
+            "network": "tcp",
+            "packet_encoding": "xudp",
+            "tls": {
+                "enabled": true,
+                "insecure": true,
+                "server_name": "proxy.xtunnel.my.id"
+            },
+            "transport": {
+                "headers": {
+                    "Host": "proxy.xtunnel.my.id"
+                },
+                "path": "/38.60.193.247-13300",
+                "type": "ws"
+            }
+        },
+        {
+            "type": "vless",
+            "tag": "3 🇲🇾 Terabix WS TLS [proxy]",
+            "server": "quiz.int.vidio.com",
+            "server_port": 443,
+            "uuid": "9b69af5e-7fd6-4c16-8a64-a60b2d0b81f7",
+            "network": "tcp",
+            "packet_encoding": "xudp",
+            "tls": {
+                "enabled": true,
+                "insecure": true,
+                "server_name": "proxy.xtunnel.my.id"
+            },
+            "transport": {
+                "headers": {
+                    "Host": "proxy.xtunnel.my.id"
+                },
+                "path": "/163.61.102.13-443",
+                "type": "ws"
+            }
+        },
+        {
+            "type": "vless",
+            "tag": "1 🇲🇾 TM TECHNOLOGY SERVICES SDN. BHD. WS NTLS [proxy]",
             "server": "quiz.int.vidio.com",
             "server_port": 80,
-            "uuid": "72e5335e-668e-48da-a047-f0cc03fbb193",
+            "uuid": "91496c6a-46b9-4352-a045-ad83dd5df383",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -78,35 +78,16 @@
                 "headers": {
                     "Host": "proxy.xtunnel.my.id"
                 },
-                "path": "/23.27.53.119-35209",
+                "path": "/58.27.117.24-443",
                 "type": "ws"
             }
         },
         {
             "type": "vless",
-            "tag": "8 🇲🇾 Microsoft Corporation WS NTLS [proxy]",
+            "tag": "2 🇲🇾 Kaopu Cloud HK Limited WS NTLS [proxy]",
             "server": "quiz.int.vidio.com",
             "server_port": 80,
-            "uuid": "72e5335e-668e-48da-a047-f0cc03fbb193",
-            "network": "tcp",
-            "packet_encoding": "xudp",
-            "tls": {
-                "insecure": true
-            },
-            "transport": {
-                "headers": {
-                    "Host": "proxy.xtunnel.my.id"
-                },
-                "path": "/20.17.104.31-443",
-                "type": "ws"
-            }
-        },
-        {
-            "type": "vless",
-            "tag": "4 🇲🇾 Kaopu Cloud HK Limited WS NTLS [proxy]",
-            "server": "quiz.int.vidio.com",
-            "server_port": 80,
-            "uuid": "72e5335e-668e-48da-a047-f0cc03fbb193",
+            "uuid": "91496c6a-46b9-4352-a045-ad83dd5df383",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -117,6 +98,25 @@
                     "Host": "proxy.xtunnel.my.id"
                 },
                 "path": "/38.60.193.247-13300",
+                "type": "ws"
+            }
+        },
+        {
+            "type": "vless",
+            "tag": "3 🇲🇾 Evoxt Enterprise WS NTLS [proxy]",
+            "server": "quiz.int.vidio.com",
+            "server_port": 80,
+            "uuid": "91496c6a-46b9-4352-a045-ad83dd5df383",
+            "network": "tcp",
+            "packet_encoding": "xudp",
+            "tls": {
+                "insecure": true
+            },
+            "transport": {
+                "headers": {
+                    "Host": "proxy.xtunnel.my.id"
+                },
+                "path": "/23.27.200.223-443",
                 "type": "ws"
             }
         }
