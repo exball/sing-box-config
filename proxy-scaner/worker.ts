@@ -29,7 +29,7 @@ interface ProxyTestResult {
 
 // Timeout configuration (adjust here)
 export const FAST_TIMEOUT_MS = 3000;   // First pass timeout
-export const RETRY_TIMEOUT_MS = 8000;  // Retry pass timeout
+export const RETRY_TIMEOUT_MS = 5000;  // Retry pass timeout
 
 const IP_RESOLVER_PATH = "/";
 
