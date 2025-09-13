@@ -331,8 +331,8 @@ async function batchLookupMissingIPs(): Promise<void> {
             processed.push({
               ip: [ip],
               country: data.country || '-',
-              asn: data.org ? data.org.split(' ')[0] : '-',
-              as_name: data.org ? data.org.split(' ').slice(1).join(' ') : '-'
+              asn: data.asn || (data.org ? data.org.split(' ')[0] : '-'),
+              as_name: (data.as_name || (data.org ? data.org.split(' ').slice(1).join(' ') : '-')).replace(/,/g, '.')
             });
             ipDataCache.set(ip, processed[processed.length-1]);
           }
@@ -370,8 +370,8 @@ async function processBatchResults(results: { [ip: string]: any }): Promise<void
     const ipData: IPDataEntry = {
       ip: [ip],
       country: country,
-      asn: data.org ? data.org.split(' ')[0] : '-',
-      as_name: data.org ? data.org.split(' ').slice(1).join(' ') : '-'
+      asn: data.asn || (data.org ? data.org.split(' ')[0] : '-'),
+      as_name: (data.as_name || (data.org ? data.org.split(' ').slice(1).join(' ') : '-')).replace(/,/g, '.')
     };
     if (!countryUpdates.has(country)) {
       countryUpdates.set(country, []);
@@ -572,10 +572,10 @@ export async function checkProxy(proxyAddress: string, proxyPort: number, timeou
           country: parsedIpInfo.country || "Unknown",
           countryCode: parsedIpInfo.countryCode || "Unknown",
           isp: parsedIpInfo.isp || "Unknown ISP",
-          org: parsedIpInfo.org || "Unknown Provider",
+          org: (parsedIpInfo.asname || parsedIpInfo.asOrganization || parsedIpInfo.org || "Unknown Provider").replace(/,/g, '.'),
           as: parsedIpInfo.as || "Unknown AS",
-          asname: parsedIpInfo.asname || "Unknown ASName",
-          asOrganization: parsedIpInfo.asOrganization || parsedIpInfo.org || "Unknown Provider"
+          asname: (parsedIpInfo.asname || "Unknown ASName").replace(/,/g, '.'),
+          asOrganization: (parsedIpInfo.asOrganization || parsedIpInfo.org || "Unknown Provider").replace(/,/g, '.')
         },
       };
     }
