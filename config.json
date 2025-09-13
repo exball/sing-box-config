@@ -136,10 +136,30 @@
     },
     {
       "type": "urltest",
+      "tag": "best latency",
+      "outbounds": [
+        "best latency vmess",
+        "best latency cf"
+      ]
+    },
+    {
+      "type": "urltest",
       "tag": "best latency vmess",
       "outbounds": [
         "Vmess Tls",
         "Vmess Ntls"
+      ]
+    },
+    {
+      "type": "urltest",
+      "tag": "best latency cf",
+      "outbounds": [
+        "ID vless",
+        "SG vless",
+        "TH vless",
+        "MY vless",
+        "VN vless",
+        "Backup"
       ]
     },
     {
