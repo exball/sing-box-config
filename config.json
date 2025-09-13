@@ -113,33 +113,12 @@
       "outbounds": [
         "best latency",
         "best latency vmess",
-        "best latency cf",
         "Vmess Tls",
-        "Vmess Ntls",
-        "ID vless",
-        "SG vless",
-        "TH vless",
-        "MY vless",
-        "VN vless",
-        "Backup"
+        "Vmess Ntls"
       ],
       "providers": [
         "Vmess Tls",
-        "Vmess Ntls",
-        "ID vless",
-        "SG vless",
-        "TH vless",
-        "MY vless",
-        "VN vless",
-        "Backup"
-      ]
-    },
-    {
-      "type": "urltest",
-      "tag": "best latency",
-      "outbounds": [
-        "best latency vmess",
-        "best latency cf"
+        "Vmess Ntls"
       ]
     },
     {
@@ -148,18 +127,6 @@
       "outbounds": [
         "Vmess Tls",
         "Vmess Ntls"
-      ]
-    },
-    {
-      "type": "urltest",
-      "tag": "best latency cf",
-      "outbounds": [
-        "ID vless",
-        "SG vless",
-        "TH vless",
-        "MY vless",
-        "VN vless",
-        "Backup"
       ]
     },
     {
@@ -187,48 +154,6 @@
     {
       "type": "block",
       "tag": "block"
-    },
-    {
-      "type": "urltest",
-      "tag": "ID vless",
-      "providers": "ID vless",
-      "url": "https://www.gstatic.com/generate_204",
-      "interval": "1m0s"
-    },
-    {
-      "type": "urltest",
-      "tag": "SG vless",
-      "providers": "SG vless",
-      "url": "https://www.gstatic.com/generate_204",
-      "interval": "1m0s"
-    },
-    {
-      "type": "urltest",
-      "tag": "TH vless",
-      "providers": "TH vless",
-      "url": "https://www.gstatic.com/generate_204",
-      "interval": "1m0s"
-    },
-    {
-      "type": "urltest",
-      "tag": "MY vless",
-      "providers": "MY vless",
-      "url": "https://www.gstatic.com/generate_204",
-      "interval": "1m0s"
-    },
-    {
-      "type": "urltest",
-      "tag": "VN vless",
-      "providers": "VN vless",
-      "url": "https://www.gstatic.com/generate_204",
-      "interval": "1m0s"
-    },
-    {
-      "type": "urltest",
-      "tag": "Backup",
-      "providers": "Backup",
-      "url": "https://www.gstatic.com/generate_204",
-      "interval": "1m0s"
     }
   ],
   "route": {
@@ -343,36 +268,6 @@
       "type": "local",
       "path": "./provider/Vmess Ntls.json",
       "tag": "Vmess Ntls"
-    },
-    {
-      "type": "local",
-      "path": "./provider/ID vless.json",
-      "tag": "ID vless"
-    },
-    {
-      "type": "local",
-      "path": "./provider/SG vless.json",
-      "tag": "SG vless"
-    },
-    {
-      "type": "local",
-      "path": "./provider/TH vless.json",
-      "tag": "TH vless"
-    },
-    {
-      "type": "local",
-      "path": "./provider/MY vless.json",
-      "tag": "MY vless"
-    },
-    {
-      "type": "local",
-      "path": "./provider/VN vless.json",
-      "tag": "VN vless"
-    },
-    {
-      "type": "local",
-      "path": "./provider/Backup.json",
-      "tag": "Backup"
     }
   ],
   "experimental": {
