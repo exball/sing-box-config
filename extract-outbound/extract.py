@@ -21,10 +21,10 @@ outbound_format = None
 HISTORY_FILE = "proxy_history.json"
 
  # URL untuk mengambil proxy (4 domain dengan pembagian 6 jam)
-# PROXY_URL_PERIOD1 = "https://vpn.ex-vpn.my.id"      # Digunakan dari 00:00-05:59 (UTC+8)
+PROXY_URL_PERIOD1 = "https://vpn.ex-vpn.my.id"      # Digunakan dari 00:00-05:59 (UTC+8)
 PROXY_URL_PERIOD2 = "https://v3.exbal.my.id"       # Digunakan dari 06:00-11:59 (UTC+8)
-# PROXY_URL_PERIOD3 = "https://proxy.xtunnel.my.id"   # Digunakan dari 12:00-17:59 (UTC+8)
-# PROXY_URL_PERIOD4 = "https://vpn.ex27.my.id"        # Digunakan dari 18:00-23:59 (UTC+8)
+PROXY_URL_PERIOD3 = "https://proxy.xtunnel.my.id"   # Digunakan dari 12:00-17:59 (UTC+8)
+PROXY_URL_PERIOD4 = "https://vpn.ex27.my.id"        # Digunakan dari 18:00-23:59 (UTC+8)
 
  # Fungsi untuk mendapatkan URL proxy berdasarkan waktu saat ini (UTC+8)
 def get_proxy_base_url():
