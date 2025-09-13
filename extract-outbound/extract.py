@@ -22,8 +22,8 @@ HISTORY_FILE = "proxy_history.json"
 
  # URL untuk mengambil proxy (4 domain dengan pembagian 6 jam)
 PROXY_URL_PERIOD1 = "https://vpn.ex-vpn.my.id"      # Digunakan dari 00:00-05:59 (UTC+8)
-PROXY_URL_PERIOD2 = "https://v3.exbal.my.id"       # Digunakan dari 06:00-11:59 (UTC+8)
-PROXY_URL_PERIOD3 = "https://proxy.xtunnel.my.id"   # Digunakan dari 12:00-17:59 (UTC+8)
+PROXY_URL_PERIOD2 = "https://vpn.exbal.my.id"       # Digunakan dari 06:00-11:59 (UTC+8)
+PROXY_URL_PERIOD3 = "https://vpn.xtunnel.my.id"   # Digunakan dari 12:00-17:59 (UTC+8)
 PROXY_URL_PERIOD4 = "https://vpn.ex27.my.id"        # Digunakan dari 18:00-23:59 (UTC+8)
 
  # Fungsi untuk mendapatkan URL proxy berdasarkan waktu saat ini (UTC+8)
@@ -1078,7 +1078,9 @@ def process_single_config(config, format_type="bfr", format_file="sing_outbound.
     for country in countries:
         for protocol in protocols:
             for security in securities:
-                url = f"{base_url}/api/{format_type}?cc={country}&protocols={protocol}&securities={security}&limit=100"
+                # Map security -> port for new worker API (tls->443, ntls->80)
+                port = "443" if security == "tls" else "80"
+                url = f"{base_url}/api/v1/sub?cc={country}&vpn={protocol}&port={port}&limit=100&format={format_type}"
                 
                 try:
                     print(f"Fetching {protocol} {security} proxies from {country}...")
