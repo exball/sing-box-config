@@ -181,6 +181,21 @@ const countryMapping: { [key: string]: string } = {
   'ZA': 'South Africa'
 };
 
+// Reverse map: country name -> code, and normalizer to ensure we always use CC
+const nameToCode: { [name: string]: string } = Object.fromEntries(
+  Object.entries(countryMapping).map(([code, name]) => [name, code])
+);
+
+function normalizeCountryCode(input?: string, hint?: string): string {
+  // If input already looks like a 2-letter code present in mapping, keep it
+  if (input && /^[A-Z]{2}$/.test(input) && countryMapping[input]) return input;
+  // If input is a known full country name, map to code
+  if (input && nameToCode[input]) return nameToCode[input];
+  // Fallback to hint if it is a valid code
+  if (hint && /^[A-Z]{2}$/.test(hint) && countryMapping[hint]) return hint;
+  return '-';
+}
+
 // File paths
 const KV_PAIR_PROXY_FILE = "./kvProxyList.json";
 const RAW_PROXY_LIST_FILE = "./rawProxyList.txt";
@@ -263,8 +278,9 @@ async function getIPData(ip: string, countryCode: string): Promise<IPDataEntry> 
     stats.cacheHits++;
     return ipDataCache.get(ip)!;
   }
-  // 2. Cari di file JSON negara spesifik
-  const ipData = await findIPInCountryData(ip, countryCode);
+  // 2. Cari di file JSON negara spesifik (pastikan menggunakan kode negara)
+  const cc = normalizeCountryCode(countryCode) || countryCode;
+  const ipData = await findIPInCountryData(ip, cc);
   if (ipData) {
     // 3. Create individual IP data for caching (normalize from group data)
     const individualIPData: IPDataEntry = {
@@ -273,18 +289,17 @@ async function getIPData(ip: string, countryCode: string): Promise<IPDataEntry> 
       asn: ipData.asn,
       as_name: ipData.as_name
     };
-  ipDataCache.set(ip, individualIPData);
-  return individualIPData;
+    ipDataCache.set(ip, individualIPData);
+    return individualIPData;
   } else {
     // 4. Tambah ke missing IPs untuk batch API nanti
     missingIPsCache.add(ip);
     stats.missingIPs++;
-    console.log(`❌ IP ${ip} not found in ${countryCode}.json - added to batch queue`);
-    // 5. Return fallback data sementara
-    // Gunakan kode negara (mis. "ID") agar konsisten dengan penamaan file per-negara
+    console.log(`❌ IP ${ip} not found in ${cc}.json - added to batch queue`);
+    // 5. Return fallback data sementara (pakai kode negara hasil normalisasi)
     const fallbackData: IPDataEntry = {
       ip: [ip],
-      country: countryCode,
+      country: cc,
       asn: "-",
       as_name: "-"
     };
@@ -330,7 +345,7 @@ async function batchLookupMissingIPs(): Promise<void> {
             const data = results[ip];
             processed.push({
               ip: [ip],
-              country: data.country || '-',
+              country: normalizeCountryCode(data.country) || '-',
               asn: data.asn || (data.org ? data.org.split(' ')[0] : '-'),
               as_name: (data.as_name || (data.org ? data.org.split(' ').slice(1).join(' ') : '-')).replace(/,/g, '.')
             });
@@ -366,7 +381,7 @@ async function processBatchResults(results: { [ip: string]: any }): Promise<void
   for (const ip of Object.keys(results)) {
     const data = results[ip];
     // ipinfo.io always returns the IP as the key
-    const country = data.country || '-';
+    const country = normalizeCountryCode(data.country) || '-';
     const ipData: IPDataEntry = {
       ip: [ip],
       country: country,
@@ -479,7 +494,13 @@ async function updateCountryJSONFileBatch(newData: IPDataEntry[]): Promise<void>
     grouped[entry.country].push(entry);
   }
   for (const country of Object.keys(grouped)) {
-    await updateCountryJSONFile(country, grouped[country]);
+    const cc = normalizeCountryCode(country);
+    await updateCountryJSONFile(cc, grouped[country].map(e => ({
+      ip: e.ip,
+      country: cc,
+      asn: e.asn,
+      as_name: e.as_name,
+    })));
   }
 }
 
