@@ -1080,7 +1080,7 @@ def process_single_config(config, format_type="bfr", format_file="sing_outbound.
             for security in securities:
                 # Map security -> port for new worker API (tls->443, ntls->80)
                 port = "443" if security == "tls" else "80"
-                url = f"{base_url}/api/v1/sub?cc={country}&vpn={protocol}&port={port}&limit=100&format={format_type}"
+                url = f"{base_url}/api/v1/sub?cc={country}&vpn={protocol}&port={port}&limit=200&format={format_type}"
                 
                 try:
                     print(f"Fetching {protocol} {security} proxies from {country}...")
