@@ -30,7 +30,7 @@ async function getNextTokenIndex(): Promise<number> {
 import * as tls from "tls";
 
 // Timeout configuration (adjust here)
-export const FAST_TIMEOUT_MS = 3000;   // First pass timeout
+export const FAST_TIMEOUT_MS = 2000;   // First pass timeout
 export const RETRY_TIMEOUT_MS = 5000;  // Retry pass timeout
 
 interface ProxyStruct {
@@ -230,8 +230,8 @@ const CONCURRENCY = 80;
 
 // Multi-worker configuration
 const USE_WORKERS = true;
-const WORKERS = 2; // GitHub Actions default 2 vCPU
-const PER_WORKER_CONCURRENCY = 50; // requested
+const WORKERS = 3; // GitHub Actions default 2 vCPU
+const PER_WORKER_CONCURRENCY = 80; // requested
 
 const CHECK_QUEUE: string[] = [];
 
