@@ -2,62 +2,82 @@
     "outbounds": [
         {
             "type": "vless",
-            "tag": "7 🇲🇾 Evoxt Enterprise WS TLS [vpn]",
+            "tag": "1 🇲🇾 Microsoft Corporation WS TLS [vpn]",
             "server": "quiz.int.vidio.com",
             "server_port": 443,
-            "uuid": "bf418ca6-a89f-428a-8745-6cb4e3b5ceab",
+            "uuid": "7293b4d1-5d93-40e5-b79b-accae6a08774",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
                 "enabled": true,
                 "insecure": true,
-                "server_name": "vpn.xtunnel.my.id"
+                "server_name": "vpn.ex27.my.id"
             },
             "transport": {
                 "headers": {
-                    "Host": "vpn.xtunnel.my.id"
+                    "Host": "vpn.ex27.my.id"
                 },
-                "path": "/23.27.200.223-443",
+                "path": "/20.17.107.137-443",
                 "type": "ws"
             }
         },
         {
             "type": "vless",
-            "tag": "9 🇲🇾 Microsoft Corporation WS TLS [vpn]",
+            "tag": "2 🇲🇾 Kaopu Cloud HK Limited WS TLS [vpn]",
             "server": "quiz.int.vidio.com",
             "server_port": 443,
-            "uuid": "bf418ca6-a89f-428a-8745-6cb4e3b5ceab",
+            "uuid": "7293b4d1-5d93-40e5-b79b-accae6a08774",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
                 "enabled": true,
                 "insecure": true,
-                "server_name": "vpn.xtunnel.my.id"
+                "server_name": "vpn.ex27.my.id"
             },
             "transport": {
                 "headers": {
-                    "Host": "vpn.xtunnel.my.id"
+                    "Host": "vpn.ex27.my.id"
                 },
-                "path": "/20.17.104.31-443",
+                "path": "/38.60.193.247-13300",
                 "type": "ws"
             }
         },
         {
             "type": "vless",
-            "tag": "1 🇲🇾 TM TECHNOLOGY SERVICES SDN. BHD. WS TLS [vpn]",
+            "tag": "3 🇲🇾 Terabix WS TLS [vpn]",
             "server": "quiz.int.vidio.com",
             "server_port": 443,
-            "uuid": "bf418ca6-a89f-428a-8745-6cb4e3b5ceab",
+            "uuid": "7293b4d1-5d93-40e5-b79b-accae6a08774",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
                 "enabled": true,
                 "insecure": true,
-                "server_name": "vpn.xtunnel.my.id"
+                "server_name": "vpn.ex27.my.id"
             },
             "transport": {
                 "headers": {
-                    "Host": "vpn.xtunnel.my.id"
+                    "Host": "vpn.ex27.my.id"
+                },
+                "path": "/163.61.102.13-443",
+                "type": "ws"
+            }
+        },
+        {
+            "type": "vless",
+            "tag": "1 🇲🇾 TM TECHNOLOGY SERVICES SDN. BHD. WS NTLS [vpn]",
+            "server": "quiz.int.vidio.com",
+            "server_port": 80,
+            "uuid": "3fc36314-975a-4ec2-b327-6d0ba606b253",
+            "network": "tcp",
+            "packet_encoding": "xudp",
+            "tls": {
+                "insecure": true,
+                "server_name": "vpn.ex27.my.id"
+            },
+            "transport": {
+                "headers": {
+                    "Host": "vpn.ex27.my.id"
                 },
                 "path": "/58.27.117.24-443",
                 "type": "ws"
@@ -65,61 +85,41 @@
         },
         {
             "type": "vless",
-            "tag": "1 🇲🇾 Microsoft Corporation WS NTLS [vpn]",
+            "tag": "2 🇲🇾 Kaopu Cloud HK Limited WS NTLS [vpn]",
             "server": "quiz.int.vidio.com",
             "server_port": 80,
-            "uuid": "9a1d4454-e5df-4878-96a6-d1fe82cd0e82",
+            "uuid": "3fc36314-975a-4ec2-b327-6d0ba606b253",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
                 "insecure": true,
-                "server_name": "vpn.xtunnel.my.id"
+                "server_name": "vpn.ex27.my.id"
             },
             "transport": {
                 "headers": {
-                    "Host": "vpn.xtunnel.my.id"
+                    "Host": "vpn.ex27.my.id"
                 },
-                "path": "/20.17.104.31-443",
+                "path": "/38.60.193.247-13300",
                 "type": "ws"
             }
         },
         {
             "type": "vless",
-            "tag": "5 🇲🇾 Evoxt Enterprise WS NTLS [vpn]",
+            "tag": "3 🇲🇾 Microsoft Corporation WS NTLS [vpn]",
             "server": "quiz.int.vidio.com",
             "server_port": 80,
-            "uuid": "9a1d4454-e5df-4878-96a6-d1fe82cd0e82",
+            "uuid": "3fc36314-975a-4ec2-b327-6d0ba606b253",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
                 "insecure": true,
-                "server_name": "vpn.xtunnel.my.id"
+                "server_name": "vpn.ex27.my.id"
             },
             "transport": {
                 "headers": {
-                    "Host": "vpn.xtunnel.my.id"
+                    "Host": "vpn.ex27.my.id"
                 },
-                "path": "/23.27.200.223-443",
-                "type": "ws"
-            }
-        },
-        {
-            "type": "vless",
-            "tag": "2 🇲🇾 TM TECHNOLOGY SERVICES SDN. BHD. WS NTLS [vpn]",
-            "server": "quiz.int.vidio.com",
-            "server_port": 80,
-            "uuid": "9a1d4454-e5df-4878-96a6-d1fe82cd0e82",
-            "network": "tcp",
-            "packet_encoding": "xudp",
-            "tls": {
-                "insecure": true,
-                "server_name": "vpn.xtunnel.my.id"
-            },
-            "transport": {
-                "headers": {
-                    "Host": "vpn.xtunnel.my.id"
-                },
-                "path": "/58.27.117.24-443",
+                "path": "/20.17.107.137-443",
                 "type": "ws"
             }
         }
