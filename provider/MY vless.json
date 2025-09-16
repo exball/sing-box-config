@@ -5,7 +5,7 @@
             "tag": "6 🇲🇾 Evoxt Enterprise WS TLS [vpn]",
             "server": "quiz.int.vidio.com",
             "server_port": 443,
-            "uuid": "379f0980-d63b-440a-9af7-a8e674646233",
+            "uuid": "78235824-07d5-47ce-9a86-afc8982fbf1c",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -17,37 +17,16 @@
                 "headers": {
                     "Host": "vpn.ex27.my.id"
                 },
-                "path": "/23.27.200.223-443",
+                "path": "/23.27.53.119-35209",
                 "type": "ws"
             }
         },
         {
             "type": "vless",
-            "tag": "2 🇲🇾 Alibaba (US) Technology Co. WS TLS [vpn]",
+            "tag": "2 🇲🇾 Kaopu Cloud HK Limited WS TLS [vpn]",
             "server": "quiz.int.vidio.com",
             "server_port": 443,
-            "uuid": "379f0980-d63b-440a-9af7-a8e674646233",
-            "network": "tcp",
-            "packet_encoding": "xudp",
-            "tls": {
-                "enabled": true,
-                "insecure": true,
-                "server_name": "vpn.ex27.my.id"
-            },
-            "transport": {
-                "headers": {
-                    "Host": "vpn.ex27.my.id"
-                },
-                "path": "/47.250.139.59-443",
-                "type": "ws"
-            }
-        },
-        {
-            "type": "vless",
-            "tag": "3 🇲🇾 Kaopu Cloud HK Limited WS TLS [vpn]",
-            "server": "quiz.int.vidio.com",
-            "server_port": 443,
-            "uuid": "379f0980-d63b-440a-9af7-a8e674646233",
+            "uuid": "78235824-07d5-47ce-9a86-afc8982fbf1c",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -65,13 +44,14 @@
         },
         {
             "type": "vless",
-            "tag": "9 🇲🇾 Microsoft Corporation WS NTLS [vpn]",
+            "tag": "9 🇲🇾 Microsoft Corporation WS TLS [vpn]",
             "server": "quiz.int.vidio.com",
-            "server_port": 80,
-            "uuid": "29b4d458-6eb3-4a78-af05-a55f5abaf3fd",
+            "server_port": 443,
+            "uuid": "78235824-07d5-47ce-9a86-afc8982fbf1c",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
+                "enabled": true,
                 "insecure": true,
                 "server_name": "vpn.ex27.my.id"
             },
@@ -85,10 +65,10 @@
         },
         {
             "type": "vless",
-            "tag": "2 🇲🇾 Evoxt Enterprise WS NTLS [vpn]",
+            "tag": "1 🇲🇾 Kaopu Cloud HK Limited WS NTLS [vpn]",
             "server": "quiz.int.vidio.com",
             "server_port": 80,
-            "uuid": "29b4d458-6eb3-4a78-af05-a55f5abaf3fd",
+            "uuid": "e82e2b95-9b94-4000-a479-06dc9dc2bfd0",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -99,16 +79,16 @@
                 "headers": {
                     "Host": "vpn.ex27.my.id"
                 },
-                "path": "/23.27.200.223-443",
+                "path": "/38.60.193.247-13300",
                 "type": "ws"
             }
         },
         {
             "type": "vless",
-            "tag": "3 🇲🇾 Terabix WS NTLS [vpn]",
+            "tag": "8 🇲🇾 Microsoft Corporation WS NTLS [vpn]",
             "server": "quiz.int.vidio.com",
             "server_port": 80,
-            "uuid": "29b4d458-6eb3-4a78-af05-a55f5abaf3fd",
+            "uuid": "e82e2b95-9b94-4000-a479-06dc9dc2bfd0",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -119,7 +99,27 @@
                 "headers": {
                     "Host": "vpn.ex27.my.id"
                 },
-                "path": "/163.61.102.13-443",
+                "path": "/20.17.104.31-443",
+                "type": "ws"
+            }
+        },
+        {
+            "type": "vless",
+            "tag": "3 🇲🇾 Alibaba (US) Technology Co. WS NTLS [vpn]",
+            "server": "quiz.int.vidio.com",
+            "server_port": 80,
+            "uuid": "e82e2b95-9b94-4000-a479-06dc9dc2bfd0",
+            "network": "tcp",
+            "packet_encoding": "xudp",
+            "tls": {
+                "insecure": true,
+                "server_name": "vpn.ex27.my.id"
+            },
+            "transport": {
+                "headers": {
+                    "Host": "vpn.ex27.my.id"
+                },
+                "path": "/47.250.139.59-443",
                 "type": "ws"
             }
         }
