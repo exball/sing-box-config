@@ -2,14 +2,76 @@
     "outbounds": [
         {
             "type": "vless",
-            "tag": "31 🇹🇭 TRUE INTERNET Co. WS TLS [vpn]",
+            "tag": "33 🇹🇭 TRUE INTERNET Co. WS TLS [vpn]",
             "server": "quiz.int.vidio.com",
             "server_port": 443,
-            "uuid": "caaa442c-e09c-476b-bb49-6e2eefeb7513",
+            "uuid": "89927d0c-89e9-436d-b97f-77777e23f4f4",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
                 "enabled": true,
+                "insecure": true,
+                "server_name": "vpn.xtunnel.my.id"
+            },
+            "transport": {
+                "headers": {
+                    "Host": "vpn.xtunnel.my.id"
+                },
+                "path": "/171.103.223.30-12084",
+                "type": "ws"
+            }
+        },
+        {
+            "type": "vless",
+            "tag": "8 🇹🇭 Siamdata Communication Co. WS TLS [vpn]",
+            "server": "quiz.int.vidio.com",
+            "server_port": 443,
+            "uuid": "89927d0c-89e9-436d-b97f-77777e23f4f4",
+            "network": "tcp",
+            "packet_encoding": "xudp",
+            "tls": {
+                "enabled": true,
+                "insecure": true,
+                "server_name": "vpn.xtunnel.my.id"
+            },
+            "transport": {
+                "headers": {
+                    "Host": "vpn.xtunnel.my.id"
+                },
+                "path": "/43.229.149.251-8443",
+                "type": "ws"
+            }
+        },
+        {
+            "type": "vless",
+            "tag": "1 🇹🇭 Kaopu Cloud HK Limited WS TLS [vpn]",
+            "server": "quiz.int.vidio.com",
+            "server_port": 443,
+            "uuid": "89927d0c-89e9-436d-b97f-77777e23f4f4",
+            "network": "tcp",
+            "packet_encoding": "xudp",
+            "tls": {
+                "enabled": true,
+                "insecure": true,
+                "server_name": "vpn.xtunnel.my.id"
+            },
+            "transport": {
+                "headers": {
+                    "Host": "vpn.xtunnel.my.id"
+                },
+                "path": "/38.60.200.62-443",
+                "type": "ws"
+            }
+        },
+        {
+            "type": "vless",
+            "tag": "30 🇹🇭 TRUE INTERNET Co. WS NTLS [vpn]",
+            "server": "quiz.int.vidio.com",
+            "server_port": 80,
+            "uuid": "8d88ecee-4c08-49c3-8ec9-48e4a36b348d",
+            "network": "tcp",
+            "packet_encoding": "xudp",
+            "tls": {
                 "insecure": true,
                 "server_name": "vpn.xtunnel.my.id"
             },
@@ -23,52 +85,10 @@
         },
         {
             "type": "vless",
-            "tag": "23 🇹🇭 Siamdata Communication Co. WS TLS [vpn]",
-            "server": "quiz.int.vidio.com",
-            "server_port": 443,
-            "uuid": "caaa442c-e09c-476b-bb49-6e2eefeb7513",
-            "network": "tcp",
-            "packet_encoding": "xudp",
-            "tls": {
-                "enabled": true,
-                "insecure": true,
-                "server_name": "vpn.xtunnel.my.id"
-            },
-            "transport": {
-                "headers": {
-                    "Host": "vpn.xtunnel.my.id"
-                },
-                "path": "/45.144.167.46-19816",
-                "type": "ws"
-            }
-        },
-        {
-            "type": "vless",
-            "tag": "10 🇹🇭 Kaopu Cloud HK Limited WS TLS [vpn]",
-            "server": "quiz.int.vidio.com",
-            "server_port": 443,
-            "uuid": "caaa442c-e09c-476b-bb49-6e2eefeb7513",
-            "network": "tcp",
-            "packet_encoding": "xudp",
-            "tls": {
-                "enabled": true,
-                "insecure": true,
-                "server_name": "vpn.xtunnel.my.id"
-            },
-            "transport": {
-                "headers": {
-                    "Host": "vpn.xtunnel.my.id"
-                },
-                "path": "/154.90.46.140-443",
-                "type": "ws"
-            }
-        },
-        {
-            "type": "vless",
-            "tag": "18 🇹🇭 TRUE INTERNET Co. WS NTLS [vpn]",
+            "tag": "41 🇹🇭 Siamdata Communication Co. WS NTLS [vpn]",
             "server": "quiz.int.vidio.com",
             "server_port": 80,
-            "uuid": "5b223353-930d-4b74-a9f3-249910dad1a4",
+            "uuid": "8d88ecee-4c08-49c3-8ec9-48e4a36b348d",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -79,16 +99,16 @@
                 "headers": {
                     "Host": "vpn.xtunnel.my.id"
                 },
-                "path": "/171.103.221.162-10026",
+                "path": "/45.136.253.18-33273",
                 "type": "ws"
             }
         },
         {
             "type": "vless",
-            "tag": "11 🇹🇭 Siamdata Communication Co. WS NTLS [vpn]",
+            "tag": "10 🇹🇭 Tencent Building WS NTLS [vpn]",
             "server": "quiz.int.vidio.com",
             "server_port": 80,
-            "uuid": "5b223353-930d-4b74-a9f3-249910dad1a4",
+            "uuid": "8d88ecee-4c08-49c3-8ec9-48e4a36b348d",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -99,27 +119,7 @@
                 "headers": {
                     "Host": "vpn.xtunnel.my.id"
                 },
-                "path": "/43.229.149.251-2053",
-                "type": "ws"
-            }
-        },
-        {
-            "type": "vless",
-            "tag": "6 🇹🇭 Bangmod Enterprise Co. WS NTLS [vpn]",
-            "server": "quiz.int.vidio.com",
-            "server_port": 80,
-            "uuid": "5b223353-930d-4b74-a9f3-249910dad1a4",
-            "network": "tcp",
-            "packet_encoding": "xudp",
-            "tls": {
-                "insecure": true,
-                "server_name": "vpn.xtunnel.my.id"
-            },
-            "transport": {
-                "headers": {
-                    "Host": "vpn.xtunnel.my.id"
-                },
-                "path": "/27.254.163.51-10327",
+                "path": "/43.133.110.81-443",
                 "type": "ws"
             }
         }
