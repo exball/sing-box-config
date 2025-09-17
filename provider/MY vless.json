@@ -2,10 +2,10 @@
     "outbounds": [
         {
             "type": "vless",
-            "tag": "1 🇲🇾 Evoxt Enterprise WS TLS [vpn]",
+            "tag": "3 🇲🇾 Evoxt Enterprise WS TLS [vpn]",
             "server": "support.zoom.us",
             "server_port": 443,
-            "uuid": "6e2dc6bb-874f-416a-a15b-2067193d5ee6",
+            "uuid": "c19e040d-0686-44f0-ba65-f27b9181c46b",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -23,10 +23,10 @@
         },
         {
             "type": "vless",
-            "tag": "3 🇲🇾 Microsoft Corporation WS TLS [vpn]",
+            "tag": "5 🇲🇾 Microsoft Corporation WS TLS [vpn]",
             "server": "support.zoom.us",
             "server_port": 443,
-            "uuid": "6e2dc6bb-874f-416a-a15b-2067193d5ee6",
+            "uuid": "c19e040d-0686-44f0-ba65-f27b9181c46b",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -38,16 +38,16 @@
                 "headers": {
                     "Host": "vpn.ex27.my.id"
                 },
-                "path": "/20.17.107.137-443",
+                "path": "/20.17.104.31-443",
                 "type": "ws"
             }
         },
         {
             "type": "vless",
-            "tag": "5 🇲🇾 TM TECHNOLOGY SERVICES SDN. BHD. WS TLS [vpn]",
+            "tag": "2 🇲🇾 Alibaba (US) Technology Co. WS TLS [vpn]",
             "server": "support.zoom.us",
             "server_port": 443,
-            "uuid": "6e2dc6bb-874f-416a-a15b-2067193d5ee6",
+            "uuid": "c19e040d-0686-44f0-ba65-f27b9181c46b",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -59,19 +59,20 @@
                 "headers": {
                     "Host": "vpn.ex27.my.id"
                 },
-                "path": "/58.27.117.24-443",
+                "path": "/47.250.139.59-443",
                 "type": "ws"
             }
         },
         {
             "type": "vless",
-            "tag": "3 🇲🇾 Evoxt Enterprise WS NTLS [vpn]",
+            "tag": "4 🇲🇾 Kaopu Cloud HK Limited WS TLS [vpn]",
             "server": "support.zoom.us",
-            "server_port": 80,
-            "uuid": "ae844098-2423-471c-b2a8-031ebd4beb1f",
+            "server_port": 443,
+            "uuid": "c19e040d-0686-44f0-ba65-f27b9181c46b",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
+                "enabled": true,
                 "insecure": true,
                 "server_name": "vpn.ex27.my.id"
             },
@@ -79,19 +80,20 @@
                 "headers": {
                     "Host": "vpn.ex27.my.id"
                 },
-                "path": "/23.27.53.119-35209",
+                "path": "/38.60.193.247-13300",
                 "type": "ws"
             }
         },
         {
             "type": "vless",
-            "tag": "6 🇲🇾 Microsoft Corporation WS NTLS [vpn]",
+            "tag": "7 🇲🇾 Terabix WS TLS [vpn]",
             "server": "support.zoom.us",
-            "server_port": 80,
-            "uuid": "ae844098-2423-471c-b2a8-031ebd4beb1f",
+            "server_port": 443,
+            "uuid": "c19e040d-0686-44f0-ba65-f27b9181c46b",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
+                "enabled": true,
                 "insecure": true,
                 "server_name": "vpn.ex27.my.id"
             },
@@ -99,27 +101,7 @@
                 "headers": {
                     "Host": "vpn.ex27.my.id"
                 },
-                "path": "/20.17.107.137-443",
-                "type": "ws"
-            }
-        },
-        {
-            "type": "vless",
-            "tag": "1 🇲🇾 TM TECHNOLOGY SERVICES SDN. BHD. WS NTLS [vpn]",
-            "server": "support.zoom.us",
-            "server_port": 80,
-            "uuid": "ae844098-2423-471c-b2a8-031ebd4beb1f",
-            "network": "tcp",
-            "packet_encoding": "xudp",
-            "tls": {
-                "insecure": true,
-                "server_name": "vpn.ex27.my.id"
-            },
-            "transport": {
-                "headers": {
-                    "Host": "vpn.ex27.my.id"
-                },
-                "path": "/58.27.117.24-443",
+                "path": "/163.61.102.13-443",
                 "type": "ws"
             }
         }

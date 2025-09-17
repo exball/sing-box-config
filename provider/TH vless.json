@@ -2,10 +2,10 @@
     "outbounds": [
         {
             "type": "vless",
-            "tag": "12 🇹🇭 TRUE INTERNET Co. WS TLS [vpn]",
+            "tag": "22 🇹🇭 TRUE INTERNET Co. WS TLS [vpn]",
             "server": "support.zoom.us",
             "server_port": 443,
-            "uuid": "9c74a60e-424d-4425-b81f-9e42cb92bd3d",
+            "uuid": "95b513fc-19e3-49e9-b1c4-1d6772e994c1",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -17,16 +17,16 @@
                 "headers": {
                     "Host": "vpn.ex27.my.id"
                 },
-                "path": "/171.103.232.174-10335",
+                "path": "/171.103.232.58-20475",
                 "type": "ws"
             }
         },
         {
             "type": "vless",
-            "tag": "7 🇹🇭 Siamdata Communication Co. WS TLS [vpn]",
+            "tag": "43 🇹🇭 Siamdata Communication Co. WS TLS [vpn]",
             "server": "support.zoom.us",
             "server_port": 443,
-            "uuid": "9c74a60e-424d-4425-b81f-9e42cb92bd3d",
+            "uuid": "95b513fc-19e3-49e9-b1c4-1d6772e994c1",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -38,16 +38,16 @@
                 "headers": {
                     "Host": "vpn.ex27.my.id"
                 },
-                "path": "/43.229.149.251-2053",
+                "path": "/103.99.11.193-8443",
                 "type": "ws"
             }
         },
         {
             "type": "vless",
-            "tag": "3 🇹🇭 CSNE Co. WS TLS [vpn]",
+            "tag": "3 🇹🇭 Kaopu Cloud HK Limited WS TLS [vpn]",
             "server": "support.zoom.us",
             "server_port": 443,
-            "uuid": "9c74a60e-424d-4425-b81f-9e42cb92bd3d",
+            "uuid": "95b513fc-19e3-49e9-b1c4-1d6772e994c1",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -59,19 +59,20 @@
                 "headers": {
                     "Host": "vpn.ex27.my.id"
                 },
-                "path": "/140.99.98.240-443",
+                "path": "/154.90.46.140-443",
                 "type": "ws"
             }
         },
         {
             "type": "vless",
-            "tag": "13 🇹🇭 TRUE INTERNET Co. WS NTLS [vpn]",
+            "tag": "5 🇹🇭 Bangmod Enterprise Co. WS TLS [vpn]",
             "server": "support.zoom.us",
-            "server_port": 80,
-            "uuid": "7e62fef7-2ff0-4eaa-a255-fe471ac8d715",
+            "server_port": 443,
+            "uuid": "95b513fc-19e3-49e9-b1c4-1d6772e994c1",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
+                "enabled": true,
                 "insecure": true,
                 "server_name": "vpn.ex27.my.id"
             },
@@ -79,39 +80,20 @@
                 "headers": {
                     "Host": "vpn.ex27.my.id"
                 },
-                "path": "/171.103.223.50-10022",
+                "path": "/27.254.163.51-10327",
                 "type": "ws"
             }
         },
         {
             "type": "vless",
-            "tag": "28 🇹🇭 Siamdata Communication Co. WS NTLS [vpn]",
+            "tag": "6 🇹🇭 CSNE Co. WS TLS [vpn]",
             "server": "support.zoom.us",
-            "server_port": 80,
-            "uuid": "7e62fef7-2ff0-4eaa-a255-fe471ac8d715",
+            "server_port": 443,
+            "uuid": "95b513fc-19e3-49e9-b1c4-1d6772e994c1",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
-                "insecure": true,
-                "server_name": "vpn.ex27.my.id"
-            },
-            "transport": {
-                "headers": {
-                    "Host": "vpn.ex27.my.id"
-                },
-                "path": "/45.144.167.46-19816",
-                "type": "ws"
-            }
-        },
-        {
-            "type": "vless",
-            "tag": "6 🇹🇭 CSNE Co. WS NTLS [vpn]",
-            "server": "support.zoom.us",
-            "server_port": 80,
-            "uuid": "7e62fef7-2ff0-4eaa-a255-fe471ac8d715",
-            "network": "tcp",
-            "packet_encoding": "xudp",
-            "tls": {
+                "enabled": true,
                 "insecure": true,
                 "server_name": "vpn.ex27.my.id"
             },

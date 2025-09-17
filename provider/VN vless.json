@@ -2,10 +2,10 @@
     "outbounds": [
         {
             "type": "vless",
-            "tag": "6 🇻🇳 Kaopu Cloud HK Limited WS TLS [vpn]",
+            "tag": "1 🇻🇳 Thien Quang Digital technology joint stock company WS TLS [vpn]",
             "server": "support.zoom.us",
             "server_port": 443,
-            "uuid": "c2adc415-985b-4048-8acd-54456a01b106",
+            "uuid": "dba0c54c-5a3d-4235-a091-a1180bac1832",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -17,16 +17,16 @@
                 "headers": {
                     "Host": "vpn.ex27.my.id"
                 },
-                "path": "/154.93.48.189-34237",
+                "path": "/160.250.64.161-12865",
                 "type": "ws"
             }
         },
         {
             "type": "vless",
-            "tag": "4 🇻🇳 VNPT Corp WS TLS [vpn]",
+            "tag": "4 🇻🇳 Kaopu Cloud HK Limited WS TLS [vpn]",
             "server": "support.zoom.us",
             "server_port": 443,
-            "uuid": "c2adc415-985b-4048-8acd-54456a01b106",
+            "uuid": "dba0c54c-5a3d-4235-a091-a1180bac1832",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -38,16 +38,16 @@
                 "headers": {
                     "Host": "vpn.ex27.my.id"
                 },
-                "path": "/103.197.184.193-37461",
+                "path": "/154.93.48.111-34237",
                 "type": "ws"
             }
         },
         {
             "type": "vless",
-            "tag": "2 🇻🇳 VIETNAM POSTS AND TELECOMMUNICATIONS GROUP WS TLS [vpn]",
+            "tag": "3 🇻🇳 UCLOUD INFORMATION TECHNOLOGY (HK) LIMITED WS TLS [vpn]",
             "server": "support.zoom.us",
             "server_port": 443,
-            "uuid": "c2adc415-985b-4048-8acd-54456a01b106",
+            "uuid": "dba0c54c-5a3d-4235-a091-a1180bac1832",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -59,19 +59,20 @@
                 "headers": {
                     "Host": "vpn.ex27.my.id"
                 },
-                "path": "/103.137.184.5-443",
+                "path": "/152.32.255.24-587",
                 "type": "ws"
             }
         },
         {
             "type": "vless",
-            "tag": "2 🇻🇳 VNPT Corp WS NTLS [vpn]",
+            "tag": "5 🇻🇳 VNPT Corp WS TLS [vpn]",
             "server": "support.zoom.us",
-            "server_port": 80,
-            "uuid": "af01dab1-e585-4260-abb0-009790432dd6",
+            "server_port": 443,
+            "uuid": "dba0c54c-5a3d-4235-a091-a1180bac1832",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
+                "enabled": true,
                 "insecure": true,
                 "server_name": "vpn.ex27.my.id"
             },
@@ -85,13 +86,14 @@
         },
         {
             "type": "vless",
-            "tag": "1 🇻🇳 VIETNAM POSTS AND TELECOMMUNICATIONS GROUP WS NTLS [vpn]",
+            "tag": "6 🇻🇳 VIETNAM POSTS AND TELECOMMUNICATIONS GROUP WS TLS [vpn]",
             "server": "support.zoom.us",
-            "server_port": 80,
-            "uuid": "af01dab1-e585-4260-abb0-009790432dd6",
+            "server_port": 443,
+            "uuid": "dba0c54c-5a3d-4235-a091-a1180bac1832",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
+                "enabled": true,
                 "insecure": true,
                 "server_name": "vpn.ex27.my.id"
             },
@@ -100,26 +102,6 @@
                     "Host": "vpn.ex27.my.id"
                 },
                 "path": "/103.137.184.5-443",
-                "type": "ws"
-            }
-        },
-        {
-            "type": "vless",
-            "tag": "3 🇻🇳 UCLOUD INFORMATION TECHNOLOGY (HK) LIMITED WS NTLS [vpn]",
-            "server": "support.zoom.us",
-            "server_port": 80,
-            "uuid": "af01dab1-e585-4260-abb0-009790432dd6",
-            "network": "tcp",
-            "packet_encoding": "xudp",
-            "tls": {
-                "insecure": true,
-                "server_name": "vpn.ex27.my.id"
-            },
-            "transport": {
-                "headers": {
-                    "Host": "vpn.ex27.my.id"
-                },
-                "path": "/152.32.255.24-587",
                 "type": "ws"
             }
         }
