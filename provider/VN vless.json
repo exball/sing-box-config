@@ -2,10 +2,10 @@
     "outbounds": [
         {
             "type": "vless",
-            "tag": "1 🇻🇳 VIETNAM POSTS AND TELECOMMUNICATIONS GROUP WS TLS [vpn]",
+            "tag": "1 🇻🇳 VNPT Corp WS TLS [vpn]",
             "server": "support.zoom.us",
             "server_port": 443,
-            "uuid": "741cf454-9ee3-4606-b059-1810fabc4c1c",
+            "uuid": "80a9c667-4aca-45db-97bd-d4b7f19b3f49",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -17,7 +17,7 @@
                 "headers": {
                     "Host": "vpn.ex-vpn.my.id"
                 },
-                "path": "/103.137.184.5-443",
+                "path": "/103.15.90.134-49678",
                 "type": "ws"
             }
         },
@@ -26,7 +26,7 @@
             "tag": "2 🇻🇳 Kaopu Cloud HK Limited WS TLS [vpn]",
             "server": "support.zoom.us",
             "server_port": 443,
-            "uuid": "741cf454-9ee3-4606-b059-1810fabc4c1c",
+            "uuid": "80a9c667-4aca-45db-97bd-d4b7f19b3f49",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -44,31 +44,10 @@
         },
         {
             "type": "vless",
-            "tag": "3 🇻🇳 UCLOUD INFORMATION TECHNOLOGY (HK) LIMITED WS TLS [vpn]",
+            "tag": "5 🇻🇳 TRUMVPS COMPANY LIMITED WS TLS [vpn]",
             "server": "support.zoom.us",
             "server_port": 443,
-            "uuid": "741cf454-9ee3-4606-b059-1810fabc4c1c",
-            "network": "tcp",
-            "packet_encoding": "xudp",
-            "tls": {
-                "enabled": true,
-                "insecure": true,
-                "server_name": "vpn.ex-vpn.my.id"
-            },
-            "transport": {
-                "headers": {
-                    "Host": "vpn.ex-vpn.my.id"
-                },
-                "path": "/152.32.255.24-587",
-                "type": "ws"
-            }
-        },
-        {
-            "type": "vless",
-            "tag": "4 🇻🇳 TRUMVPS COMPANY LIMITED WS TLS [vpn]",
-            "server": "support.zoom.us",
-            "server_port": 443,
-            "uuid": "741cf454-9ee3-4606-b059-1810fabc4c1c",
+            "uuid": "80a9c667-4aca-45db-97bd-d4b7f19b3f49",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -86,10 +65,10 @@
         },
         {
             "type": "vless",
-            "tag": "5 🇻🇳 VNPT Corp WS TLS [vpn]",
+            "tag": "6 🇻🇳 Thien Quang Digital technology joint stock company WS TLS [vpn]",
             "server": "support.zoom.us",
             "server_port": 443,
-            "uuid": "741cf454-9ee3-4606-b059-1810fabc4c1c",
+            "uuid": "80a9c667-4aca-45db-97bd-d4b7f19b3f49",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -101,7 +80,28 @@
                 "headers": {
                     "Host": "vpn.ex-vpn.my.id"
                 },
-                "path": "/103.197.184.193-37461",
+                "path": "/160.250.64.161-12865",
+                "type": "ws"
+            }
+        },
+        {
+            "type": "vless",
+            "tag": "7 🇻🇳 UCLOUD INFORMATION TECHNOLOGY (HK) LIMITED WS TLS [vpn]",
+            "server": "support.zoom.us",
+            "server_port": 443,
+            "uuid": "80a9c667-4aca-45db-97bd-d4b7f19b3f49",
+            "network": "tcp",
+            "packet_encoding": "xudp",
+            "tls": {
+                "enabled": true,
+                "insecure": true,
+                "server_name": "vpn.ex-vpn.my.id"
+            },
+            "transport": {
+                "headers": {
+                    "Host": "vpn.ex-vpn.my.id"
+                },
+                "path": "/152.32.255.24-587",
                 "type": "ws"
             }
         }
