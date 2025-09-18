@@ -2,10 +2,73 @@
     "outbounds": [
         {
             "type": "vless",
-            "tag": "1 🇻🇳 Thien Quang Digital technology joint stock company WS TLS [vpn]",
+            "tag": "1 🇻🇳 VNPT Corp WS TLS [vpn]",
             "server": "support.zoom.us",
             "server_port": 443,
-            "uuid": "dc0de6ad-f154-438b-a3de-66d2af199651",
+            "uuid": "4b508a9b-e54d-4a15-97a4-4ce6f1ea34b1",
+            "network": "tcp",
+            "packet_encoding": "xudp",
+            "tls": {
+                "enabled": true,
+                "insecure": true,
+                "server_name": "vpn.xtunnel.my.id"
+            },
+            "transport": {
+                "headers": {
+                    "Host": "vpn.xtunnel.my.id"
+                },
+                "path": "/103.15.90.134-49678",
+                "type": "ws"
+            }
+        },
+        {
+            "type": "vless",
+            "tag": "3 🇻🇳 Kaopu Cloud HK Limited WS TLS [vpn]",
+            "server": "support.zoom.us",
+            "server_port": 443,
+            "uuid": "4b508a9b-e54d-4a15-97a4-4ce6f1ea34b1",
+            "network": "tcp",
+            "packet_encoding": "xudp",
+            "tls": {
+                "enabled": true,
+                "insecure": true,
+                "server_name": "vpn.xtunnel.my.id"
+            },
+            "transport": {
+                "headers": {
+                    "Host": "vpn.xtunnel.my.id"
+                },
+                "path": "/154.93.48.189-34237",
+                "type": "ws"
+            }
+        },
+        {
+            "type": "vless",
+            "tag": "2 🇻🇳 UCLOUD INFORMATION TECHNOLOGY (HK) LIMITED WS TLS [vpn]",
+            "server": "support.zoom.us",
+            "server_port": 443,
+            "uuid": "4b508a9b-e54d-4a15-97a4-4ce6f1ea34b1",
+            "network": "tcp",
+            "packet_encoding": "xudp",
+            "tls": {
+                "enabled": true,
+                "insecure": true,
+                "server_name": "vpn.xtunnel.my.id"
+            },
+            "transport": {
+                "headers": {
+                    "Host": "vpn.xtunnel.my.id"
+                },
+                "path": "/152.32.255.24-587",
+                "type": "ws"
+            }
+        },
+        {
+            "type": "vless",
+            "tag": "4 🇻🇳 Thien Quang Digital technology joint stock company WS TLS [vpn]",
+            "server": "support.zoom.us",
+            "server_port": 443,
+            "uuid": "4b508a9b-e54d-4a15-97a4-4ce6f1ea34b1",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -23,31 +86,10 @@
         },
         {
             "type": "vless",
-            "tag": "3 🇻🇳 Kaopu Cloud HK Limited WS TLS [vpn]",
+            "tag": "5 🇻🇳 VIETNAM POSTS AND TELECOMMUNICATIONS GROUP WS TLS [vpn]",
             "server": "support.zoom.us",
             "server_port": 443,
-            "uuid": "dc0de6ad-f154-438b-a3de-66d2af199651",
-            "network": "tcp",
-            "packet_encoding": "xudp",
-            "tls": {
-                "enabled": true,
-                "insecure": true,
-                "server_name": "vpn.xtunnel.my.id"
-            },
-            "transport": {
-                "headers": {
-                    "Host": "vpn.xtunnel.my.id"
-                },
-                "path": "/154.93.48.111-34237",
-                "type": "ws"
-            }
-        },
-        {
-            "type": "vless",
-            "tag": "4 🇻🇳 VIETNAM POSTS AND TELECOMMUNICATIONS GROUP WS TLS [vpn]",
-            "server": "support.zoom.us",
-            "server_port": 443,
-            "uuid": "dc0de6ad-f154-438b-a3de-66d2af199651",
+            "uuid": "4b508a9b-e54d-4a15-97a4-4ce6f1ea34b1",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -60,48 +102,6 @@
                     "Host": "vpn.xtunnel.my.id"
                 },
                 "path": "/103.137.184.5-443",
-                "type": "ws"
-            }
-        },
-        {
-            "type": "vless",
-            "tag": "7 🇻🇳 VNPT Corp WS TLS [vpn]",
-            "server": "support.zoom.us",
-            "server_port": 443,
-            "uuid": "dc0de6ad-f154-438b-a3de-66d2af199651",
-            "network": "tcp",
-            "packet_encoding": "xudp",
-            "tls": {
-                "enabled": true,
-                "insecure": true,
-                "server_name": "vpn.xtunnel.my.id"
-            },
-            "transport": {
-                "headers": {
-                    "Host": "vpn.xtunnel.my.id"
-                },
-                "path": "/103.197.184.193-37461",
-                "type": "ws"
-            }
-        },
-        {
-            "type": "vless",
-            "tag": "6 🇻🇳 TRUMVPS COMPANY LIMITED WS TLS [vpn]",
-            "server": "support.zoom.us",
-            "server_port": 443,
-            "uuid": "dc0de6ad-f154-438b-a3de-66d2af199651",
-            "network": "tcp",
-            "packet_encoding": "xudp",
-            "tls": {
-                "enabled": true,
-                "insecure": true,
-                "server_name": "vpn.xtunnel.my.id"
-            },
-            "transport": {
-                "headers": {
-                    "Host": "vpn.xtunnel.my.id"
-                },
-                "path": "/160.191.165.40-19957",
                 "type": "ws"
             }
         }
