@@ -2,10 +2,10 @@
     "outbounds": [
         {
             "type": "vless",
-            "tag": "36 🇮🇩 Akamai Connected Cloud WS TLS [vpn]",
+            "tag": "31 🇮🇩 Akamai Connected Cloud WS TLS [vpn]",
             "server": "support.zoom.us",
             "server_port": 443,
-            "uuid": "6de79114-37d0-4d29-8079-c904bdadb027",
+            "uuid": "32afac96-38fd-4056-93da-b8f4bcbad933",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -17,16 +17,37 @@
                 "headers": {
                     "Host": "vpn.xtunnel.my.id"
                 },
-                "path": "/172.232.234.166-20205",
+                "path": "/172.232.232.163-32225",
                 "type": "ws"
             }
         },
         {
             "type": "vless",
-            "tag": "28 🇮🇩 Amazon.com WS TLS [vpn]",
+            "tag": "55 🇮🇩 CV. Rumahweb Indonesia WS TLS [vpn]",
             "server": "support.zoom.us",
             "server_port": 443,
-            "uuid": "6de79114-37d0-4d29-8079-c904bdadb027",
+            "uuid": "32afac96-38fd-4056-93da-b8f4bcbad933",
+            "network": "tcp",
+            "packet_encoding": "xudp",
+            "tls": {
+                "enabled": true,
+                "insecure": true,
+                "server_name": "vpn.xtunnel.my.id"
+            },
+            "transport": {
+                "headers": {
+                    "Host": "vpn.xtunnel.my.id"
+                },
+                "path": "/203.194.112.119-8443",
+                "type": "ws"
+            }
+        },
+        {
+            "type": "vless",
+            "tag": "52 🇮🇩 Amazon.com WS TLS [vpn]",
+            "server": "support.zoom.us",
+            "server_port": 443,
+            "uuid": "32afac96-38fd-4056-93da-b8f4bcbad933",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -44,10 +65,10 @@
         },
         {
             "type": "vless",
-            "tag": "54 🇮🇩 PT Pusat Media Indonesia WS TLS [vpn]",
+            "tag": "27 🇮🇩 PT Pusat Media Indonesia WS TLS [vpn]",
             "server": "support.zoom.us",
             "server_port": 443,
-            "uuid": "6de79114-37d0-4d29-8079-c904bdadb027",
+            "uuid": "32afac96-38fd-4056-93da-b8f4bcbad933",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -65,31 +86,10 @@
         },
         {
             "type": "vless",
-            "tag": "9 🇮🇩 Kaopu Cloud HK Limited WS TLS [vpn]",
-            "server": "support.zoom.us",
-            "server_port": 443,
-            "uuid": "6de79114-37d0-4d29-8079-c904bdadb027",
-            "network": "tcp",
-            "packet_encoding": "xudp",
-            "tls": {
-                "enabled": true,
-                "insecure": true,
-                "server_name": "vpn.xtunnel.my.id"
-            },
-            "transport": {
-                "headers": {
-                    "Host": "vpn.xtunnel.my.id"
-                },
-                "path": "/156.244.1.250-8443",
-                "type": "ws"
-            }
-        },
-        {
-            "type": "vless",
             "tag": "12 🇮🇩 Alibaba (US) Technology Co. WS TLS [vpn]",
             "server": "support.zoom.us",
             "server_port": 443,
-            "uuid": "6de79114-37d0-4d29-8079-c904bdadb027",
+            "uuid": "32afac96-38fd-4056-93da-b8f4bcbad933",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -107,10 +107,10 @@
         },
         {
             "type": "vless",
-            "tag": "16 🇮🇩 PT Telekomunikasi Indonesia WS TLS [vpn]",
+            "tag": "29 🇮🇩 PT Telekomunikasi Indonesia WS TLS [vpn]",
             "server": "support.zoom.us",
             "server_port": 443,
-            "uuid": "6de79114-37d0-4d29-8079-c904bdadb027",
+            "uuid": "32afac96-38fd-4056-93da-b8f4bcbad933",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -128,10 +128,31 @@
         },
         {
             "type": "vless",
-            "tag": "51 🇮🇩 INDO Internet WS TLS [vpn]",
+            "tag": "40 🇮🇩 Kaopu Cloud HK Limited WS TLS [vpn]",
             "server": "support.zoom.us",
             "server_port": 443,
-            "uuid": "6de79114-37d0-4d29-8079-c904bdadb027",
+            "uuid": "32afac96-38fd-4056-93da-b8f4bcbad933",
+            "network": "tcp",
+            "packet_encoding": "xudp",
+            "tls": {
+                "enabled": true,
+                "insecure": true,
+                "server_name": "vpn.xtunnel.my.id"
+            },
+            "transport": {
+                "headers": {
+                    "Host": "vpn.xtunnel.my.id"
+                },
+                "path": "/156.244.1.250-8443",
+                "type": "ws"
+            }
+        },
+        {
+            "type": "vless",
+            "tag": "56 🇮🇩 INDO Internet WS TLS [vpn]",
+            "server": "support.zoom.us",
+            "server_port": 443,
+            "uuid": "32afac96-38fd-4056-93da-b8f4bcbad933",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -149,10 +170,10 @@
         },
         {
             "type": "vless",
-            "tag": "56 🇮🇩 Akamai Connected Cloud WS TLS [vpn]",
+            "tag": "25 🇮🇩 Akamai Connected Cloud WS TLS [vpn]",
             "server": "support.zoom.us",
             "server_port": 443,
-            "uuid": "6de79114-37d0-4d29-8079-c904bdadb027",
+            "uuid": "32afac96-38fd-4056-93da-b8f4bcbad933",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -164,16 +185,37 @@
                 "headers": {
                     "Host": "vpn.xtunnel.my.id"
                 },
-                "path": "/172.232.238.52-74",
+                "path": "/172.232.238.56-20205",
                 "type": "ws"
             }
         },
         {
             "type": "vless",
-            "tag": "32 🇮🇩 Amazon.com WS TLS [vpn]",
+            "tag": "7 🇮🇩 CV. Rumahweb Indonesia WS TLS [vpn]",
             "server": "support.zoom.us",
             "server_port": 443,
-            "uuid": "6de79114-37d0-4d29-8079-c904bdadb027",
+            "uuid": "32afac96-38fd-4056-93da-b8f4bcbad933",
+            "network": "tcp",
+            "packet_encoding": "xudp",
+            "tls": {
+                "enabled": true,
+                "insecure": true,
+                "server_name": "vpn.xtunnel.my.id"
+            },
+            "transport": {
+                "headers": {
+                    "Host": "vpn.xtunnel.my.id"
+                },
+                "path": "/203.194.112.119-2053",
+                "type": "ws"
+            }
+        },
+        {
+            "type": "vless",
+            "tag": "26 🇮🇩 Amazon.com WS TLS [vpn]",
+            "server": "support.zoom.us",
+            "server_port": 443,
+            "uuid": "32afac96-38fd-4056-93da-b8f4bcbad933",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -191,10 +233,10 @@
         },
         {
             "type": "vless",
-            "tag": "45 🇮🇩 PT Pusat Media Indonesia WS TLS [vpn]",
+            "tag": "48 🇮🇩 PT Pusat Media Indonesia WS TLS [vpn]",
             "server": "support.zoom.us",
             "server_port": 443,
-            "uuid": "6de79114-37d0-4d29-8079-c904bdadb027",
+            "uuid": "32afac96-38fd-4056-93da-b8f4bcbad933",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -207,48 +249,6 @@
                     "Host": "vpn.xtunnel.my.id"
                 },
                 "path": "/103.6.207.108-8080",
-                "type": "ws"
-            }
-        },
-        {
-            "type": "vless",
-            "tag": "4 🇮🇩 Akamai Connected Cloud WS TLS [vpn]",
-            "server": "support.zoom.us",
-            "server_port": 443,
-            "uuid": "6de79114-37d0-4d29-8079-c904bdadb027",
-            "network": "tcp",
-            "packet_encoding": "xudp",
-            "tls": {
-                "enabled": true,
-                "insecure": true,
-                "server_name": "vpn.xtunnel.my.id"
-            },
-            "transport": {
-                "headers": {
-                    "Host": "vpn.xtunnel.my.id"
-                },
-                "path": "/172.232.238.52-32225",
-                "type": "ws"
-            }
-        },
-        {
-            "type": "vless",
-            "tag": "43 🇮🇩 Akamai Connected Cloud WS TLS [vpn]",
-            "server": "support.zoom.us",
-            "server_port": 443,
-            "uuid": "6de79114-37d0-4d29-8079-c904bdadb027",
-            "network": "tcp",
-            "packet_encoding": "xudp",
-            "tls": {
-                "enabled": true,
-                "insecure": true,
-                "server_name": "vpn.xtunnel.my.id"
-            },
-            "transport": {
-                "headers": {
-                    "Host": "vpn.xtunnel.my.id"
-                },
-                "path": "/172.232.232.163-386",
                 "type": "ws"
             }
         }
