@@ -2,10 +2,34 @@
     "outbounds": [
         {
             "type": "vless",
+            "tag": "6 🇲🇾 Evoxt Enterprise WS TLS [vpn]",
+            "server": "quiz.int.vidio.com",
+            "server_port": 443,
+            "uuid": "a74b4404-235a-4b5c-ae42-72a7f2f4da9f",
+            "network": "tcp",
+            "packet_encoding": "xudp",
+            "tls": {
+                "enabled": true,
+                "insecure": true,
+                "server_name": "vpn.ex-vpn.my.id"
+            },
+            "transport": {
+                "headers": {
+                    "Host": "vpn.ex-vpn.my.id"
+                },
+                "path": "/23.27.53.119-35209",
+                "type": "ws"
+            },
+            "multiplex": {
+                "enabled": false
+            }
+        },
+        {
+            "type": "vless",
             "tag": "1 🇲🇾 Terabix WS TLS [vpn]",
             "server": "quiz.int.vidio.com",
             "server_port": 443,
-            "uuid": "42e48e23-604a-4cb7-9826-d66885c0a79b",
+            "uuid": "a74b4404-235a-4b5c-ae42-72a7f2f4da9f",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -26,58 +50,10 @@
         },
         {
             "type": "vless",
-            "tag": "2 🇲🇾 Microsoft Corporation WS TLS [vpn]",
+            "tag": "3 🇲🇾 Alibaba (US) Technology Co. WS TLS [vpn]",
             "server": "quiz.int.vidio.com",
             "server_port": 443,
-            "uuid": "42e48e23-604a-4cb7-9826-d66885c0a79b",
-            "network": "tcp",
-            "packet_encoding": "xudp",
-            "tls": {
-                "enabled": true,
-                "insecure": true,
-                "server_name": "vpn.ex-vpn.my.id"
-            },
-            "transport": {
-                "headers": {
-                    "Host": "vpn.ex-vpn.my.id"
-                },
-                "path": "/20.17.104.31-443",
-                "type": "ws"
-            },
-            "multiplex": {
-                "enabled": false
-            }
-        },
-        {
-            "type": "vless",
-            "tag": "4 🇲🇾 Evoxt Enterprise WS TLS [vpn]",
-            "server": "quiz.int.vidio.com",
-            "server_port": 443,
-            "uuid": "42e48e23-604a-4cb7-9826-d66885c0a79b",
-            "network": "tcp",
-            "packet_encoding": "xudp",
-            "tls": {
-                "enabled": true,
-                "insecure": true,
-                "server_name": "vpn.ex-vpn.my.id"
-            },
-            "transport": {
-                "headers": {
-                    "Host": "vpn.ex-vpn.my.id"
-                },
-                "path": "/155.254.60.225-443",
-                "type": "ws"
-            },
-            "multiplex": {
-                "enabled": false
-            }
-        },
-        {
-            "type": "vless",
-            "tag": "5 🇲🇾 Alibaba (US) Technology Co. WS TLS [vpn]",
-            "server": "quiz.int.vidio.com",
-            "server_port": 443,
-            "uuid": "42e48e23-604a-4cb7-9826-d66885c0a79b",
+            "uuid": "a74b4404-235a-4b5c-ae42-72a7f2f4da9f",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -98,10 +74,10 @@
         },
         {
             "type": "vless",
-            "tag": "6 🇲🇾 Kaopu Cloud HK Limited WS TLS [vpn]",
+            "tag": "4 🇲🇾 Kaopu Cloud HK Limited WS TLS [vpn]",
             "server": "quiz.int.vidio.com",
             "server_port": 443,
-            "uuid": "42e48e23-604a-4cb7-9826-d66885c0a79b",
+            "uuid": "a74b4404-235a-4b5c-ae42-72a7f2f4da9f",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -114,6 +90,30 @@
                     "Host": "vpn.ex-vpn.my.id"
                 },
                 "path": "/38.60.193.247-13300",
+                "type": "ws"
+            },
+            "multiplex": {
+                "enabled": false
+            }
+        },
+        {
+            "type": "vless",
+            "tag": "5 🇲🇾 Microsoft Corporation WS TLS [vpn]",
+            "server": "quiz.int.vidio.com",
+            "server_port": 443,
+            "uuid": "a74b4404-235a-4b5c-ae42-72a7f2f4da9f",
+            "network": "tcp",
+            "packet_encoding": "xudp",
+            "tls": {
+                "enabled": true,
+                "insecure": true,
+                "server_name": "vpn.ex-vpn.my.id"
+            },
+            "transport": {
+                "headers": {
+                    "Host": "vpn.ex-vpn.my.id"
+                },
+                "path": "/20.17.104.31-443",
                 "type": "ws"
             },
             "multiplex": {
