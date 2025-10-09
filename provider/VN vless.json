@@ -2,10 +2,10 @@
     "outbounds": [
         {
             "type": "vless",
-            "tag": "3 🇻🇳 VNPT Corp WS TLS [vpn]",
+            "tag": "1 🇻🇳 VNPT Corp WS TLS [vpn]",
             "server": "quiz.int.vidio.com",
             "server_port": 443,
-            "uuid": "9c36c081-be4d-4ecc-9160-ec8bc7705f22",
+            "uuid": "9ac165e0-980e-4a05-94d0-84117ac26596",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -17,31 +17,7 @@
                 "headers": {
                     "Host": "vpn.exbal.my.id"
                 },
-                "path": "/103.197.184.193-37461",
-                "type": "ws"
-            },
-            "multiplex": {
-                "enabled": false
-            }
-        },
-        {
-            "type": "vless",
-            "tag": "1 🇻🇳 UCLOUD INFORMATION TECHNOLOGY (HK) LIMITED WS TLS [vpn]",
-            "server": "quiz.int.vidio.com",
-            "server_port": 443,
-            "uuid": "9c36c081-be4d-4ecc-9160-ec8bc7705f22",
-            "network": "tcp",
-            "packet_encoding": "xudp",
-            "tls": {
-                "enabled": true,
-                "insecure": true,
-                "server_name": "vpn.exbal.my.id"
-            },
-            "transport": {
-                "headers": {
-                    "Host": "vpn.exbal.my.id"
-                },
-                "path": "/152.32.255.24-587",
+                "path": "/103.15.90.134-49678",
                 "type": "ws"
             },
             "multiplex": {
@@ -53,7 +29,7 @@
             "tag": "2 🇻🇳 Kaopu Cloud HK Limited WS TLS [vpn]",
             "server": "quiz.int.vidio.com",
             "server_port": 443,
-            "uuid": "9c36c081-be4d-4ecc-9160-ec8bc7705f22",
+            "uuid": "9ac165e0-980e-4a05-94d0-84117ac26596",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -74,10 +50,10 @@
         },
         {
             "type": "vless",
-            "tag": "5 🇻🇳 TRUMVPS COMPANY LIMITED WS TLS [vpn]",
+            "tag": "3 🇻🇳 TRUMVPS COMPANY LIMITED WS TLS [vpn]",
             "server": "quiz.int.vidio.com",
             "server_port": 443,
-            "uuid": "9c36c081-be4d-4ecc-9160-ec8bc7705f22",
+            "uuid": "9ac165e0-980e-4a05-94d0-84117ac26596",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -98,10 +74,10 @@
         },
         {
             "type": "vless",
-            "tag": "4 🇻🇳 VNPT Corp WS TLS [vpn]",
+            "tag": "5 🇻🇳 UCLOUD INFORMATION TECHNOLOGY (HK) LIMITED WS TLS [vpn]",
             "server": "quiz.int.vidio.com",
             "server_port": 443,
-            "uuid": "9c36c081-be4d-4ecc-9160-ec8bc7705f22",
+            "uuid": "9ac165e0-980e-4a05-94d0-84117ac26596",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -113,7 +89,31 @@
                 "headers": {
                     "Host": "vpn.exbal.my.id"
                 },
-                "path": "/103.15.90.134-49678",
+                "path": "/152.32.255.24-587",
+                "type": "ws"
+            },
+            "multiplex": {
+                "enabled": false
+            }
+        },
+        {
+            "type": "vless",
+            "tag": "4 🇻🇳 VNPT Corp WS TLS [vpn]",
+            "server": "quiz.int.vidio.com",
+            "server_port": 443,
+            "uuid": "9ac165e0-980e-4a05-94d0-84117ac26596",
+            "network": "tcp",
+            "packet_encoding": "xudp",
+            "tls": {
+                "enabled": true,
+                "insecure": true,
+                "server_name": "vpn.exbal.my.id"
+            },
+            "transport": {
+                "headers": {
+                    "Host": "vpn.exbal.my.id"
+                },
+                "path": "/103.197.184.193-37461",
                 "type": "ws"
             },
             "multiplex": {
