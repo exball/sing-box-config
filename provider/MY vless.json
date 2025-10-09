@@ -2,10 +2,10 @@
     "outbounds": [
         {
             "type": "vless",
-            "tag": "1 🇲🇾 Terabix WS TLS [vpn]",
+            "tag": "7 🇲🇾 Evoxt Enterprise WS TLS [vpn]",
             "server": "quiz.int.vidio.com",
             "server_port": 443,
-            "uuid": "74410a79-1ea7-4c3a-ae7f-c7e1b88adbf1",
+            "uuid": "bb477451-404f-4e88-b803-3a3d9ec029a4",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -17,7 +17,7 @@
                 "headers": {
                     "Host": "vpn.xtunnel.my.id"
                 },
-                "path": "/163.61.102.13-443",
+                "path": "/23.27.53.119-35209",
                 "type": "ws"
             },
             "multiplex": {
@@ -26,34 +26,10 @@
         },
         {
             "type": "vless",
-            "tag": "2 🇲🇾 TM TECHNOLOGY SERVICES SDN. BHD. WS TLS [vpn]",
+            "tag": "1 🇲🇾 Alibaba (US) Technology Co. WS TLS [vpn]",
             "server": "quiz.int.vidio.com",
             "server_port": 443,
-            "uuid": "74410a79-1ea7-4c3a-ae7f-c7e1b88adbf1",
-            "network": "tcp",
-            "packet_encoding": "xudp",
-            "tls": {
-                "enabled": true,
-                "insecure": true,
-                "server_name": "vpn.xtunnel.my.id"
-            },
-            "transport": {
-                "headers": {
-                    "Host": "vpn.xtunnel.my.id"
-                },
-                "path": "/58.27.117.24-443",
-                "type": "ws"
-            },
-            "multiplex": {
-                "enabled": false
-            }
-        },
-        {
-            "type": "vless",
-            "tag": "3 🇲🇾 Alibaba (US) Technology Co. WS TLS [vpn]",
-            "server": "quiz.int.vidio.com",
-            "server_port": 443,
-            "uuid": "74410a79-1ea7-4c3a-ae7f-c7e1b88adbf1",
+            "uuid": "bb477451-404f-4e88-b803-3a3d9ec029a4",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -74,10 +50,10 @@
         },
         {
             "type": "vless",
-            "tag": "4 🇲🇾 Kaopu Cloud HK Limited WS TLS [vpn]",
+            "tag": "2 🇲🇾 Terabix WS TLS [vpn]",
             "server": "quiz.int.vidio.com",
             "server_port": 443,
-            "uuid": "74410a79-1ea7-4c3a-ae7f-c7e1b88adbf1",
+            "uuid": "bb477451-404f-4e88-b803-3a3d9ec029a4",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -89,7 +65,7 @@
                 "headers": {
                     "Host": "vpn.xtunnel.my.id"
                 },
-                "path": "/38.60.193.247-13300",
+                "path": "/163.61.102.13-443",
                 "type": "ws"
             },
             "multiplex": {
@@ -98,10 +74,10 @@
         },
         {
             "type": "vless",
-            "tag": "6 🇲🇾 Evoxt Enterprise WS TLS [vpn]",
+            "tag": "3 🇲🇾 TM TECHNOLOGY SERVICES SDN. BHD. WS TLS [vpn]",
             "server": "quiz.int.vidio.com",
             "server_port": 443,
-            "uuid": "74410a79-1ea7-4c3a-ae7f-c7e1b88adbf1",
+            "uuid": "bb477451-404f-4e88-b803-3a3d9ec029a4",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -113,7 +89,31 @@
                 "headers": {
                     "Host": "vpn.xtunnel.my.id"
                 },
-                "path": "/155.254.60.225-443",
+                "path": "/58.27.117.24-443",
+                "type": "ws"
+            },
+            "multiplex": {
+                "enabled": false
+            }
+        },
+        {
+            "type": "vless",
+            "tag": "4 🇲🇾 Microsoft Corporation WS TLS [vpn]",
+            "server": "quiz.int.vidio.com",
+            "server_port": 443,
+            "uuid": "bb477451-404f-4e88-b803-3a3d9ec029a4",
+            "network": "tcp",
+            "packet_encoding": "xudp",
+            "tls": {
+                "enabled": true,
+                "insecure": true,
+                "server_name": "vpn.xtunnel.my.id"
+            },
+            "transport": {
+                "headers": {
+                    "Host": "vpn.xtunnel.my.id"
+                },
+                "path": "/20.17.104.31-443",
                 "type": "ws"
             },
             "multiplex": {
