@@ -2,22 +2,46 @@
     "outbounds": [
         {
             "type": "vless",
-            "tag": "2 🇻🇳 VNPT Corp WS TLS [vpn]",
+            "tag": "1 🇻🇳 VNPT Corp WS TLS [vpn]",
             "server": "quiz.int.vidio.com",
             "server_port": 443,
-            "uuid": "0eba105c-35eb-4fb2-b103-8a2c89c753d3",
+            "uuid": "64963b99-6881-4b25-945d-8b1a30b0539e",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
                 "enabled": true,
                 "insecure": true,
-                "server_name": "vpn.ex27.my.id"
+                "server_name": "vpn.ex-vpn.my.id"
             },
             "transport": {
                 "headers": {
-                    "Host": "vpn.ex27.my.id"
+                    "Host": "vpn.ex-vpn.my.id"
                 },
                 "path": "/103.197.184.193-37461",
+                "type": "ws"
+            },
+            "multiplex": {
+                "enabled": false
+            }
+        },
+        {
+            "type": "vless",
+            "tag": "2 🇻🇳 Kaopu Cloud HK Limited WS TLS [vpn]",
+            "server": "quiz.int.vidio.com",
+            "server_port": 443,
+            "uuid": "64963b99-6881-4b25-945d-8b1a30b0539e",
+            "network": "tcp",
+            "packet_encoding": "xudp",
+            "tls": {
+                "enabled": true,
+                "insecure": true,
+                "server_name": "vpn.ex-vpn.my.id"
+            },
+            "transport": {
+                "headers": {
+                    "Host": "vpn.ex-vpn.my.id"
+                },
+                "path": "/154.93.48.189-34237",
                 "type": "ws"
             },
             "multiplex": {
@@ -29,17 +53,17 @@
             "tag": "3 🇻🇳 TRUMVPS COMPANY LIMITED WS TLS [vpn]",
             "server": "quiz.int.vidio.com",
             "server_port": 443,
-            "uuid": "0eba105c-35eb-4fb2-b103-8a2c89c753d3",
+            "uuid": "64963b99-6881-4b25-945d-8b1a30b0539e",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
                 "enabled": true,
                 "insecure": true,
-                "server_name": "vpn.ex27.my.id"
+                "server_name": "vpn.ex-vpn.my.id"
             },
             "transport": {
                 "headers": {
-                    "Host": "vpn.ex27.my.id"
+                    "Host": "vpn.ex-vpn.my.id"
                 },
                 "path": "/160.191.165.40-19957",
                 "type": "ws"
@@ -53,17 +77,17 @@
             "tag": "4 🇻🇳 UCLOUD INFORMATION TECHNOLOGY (HK) LIMITED WS TLS [vpn]",
             "server": "quiz.int.vidio.com",
             "server_port": 443,
-            "uuid": "0eba105c-35eb-4fb2-b103-8a2c89c753d3",
+            "uuid": "64963b99-6881-4b25-945d-8b1a30b0539e",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
                 "enabled": true,
                 "insecure": true,
-                "server_name": "vpn.ex27.my.id"
+                "server_name": "vpn.ex-vpn.my.id"
             },
             "transport": {
                 "headers": {
-                    "Host": "vpn.ex27.my.id"
+                    "Host": "vpn.ex-vpn.my.id"
                 },
                 "path": "/152.32.255.24-587",
                 "type": "ws"
@@ -74,44 +98,20 @@
         },
         {
             "type": "vless",
-            "tag": "5 🇻🇳 Kaopu Cloud HK Limited WS TLS [vpn]",
+            "tag": "5 🇻🇳 VNPT Corp WS TLS [vpn]",
             "server": "quiz.int.vidio.com",
             "server_port": 443,
-            "uuid": "0eba105c-35eb-4fb2-b103-8a2c89c753d3",
+            "uuid": "64963b99-6881-4b25-945d-8b1a30b0539e",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
                 "enabled": true,
                 "insecure": true,
-                "server_name": "vpn.ex27.my.id"
+                "server_name": "vpn.ex-vpn.my.id"
             },
             "transport": {
                 "headers": {
-                    "Host": "vpn.ex27.my.id"
-                },
-                "path": "/154.93.48.189-34237",
-                "type": "ws"
-            },
-            "multiplex": {
-                "enabled": false
-            }
-        },
-        {
-            "type": "vless",
-            "tag": "1 🇻🇳 VNPT Corp WS TLS [vpn]",
-            "server": "quiz.int.vidio.com",
-            "server_port": 443,
-            "uuid": "0eba105c-35eb-4fb2-b103-8a2c89c753d3",
-            "network": "tcp",
-            "packet_encoding": "xudp",
-            "tls": {
-                "enabled": true,
-                "insecure": true,
-                "server_name": "vpn.ex27.my.id"
-            },
-            "transport": {
-                "headers": {
-                    "Host": "vpn.ex27.my.id"
+                    "Host": "vpn.ex-vpn.my.id"
                 },
                 "path": "/103.15.90.134-49678",
                 "type": "ws"
