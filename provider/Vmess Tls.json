@@ -22,47 +22,7 @@
         },
         {
             "security": "",
-            "server": "quiz.int.vidio.com",
-            "server_port": 443,
-            "tag": "3 ✨ 🇸🇬 DIGITALOCEAN LLC GRPC CDN TLS",
-            "tls": {
-                "enabled": true,
-                "insecure": true,
-                "server_name": "sg1.foolvpn.me"
-            },
-            "transport": {
-                "service_name": "sg1.foolvpn.me",
-                "type": "grpc"
-            },
-            "type": "vmess",
-            "uuid": "b0bf6247-7866-478b-93f1-ad050d1d261e"
-        },
-        {
-            "security": "",
-            "server": "quiz.int.vidio.com",
-            "server_port": 443,
-            "tag": "2 ✨ 🇸🇬 DIGITALOCEAN LLC WS CDN TLS",
-            "tls": {
-                "enabled": true,
-                "insecure": true,
-                "server_name": "sg1.foolvpn.me"
-            },
-            "transport": {
-                "headers": {
-                    "Host": "sg1.foolvpn.me"
-                },
-                "path": "/vmess",
-                "type": "ws",
-                "max_early_data": 0,
-                "early_data_header_name": "Sec-WebSocket-Protocol"
-            },
-            "type": "vmess",
-            "uuid": "b0bf6247-7866-478b-93f1-ad050d1d261e",
-            "domain_strategy": "ipv4_only"
-        },
-        {
-            "security": "",
-            "server": "quiz.int.vidio.com",
+            "server": "support.zoom.us",
             "server_port": 443,
             "tag": "3 ✨ 🇮🇩 ARENHOST GRPC CDN TLS",
             "tls": {
@@ -75,11 +35,11 @@
                 "type": "grpc"
             },
             "type": "vmess",
-            "uuid": "b0bf6247-7866-478b-93f1-ad050d1d261e"
+            "uuid": "434ebb0f-d6cf-4d7b-98f9-4b5ab74da29b"
         },
         {
             "security": "",
-            "server": "quiz.int.vidio.com",
+            "server": "support.zoom.us",
             "server_port": 443,
             "tag": "2 ✨ 🇮🇩 ARENHOST WS CDN TLS",
             "tls": {
@@ -92,15 +52,48 @@
                     "Host": "id1.foolvpn.me"
                 },
                 "path": "/vmess",
-                "type": "ws",
-                "max_early_data": 0,
-                "early_data_header_name": "Sec-WebSocket-Protocol"
+                "type": "ws"
             },
             "type": "vmess",
-            "uuid": "b0bf6247-7866-478b-93f1-ad050d1d261e",
-            "domain_strategy": "ipv4_only"
+            "uuid": "434ebb0f-d6cf-4d7b-98f9-4b5ab74da29b"
         },
-        
+        {
+            "security": "",
+            "server": "support.zoom.us",
+            "server_port": 443,
+            "tag": "✨ 🇮🇩 ARENHOST GRPC CDN TLS",
+            "tls": {
+                "enabled": true,
+                "insecure": true,
+                "server_name": "sg1.foolvpn.me"
+            },
+            "transport": {
+                "service_name": "sg1.foolvpn.me",
+                "type": "grpc"
+            },
+            "type": "vmess",
+            "uuid": "434ebb0f-d6cf-4d7b-98f9-4b5ab74da29b"
+        },
+        {
+            "security": "",
+            "server": "support.zoom.us",
+            "server_port": 443,
+            "tag": "✨ 🇮🇩 ARENHOST WS CDN TLS",
+            "tls": {
+                "enabled": true,
+                "insecure": true,
+                "server_name": "sg1.foolvpn.me"
+            },
+            "transport": {
+                "headers": {
+                    "Host": "sg1.foolvpn.me"
+                },
+                "path": "/vmess",
+                "type": "ws"
+            },
+            "type": "vmess",
+            "uuid": "434ebb0f-d6cf-4d7b-98f9-4b5ab74da29b"
+        },
         {
             "security": "",
             "server": "support.zoom.us",
@@ -122,94 +115,24 @@
             "uuid": "babdc0ad-c3bc-4f5a-975d-c8844dd6e1cd"
         },
         {
-            "security": "",
-            "server": "quiz.int.vidio.com",
+            "security": "auto",
+            "server": "support.zoom.us",
             "server_port": 443,
-            "tag": "47 🇸🇬 DATACAMP WS CDN TLS",
+            "tag": "47 🇸🇬 CYBERZON S A  SRI LANKA  WS CDN TLS",
             "tls": {
                 "enabled": true,
                 "insecure": true,
-                "server_name": "sgfqkqmltcy.site"
+                "server_name": "node4.rtxconfigz.com"
             },
             "transport": {
                 "headers": {
-                    "Host": "sgfqkqmltcy.site"
+                    "Host": "node4.rtxconfigz.com"
                 },
-                "path": "/rbqqvws",
-                "type": "ws",
-                "max_early_data": 0,
-                "early_data_header_name": "Sec-WebSocket-Protocol"
-            },
-            "type": "vmess",
-            "uuid": "d13fc2f5-3e05-4795-81eb-44143a09e552",
-            "domain_strategy": "ipv4_only"
-        },
-        {
-            "security": "",
-            "server": "quiz.int.vidio.com",
-            "server_port": 2096,
-            "tag": "32 🇩🇪 CLOUDFLARE WARP WS CDN TLS",
-            "tls": {
-                "enabled": true,
-                "insecure": true,
-                "server_name": "de01.sh-cloudflare.sbs"
-            },
-            "transport": {
-                "headers": {
-                    "Host": "de01.sh-cloudflare.sbs"
-                },
-                "path": "/",
-                "type": "ws",
-                "max_early_data": 0,
-                "early_data_header_name": "Sec-WebSocket-Protocol"
-            },
-            "type": "vmess",
-            "uuid": "2703867d-dd8f-4f7f-93f4-ac6e4f56c7e8",
-            "domain_strategy": "ipv4_only"
-        },
-        {
-            "security": "",
-            "server": "quiz.int.vidio.com",
-            "server_port": 443,
-            "tag": "124 🇫🇷 FEELB WS CDN TLS",
-            "tls": {
-                "enabled": true,
-                "insecure": true,
-                "server_name": "beyonddsz.cfd"
-            },
-            "transport": {
-                "headers": {
-                    "Host": "beyonddsz.cfd"
-                },
-                "path": "/linkws",
-                "type": "ws",
-                "max_early_data": 0,
-                "early_data_header_name": "Sec-WebSocket-Protocol"
-            },
-            "type": "vmess",
-            "uuid": "9b456c2a-f2c1-45e1-87a9-b7628b04bb24",
-            "domain_strategy": "ipv4_only"
-        },
-        {
-            "security": "",
-            "server": "quiz.int.vidio.com",
-            "server_port": 2096,
-            "tag": "91 🇰🇷 ORACLE CLOUD WS CDN TLS",
-            "tls": {
-                "enabled": true,
-                "insecure": true,
-                "server_name": "dv4.789900.xyz"
-            },
-            "transport": {
-                "headers": {
-                    "Host": "dv4.789900.xyz"
-                },
-                "path": "/0c8f3e29-4ec9-4ba6-a6ef-4487873f5d05-vm",
+                "path": "/@Malinda6104",
                 "type": "ws"
             },
             "type": "vmess",
-            "uuid": "0c8f3e29-4ec9-4ba6-a6ef-4487873f5d05",
-            "domain_strategy": "ipv4_only"
+            "uuid": "44e57485-eccc-46ef-808f-cd17ac810018"
         }
     ]
 }
