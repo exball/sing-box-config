@@ -2,10 +2,10 @@
     "outbounds": [
         {
             "type": "vless",
-            "tag": "5 🇲🇾 Evoxt Enterprise WS TLS [vpn]",
+            "tag": "2 🇲🇾 Evoxt Enterprise WS TLS [vpn]",
             "server": "support.zoom.us",
             "server_port": 443,
-            "uuid": "9912a13e-eb9d-4087-ac70-9256c4b38fe4",
+            "uuid": "42ebb7d4-1f4b-4989-99f4-64f8696a121a",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -17,31 +17,7 @@
                 "headers": {
                     "Host": "vpn.exbal.my.id"
                 },
-                "path": "/23.27.53.119-35209",
-                "type": "ws"
-            },
-            "multiplex": {
-                "enabled": false
-            }
-        },
-        {
-            "type": "vless",
-            "tag": "2 🇲🇾 Microsoft Corporation WS TLS [vpn]",
-            "server": "support.zoom.us",
-            "server_port": 443,
-            "uuid": "9912a13e-eb9d-4087-ac70-9256c4b38fe4",
-            "network": "tcp",
-            "packet_encoding": "xudp",
-            "tls": {
-                "enabled": true,
-                "insecure": true,
-                "server_name": "vpn.exbal.my.id"
-            },
-            "transport": {
-                "headers": {
-                    "Host": "vpn.exbal.my.id"
-                },
-                "path": "/20.17.104.31-443",
+                "path": "/155.254.60.225-443",
                 "type": "ws"
             },
             "multiplex": {
@@ -53,7 +29,7 @@
             "tag": "3 🇲🇾 Alibaba (US) Technology Co. WS TLS [vpn]",
             "server": "support.zoom.us",
             "server_port": 443,
-            "uuid": "9912a13e-eb9d-4087-ac70-9256c4b38fe4",
+            "uuid": "42ebb7d4-1f4b-4989-99f4-64f8696a121a",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -74,10 +50,10 @@
         },
         {
             "type": "vless",
-            "tag": "4 🇲🇾 TM TECHNOLOGY SERVICES SDN. BHD. WS TLS [vpn]",
+            "tag": "5 🇲🇾 TM TECHNOLOGY SERVICES SDN. BHD. WS TLS [vpn]",
             "server": "support.zoom.us",
             "server_port": 443,
-            "uuid": "9912a13e-eb9d-4087-ac70-9256c4b38fe4",
+            "uuid": "42ebb7d4-1f4b-4989-99f4-64f8696a121a",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -101,7 +77,7 @@
             "tag": "6 🇲🇾 Terabix WS TLS [vpn]",
             "server": "support.zoom.us",
             "server_port": 443,
-            "uuid": "9912a13e-eb9d-4087-ac70-9256c4b38fe4",
+            "uuid": "42ebb7d4-1f4b-4989-99f4-64f8696a121a",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -114,6 +90,30 @@
                     "Host": "vpn.exbal.my.id"
                 },
                 "path": "/163.61.102.13-443",
+                "type": "ws"
+            },
+            "multiplex": {
+                "enabled": false
+            }
+        },
+        {
+            "type": "vless",
+            "tag": "7 🇲🇾 Microsoft Corporation WS TLS [vpn]",
+            "server": "support.zoom.us",
+            "server_port": 443,
+            "uuid": "42ebb7d4-1f4b-4989-99f4-64f8696a121a",
+            "network": "tcp",
+            "packet_encoding": "xudp",
+            "tls": {
+                "enabled": true,
+                "insecure": true,
+                "server_name": "vpn.exbal.my.id"
+            },
+            "transport": {
+                "headers": {
+                    "Host": "vpn.exbal.my.id"
+                },
+                "path": "/20.17.104.31-443",
                 "type": "ws"
             },
             "multiplex": {
