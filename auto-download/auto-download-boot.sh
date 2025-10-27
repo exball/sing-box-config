@@ -7,7 +7,7 @@
 sleep 30
 
 # Path ke script auto-download.sh
-SCRIPT_PATH="/data/adb/auto-download/auto-download.sh"
+SCRIPT_PATH="/data/adb/auto-download/restart-auto-download.sh"
 
 # Pastikan direktori yang diperlukan ada
 mkdir -p /data/adb/auto-download
@@ -29,8 +29,8 @@ if [ ! -f "$SCRIPT_PATH" ]; then
     log_boot "ERROR: Script utama tidak ditemukan di $SCRIPT_PATH"
     
     # Coba salin dari direktori service.d jika ada
-    if [ -f "/data/adb/service.d/auto-download.sh" ]; then
-        cp "/data/adb/service.d/auto-download.sh" "$SCRIPT_PATH"
+    if [ -f "/data/adb/service.d/restart-auto-download.sh" ]; then
+        cp "/data/adb/service.d/restart-auto-download.sh" "$SCRIPT_PATH"
         chmod +x "$SCRIPT_PATH"
         log_boot "Script disalin dari /data/adb/service.d/ ke $SCRIPT_PATH"
     else
