@@ -5,7 +5,7 @@
             "tag": "5 🇻🇳 VNPT Corp WS TLS [vpn]",
             "server": "support.zoom.us",
             "server_port": 443,
-            "uuid": "a85fd7ca-4adf-4e4f-a034-62cde63469db",
+            "uuid": "84426b93-4268-4d46-88fc-764d6c1d61f5",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -17,7 +17,7 @@
                 "headers": {
                     "Host": "vpn.ex27.my.id"
                 },
-                "path": "/103.15.90.134-49678",
+                "path": "/103.197.184.193-37461",
                 "type": "ws"
             },
             "multiplex": {
@@ -26,10 +26,10 @@
         },
         {
             "type": "vless",
-            "tag": "1 🇻🇳 UCLOUD INFORMATION TECHNOLOGY (HK) LIMITED WS TLS [vpn]",
+            "tag": "2 🇻🇳 UCLOUD INFORMATION TECHNOLOGY (HK) LIMITED WS TLS [vpn]",
             "server": "support.zoom.us",
             "server_port": 443,
-            "uuid": "a85fd7ca-4adf-4e4f-a034-62cde63469db",
+            "uuid": "84426b93-4268-4d46-88fc-764d6c1d61f5",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -50,34 +50,10 @@
         },
         {
             "type": "vless",
-            "tag": "2 🇻🇳 TRUMVPS COMPANY LIMITED WS TLS [vpn]",
+            "tag": "3 🇻🇳 Kaopu Cloud HK Limited WS TLS [vpn]",
             "server": "support.zoom.us",
             "server_port": 443,
-            "uuid": "a85fd7ca-4adf-4e4f-a034-62cde63469db",
-            "network": "tcp",
-            "packet_encoding": "xudp",
-            "tls": {
-                "enabled": true,
-                "insecure": true,
-                "server_name": "vpn.ex27.my.id"
-            },
-            "transport": {
-                "headers": {
-                    "Host": "vpn.ex27.my.id"
-                },
-                "path": "/160.191.165.40-19957",
-                "type": "ws"
-            },
-            "multiplex": {
-                "enabled": false
-            }
-        },
-        {
-            "type": "vless",
-            "tag": "4 🇻🇳 Kaopu Cloud HK Limited WS TLS [vpn]",
-            "server": "support.zoom.us",
-            "server_port": 443,
-            "uuid": "a85fd7ca-4adf-4e4f-a034-62cde63469db",
+            "uuid": "84426b93-4268-4d46-88fc-764d6c1d61f5",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -98,10 +74,10 @@
         },
         {
             "type": "vless",
-            "tag": "3 🇻🇳 VNPT Corp WS TLS [vpn]",
+            "tag": "4 🇻🇳 TRUMVPS COMPANY LIMITED WS TLS [vpn]",
             "server": "support.zoom.us",
             "server_port": 443,
-            "uuid": "a85fd7ca-4adf-4e4f-a034-62cde63469db",
+            "uuid": "84426b93-4268-4d46-88fc-764d6c1d61f5",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -113,7 +89,31 @@
                 "headers": {
                     "Host": "vpn.ex27.my.id"
                 },
-                "path": "/103.197.184.193-37461",
+                "path": "/160.191.165.40-19957",
+                "type": "ws"
+            },
+            "multiplex": {
+                "enabled": false
+            }
+        },
+        {
+            "type": "vless",
+            "tag": "1 🇻🇳 VNPT Corp WS TLS [vpn]",
+            "server": "support.zoom.us",
+            "server_port": 443,
+            "uuid": "84426b93-4268-4d46-88fc-764d6c1d61f5",
+            "network": "tcp",
+            "packet_encoding": "xudp",
+            "tls": {
+                "enabled": true,
+                "insecure": true,
+                "server_name": "vpn.ex27.my.id"
+            },
+            "transport": {
+                "headers": {
+                    "Host": "vpn.ex27.my.id"
+                },
+                "path": "/103.15.90.134-49678",
                 "type": "ws"
             },
             "multiplex": {
