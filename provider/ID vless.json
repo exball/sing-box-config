@@ -2,10 +2,10 @@
     "outbounds": [
         {
             "type": "vless",
-            "tag": "20 🇮🇩 Akamai Connected Cloud WS TLS [vpn]",
+            "tag": "4 🇮🇩 Akamai Connected Cloud WS TLS [vpn]",
             "server": "support.zoom.us",
             "server_port": 443,
-            "uuid": "79fe3b72-a266-4375-89a4-159f1db67427",
+            "uuid": "12b7c5f0-3183-48a2-8238-00dda007f0a6",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -17,7 +17,7 @@
                 "headers": {
                     "Host": "vpn.exbal.my.id"
                 },
-                "path": "/172.232.238.52-74",
+                "path": "/172.232.238.52-32225",
                 "type": "ws"
             },
             "multiplex": {
@@ -26,10 +26,34 @@
         },
         {
             "type": "vless",
-            "tag": "8 🇮🇩 Amazon.com WS TLS [vpn]",
+            "tag": "11 🇮🇩 PT Pusat Media Indonesia WS TLS [vpn]",
             "server": "support.zoom.us",
             "server_port": 443,
-            "uuid": "79fe3b72-a266-4375-89a4-159f1db67427",
+            "uuid": "12b7c5f0-3183-48a2-8238-00dda007f0a6",
+            "network": "tcp",
+            "packet_encoding": "xudp",
+            "tls": {
+                "enabled": true,
+                "insecure": true,
+                "server_name": "vpn.exbal.my.id"
+            },
+            "transport": {
+                "headers": {
+                    "Host": "vpn.exbal.my.id"
+                },
+                "path": "/103.6.207.108-19224",
+                "type": "ws"
+            },
+            "multiplex": {
+                "enabled": false
+            }
+        },
+        {
+            "type": "vless",
+            "tag": "33 🇮🇩 Amazon.com WS TLS [vpn]",
+            "server": "support.zoom.us",
+            "server_port": 443,
+            "uuid": "12b7c5f0-3183-48a2-8238-00dda007f0a6",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -50,10 +74,10 @@
         },
         {
             "type": "vless",
-            "tag": "14 🇮🇩 PT Pusat Media Indonesia WS TLS [vpn]",
+            "tag": "25 🇮🇩 CV. Rumahweb Indonesia WS TLS [vpn]",
             "server": "support.zoom.us",
             "server_port": 443,
-            "uuid": "79fe3b72-a266-4375-89a4-159f1db67427",
+            "uuid": "12b7c5f0-3183-48a2-8238-00dda007f0a6",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -65,7 +89,7 @@
                 "headers": {
                     "Host": "vpn.exbal.my.id"
                 },
-                "path": "/103.6.207.108-8080",
+                "path": "/203.194.112.119-2053",
                 "type": "ws"
             },
             "multiplex": {
@@ -74,106 +98,10 @@
         },
         {
             "type": "vless",
-            "tag": "32 🇮🇩 CV. Rumahweb Indonesia WS TLS [vpn]",
+            "tag": "3 🇮🇩 Alibaba (US) Technology Co. WS TLS [vpn]",
             "server": "support.zoom.us",
             "server_port": 443,
-            "uuid": "79fe3b72-a266-4375-89a4-159f1db67427",
-            "network": "tcp",
-            "packet_encoding": "xudp",
-            "tls": {
-                "enabled": true,
-                "insecure": true,
-                "server_name": "vpn.exbal.my.id"
-            },
-            "transport": {
-                "headers": {
-                    "Host": "vpn.exbal.my.id"
-                },
-                "path": "/203.194.112.119-8443",
-                "type": "ws"
-            },
-            "multiplex": {
-                "enabled": false
-            }
-        },
-        {
-            "type": "vless",
-            "tag": "16 🇮🇩 Hostinger International Limited WS TLS [vpn]",
-            "server": "support.zoom.us",
-            "server_port": 443,
-            "uuid": "79fe3b72-a266-4375-89a4-159f1db67427",
-            "network": "tcp",
-            "packet_encoding": "xudp",
-            "tls": {
-                "enabled": true,
-                "insecure": true,
-                "server_name": "vpn.exbal.my.id"
-            },
-            "transport": {
-                "headers": {
-                    "Host": "vpn.exbal.my.id"
-                },
-                "path": "/31.97.50.106-443",
-                "type": "ws"
-            },
-            "multiplex": {
-                "enabled": false
-            }
-        },
-        {
-            "type": "vless",
-            "tag": "24 🇮🇩 PT Telekomunikasi Indonesia WS TLS [vpn]",
-            "server": "support.zoom.us",
-            "server_port": 443,
-            "uuid": "79fe3b72-a266-4375-89a4-159f1db67427",
-            "network": "tcp",
-            "packet_encoding": "xudp",
-            "tls": {
-                "enabled": true,
-                "insecure": true,
-                "server_name": "vpn.exbal.my.id"
-            },
-            "transport": {
-                "headers": {
-                    "Host": "vpn.exbal.my.id"
-                },
-                "path": "/36.95.152.58-12137",
-                "type": "ws"
-            },
-            "multiplex": {
-                "enabled": false
-            }
-        },
-        {
-            "type": "vless",
-            "tag": "29 🇮🇩 INDO Internet WS TLS [vpn]",
-            "server": "support.zoom.us",
-            "server_port": 443,
-            "uuid": "79fe3b72-a266-4375-89a4-159f1db67427",
-            "network": "tcp",
-            "packet_encoding": "xudp",
-            "tls": {
-                "enabled": true,
-                "insecure": true,
-                "server_name": "vpn.exbal.my.id"
-            },
-            "transport": {
-                "headers": {
-                    "Host": "vpn.exbal.my.id"
-                },
-                "path": "/117.54.114.103-443",
-                "type": "ws"
-            },
-            "multiplex": {
-                "enabled": false
-            }
-        },
-        {
-            "type": "vless",
-            "tag": "36 🇮🇩 Alibaba (US) Technology Co. WS TLS [vpn]",
-            "server": "support.zoom.us",
-            "server_port": 443,
-            "uuid": "79fe3b72-a266-4375-89a4-159f1db67427",
+            "uuid": "12b7c5f0-3183-48a2-8238-00dda007f0a6",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -194,10 +122,34 @@
         },
         {
             "type": "vless",
-            "tag": "38 🇮🇩 PT Industri Kreatif Digital WS TLS [vpn]",
+            "tag": "9 🇮🇩 Hostinger International Limited WS TLS [vpn]",
             "server": "support.zoom.us",
             "server_port": 443,
-            "uuid": "79fe3b72-a266-4375-89a4-159f1db67427",
+            "uuid": "12b7c5f0-3183-48a2-8238-00dda007f0a6",
+            "network": "tcp",
+            "packet_encoding": "xudp",
+            "tls": {
+                "enabled": true,
+                "insecure": true,
+                "server_name": "vpn.exbal.my.id"
+            },
+            "transport": {
+                "headers": {
+                    "Host": "vpn.exbal.my.id"
+                },
+                "path": "/31.97.50.106-443",
+                "type": "ws"
+            },
+            "multiplex": {
+                "enabled": false
+            }
+        },
+        {
+            "type": "vless",
+            "tag": "31 🇮🇩 PT Industri Kreatif Digital WS TLS [vpn]",
+            "server": "support.zoom.us",
+            "server_port": 443,
+            "uuid": "12b7c5f0-3183-48a2-8238-00dda007f0a6",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -218,10 +170,10 @@
         },
         {
             "type": "vless",
-            "tag": "21 🇮🇩 Akamai Connected Cloud WS TLS [vpn]",
+            "tag": "34 🇮🇩 PT Telekomunikasi Indonesia WS TLS [vpn]",
             "server": "support.zoom.us",
             "server_port": 443,
-            "uuid": "79fe3b72-a266-4375-89a4-159f1db67427",
+            "uuid": "12b7c5f0-3183-48a2-8238-00dda007f0a6",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -233,7 +185,7 @@
                 "headers": {
                     "Host": "vpn.exbal.my.id"
                 },
-                "path": "/172.232.238.56-486",
+                "path": "/36.95.152.58-12137",
                 "type": "ws"
             },
             "multiplex": {
@@ -242,10 +194,58 @@
         },
         {
             "type": "vless",
-            "tag": "27 🇮🇩 Amazon.com WS TLS [vpn]",
+            "tag": "15 🇮🇩 Akamai Connected Cloud WS TLS [vpn]",
             "server": "support.zoom.us",
             "server_port": 443,
-            "uuid": "79fe3b72-a266-4375-89a4-159f1db67427",
+            "uuid": "12b7c5f0-3183-48a2-8238-00dda007f0a6",
+            "network": "tcp",
+            "packet_encoding": "xudp",
+            "tls": {
+                "enabled": true,
+                "insecure": true,
+                "server_name": "vpn.exbal.my.id"
+            },
+            "transport": {
+                "headers": {
+                    "Host": "vpn.exbal.my.id"
+                },
+                "path": "/172.232.238.56-32225",
+                "type": "ws"
+            },
+            "multiplex": {
+                "enabled": false
+            }
+        },
+        {
+            "type": "vless",
+            "tag": "13 🇮🇩 PT Pusat Media Indonesia WS TLS [vpn]",
+            "server": "support.zoom.us",
+            "server_port": 443,
+            "uuid": "12b7c5f0-3183-48a2-8238-00dda007f0a6",
+            "network": "tcp",
+            "packet_encoding": "xudp",
+            "tls": {
+                "enabled": true,
+                "insecure": true,
+                "server_name": "vpn.exbal.my.id"
+            },
+            "transport": {
+                "headers": {
+                    "Host": "vpn.exbal.my.id"
+                },
+                "path": "/103.6.207.108-8080",
+                "type": "ws"
+            },
+            "multiplex": {
+                "enabled": false
+            }
+        },
+        {
+            "type": "vless",
+            "tag": "37 🇮🇩 Amazon.com WS TLS [vpn]",
+            "server": "support.zoom.us",
+            "server_port": 443,
+            "uuid": "12b7c5f0-3183-48a2-8238-00dda007f0a6",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -266,10 +266,10 @@
         },
         {
             "type": "vless",
-            "tag": "15 🇮🇩 PT Pusat Media Indonesia WS TLS [vpn]",
+            "tag": "30 🇮🇩 Akamai Connected Cloud WS TLS [vpn]",
             "server": "support.zoom.us",
             "server_port": 443,
-            "uuid": "79fe3b72-a266-4375-89a4-159f1db67427",
+            "uuid": "12b7c5f0-3183-48a2-8238-00dda007f0a6",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -281,7 +281,7 @@
                 "headers": {
                     "Host": "vpn.exbal.my.id"
                 },
-                "path": "/103.6.207.108-19224",
+                "path": "/172.232.238.56-4399",
                 "type": "ws"
             },
             "multiplex": {
