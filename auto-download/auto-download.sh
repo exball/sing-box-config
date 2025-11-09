@@ -59,6 +59,30 @@ log_message() {
     fi
 }
 
+# ===== CURL RESOLUTION =====
+# Pilih binary curl yang akan digunakan: prefer PATH/system, fallback ke Termux
+CURL_BIN="${CURL_BIN:-}"
+if [ -z "$CURL_BIN" ]; then
+    for candidate in \
+        "$(command -v curl 2>/dev/null)" \
+        /system/bin/curl \
+        /system/xbin/curl \
+        /vendor/bin/curl \
+        /data/data/com.termux/files/usr/bin/curl; do
+        if [ -n "$candidate" ] && [ -x "$candidate" ]; then
+            CURL_BIN="$candidate"
+            break
+        fi
+    done
+fi
+
+if [ -z "$CURL_BIN" ] || [ ! -x "$CURL_BIN" ]; then
+    log_message "ERROR: curl binary not found. Please install curl (system or Termux)."
+    exit 1
+fi
+
+log_message "Using curl: $CURL_BIN"
+
 # Fungsi untuk mendapatkan hash SHA-1 dari file lokal
 get_local_sha1() {
     local file="$1"
@@ -102,7 +126,7 @@ curl_network_check() {
         return 1
     fi
     
-    curl -s -f -m "$timeout_max" --connect-timeout "$timeout_connect" -o /dev/null "$test_url"
+    "$CURL_BIN" -s -f -m "$timeout_max" --connect-timeout "$timeout_connect" -o /dev/null "$test_url"
     return $?
 }
 
@@ -122,7 +146,7 @@ curl_download_file() {
     ensure_parent_directory "$output_file"
     
     # Download file dengan follow redirects
-    curl -s -L --connect-timeout "$timeout_connect" --max-time "$timeout_max" "$source_url" -o "$output_file"
+    "$CURL_BIN" -s -L --connect-timeout "$timeout_connect" --max-time "$timeout_max" "$source_url" -o "$output_file"
     local curl_exit_code=$?
     
     # Jika gagal, hapus file yang mungkin sudah dibuat (partial download)
