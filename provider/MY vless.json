@@ -2,22 +2,46 @@
     "outbounds": [
         {
             "type": "vless",
-            "tag": "8 🇲🇾 Terabix WS TLS [vpn]",
+            "tag": "14 🇲🇾 Evoxt Enterprise WS TLS [vpn]",
             "server": "support.zoom.us",
             "server_port": 443,
-            "uuid": "70b7efc7-950e-462e-b703-4613b2247e18",
+            "uuid": "d9459a21-fa9f-475c-b4b1-3b7b64f253c9",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
                 "enabled": true,
                 "insecure": true,
-                "server_name": "vpn.ex-vpn.my.id"
+                "server_name": "vpn.exbal.my.id"
             },
             "transport": {
                 "headers": {
-                    "Host": "vpn.ex-vpn.my.id"
+                    "Host": "vpn.exbal.my.id"
                 },
-                "path": "/160.30.209.220-9884",
+                "path": "/166.88.7.198-6666",
+                "type": "ws"
+            },
+            "multiplex": {
+                "enabled": false
+            }
+        },
+        {
+            "type": "vless",
+            "tag": "8 🇲🇾 Terabix WS TLS [vpn]",
+            "server": "support.zoom.us",
+            "server_port": 443,
+            "uuid": "d9459a21-fa9f-475c-b4b1-3b7b64f253c9",
+            "network": "tcp",
+            "packet_encoding": "xudp",
+            "tls": {
+                "enabled": true,
+                "insecure": true,
+                "server_name": "vpn.exbal.my.id"
+            },
+            "transport": {
+                "headers": {
+                    "Host": "vpn.exbal.my.id"
+                },
+                "path": "/160.30.209.220-18884",
                 "type": "ws"
             },
             "multiplex": {
@@ -29,19 +53,19 @@
             "tag": "18 🇲🇾 Kaopu Cloud HK Limited WS TLS [vpn]",
             "server": "support.zoom.us",
             "server_port": 443,
-            "uuid": "70b7efc7-950e-462e-b703-4613b2247e18",
+            "uuid": "d9459a21-fa9f-475c-b4b1-3b7b64f253c9",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
                 "enabled": true,
                 "insecure": true,
-                "server_name": "vpn.ex-vpn.my.id"
+                "server_name": "vpn.exbal.my.id"
             },
             "transport": {
                 "headers": {
-                    "Host": "vpn.ex-vpn.my.id"
+                    "Host": "vpn.exbal.my.id"
                 },
-                "path": "/38.54.113.23-443",
+                "path": "/38.54.113.23-20205",
                 "type": "ws"
             },
             "multiplex": {
@@ -50,20 +74,20 @@
         },
         {
             "type": "vless",
-            "tag": "3 🇲🇾 TM TECHNOLOGY SERVICES SDN. BHD. WS TLS [vpn]",
+            "tag": "2 🇲🇾 TM TECHNOLOGY SERVICES SDN. BHD. WS TLS [vpn]",
             "server": "support.zoom.us",
             "server_port": 443,
-            "uuid": "70b7efc7-950e-462e-b703-4613b2247e18",
+            "uuid": "d9459a21-fa9f-475c-b4b1-3b7b64f253c9",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
                 "enabled": true,
                 "insecure": true,
-                "server_name": "vpn.ex-vpn.my.id"
+                "server_name": "vpn.exbal.my.id"
             },
             "transport": {
                 "headers": {
-                    "Host": "vpn.ex-vpn.my.id"
+                    "Host": "vpn.exbal.my.id"
                 },
                 "path": "/58.27.117.24-443",
                 "type": "ws"
@@ -74,46 +98,22 @@
         },
         {
             "type": "vless",
-            "tag": "4 🇲🇾 BrainStorm Network WS TLS [vpn]",
+            "tag": "7 🇲🇾 BrainStorm Network WS TLS [vpn]",
             "server": "support.zoom.us",
             "server_port": 443,
-            "uuid": "70b7efc7-950e-462e-b703-4613b2247e18",
+            "uuid": "d9459a21-fa9f-475c-b4b1-3b7b64f253c9",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
                 "enabled": true,
                 "insecure": true,
-                "server_name": "vpn.ex-vpn.my.id"
+                "server_name": "vpn.exbal.my.id"
             },
             "transport": {
                 "headers": {
-                    "Host": "vpn.ex-vpn.my.id"
+                    "Host": "vpn.exbal.my.id"
                 },
                 "path": "/103.75.116.164-443",
-                "type": "ws"
-            },
-            "multiplex": {
-                "enabled": false
-            }
-        },
-        {
-            "type": "vless",
-            "tag": "13 🇲🇾 Evoxt Enterprise WS TLS [vpn]",
-            "server": "support.zoom.us",
-            "server_port": 443,
-            "uuid": "70b7efc7-950e-462e-b703-4613b2247e18",
-            "network": "tcp",
-            "packet_encoding": "xudp",
-            "tls": {
-                "enabled": true,
-                "insecure": true,
-                "server_name": "vpn.ex-vpn.my.id"
-            },
-            "transport": {
-                "headers": {
-                    "Host": "vpn.ex-vpn.my.id"
-                },
-                "path": "/166.88.35.176-49066",
                 "type": "ws"
             },
             "multiplex": {
