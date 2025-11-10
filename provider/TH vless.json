@@ -2,10 +2,10 @@
     "outbounds": [
         {
             "type": "vless",
-            "tag": "34 🇹🇭 TRUE INTERNET Co. WS TLS [vpn]",
+            "tag": "1 🇹🇭 Siamdata Communication Co. WS TLS [vpn]",
             "server": "support.zoom.us",
             "server_port": 443,
-            "uuid": "5cbf5803-ebbe-48d1-8607-0ed3954712e4",
+            "uuid": "51e69fe9-0aa3-4b55-af45-86f576e331df",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -17,7 +17,7 @@
                 "headers": {
                     "Host": "vpn.ex-vpn.my.id"
                 },
-                "path": "/171.103.223.50-10067",
+                "path": "/212.80.213.140-31557",
                 "type": "ws"
             },
             "multiplex": {
@@ -26,10 +26,10 @@
         },
         {
             "type": "vless",
-            "tag": "12 🇹🇭 Siamdata Communication Co. WS TLS [vpn]",
+            "tag": "2 🇹🇭 TRUE INTERNET Co. WS TLS [vpn]",
             "server": "support.zoom.us",
             "server_port": 443,
-            "uuid": "5cbf5803-ebbe-48d1-8607-0ed3954712e4",
+            "uuid": "51e69fe9-0aa3-4b55-af45-86f576e331df",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -41,7 +41,7 @@
                 "headers": {
                     "Host": "vpn.ex-vpn.my.id"
                 },
-                "path": "/103.22.183.118-32225",
+                "path": "/171.103.223.50-10022",
                 "type": "ws"
             },
             "multiplex": {
@@ -50,10 +50,10 @@
         },
         {
             "type": "vless",
-            "tag": "1 🇹🇭 Kaopu Cloud HK Limited WS TLS [vpn]",
+            "tag": "37 🇹🇭 Kaopu Cloud HK Limited WS TLS [vpn]",
             "server": "support.zoom.us",
             "server_port": 443,
-            "uuid": "5cbf5803-ebbe-48d1-8607-0ed3954712e4",
+            "uuid": "51e69fe9-0aa3-4b55-af45-86f576e331df",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -74,10 +74,34 @@
         },
         {
             "type": "vless",
-            "tag": "16 🇹🇭 Bangmod Enterprise Co. WS TLS [vpn]",
+            "tag": "18 🇹🇭 Tencent Building WS TLS [vpn]",
             "server": "support.zoom.us",
             "server_port": 443,
-            "uuid": "5cbf5803-ebbe-48d1-8607-0ed3954712e4",
+            "uuid": "51e69fe9-0aa3-4b55-af45-86f576e331df",
+            "network": "tcp",
+            "packet_encoding": "xudp",
+            "tls": {
+                "enabled": true,
+                "insecure": true,
+                "server_name": "vpn.ex-vpn.my.id"
+            },
+            "transport": {
+                "headers": {
+                    "Host": "vpn.ex-vpn.my.id"
+                },
+                "path": "/43.133.110.81-443",
+                "type": "ws"
+            },
+            "multiplex": {
+                "enabled": false
+            }
+        },
+        {
+            "type": "vless",
+            "tag": "26 🇹🇭 Bangmod Enterprise Co. WS TLS [vpn]",
+            "server": "support.zoom.us",
+            "server_port": 443,
+            "uuid": "51e69fe9-0aa3-4b55-af45-86f576e331df",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -90,30 +114,6 @@
                     "Host": "vpn.ex-vpn.my.id"
                 },
                 "path": "/27.254.163.51-10327",
-                "type": "ws"
-            },
-            "multiplex": {
-                "enabled": false
-            }
-        },
-        {
-            "type": "vless",
-            "tag": "40 🇹🇭 CAT Telecom Public Company Limited WS TLS [vpn]",
-            "server": "support.zoom.us",
-            "server_port": 443,
-            "uuid": "5cbf5803-ebbe-48d1-8607-0ed3954712e4",
-            "network": "tcp",
-            "packet_encoding": "xudp",
-            "tls": {
-                "enabled": true,
-                "insecure": true,
-                "server_name": "vpn.ex-vpn.my.id"
-            },
-            "transport": {
-                "headers": {
-                    "Host": "vpn.ex-vpn.my.id"
-                },
-                "path": "/122.155.180.241-61389",
                 "type": "ws"
             },
             "multiplex": {
