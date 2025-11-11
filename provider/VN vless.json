@@ -2,10 +2,10 @@
     "outbounds": [
         {
             "type": "vless",
-            "tag": "5 🇻🇳 VNPT Corp WS TLS [vpn]",
+            "tag": "2 🇻🇳 VNPT Corp WS TLS [vpn]",
             "server": "support.zoom.us",
             "server_port": 443,
-            "uuid": "acf6c4fc-616c-4ce6-9e36-c1165b025655",
+            "uuid": "3ab19b08-f0f5-4f07-a5b0-8234ea631ba3",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -17,7 +17,7 @@
                 "headers": {
                     "Host": "vpn.exbal.my.id"
                 },
-                "path": "/103.197.184.193-37461",
+                "path": "/103.15.90.134-49678",
                 "type": "ws"
             },
             "multiplex": {
@@ -26,58 +26,10 @@
         },
         {
             "type": "vless",
-            "tag": "2 🇻🇳 UCLOUD INFORMATION TECHNOLOGY (HK) LIMITED WS TLS [vpn]",
+            "tag": "1 🇻🇳 Kaopu Cloud HK Limited WS TLS [vpn]",
             "server": "support.zoom.us",
             "server_port": 443,
-            "uuid": "acf6c4fc-616c-4ce6-9e36-c1165b025655",
-            "network": "tcp",
-            "packet_encoding": "xudp",
-            "tls": {
-                "enabled": true,
-                "insecure": true,
-                "server_name": "vpn.exbal.my.id"
-            },
-            "transport": {
-                "headers": {
-                    "Host": "vpn.exbal.my.id"
-                },
-                "path": "/152.32.255.24-587",
-                "type": "ws"
-            },
-            "multiplex": {
-                "enabled": false
-            }
-        },
-        {
-            "type": "vless",
-            "tag": "3 🇻🇳 TRUMVPS COMPANY LIMITED WS TLS [vpn]",
-            "server": "support.zoom.us",
-            "server_port": 443,
-            "uuid": "acf6c4fc-616c-4ce6-9e36-c1165b025655",
-            "network": "tcp",
-            "packet_encoding": "xudp",
-            "tls": {
-                "enabled": true,
-                "insecure": true,
-                "server_name": "vpn.exbal.my.id"
-            },
-            "transport": {
-                "headers": {
-                    "Host": "vpn.exbal.my.id"
-                },
-                "path": "/160.191.165.40-19957",
-                "type": "ws"
-            },
-            "multiplex": {
-                "enabled": false
-            }
-        },
-        {
-            "type": "vless",
-            "tag": "4 🇻🇳 Kaopu Cloud HK Limited WS TLS [vpn]",
-            "server": "support.zoom.us",
-            "server_port": 443,
-            "uuid": "acf6c4fc-616c-4ce6-9e36-c1165b025655",
+            "uuid": "3ab19b08-f0f5-4f07-a5b0-8234ea631ba3",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -98,10 +50,10 @@
         },
         {
             "type": "vless",
-            "tag": "1 🇻🇳 VNPT Corp WS TLS [vpn]",
+            "tag": "4 🇻🇳 UCLOUD INFORMATION TECHNOLOGY (HK) LIMITED WS TLS [vpn]",
             "server": "support.zoom.us",
             "server_port": 443,
-            "uuid": "acf6c4fc-616c-4ce6-9e36-c1165b025655",
+            "uuid": "3ab19b08-f0f5-4f07-a5b0-8234ea631ba3",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -113,7 +65,55 @@
                 "headers": {
                     "Host": "vpn.exbal.my.id"
                 },
-                "path": "/103.15.90.134-49678",
+                "path": "/152.32.255.24-587",
+                "type": "ws"
+            },
+            "multiplex": {
+                "enabled": false
+            }
+        },
+        {
+            "type": "vless",
+            "tag": "5 🇻🇳 TRUMVPS COMPANY LIMITED WS TLS [vpn]",
+            "server": "support.zoom.us",
+            "server_port": 443,
+            "uuid": "3ab19b08-f0f5-4f07-a5b0-8234ea631ba3",
+            "network": "tcp",
+            "packet_encoding": "xudp",
+            "tls": {
+                "enabled": true,
+                "insecure": true,
+                "server_name": "vpn.exbal.my.id"
+            },
+            "transport": {
+                "headers": {
+                    "Host": "vpn.exbal.my.id"
+                },
+                "path": "/160.191.165.40-19957",
+                "type": "ws"
+            },
+            "multiplex": {
+                "enabled": false
+            }
+        },
+        {
+            "type": "vless",
+            "tag": "3 🇻🇳 VNPT Corp WS TLS [vpn]",
+            "server": "support.zoom.us",
+            "server_port": 443,
+            "uuid": "3ab19b08-f0f5-4f07-a5b0-8234ea631ba3",
+            "network": "tcp",
+            "packet_encoding": "xudp",
+            "tls": {
+                "enabled": true,
+                "insecure": true,
+                "server_name": "vpn.exbal.my.id"
+            },
+            "transport": {
+                "headers": {
+                    "Host": "vpn.exbal.my.id"
+                },
+                "path": "/103.197.184.193-37461",
                 "type": "ws"
             },
             "multiplex": {
