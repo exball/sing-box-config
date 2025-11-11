@@ -2,10 +2,10 @@
     "outbounds": [
         {
             "type": "vless",
-            "tag": "7 🇲🇾 Terabix WS TLS [vpn]",
+            "tag": "16 🇲🇾 Evoxt Enterprise WS TLS [vpn]",
             "server": "support.zoom.us",
             "server_port": 443,
-            "uuid": "00b45eb9-a31e-48fc-9837-a18ce2d44153",
+            "uuid": "c7e026dd-5ffa-4a59-bcdc-3cf8fc1569dc",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -17,7 +17,7 @@
                 "headers": {
                     "Host": "vpn.ex-vpn.my.id"
                 },
-                "path": "/160.30.209.220-9884",
+                "path": "/166.88.7.198-6666",
                 "type": "ws"
             },
             "multiplex": {
@@ -26,10 +26,10 @@
         },
         {
             "type": "vless",
-            "tag": "1 🇲🇾 Kaopu Cloud HK Limited WS TLS [vpn]",
+            "tag": "12 🇲🇾 Kaopu Cloud HK Limited WS TLS [vpn]",
             "server": "support.zoom.us",
             "server_port": 443,
-            "uuid": "00b45eb9-a31e-48fc-9837-a18ce2d44153",
+            "uuid": "c7e026dd-5ffa-4a59-bcdc-3cf8fc1569dc",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -41,7 +41,31 @@
                 "headers": {
                     "Host": "vpn.ex-vpn.my.id"
                 },
-                "path": "/38.60.193.247-13300",
+                "path": "/38.60.193.18-443",
+                "type": "ws"
+            },
+            "multiplex": {
+                "enabled": false
+            }
+        },
+        {
+            "type": "vless",
+            "tag": "11 🇲🇾 Terabix WS TLS [vpn]",
+            "server": "support.zoom.us",
+            "server_port": 443,
+            "uuid": "c7e026dd-5ffa-4a59-bcdc-3cf8fc1569dc",
+            "network": "tcp",
+            "packet_encoding": "xudp",
+            "tls": {
+                "enabled": true,
+                "insecure": true,
+                "server_name": "vpn.ex-vpn.my.id"
+            },
+            "transport": {
+                "headers": {
+                    "Host": "vpn.ex-vpn.my.id"
+                },
+                "path": "/160.30.209.220-18884",
                 "type": "ws"
             },
             "multiplex": {
@@ -53,7 +77,7 @@
             "tag": "2 🇲🇾 Alibaba (US) Technology Co. WS TLS [vpn]",
             "server": "support.zoom.us",
             "server_port": 443,
-            "uuid": "00b45eb9-a31e-48fc-9837-a18ce2d44153",
+            "uuid": "c7e026dd-5ffa-4a59-bcdc-3cf8fc1569dc",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -74,10 +98,10 @@
         },
         {
             "type": "vless",
-            "tag": "3 🇲🇾 Evoxt Enterprise WS TLS [vpn]",
+            "tag": "9 🇲🇾 TM TECHNOLOGY SERVICES SDN. BHD. WS TLS [vpn]",
             "server": "support.zoom.us",
             "server_port": 443,
-            "uuid": "00b45eb9-a31e-48fc-9837-a18ce2d44153",
+            "uuid": "c7e026dd-5ffa-4a59-bcdc-3cf8fc1569dc",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -89,31 +113,7 @@
                 "headers": {
                     "Host": "vpn.ex-vpn.my.id"
                 },
-                "path": "/166.88.35.176-49066",
-                "type": "ws"
-            },
-            "multiplex": {
-                "enabled": false
-            }
-        },
-        {
-            "type": "vless",
-            "tag": "16 🇲🇾 BrainStorm Network WS TLS [vpn]",
-            "server": "support.zoom.us",
-            "server_port": 443,
-            "uuid": "00b45eb9-a31e-48fc-9837-a18ce2d44153",
-            "network": "tcp",
-            "packet_encoding": "xudp",
-            "tls": {
-                "enabled": true,
-                "insecure": true,
-                "server_name": "vpn.ex-vpn.my.id"
-            },
-            "transport": {
-                "headers": {
-                    "Host": "vpn.ex-vpn.my.id"
-                },
-                "path": "/103.75.116.164-443",
+                "path": "/58.27.117.24-443",
                 "type": "ws"
             },
             "multiplex": {
