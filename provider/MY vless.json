@@ -2,10 +2,10 @@
     "outbounds": [
         {
             "type": "vless",
-            "tag": "13 🇲🇾 Terabix WS TLS [vpn]",
+            "tag": "19 🇲🇾 Terabix WS TLS [vpn]",
             "server": "170.114.45.6",
             "server_port": 443,
-            "uuid": "c1638c2a-d86a-4fea-942a-7ab8e8185e93",
+            "uuid": "a666a0ab-32e1-4d93-9bf1-f23391f5d1f1",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -17,7 +17,7 @@
                 "headers": {
                     "Host": "vpn.xtunnel.my.id"
                 },
-                "path": "/160.30.209.220-18882",
+                "path": "/160.30.209.220-18886",
                 "type": "ws"
             },
             "multiplex": {
@@ -26,10 +26,10 @@
         },
         {
             "type": "vless",
-            "tag": "16 🇲🇾 Evoxt Enterprise WS TLS [vpn]",
+            "tag": "6 🇲🇾 Evoxt Enterprise WS TLS [vpn]",
             "server": "170.114.45.6",
             "server_port": 443,
-            "uuid": "c1638c2a-d86a-4fea-942a-7ab8e8185e93",
+            "uuid": "a666a0ab-32e1-4d93-9bf1-f23391f5d1f1",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -41,31 +41,7 @@
                 "headers": {
                     "Host": "vpn.xtunnel.my.id"
                 },
-                "path": "/45.195.76.122-44559",
-                "type": "ws"
-            },
-            "multiplex": {
-                "enabled": false
-            }
-        },
-        {
-            "type": "vless",
-            "tag": "18 🇲🇾 Kaopu Cloud HK Limited WS TLS [vpn]",
-            "server": "170.114.45.6",
-            "server_port": 443,
-            "uuid": "c1638c2a-d86a-4fea-942a-7ab8e8185e93",
-            "network": "tcp",
-            "packet_encoding": "xudp",
-            "tls": {
-                "enabled": true,
-                "insecure": true,
-                "server_name": "vpn.xtunnel.my.id"
-            },
-            "transport": {
-                "headers": {
-                    "Host": "vpn.xtunnel.my.id"
-                },
-                "path": "/38.60.193.18-74",
+                "path": "/155.254.60.225-443",
                 "type": "ws"
             },
             "multiplex": {
@@ -77,7 +53,7 @@
             "tag": "4 🇲🇾 BrainStorm Network WS TLS [vpn]",
             "server": "170.114.45.6",
             "server_port": 443,
-            "uuid": "c1638c2a-d86a-4fea-942a-7ab8e8185e93",
+            "uuid": "a666a0ab-32e1-4d93-9bf1-f23391f5d1f1",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -98,10 +74,34 @@
         },
         {
             "type": "vless",
-            "tag": "10 🇲🇾 Alibaba (US) Technology Co. WS TLS [vpn]",
+            "tag": "12 🇲🇾 Kaopu Cloud HK Limited WS TLS [vpn]",
             "server": "170.114.45.6",
             "server_port": 443,
-            "uuid": "c1638c2a-d86a-4fea-942a-7ab8e8185e93",
+            "uuid": "a666a0ab-32e1-4d93-9bf1-f23391f5d1f1",
+            "network": "tcp",
+            "packet_encoding": "xudp",
+            "tls": {
+                "enabled": true,
+                "insecure": true,
+                "server_name": "vpn.xtunnel.my.id"
+            },
+            "transport": {
+                "headers": {
+                    "Host": "vpn.xtunnel.my.id"
+                },
+                "path": "/38.60.193.247-13300",
+                "type": "ws"
+            },
+            "multiplex": {
+                "enabled": false
+            }
+        },
+        {
+            "type": "vless",
+            "tag": "8 🇲🇾 Alibaba (US) Technology Co. WS TLS [vpn]",
+            "server": "170.114.45.6",
+            "server_port": 443,
+            "uuid": "a666a0ab-32e1-4d93-9bf1-f23391f5d1f1",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
