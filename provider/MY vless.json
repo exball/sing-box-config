@@ -2,10 +2,10 @@
     "outbounds": [
         {
             "type": "vless",
-            "tag": "9 🇲🇾 Kaopu Cloud HK Limited WS TLS [vpn]",
+            "tag": "14 🇲🇾 Evoxt Enterprise WS TLS [vpn]",
             "server": "104.18.1.196",
             "server_port": 443,
-            "uuid": "9feab7f3-cec9-454d-8cb3-24a3527a7543",
+            "uuid": "fd78fae7-141d-4c9f-9b1c-ab94d81dc373",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -17,7 +17,7 @@
                 "headers": {
                     "Host": "vpn.ex-vpn.my.id"
                 },
-                "path": "/154.90.38.113-74",
+                "path": "/23.27.53.119-35209",
                 "type": "ws"
             },
             "multiplex": {
@@ -26,10 +26,10 @@
         },
         {
             "type": "vless",
-            "tag": "15 🇲🇾 Terabix WS TLS [vpn]",
+            "tag": "16 🇲🇾 Terabix WS TLS [vpn]",
             "server": "104.18.1.196",
             "server_port": 443,
-            "uuid": "9feab7f3-cec9-454d-8cb3-24a3527a7543",
+            "uuid": "fd78fae7-141d-4c9f-9b1c-ab94d81dc373",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -41,7 +41,7 @@
                 "headers": {
                     "Host": "vpn.ex-vpn.my.id"
                 },
-                "path": "/160.30.209.220-18886",
+                "path": "/160.30.209.220-18884",
                 "type": "ws"
             },
             "multiplex": {
@@ -50,34 +50,10 @@
         },
         {
             "type": "vless",
-            "tag": "1 🇲🇾 BrainStorm Network WS TLS [vpn]",
+            "tag": "4 🇲🇾 Alibaba (US) Technology Co. WS TLS [vpn]",
             "server": "104.18.1.196",
             "server_port": 443,
-            "uuid": "9feab7f3-cec9-454d-8cb3-24a3527a7543",
-            "network": "tcp",
-            "packet_encoding": "xudp",
-            "tls": {
-                "enabled": true,
-                "insecure": true,
-                "server_name": "vpn.ex-vpn.my.id"
-            },
-            "transport": {
-                "headers": {
-                    "Host": "vpn.ex-vpn.my.id"
-                },
-                "path": "/103.75.116.164-443",
-                "type": "ws"
-            },
-            "multiplex": {
-                "enabled": false
-            }
-        },
-        {
-            "type": "vless",
-            "tag": "3 🇲🇾 Alibaba (US) Technology Co. WS TLS [vpn]",
-            "server": "104.18.1.196",
-            "server_port": 443,
-            "uuid": "9feab7f3-cec9-454d-8cb3-24a3527a7543",
+            "uuid": "fd78fae7-141d-4c9f-9b1c-ab94d81dc373",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -98,10 +74,10 @@
         },
         {
             "type": "vless",
-            "tag": "11 🇲🇾 Evoxt Enterprise WS TLS [vpn]",
+            "tag": "5 🇲🇾 Kaopu Cloud HK Limited WS TLS [vpn]",
             "server": "104.18.1.196",
             "server_port": 443,
-            "uuid": "9feab7f3-cec9-454d-8cb3-24a3527a7543",
+            "uuid": "fd78fae7-141d-4c9f-9b1c-ab94d81dc373",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -113,7 +89,31 @@
                 "headers": {
                     "Host": "vpn.ex-vpn.my.id"
                 },
-                "path": "/23.27.53.119-35209",
+                "path": "/154.90.38.113-443",
+                "type": "ws"
+            },
+            "multiplex": {
+                "enabled": false
+            }
+        },
+        {
+            "type": "vless",
+            "tag": "9 🇲🇾 BrainStorm Network WS TLS [vpn]",
+            "server": "104.18.1.196",
+            "server_port": 443,
+            "uuid": "fd78fae7-141d-4c9f-9b1c-ab94d81dc373",
+            "network": "tcp",
+            "packet_encoding": "xudp",
+            "tls": {
+                "enabled": true,
+                "insecure": true,
+                "server_name": "vpn.ex-vpn.my.id"
+            },
+            "transport": {
+                "headers": {
+                    "Host": "vpn.ex-vpn.my.id"
+                },
+                "path": "/103.75.116.164-443",
                 "type": "ws"
             },
             "multiplex": {
