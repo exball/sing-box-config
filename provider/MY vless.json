@@ -2,10 +2,10 @@
     "outbounds": [
         {
             "type": "vless",
-            "tag": "8 🇲🇾 Evoxt Enterprise WS TLS [vpn]",
+            "tag": "3 🇲🇾 Evoxt Enterprise WS TLS [vpn]",
             "server": "104.18.1.196",
             "server_port": 443,
-            "uuid": "ea504019-9535-4182-ade4-bb1298844350",
+            "uuid": "e9eb75f2-963c-4df1-874e-7b50ab926dc8",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -17,7 +17,7 @@
                 "headers": {
                     "Host": "vpn.ex27.my.id"
                 },
-                "path": "/23.27.53.119-35209",
+                "path": "/45.195.76.122-44559",
                 "type": "ws"
             },
             "multiplex": {
@@ -26,10 +26,10 @@
         },
         {
             "type": "vless",
-            "tag": "9 🇲🇾 Terabix WS TLS [vpn]",
+            "tag": "6 🇲🇾 Terabix WS TLS [vpn]",
             "server": "104.18.1.196",
             "server_port": 443,
-            "uuid": "ea504019-9535-4182-ade4-bb1298844350",
+            "uuid": "e9eb75f2-963c-4df1-874e-7b50ab926dc8",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -50,10 +50,34 @@
         },
         {
             "type": "vless",
-            "tag": "6 🇲🇾 BrainStorm Network WS TLS [vpn]",
+            "tag": "7 🇲🇾 Kaopu Cloud HK Limited WS TLS [vpn]",
             "server": "104.18.1.196",
             "server_port": 443,
-            "uuid": "ea504019-9535-4182-ade4-bb1298844350",
+            "uuid": "e9eb75f2-963c-4df1-874e-7b50ab926dc8",
+            "network": "tcp",
+            "packet_encoding": "xudp",
+            "tls": {
+                "enabled": true,
+                "insecure": true,
+                "server_name": "vpn.ex27.my.id"
+            },
+            "transport": {
+                "headers": {
+                    "Host": "vpn.ex27.my.id"
+                },
+                "path": "/38.54.113.23-443",
+                "type": "ws"
+            },
+            "multiplex": {
+                "enabled": false
+            }
+        },
+        {
+            "type": "vless",
+            "tag": "1 🇲🇾 BrainStorm Network WS TLS [vpn]",
+            "server": "104.18.1.196",
+            "server_port": 443,
+            "uuid": "e9eb75f2-963c-4df1-874e-7b50ab926dc8",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -74,10 +98,10 @@
         },
         {
             "type": "vless",
-            "tag": "12 🇲🇾 TM TECHNOLOGY SERVICES SDN. BHD. WS TLS [vpn]",
+            "tag": "2 🇲🇾 TM TECHNOLOGY SERVICES SDN. BHD. WS TLS [vpn]",
             "server": "104.18.1.196",
             "server_port": 443,
-            "uuid": "ea504019-9535-4182-ade4-bb1298844350",
+            "uuid": "e9eb75f2-963c-4df1-874e-7b50ab926dc8",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -90,30 +114,6 @@
                     "Host": "vpn.ex27.my.id"
                 },
                 "path": "/58.27.117.24-443",
-                "type": "ws"
-            },
-            "multiplex": {
-                "enabled": false
-            }
-        },
-        {
-            "type": "vless",
-            "tag": "13 🇲🇾 Alibaba (US) Technology Co. WS TLS [vpn]",
-            "server": "104.18.1.196",
-            "server_port": 443,
-            "uuid": "ea504019-9535-4182-ade4-bb1298844350",
-            "network": "tcp",
-            "packet_encoding": "xudp",
-            "tls": {
-                "enabled": true,
-                "insecure": true,
-                "server_name": "vpn.ex27.my.id"
-            },
-            "transport": {
-                "headers": {
-                    "Host": "vpn.ex27.my.id"
-                },
-                "path": "/47.250.139.59-443",
                 "type": "ws"
             },
             "multiplex": {
