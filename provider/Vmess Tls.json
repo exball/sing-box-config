@@ -1,10 +1,12 @@
 {
     "outbounds": [
         {
+            "type": "vmess",
+            "tag": "3 ✨ 🇮🇩 ARENHOST GRPC CDN TLS",
+            "uuid": "434ebb0f-d6cf-4d7b-98f9-4b5ab74da29b",
             "security": "",
             "server": "104.18.1.196",
             "server_port": 443,
-            "tag": "3 ✨ 🇮🇩 ARENHOST GRPC CDN TLS",
             "tls": {
                 "enabled": true,
                 "insecure": true,
@@ -14,34 +16,40 @@
                 "service_name": "id1.foolvpn.me",
                 "type": "grpc"
             },
-            "type": "vmess",
-            "uuid": "434ebb0f-d6cf-4d7b-98f9-4b5ab74da29b"
+            "multiplex": {
+                "enabled": false
+            }
         },
         {
+            "type": "vmess",
+            "tag": "2 ✨ 🇮🇩 ARENHOST WS CDN TLS",
+            "uuid": "434ebb0f-d6cf-4d7b-98f9-4b5ab74da29b",
             "security": "",
             "server": "104.18.1.196",
             "server_port": 443,
-            "tag": "2 ✨ 🇮🇩 ARENHOST WS CDN TLS",
             "tls": {
                 "enabled": true,
                 "insecure": true,
                 "server_name": "id1.foolvpn.me"
             },
             "transport": {
+                "type": "ws",
+                "path": "/vmess",
                 "headers": {
                     "Host": "id1.foolvpn.me"
-                },
-                "path": "/vmess",
-                "type": "ws"
+                }
             },
-            "type": "vmess",
-            "uuid": "434ebb0f-d6cf-4d7b-98f9-4b5ab74da29b"
+            "multiplex": {
+                "enabled": false
+            }
         },
         {
+            "type": "vmess",
+            "tag": "✨ 🇮🇩 ARENHOST GRPC CDN TLS",
+            "uuid": "434ebb0f-d6cf-4d7b-98f9-4b5ab74da29b",
             "security": "",
             "server": "104.18.1.196",
             "server_port": 443,
-            "tag": "✨ 🇮🇩 ARENHOST GRPC CDN TLS",
             "tls": {
                 "enabled": true,
                 "insecure": true,
@@ -51,68 +59,78 @@
                 "service_name": "sg1.foolvpn.me",
                 "type": "grpc"
             },
-            "type": "vmess",
-            "uuid": "434ebb0f-d6cf-4d7b-98f9-4b5ab74da29b"
+            "multiplex": {
+                "enabled": false
+            }
         },
         {
+            "type": "vmess",
+            "tag": "✨ 🇮🇩 ARENHOST WS CDN TLS",
+            "uuid": "434ebb0f-d6cf-4d7b-98f9-4b5ab74da29b",
             "security": "",
             "server": "104.18.1.196",
             "server_port": 443,
-            "tag": "✨ 🇮🇩 ARENHOST WS CDN TLS",
             "tls": {
                 "enabled": true,
                 "insecure": true,
                 "server_name": "sg1.foolvpn.me"
             },
             "transport": {
+                "type": "ws",
+                "path": "/vmess",
                 "headers": {
                     "Host": "sg1.foolvpn.me"
-                },
-                "path": "/vmess",
-                "type": "ws"
+                }
             },
-            "type": "vmess",
-            "uuid": "434ebb0f-d6cf-4d7b-98f9-4b5ab74da29b"
+            "multiplex": {
+                "enabled": false
+            }
         },
         {
+            "type": "vmess",
+            "tag": "IpTunnel-Speed-AON TLS",
+            "uuid": "4b7fb126-0a59-467d-82b5-1d57d9bc6082",
             "security": "",
             "server": "104.18.1.196",
             "server_port": 443,
-            "tag": "IpTunnel-Speed-AON TLS",
             "tls": {
                 "enabled": true,
                 "insecure": true,
                 "server_name": "sing-box.sbs"
             },
             "transport": {
+                "type": "ws",
+                "path": "/premium-optimize-to-ai-innovations/buy-vmess-ws-pm-telegram-at-synricha",
                 "headers": {
                     "Host": "sing-box.sbs"
-                },
-                "path": "/premium-optimize-to-ai-innovations/buy-vmess-ws-pm-telegram-at-synricha",
-                "type": "ws"
+                }
             },
-            "type": "vmess",
-            "uuid": "4b7fb126-0a59-467d-82b5-1d57d9bc6082"
+            "multiplex": {
+                "enabled": false
+            }
         },
         {
+            "type": "vmess",
+            "tag": "IpTunel-ATP-AON TLS",
+            "uuid": "5fdbf77b-876f-4891-afd0-b2d53c08404e",
             "security": "",
             "server": "104.18.1.196",
             "server_port": 443,
-            "tag": "IpTunel-ATP-AON TLS",
             "tls": {
                 "enabled": true,
                 "insecure": true,
                 "server_name": "akamaized.my"
             },
             "transport": {
+                "type": "ws",
+                "path": "/amazing-steps-to-growth-hacking/buy-vmess-ws-pm-telegram-at-synricha",
                 "headers": {
                     "Host": "akamaized.my"
-                },
-                "path": "/amazing-steps-to-growth-hacking/buy-vmess-ws-pm-telegram-at-synricha",
-                "type": "ws"
+                }
             },
-            "type": "vmess",
-            "uuid": "5fdbf77b-876f-4891-afd0-b2d53c08404e"
+            "multiplex": {
+                "enabled": false
+            }
         },
         {
             "type": "vmess",
@@ -123,8 +141,8 @@
             "server_port": 443,
             "tls": {
                 "enabled": true,
-                "server_name": "sing-box.web.id",
-                "insecure": true
+                "insecure": true,
+                "server_name": "sing-box.web.id"
             },
             "transport": {
                 "type": "ws",
