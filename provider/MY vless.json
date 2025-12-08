@@ -1,103 +1,123 @@
 {
     "outbounds": [
         {
-            "server": "vpn.ex-vpn.my.id",
-            "server_port": 443,
-            "tag": "2 🇲🇾 Terabix WS TLS",
-            "network": "tcp",
             "type": "vless",
-            "uuid": "823af315-972e-46ef-9efc-67357611cbe3",
+            "tag": "10 🇲🇾 Evoxt Enterprise WS TLS",
+            "server": "104.18.1.196",
+            "server_port": 443,
+            "uuid": "dcba1bd2-04f5-4d97-b657-9722df572feb",
+            "network": "tcp",
+            "packet_encoding": "xudp",
             "tls": {
                 "enabled": true,
                 "insecure": true,
                 "server_name": "vpn.ex-vpn.my.id"
             },
             "transport": {
-                "type": "ws",
-                "path": "/160.30.5.38-9884",
                 "headers": {
                     "Host": "vpn.ex-vpn.my.id"
-                }
-            }
-        },
-        {
-            "server": "vpn.ex-vpn.my.id",
-            "server_port": 443,
-            "tag": "13 🇲🇾 Evoxt Enterprise WS TLS",
-            "network": "tcp",
-            "type": "vless",
-            "uuid": "823af315-972e-46ef-9efc-67357611cbe3",
-            "tls": {
-                "enabled": true,
-                "insecure": true,
-                "server_name": "vpn.ex-vpn.my.id"
-            },
-            "transport": {
-                "type": "ws",
+                },
                 "path": "/23.27.53.119-35209",
-                "headers": {
-                    "Host": "vpn.ex-vpn.my.id"
-                }
+                "type": "ws"
+            },
+            "multiplex": {
+                "enabled": false
             }
         },
         {
-            "server": "vpn.ex-vpn.my.id",
-            "server_port": 443,
-            "tag": "8 🇲🇾 BrainStorm Network WS TLS",
-            "network": "tcp",
             "type": "vless",
-            "uuid": "823af315-972e-46ef-9efc-67357611cbe3",
+            "tag": "8 🇲🇾 Terabix WS TLS",
+            "server": "104.18.1.196",
+            "server_port": 443,
+            "uuid": "dcba1bd2-04f5-4d97-b657-9722df572feb",
+            "network": "tcp",
+            "packet_encoding": "xudp",
             "tls": {
                 "enabled": true,
                 "insecure": true,
                 "server_name": "vpn.ex-vpn.my.id"
             },
             "transport": {
-                "type": "ws",
+                "headers": {
+                    "Host": "vpn.ex-vpn.my.id"
+                },
+                "path": "/160.30.209.220-18884",
+                "type": "ws"
+            },
+            "multiplex": {
+                "enabled": false
+            }
+        },
+        {
+            "type": "vless",
+            "tag": "3 🇲🇾 BrainStorm Network WS TLS",
+            "server": "104.18.1.196",
+            "server_port": 443,
+            "uuid": "dcba1bd2-04f5-4d97-b657-9722df572feb",
+            "network": "tcp",
+            "packet_encoding": "xudp",
+            "tls": {
+                "enabled": true,
+                "insecure": true,
+                "server_name": "vpn.ex-vpn.my.id"
+            },
+            "transport": {
+                "headers": {
+                    "Host": "vpn.ex-vpn.my.id"
+                },
                 "path": "/103.75.116.164-443",
-                "headers": {
-                    "Host": "vpn.ex-vpn.my.id"
-                }
+                "type": "ws"
+            },
+            "multiplex": {
+                "enabled": false
             }
         },
         {
-            "server": "vpn.ex-vpn.my.id",
-            "server_port": 443,
-            "tag": "10 🇲🇾 Alibaba (US) Technology Co. WS TLS",
-            "network": "tcp",
             "type": "vless",
-            "uuid": "823af315-972e-46ef-9efc-67357611cbe3",
+            "tag": "6 🇲🇾 Kaopu Cloud HK Limited WS TLS",
+            "server": "104.18.1.196",
+            "server_port": 443,
+            "uuid": "dcba1bd2-04f5-4d97-b657-9722df572feb",
+            "network": "tcp",
+            "packet_encoding": "xudp",
             "tls": {
                 "enabled": true,
                 "insecure": true,
                 "server_name": "vpn.ex-vpn.my.id"
             },
             "transport": {
-                "type": "ws",
-                "path": "/47.250.139.59-443",
                 "headers": {
                     "Host": "vpn.ex-vpn.my.id"
-                }
+                },
+                "path": "/38.60.193.247-13300",
+                "type": "ws"
+            },
+            "multiplex": {
+                "enabled": false
             }
         },
         {
-            "server": "vpn.ex-vpn.my.id",
-            "server_port": 443,
-            "tag": "12 🇲🇾 TM TECHNOLOGY SERVICES SDN. BHD. WS TLS",
-            "network": "tcp",
             "type": "vless",
-            "uuid": "823af315-972e-46ef-9efc-67357611cbe3",
+            "tag": "13 🇲🇾 TM TECHNOLOGY SERVICES SDN. BHD. WS TLS",
+            "server": "104.18.1.196",
+            "server_port": 443,
+            "uuid": "dcba1bd2-04f5-4d97-b657-9722df572feb",
+            "network": "tcp",
+            "packet_encoding": "xudp",
             "tls": {
                 "enabled": true,
                 "insecure": true,
                 "server_name": "vpn.ex-vpn.my.id"
             },
             "transport": {
-                "type": "ws",
+                "headers": {
+                    "Host": "vpn.ex-vpn.my.id"
+                },
                 "path": "/58.27.117.24-443",
-                "headers": {
-                    "Host": "vpn.ex-vpn.my.id"
-                }
+                "type": "ws"
+            },
+            "multiplex": {
+                "enabled": false
             }
         }
     ]
