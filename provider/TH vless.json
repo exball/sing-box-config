@@ -2,10 +2,10 @@
     "outbounds": [
         {
             "type": "vless",
-            "tag": "25 🇹🇭 Siamdata Communication Co. WS TLS",
+            "tag": "13 🇹🇭 Siamdata Communication Co. WS TLS",
             "server": "104.18.1.196",
             "server_port": 443,
-            "uuid": "3ec2fc8b-dea4-4101-aed1-8a512a309009",
+            "uuid": "18dde00d-c2a8-4dba-b9a1-bbff6aefa285",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -17,7 +17,7 @@
                 "headers": {
                     "Host": "vpn.ex-vpn.my.id"
                 },
-                "path": "/45.136.253.18-33273",
+                "path": "/103.99.11.193-8443",
                 "type": "ws"
             },
             "multiplex": {
@@ -26,10 +26,10 @@
         },
         {
             "type": "vless",
-            "tag": "27 🇹🇭 TRUE INTERNET Co. WS TLS",
+            "tag": "4 🇹🇭 TRUE INTERNET Co. WS TLS",
             "server": "104.18.1.196",
             "server_port": 443,
-            "uuid": "3ec2fc8b-dea4-4101-aed1-8a512a309009",
+            "uuid": "18dde00d-c2a8-4dba-b9a1-bbff6aefa285",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -41,7 +41,7 @@
                 "headers": {
                     "Host": "vpn.ex-vpn.my.id"
                 },
-                "path": "/171.103.223.50-10279",
+                "path": "/171.103.164.62-30921",
                 "type": "ws"
             },
             "multiplex": {
@@ -50,34 +50,10 @@
         },
         {
             "type": "vless",
-            "tag": "1 🇹🇭 Kaopu Cloud HK Limited WS TLS",
+            "tag": "1 🇹🇭 CAT Telecom Public Company Limited WS TLS",
             "server": "104.18.1.196",
             "server_port": 443,
-            "uuid": "3ec2fc8b-dea4-4101-aed1-8a512a309009",
-            "network": "tcp",
-            "packet_encoding": "xudp",
-            "tls": {
-                "enabled": true,
-                "insecure": true,
-                "server_name": "vpn.ex-vpn.my.id"
-            },
-            "transport": {
-                "headers": {
-                    "Host": "vpn.ex-vpn.my.id"
-                },
-                "path": "/38.60.200.62-443",
-                "type": "ws"
-            },
-            "multiplex": {
-                "enabled": false
-            }
-        },
-        {
-            "type": "vless",
-            "tag": "11 🇹🇭 CAT Telecom Public Company Limited WS TLS",
-            "server": "104.18.1.196",
-            "server_port": 443,
-            "uuid": "3ec2fc8b-dea4-4101-aed1-8a512a309009",
+            "uuid": "18dde00d-c2a8-4dba-b9a1-bbff6aefa285",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -98,10 +74,10 @@
         },
         {
             "type": "vless",
-            "tag": "16 🇹🇭 Alibaba (US) Technology Co. WS TLS",
+            "tag": "23 🇹🇭 Alibaba (US) Technology Co. WS TLS",
             "server": "104.18.1.196",
             "server_port": 443,
-            "uuid": "3ec2fc8b-dea4-4101-aed1-8a512a309009",
+            "uuid": "18dde00d-c2a8-4dba-b9a1-bbff6aefa285",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -114,6 +90,30 @@
                     "Host": "vpn.ex-vpn.my.id"
                 },
                 "path": "/8.213.206.54-443",
+                "type": "ws"
+            },
+            "multiplex": {
+                "enabled": false
+            }
+        },
+        {
+            "type": "vless",
+            "tag": "25 🇹🇭 Tencent Building WS TLS",
+            "server": "104.18.1.196",
+            "server_port": 443,
+            "uuid": "18dde00d-c2a8-4dba-b9a1-bbff6aefa285",
+            "network": "tcp",
+            "packet_encoding": "xudp",
+            "tls": {
+                "enabled": true,
+                "insecure": true,
+                "server_name": "vpn.ex-vpn.my.id"
+            },
+            "transport": {
+                "headers": {
+                    "Host": "vpn.ex-vpn.my.id"
+                },
+                "path": "/43.133.110.81-443",
                 "type": "ws"
             },
             "multiplex": {
