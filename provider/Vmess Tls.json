@@ -154,6 +154,30 @@
             "multiplex": {
                 "enabled": false
             }
+        },
+        {
+            "type": "vmess",
+            "tag": "ex_ball-Patungan TLS",
+            "uuid": "01d88f3b-c812-401a-b5b9-ed99dc45f234",
+            "security": "auto",
+            "server": "104.18.1.196",
+            "server_port": 443,
+            "alter_id": 0,
+            "tls": {
+                "enabled": true,
+                "insecure": true,
+                "server_name": "ado1.xmd.asia"
+            },
+            "transport": {
+                "type": "ws",
+                "path": "/vmess-ws",
+                "headers": {
+                    "Host": "ado1.xmd.asia"
+                }
+            },
+            "multiplex": {
+                "enabled": false
+            }
         }
     ]
 }
