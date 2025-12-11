@@ -1,396 +1,440 @@
 {
-  "log": {
-    "level": "fatal",
-    "output": "/data/adb/box/run/sing-box.log",
-    "timestamp": true
-  },
-  "dns": {
-    "servers": [
-      {
-        "tag": "dns_server",
-        "address": [
-          "1.1.1.1",
-          "8.8.8.8"
+    "log": {
+        "level": "fatal",
+        "output": "/data/adb/box/run/sing-box.log",
+        "timestamp": true
+    },
+    "dns": {
+        "servers": [
+            {
+                "tag": "dns_server",
+                "address": [
+                    "1.1.1.1",
+                    "8.8.8.8",
+                    "9.9.9.9"
+                ],
+                "detour": "selector"
+            },
+            {
+                "tag": "local",
+                "address": [
+                    "170.114.45.6",
+                    "170.114.46.6",
+                    "104.22.4.240",
+                    "104.22.5.240",
+                    "104.17.105.89",
+                    "104.17.103.89",
+                    "104.17.106.89",
+                    "104.16.230.163",
+                    "104.17.70.206",
+                    "104.17.71.206",
+                    "104.16.231.163",
+                    "104.16.232.163",
+                    "13.225.4.107",
+                    "172.67.5.14",
+                    "112.215.203.246",
+                    "112.215.203.247",
+                    "112.215.203.248",
+                    "112.215.203.254",
+                    "112.215.198.248",
+                    "112.215.198.254",
+                    "10.19.133.148",
+                    "10.19.19.204",
+                    "192.168.144.28",
+                    "104.17.2.81",
+                    "104.17.3.81",
+                    "104.18.1.196"
+                ],
+                "detour": "direct"
+            },
+            {
+                "tag": "fakedns",
+                "address": "fakeip"
+            }
         ],
-        "detour": "server"
-      },
-      {
-        "tag": "local",
-        "address": [
-          "170.114.45.6",
-          "170.114.46.6",
-          "104.22.4.240",
-          "104.22.5.240",
-          "104.17.105.89",
-          "104.17.103.89",
-          "104.17.106.89",
-          "104.16.230.163",
-          "104.17.70.206",
-          "104.17.71.206",
-          "104.16.231.163",
-          "104.16.232.163",
-          "13.225.4.107",
-          "172.67.5.14",
-          "112.215.203.246",
-          "112.215.203.247",
-          "112.215.203.248",
-          "112.215.203.254",
-          "112.215.198.248",
-          "112.215.198.254",
-          "10.19.133.148",
-          "10.19.19.204",
-          "192.168.144.28",
-          "104.17.2.81",
-          "104.17.3.81",
-          "104.18.1.196"
-        ],
-        "detour": "direct"
-      },
-      {
-        "tag": "fakedns",
-        "address": "fakeip"
-      }
-    ],
-    "rules": [
-      {
-        "outbound": "any",
-        "server": "local",
-        "disable_cache": true
-      },
-      {
-        "domain": [
-          "support.zoom.us",
-          "quiz.int.vidio.com",
-          "zencoder.ai",
-          "api.openai.com",
-          "chat.openai.com",
-          "claude.ai",
-          "anthropic.com"
-        ],
-        "server": "dns_server"
-      },
-      {
-        "domain_suffix": [
-          "openai.com",
-          "anthropic.com",
-          "claude.ai"
-        ],
-        "server": "dns_server"
-      },
-      {
-        "query_type": [
-          "AAAA",
-          "A"
-        ],
-        "server": "fakedns"
-      }
-    ],
-    "fakeip": {
-      "enabled": true,
-      "inet4_range": "198.18.0.0/15",
-      "inet6_range": "fc00::/18"
-    },
-    "strategy": "ipv4_only"
-  },
-  "inbounds": [
-    {
-      "type": "tproxy",
-      "tag": "tproxy-in",
-      "listen": "::",
-      "listen_port": 9898,
-      "sniff": true,
-      "sniff_override_destination": true
-    },
-    {
-      "type": "redirect",
-      "tag": "redirect-in",
-      "listen": "::",
-      "listen_port": 9797,
-      "sniff": true,
-      "sniff_override_destination": true
-    }
-  ],
-  "outbounds": [
-    {
-      "type": "selector",
-      "tag": "server",
-      "outbounds": [
-        "best latency",
-        "best latency vmess",
-        "best latency cf",
-        "Vmess Tls",
-        "Vmess Ntls",
-        "ID vless",
-        "SG vless",
-        "TH vless",
-        "MY vless",
-        "VN vless",
-        "Backup"
-      ],
-      "providers": [
-        "Vmess Tls",
-        "Vmess Ntls",
-        "ID vless",
-        "SG vless",
-        "TH vless",
-        "MY vless",
-        "VN vless",
-        "Backup"
-      ],
-      "default": "best latency cf"
-    },
-    {
-      "type": "urltest",
-      "tag": "best latency",
-      "outbounds": [
-        "best latency vmess",
-        "best latency cf"
-      ],
-      "interval": "30s"
-    },
-    {
-      "type": "urltest",
-      "tag": "best latency vmess",
-      "outbounds": [
-        "Vmess Tls",
-        "Vmess Ntls"
-      ]
-    },
-    {
-      "type": "urltest",
-      "tag": "best latency cf",
-      "outbounds": [
-        "ID vless",
-        "SG vless",
-        "TH vless",
-        "MY vless",
-        "VN vless",
-        "Backup"
-      ]
-    },
-    {
-      "type": "urltest",
-      "tag": "Vmess Tls",
-      "providers": "Vmess Tls",
-      "url": "https://www.gstatic.com/generate_204",
-      "interval": "1m0s"
-    },
-    {
-      "type": "urltest",
-      "tag": "Vmess Ntls",
-      "providers": "Vmess Ntls",
-      "url": "https://www.gstatic.com/generate_204",
-      "interval": "1m0s"
-    },
-    {
-      "type": "dns",
-      "tag": "dns"
-    },
-    {
-      "type": "direct",
-      "tag": "direct"
-    },
-    {
-      "type": "block",
-      "tag": "block"
-    },
-    {
-      "type": "urltest",
-      "tag": "ID vless",
-      "providers": "ID vless",
-      "url": "https://www.gstatic.com/generate_204",
-      "interval": "1m0s"
-    },
-    {
-      "type": "urltest",
-      "tag": "SG vless",
-      "providers": "SG vless",
-      "url": "https://www.gstatic.com/generate_204",
-      "interval": "1m0s"
-    },
-    {
-      "type": "urltest",
-      "tag": "TH vless",
-      "providers": "TH vless",
-      "url": "https://www.gstatic.com/generate_204",
-      "interval": "1m0s"
-    },
-    {
-      "type": "urltest",
-      "tag": "MY vless",
-      "providers": "MY vless",
-      "url": "https://www.gstatic.com/generate_204",
-      "interval": "1m0s"
-    },
-    {
-      "type": "urltest",
-      "tag": "VN vless",
-      "providers": "VN vless",
-      "url": "https://www.gstatic.com/generate_204",
-      "interval": "1m0s"
-    },
-    {
-      "type": "urltest",
-      "tag": "Backup",
-      "providers": "Backup",
-      "url": "https://www.gstatic.com/generate_204",
-      "interval": "1m0s"
-    }
-  ],
-  "route": {
-    "rules": [
-      {
-        "type": "logical",
-        "mode": "or",
         "rules": [
-          {
-            "port": 53
-          },
-          {
-            "protocol": "dns"
-          }
+            {
+                "outbound": "any",
+                "server": "local",
+                "disable_cache": true
+            },
+            {
+                "domain": [
+                    "support.zoom.us",
+                    "quiz.int.vidio.com",
+                    "zencoder.ai",
+                    "api.openai.com",
+                    "chat.openai.com",
+                    "claude.ai",
+                    "anthropic.com"
+                ],
+                "server": "dns_server"
+            },
+            {
+                "domain_suffix": [
+                    "openai.com",
+                    "anthropic.com",
+                    "claude.ai"
+                ],
+                "server": "dns_server"
+            },
+            {
+                "query_type": [
+                    "AAAA",
+                    "A"
+                ],
+                "server": "fakedns"
+            }
         ],
-        "outbound": "dns"
-      },
-      {
-        "protocol": "icmp",
-        "outbound": "direct"
-      },
-      {
-        "domain_suffix": "zimperium.com",
-        "outbound": "block"
-      },
-      {
-        "geosite": "category-ads-all",
-        "outbound": "block"
-      },
-      {
-        "geoip": [
-          "private",
-          "cn"
-        ],
-        "outbound": "direct"
-      },
-      {
-        "domain": [
-          "whatsapp.net",
-          "whatsapp.com",
-          "wa.me",
-          "readyservervps.com"
-        ],
-        "outbound": "best latency vmess"
-      },
-      {
-        "domain_suffix": [
-          "whatsapp.net",
-          "whatsapp.com",
-          "wa.me",
-          "readyservervps.com"
-        ],
-        "outbound": "best latency vmess"
-      },
-      {
-        "protocol": "udp",
-        "port": [
-          3478,
-          3482
-        ],
-        "outbound": "best latency vmess"
-      },
-      {
-        "domain_suffix": [
-          "whatsapp.net",
-          "whatsapp.com",
-          "readyservervps.com"
-        ],
-        "port": [
-          443,
-          5222
-        ],
-        "outbound": "best latency vmess"
-      },
-      {
-        "process_name": [
-          "com.whatsapp",
-          "com.whatsapp.w4b",
-          "readyservervps.com"
-        ],
-        "outbound": "best latency vmess"
-      },
-      {
-        "ip_cidr": [
-          "31.13.64.0/18",
-          "31.13.24.0/21",
-          "66.220.144.0/20",
-          "69.63.176.0/20",
-          "69.171.224.0/19",
-          "74.119.76.0/22",
-          "103.4.96.0/22",
-          "129.134.0.0/17",
-          "157.240.0.0/17",
-          "173.252.64.0/18",
-          "179.60.192.0/22",
-          "185.60.216.0/22",
-          "204.15.20.0/22"
-        ],
-        "outbound": "best latency vmess"
-      }
+        "fakeip": {
+            "enabled": true,
+            "inet4_range": "198.18.0.0/15",
+            "inet6_range": "fc00::/18"
+        },
+        "strategy": "ipv4_only"
+    },
+    "inbounds": [
+        {
+            "type": "tproxy",
+            "tag": "tproxy-in",
+            "listen": "::",
+            "listen_port": 9898,
+            "sniff": true,
+            "sniff_override_destination": true
+        },
+        {
+            "type": "redirect",
+            "tag": "redirect-in",
+            "listen": "::",
+            "listen_port": 9797,
+            "sniff": true,
+            "sniff_override_destination": true
+        },
+        {
+            "type": "tun",
+            "tag": "tun-in",
+            "interface_name": "sing",
+            "address": [
+                "172.18.0.1/30",
+                "fdfe:dcba:9876::1/126"
+            ],
+            "mtu": 9000,
+            "stack": "mixed",
+            "auto_route": true,
+            "strict_route": true,
+            "auto_redirect": true,
+            "route_exclude_address": [
+                "192.168.44.1/24",
+                "192.168.6.1/24",
+                "8.8.8.8/32",
+                "1.1.1.1/32",
+                "9.9.9.9/32",
+                "104.22.4.240/32",
+                "104.18.1.196/32"
+            ]
+        }
     ],
-    "final": "server",
-    "auto_detect_interface": false
-  },
-  "outbound_providers": [
-    {
-      "type": "local",
-      "path": "./provider/Vmess Tls.json",
-      "tag": "Vmess Tls"
+    "outbounds": [
+        {
+            "type": "selector",
+            "tag": "selector",
+            "outbounds": [
+                "best latency",
+                "best latency vmess",
+                "best latency cf",
+                "Vmess-Tls",
+                "Vmess-Ntls",
+                "ID-vless",
+                "SG-vless",
+                "TH-vless",
+                "MY-vless",
+                "VN-vless",
+                "Backup-"
+            ],
+            "providers": [
+                "Vmess_Tls",
+                "Vmess_Ntls",
+                "ID_Vless",
+                "SG_vless",
+                "TH_vless",
+                "MY_vless",
+                "VN_vless",
+                "Backup_"
+            ],
+            "default": "best latency cf"
+        },
+        {
+            "type": "urltest",
+            "tag": "best latency",
+            "outbounds": [
+                "best latency vmess",
+                "best latency cf"
+            ],
+            "interval": "30s",
+            "interrupt_exist_connections": true
+        },
+        {
+            "type": "urltest",
+            "tag": "best latency vmess",
+            "outbounds": [
+                "Vmess-Tls",
+                "Vmess-Ntls"
+            ]
+        },
+        {
+            "type": "urltest",
+            "tag": "best latency cf",
+            "outbounds": [
+                "ID-vless",
+                "SG-vless",
+                "TH-vless",
+                "MY-vless",
+                "VN-vless",
+                "Backup-"
+            ]
+        },
+        {
+            "type": "dns",
+            "tag": "dns"
+        },
+        {
+            "type": "direct",
+            "tag": "direct"
+        },
+        {
+            "type": "block",
+            "tag": "block"
+        },
+        {
+            "type": "urltest",
+            "tag": "Vmess-Tls",
+            "providers": "Vmess_Tls",
+            "url": "https://www.gstatic.com/generate_204",
+            "interval": "1m0s"
+        },
+        {
+            "type": "urltest",
+            "tag": "Vmess-Ntls",
+            "providers": "Vmess_Ntls",
+            "url": "https://www.gstatic.com/generate_204",
+            "interval": "1m0s"
+        },
+        {
+            "type": "urltest",
+            "tag": "ID-vless",
+            "providers": "ID_vless",
+            "url": "https://www.gstatic.com/generate_204",
+            "interval": "1m0s"
+        },
+        {
+            "type": "urltest",
+            "tag": "SG-vless",
+            "providers": "SG_vless",
+            "url": "https://www.gstatic.com/generate_204",
+            "interval": "1m0s"
+        },
+        {
+            "type": "urltest",
+            "tag": "TH-vless",
+            "providers": "TH_vless",
+            "url": "https://www.gstatic.com/generate_204",
+            "interval": "1m0s"
+        },
+        {
+            "type": "urltest",
+            "tag": "MY-vless",
+            "providers": "MY_vless",
+            "url": "https://www.gstatic.com/generate_204",
+            "interval": "1m0s"
+        },
+        {
+            "type": "urltest",
+            "tag": "VN-vless",
+            "providers": "VN_vless",
+            "url": "https://www.gstatic.com/generate_204",
+            "interval": "1m0s"
+        },
+        {
+            "type": "urltest",
+            "tag": "Backup-",
+            "providers": "Backup_",
+            "url": "https://www.gstatic.com/generate_204",
+            "interval": "1m0s"
+        }
+    ],
+    "route": {
+        "rules": [
+            {
+                "domain": [
+                    "www.gstatic.com",
+                    "clients3.google.com",
+                    "www.google.com",
+                    "chat.openai.com"
+                ],
+                "outbound": "direct"
+            },
+            {
+                "ip_cidr": [
+                    "8.8.8.8/32",
+                    "1.1.1.1/32",
+                    "9.9.9.9/32",
+                    "104.22.4.240/32",
+                    "104.18.1.196/32"
+                ],
+                "outbound": "direct"
+            },
+            {
+                "type": "logical",
+                "mode": "or",
+                "rules": [
+                    {
+                        "port": 53
+                    },
+                    {
+                        "protocol": "dns"
+                    }
+                ],
+                "outbound": "dns"
+            },
+            {
+                "protocol": "icmp",
+                "outbound": "direct"
+            },
+            {
+                "domain_suffix": "zimperium.com",
+                "outbound": "block"
+            },
+            {
+                "geosite": "category-ads-all",
+                "outbound": "block"
+            },
+            {
+                "geoip": [
+                    "private",
+                    "cn"
+                ],
+                "outbound": "direct"
+            },
+            {
+                "domain": [
+                    "whatsapp.net",
+                    "whatsapp.com",
+                    "wa.me",
+                    "readyservervps.com"
+                ],
+                "outbound": "best latency vmess"
+            },
+            {
+                "domain_suffix": [
+                    "whatsapp.net",
+                    "whatsapp.com",
+                    "wa.me",
+                    "readyservervps.com"
+                ],
+                "outbound": "best latency vmess"
+            },
+            {
+                "protocol": "udp",
+                "port": [
+                    3478,
+                    3482
+                ],
+                "outbound": "best latency vmess"
+            },
+            {
+                "domain_suffix": [
+                    "whatsapp.net",
+                    "whatsapp.com",
+                    "readyservervps.com"
+                ],
+                "port": [
+                    443,
+                    5222
+                ],
+                "outbound": "best latency vmess"
+            },
+            {
+                "process_name": [
+                    "com.whatsapp",
+                    "com.whatsapp.w4b",
+                    "readyservervps.com"
+                ],
+                "outbound": "best latency vmess"
+            },
+            {
+                "ip_cidr": [
+                    "31.13.64.0/18",
+                    "31.13.24.0/21",
+                    "66.220.144.0/20",
+                    "69.63.176.0/20",
+                    "69.171.224.0/19",
+                    "74.119.76.0/22",
+                    "103.4.96.0/22",
+                    "129.134.0.0/17",
+                    "157.240.0.0/17",
+                    "173.252.64.0/18",
+                    "179.60.192.0/22",
+                    "185.60.216.0/22",
+                    "204.15.20.0/22"
+                ],
+                "outbound": "best latency vmess"
+            }
+        ],
+        "final": "selector",
+        "auto_detect_interface": true
     },
-    {
-      "type": "local",
-      "path": "./provider/Vmess Ntls.json",
-      "tag": "Vmess Ntls"
-    },
-    {
-      "type": "local",
-      "path": "./provider/ID vless.json",
-      "tag": "ID vless"
-    },
-    {
-      "type": "local",
-      "path": "./provider/SG vless.json",
-      "tag": "SG vless"
-    },
-    {
-      "type": "local",
-      "path": "./provider/TH vless.json",
-      "tag": "TH vless"
-    },
-    {
-      "type": "local",
-      "path": "./provider/MY vless.json",
-      "tag": "MY vless"
-    },
-    {
-      "type": "local",
-      "path": "./provider/VN vless.json",
-      "tag": "VN vless"
-    },
-    {
-      "type": "local",
-      "path": "./provider/Backup.json",
-      "tag": "Backup"
+    "outbound_providers": [
+        {
+            "type": "local",
+            "path": "./provider/Vmess Tls.json",
+            "tag": "Vmess_Tls"
+        },
+        {
+            "type": "local",
+            "path": "./provider/Vmess Ntls.json",
+            "tag": "Vmess_Ntls"
+        },
+        {
+            "type": "local",
+            "path": "./provider/ID vless.json",
+            "tag": "ID_vless"
+        },
+        {
+            "type": "local",
+            "path": "./provider/SG vless.json",
+            "tag": "SG_vless"
+        },
+        {
+            "type": "local",
+            "path": "./provider/TH vless.json",
+            "tag": "TH_vless"
+        },
+        {
+            "type": "local",
+            "path": "./provider/MY vless.json",
+            "tag": "MY_vless"
+        },
+        {
+            "type": "local",
+            "path": "./provider/VN vless.json",
+            "tag": "VN_vless"
+        },
+        {
+            "type": "local",
+            "path": "./provider/Backup.json",
+            "tag": "Backup_"
+        }
+    ],
+    "experimental": {
+        "cache_file": {
+            "enabled": true,
+            "path": "cache.db"
+        },
+        "clash_api": {
+            "external_controller": "0.0.0.0:9090",
+            "external_ui": "zashboard",
+            "external_ui_download_url": "https://github.com/Zephyruso/zashboard/releases/latest/download/dist.zip",
+            "external_ui_download_detour": "selector"
+        }
     }
-  ],
-  "experimental": {
-    "cache_file": {
-      "enabled": true,
-      "path": "cache.db"
-    },
-    "clash_api": {
-      "external_controller": "0.0.0.0:9090",
-      "external_ui": "zashboard",
-      "external_ui_download_url": "https://github.com/Zephyruso/zashboard/releases/latest/download/dist.zip",
-      "external_ui_download_detour": "server"
-    }
-  }
 }
