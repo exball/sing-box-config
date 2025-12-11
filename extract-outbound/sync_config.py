@@ -262,8 +262,8 @@ def update_config_json(output_names):
     print("\n=== Updating 'best latency cf' configuration ===")
     for outbound in config_data['outbounds']:
         if outbound.get('tag') == 'best latency cf' and outbound.get('type') == 'urltest':
-            # Hanya auto_tags (tanpa vmess manual)
-            outbound['outbounds'] = auto_tags
+            # Hanya outbound_tags (tanpa vmess manual)
+            outbound['outbounds'] = outbound_tags
             print(f"Updated best latency cf.outbounds: {outbound['outbounds']}")
             break
     
