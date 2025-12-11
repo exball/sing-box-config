@@ -223,15 +223,59 @@ def update_config_json(output_names):
         }
         filtered_outbounds.append(outbound)
         print(f"Added urltest outbound: {tag}")
+
+    # Tambahkan outbound untuk manual Vmess providers
+    manual_vmess_providers = [
+        {"tag": "Vmess_Tls", "formatted_tag": "Vmess-Tls"},
+        {"tag": "Vmess_Ntls", "formatted_tag": "Vmess-Ntls"}
+    ]
+    for provider in manual_vmess_providers:
+        outbound = {
+            "type": "urltest",
+            "tag": provider["formatted_tag"],
+            "providers": provider["tag"],
+            "url": "https://www.gstatic.com/generate_204",
+            "interval": "1m0s"
+        }
+        filtered_outbounds.append(outbound)
+        print(f"Added urltest outbound for manual provider: {provider['formatted_tag']}")
     
     # Update manual Vmess outbounds to new format
+    vmess_outbounds_present = {'Vmess-Tls': False, 'Vmess-Ntls': False}
     for outbound in filtered_outbounds:
         if outbound.get('tag') == 'Vmess Tls':
             outbound['tag'] = 'Vmess-Tls'
             outbound['providers'] = 'Vmess_Tls'
+            vmess_outbounds_present['Vmess-Tls'] = True
         elif outbound.get('tag') == 'Vmess Ntls':
             outbound['tag'] = 'Vmess-Ntls'
             outbound['providers'] = 'Vmess_Ntls'
+            vmess_outbounds_present['Vmess-Ntls'] = True
+        elif outbound.get('tag') == 'Vmess-Tls':
+            vmess_outbounds_present['Vmess-Tls'] = True
+        elif outbound.get('tag') == 'Vmess-Ntls':
+            vmess_outbounds_present['Vmess-Ntls'] = True
+
+    # Add missing Vmess outbounds
+    if not vmess_outbounds_present['Vmess-Tls']:
+        filtered_outbounds.append({
+            "type": "urltest",
+            "tag": "Vmess-Tls",
+            "providers": "Vmess_Tls",
+            "url": "https://www.gstatic.com/generate_204",
+            "interval": "1m0s"
+        })
+        print("Added missing Vmess-Tls outbound")
+
+    if not vmess_outbounds_present['Vmess-Ntls']:
+        filtered_outbounds.append({
+            "type": "urltest",
+            "tag": "Vmess-Ntls",
+            "providers": "Vmess_Ntls",
+            "url": "https://www.gstatic.com/generate_204",
+            "interval": "1m0s"
+        })
+        print("Added missing Vmess-Ntls outbound")
 
     config_data['outbounds'] = filtered_outbounds
 
