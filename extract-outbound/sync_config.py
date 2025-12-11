@@ -198,7 +198,7 @@ def update_config_json(output_names):
     # Tapi pertahankan yang manual seperti server, best latency, vmess, dll
     manual_tags = [
         'server', 'best latency', 'best latency vmess', 'best latency cf',
-        'Vmess Tls', 'Vmess Ntls', 'direct', 'block', 'dns'
+        'Vmess-Tls', 'Vmess-Ntls', 'direct', 'block', 'dns'
     ]
     
     # Filter outbound: pertahankan manual, hapus yang auto-generated lama
