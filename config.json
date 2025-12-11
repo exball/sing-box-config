@@ -184,27 +184,13 @@
       "type": "urltest",
       "tag": "best latency cf",
       "outbounds": [
-        "ID vless",
-        "SG vless",
-        "TH vless",
-        "MY vless",
-        "VN vless",
-        "Backup"
+        "ID-vless",
+        "SG-vless",
+        "TH-vless",
+        "MY-vless",
+        "VN-vless",
+        "Backup-"
       ]
-    },
-    {
-      "type": "urltest",
-      "tag": "Vmess-Tls",
-      "providers": "Vmess_Tls",
-      "url": "https://www.gstatic.com/generate_204",
-      "interval": "1m0s"
-    },
-    {
-      "type": "urltest",
-      "tag": "Vmess-Ntls",
-      "providers": "Vmess_Ntls",
-      "url": "https://www.gstatic.com/generate_204",
-      "interval": "1m0s"
     },
     {
       "type": "dns",
