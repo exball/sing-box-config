@@ -210,21 +210,25 @@ def update_config_json(output_names):
         else:
             print(f"Removed old auto-generated outbound: {tag}")
     
-    # Tambahkan outbound untuk manual Vmess providers terlebih dahulu
+    # Tambahkan outbound untuk manual Vmess providers terlebih dahulu (jika belum ada)
     manual_vmess_providers = [
         {"tag": "Vmess_Tls", "formatted_tag": "Vmess-Tls"},
         {"tag": "Vmess_Ntls", "formatted_tag": "Vmess-Ntls"}
     ]
+    existing_tags = [outbound.get('tag') for outbound in filtered_outbounds]
     for provider in manual_vmess_providers:
-        outbound = {
-            "type": "urltest",
-            "tag": provider["formatted_tag"],
-            "providers": provider["tag"],
-            "url": "https://www.gstatic.com/generate_204",
-            "interval": "1m0s"
-        }
-        filtered_outbounds.append(outbound)
-        print(f"Added urltest outbound for manual provider: {provider['formatted_tag']}")
+        if provider["formatted_tag"] not in existing_tags:
+            outbound = {
+                "type": "urltest",
+                "tag": provider["formatted_tag"],
+                "providers": provider["tag"],
+                "url": "https://www.gstatic.com/generate_204",
+                "interval": "1m0s"
+            }
+            filtered_outbounds.append(outbound)
+            print(f"Added urltest outbound for manual provider: {provider['formatted_tag']}")
+        else:
+            print(f"Skipped adding {provider['formatted_tag']} as it already exists")
 
     # Tambahkan outbound baru untuk setiap provider auto-generated
     for i, output_name in enumerate(output_names):
