@@ -115,6 +115,24 @@ def get_tag_from_filename(filename):
         return filename.rsplit('.', 1)[0]
     return filename
 
+def format_outbound_tag(tag):
+    """
+    Format tag untuk outbounds: ganti spasi dengan -, tambah - jika tidak ada spasi
+    """
+    if ' ' in tag:
+        return tag.replace(' ', '-')
+    else:
+        return tag + '-'
+
+def format_provider_tag(tag):
+    """
+    Format tag untuk providers: ganti spasi dengan _, tambah _ jika tidak ada spasi
+    """
+    if ' ' in tag:
+        return tag.replace(' ', '_')
+    else:
+        return tag + '_'
+
 def update_config_json(output_names):
     """
     Update config.json berdasarkan output_names dari config.ini
@@ -131,7 +149,11 @@ def update_config_json(output_names):
     
     # Generate tags dari output_names
     auto_tags = [get_tag_from_filename(name) for name in output_names]
+    outbound_tags = [format_outbound_tag(tag) for tag in auto_tags]
+    provider_tags = [format_provider_tag(tag) for tag in auto_tags]
     print(f"Generated tags: {auto_tags}")
+    print(f"Outbound tags: {outbound_tags}")
+    print(f"Provider tags: {provider_tags}")
     
     # 1. Update outbound_providers
     print("\n=== Updating outbound_providers ===")
@@ -141,19 +163,19 @@ def update_config_json(output_names):
         {
             "type": "local",
             "path": "./provider/Vmess Tls.json",
-            "tag": "Vmess Tls"
+            "tag": "Vmess_Tls"
         },
         {
-            "type": "local", 
+            "type": "local",
             "path": "./provider/Vmess Ntls.json",
-            "tag": "Vmess Ntls"
+            "tag": "Vmess_Ntls"
         }
     ]
     
     # Tambahkan provider otomatis dari config.ini
     auto_providers = []
-    for output_name in output_names:
-        tag = get_tag_from_filename(output_name)
+    for i, output_name in enumerate(output_names):
+        tag = provider_tags[i]
         provider = {
             "type": "local",
             "path": f"./provider/{output_name}",
@@ -189,36 +211,54 @@ def update_config_json(output_names):
             print(f"Removed old auto-generated outbound: {tag}")
     
     # Tambahkan outbound baru untuk setiap provider
-    for output_name in output_names:
-        tag = get_tag_from_filename(output_name)
+    for i, output_name in enumerate(output_names):
+        tag = outbound_tags[i]
+        provider_tag = provider_tags[i]
         outbound = {
             "type": "urltest",
             "tag": tag,
-            "providers": tag,
+            "providers": provider_tag,
             "url": "https://www.gstatic.com/generate_204",
             "interval": "1m0s"
         }
         filtered_outbounds.append(outbound)
         print(f"Added urltest outbound: {tag}")
     
+    # Update manual Vmess outbounds to new format
+    for outbound in filtered_outbounds:
+        if outbound.get('tag') == 'Vmess Tls':
+            outbound['tag'] = 'Vmess-Tls'
+            outbound['providers'] = 'Vmess_Tls'
+        elif outbound.get('tag') == 'Vmess Ntls':
+            outbound['tag'] = 'Vmess-Ntls'
+            outbound['providers'] = 'Vmess_Ntls'
+
     config_data['outbounds'] = filtered_outbounds
-    
+
     # 3. Update "server" outbounds dan providers
     print("\n=== Updating 'server' configuration ===")
     for outbound in config_data['outbounds']:
         if outbound.get('tag') == 'server' and outbound.get('type') == 'selector':
             # Update outbounds array
-            fixed_outbounds = ['best latency', 'best latency vmess', 'best latency cf', 'Vmess Tls', 'Vmess Ntls']
-            outbound['outbounds'] = fixed_outbounds + auto_tags
+            fixed_outbounds = ['best latency', 'best latency vmess', 'best latency cf', 'Vmess-Tls', 'Vmess-Ntls']
+            outbound['outbounds'] = fixed_outbounds + outbound_tags
             print(f"Updated server.outbounds: {outbound['outbounds']}")
-            
+
             # Update providers array
-            fixed_providers = ['Vmess Tls', 'Vmess Ntls']
-            outbound['providers'] = fixed_providers + auto_tags
+            fixed_providers = ['Vmess_Tls', 'Vmess_Ntls']
+            outbound['providers'] = fixed_providers + provider_tags
             print(f"Updated server.providers: {outbound['providers']}")
             break
     
-    # 4. Update "best latency cf" outbounds
+    # 4. Update "best latency vmess" outbounds
+    print("\n=== Updating 'best latency vmess' configuration ===")
+    for outbound in config_data['outbounds']:
+        if outbound.get('tag') == 'best latency vmess' and outbound.get('type') == 'urltest':
+            outbound['outbounds'] = ['Vmess-Tls', 'Vmess-Ntls']
+            print(f"Updated best latency vmess.outbounds: {outbound['outbounds']}")
+            break
+
+    # 5. Update "best latency cf" outbounds
     print("\n=== Updating 'best latency cf' configuration ===")
     for outbound in config_data['outbounds']:
         if outbound.get('tag') == 'best latency cf' and outbound.get('type') == 'urltest':
