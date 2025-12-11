@@ -210,21 +210,7 @@ def update_config_json(output_names):
         else:
             print(f"Removed old auto-generated outbound: {tag}")
     
-    # Tambahkan outbound baru untuk setiap provider
-    for i, output_name in enumerate(output_names):
-        tag = outbound_tags[i]
-        provider_tag = provider_tags[i]
-        outbound = {
-            "type": "urltest",
-            "tag": tag,
-            "providers": provider_tag,
-            "url": "https://www.gstatic.com/generate_204",
-            "interval": "1m0s"
-        }
-        filtered_outbounds.append(outbound)
-        print(f"Added urltest outbound: {tag}")
-
-    # Tambahkan outbound untuk manual Vmess providers
+    # Tambahkan outbound untuk manual Vmess providers terlebih dahulu
     manual_vmess_providers = [
         {"tag": "Vmess_Tls", "formatted_tag": "Vmess-Tls"},
         {"tag": "Vmess_Ntls", "formatted_tag": "Vmess-Ntls"}
@@ -239,6 +225,20 @@ def update_config_json(output_names):
         }
         filtered_outbounds.append(outbound)
         print(f"Added urltest outbound for manual provider: {provider['formatted_tag']}")
+
+    # Tambahkan outbound baru untuk setiap provider auto-generated
+    for i, output_name in enumerate(output_names):
+        tag = outbound_tags[i]
+        provider_tag = provider_tags[i]
+        outbound = {
+            "type": "urltest",
+            "tag": tag,
+            "providers": provider_tag,
+            "url": "https://www.gstatic.com/generate_204",
+            "interval": "1m0s"
+        }
+        filtered_outbounds.append(outbound)
+        print(f"Added urltest outbound: {tag}")
     
     # Update manual Vmess outbounds to new format
     vmess_outbounds_present = {'Vmess-Tls': False, 'Vmess-Ntls': False}
