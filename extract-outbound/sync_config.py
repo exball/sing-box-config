@@ -281,7 +281,18 @@ def update_config_json(output_names):
         })
         print("Added missing Vmess-Ntls outbound")
 
-    config_data['outbounds'] = filtered_outbounds
+    # Deduplikasi outbounds berdasarkan tag sebelum menyimpan
+    seen_tags = {}
+    deduplicated_outbounds = []
+    for outbound in filtered_outbounds:
+        tag = outbound.get('tag')
+        if tag not in seen_tags:
+            seen_tags[tag] = True
+            deduplicated_outbounds.append(outbound)
+        else:
+            print(f"Removed duplicate outbound: {tag}")
+
+    config_data['outbounds'] = deduplicated_outbounds
 
     # 3. Update "server" outbounds dan providers
     print("\n=== Updating 'server' configuration ===")
