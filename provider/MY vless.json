@@ -2,10 +2,10 @@
     "outbounds": [
         {
             "type": "vless",
-            "tag": "13 🇲🇾 Evoxt Enterprise WS TLS",
+            "tag": "10 🇲🇾 Evoxt Enterprise WS TLS",
             "server": "104.18.1.196",
             "server_port": 443,
-            "uuid": "6eb9cfa9-e0a3-4493-ad8f-b066d461f6d3",
+            "uuid": "9a14ebb6-c7d0-4025-a3e5-24e619f2a4ad",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -17,7 +17,7 @@
                 "headers": {
                     "Host": "vpn.ex-vpn.my.id"
                 },
-                "path": "/166.88.35.176-49066",
+                "path": "/155.254.60.225-443",
                 "type": "ws"
             },
             "multiplex": {
@@ -26,34 +26,10 @@
         },
         {
             "type": "vless",
-            "tag": "12 🇲🇾 Terabix WS TLS",
+            "tag": "1 🇲🇾 Alibaba (US) Technology Co. WS TLS",
             "server": "104.18.1.196",
             "server_port": 443,
-            "uuid": "6eb9cfa9-e0a3-4493-ad8f-b066d461f6d3",
-            "network": "tcp",
-            "packet_encoding": "xudp",
-            "tls": {
-                "enabled": true,
-                "insecure": true,
-                "server_name": "vpn.ex-vpn.my.id"
-            },
-            "transport": {
-                "headers": {
-                    "Host": "vpn.ex-vpn.my.id"
-                },
-                "path": "/160.30.209.220-18886",
-                "type": "ws"
-            },
-            "multiplex": {
-                "enabled": false
-            }
-        },
-        {
-            "type": "vless",
-            "tag": "3 🇲🇾 Alibaba (US) Technology Co. WS TLS",
-            "server": "104.18.1.196",
-            "server_port": 443,
-            "uuid": "6eb9cfa9-e0a3-4493-ad8f-b066d461f6d3",
+            "uuid": "9a14ebb6-c7d0-4025-a3e5-24e619f2a4ad",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -74,10 +50,10 @@
         },
         {
             "type": "vless",
-            "tag": "9 🇲🇾 TM TECHNOLOGY SERVICES SDN. BHD. WS TLS",
+            "tag": "14 🇲🇾 Terabix WS TLS",
             "server": "104.18.1.196",
             "server_port": 443,
-            "uuid": "6eb9cfa9-e0a3-4493-ad8f-b066d461f6d3",
+            "uuid": "9a14ebb6-c7d0-4025-a3e5-24e619f2a4ad",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -89,7 +65,7 @@
                 "headers": {
                     "Host": "vpn.ex-vpn.my.id"
                 },
-                "path": "/58.27.117.24-443",
+                "path": "/160.30.209.220-18884",
                 "type": "ws"
             },
             "multiplex": {
@@ -98,10 +74,10 @@
         },
         {
             "type": "vless",
-            "tag": "14 🇲🇾 Kaopu Cloud HK Limited WS TLS",
+            "tag": "9 🇲🇾 Kaopu Cloud HK Limited WS TLS",
             "server": "104.18.1.196",
             "server_port": 443,
-            "uuid": "6eb9cfa9-e0a3-4493-ad8f-b066d461f6d3",
+            "uuid": "9a14ebb6-c7d0-4025-a3e5-24e619f2a4ad",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -114,6 +90,30 @@
                     "Host": "vpn.ex-vpn.my.id"
                 },
                 "path": "/38.60.193.247-13300",
+                "type": "ws"
+            },
+            "multiplex": {
+                "enabled": false
+            }
+        },
+        {
+            "type": "vless",
+            "tag": "12 🇲🇾 TM TECHNOLOGY SERVICES SDN. BHD. WS TLS",
+            "server": "104.18.1.196",
+            "server_port": 443,
+            "uuid": "9a14ebb6-c7d0-4025-a3e5-24e619f2a4ad",
+            "network": "tcp",
+            "packet_encoding": "xudp",
+            "tls": {
+                "enabled": true,
+                "insecure": true,
+                "server_name": "vpn.ex-vpn.my.id"
+            },
+            "transport": {
+                "headers": {
+                    "Host": "vpn.ex-vpn.my.id"
+                },
+                "path": "/58.27.117.24-443",
                 "type": "ws"
             },
             "multiplex": {
