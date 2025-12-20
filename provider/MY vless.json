@@ -2,10 +2,10 @@
     "outbounds": [
         {
             "type": "vless",
-            "tag": "1 🇲🇾 Evoxt Enterprise WS TLS",
+            "tag": "3 🇲🇾 Evoxt Enterprise WS TLS",
             "server": "104.18.1.196",
             "server_port": 443,
-            "uuid": "37389f8b-a936-4a65-9b03-0cd782490b9c",
+            "uuid": "2fef0085-ec6b-4bc4-a622-2057489a4745",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -17,7 +17,7 @@
                 "headers": {
                     "Host": "vpn.xtunnel.my.id"
                 },
-                "path": "/155.254.60.225-443",
+                "path": "/45.195.76.122-44559",
                 "type": "ws"
             },
             "multiplex": {
@@ -26,10 +26,10 @@
         },
         {
             "type": "vless",
-            "tag": "8 🇲🇾 Terabix WS TLS",
+            "tag": "1 🇲🇾 Alibaba (US) Technology Co. WS TLS",
             "server": "104.18.1.196",
             "server_port": 443,
-            "uuid": "37389f8b-a936-4a65-9b03-0cd782490b9c",
+            "uuid": "2fef0085-ec6b-4bc4-a622-2057489a4745",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -41,7 +41,7 @@
                 "headers": {
                     "Host": "vpn.xtunnel.my.id"
                 },
-                "path": "/160.30.5.38-9884",
+                "path": "/47.250.139.59-443",
                 "type": "ws"
             },
             "multiplex": {
@@ -50,10 +50,34 @@
         },
         {
             "type": "vless",
-            "tag": "5 🇲🇾 TM TECHNOLOGY SERVICES SDN. BHD. WS TLS",
+            "tag": "13 🇲🇾 Terabix WS TLS",
             "server": "104.18.1.196",
             "server_port": 443,
-            "uuid": "37389f8b-a936-4a65-9b03-0cd782490b9c",
+            "uuid": "2fef0085-ec6b-4bc4-a622-2057489a4745",
+            "network": "tcp",
+            "packet_encoding": "xudp",
+            "tls": {
+                "enabled": true,
+                "insecure": true,
+                "server_name": "vpn.xtunnel.my.id"
+            },
+            "transport": {
+                "headers": {
+                    "Host": "vpn.xtunnel.my.id"
+                },
+                "path": "/160.30.209.220-9884",
+                "type": "ws"
+            },
+            "multiplex": {
+                "enabled": false
+            }
+        },
+        {
+            "type": "vless",
+            "tag": "6 🇲🇾 TM TECHNOLOGY SERVICES SDN. BHD. WS TLS",
+            "server": "104.18.1.196",
+            "server_port": 443,
+            "uuid": "2fef0085-ec6b-4bc4-a622-2057489a4745",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -74,10 +98,10 @@
         },
         {
             "type": "vless",
-            "tag": "7 🇲🇾 Kaopu Cloud HK Limited WS TLS",
+            "tag": "10 🇲🇾 Kaopu Cloud HK Limited WS TLS",
             "server": "104.18.1.196",
             "server_port": 443,
-            "uuid": "37389f8b-a936-4a65-9b03-0cd782490b9c",
+            "uuid": "2fef0085-ec6b-4bc4-a622-2057489a4745",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -90,30 +114,6 @@
                     "Host": "vpn.xtunnel.my.id"
                 },
                 "path": "/38.60.193.247-13300",
-                "type": "ws"
-            },
-            "multiplex": {
-                "enabled": false
-            }
-        },
-        {
-            "type": "vless",
-            "tag": "14 🇲🇾 Alibaba (US) Technology Co. WS TLS",
-            "server": "104.18.1.196",
-            "server_port": 443,
-            "uuid": "37389f8b-a936-4a65-9b03-0cd782490b9c",
-            "network": "tcp",
-            "packet_encoding": "xudp",
-            "tls": {
-                "enabled": true,
-                "insecure": true,
-                "server_name": "vpn.xtunnel.my.id"
-            },
-            "transport": {
-                "headers": {
-                    "Host": "vpn.xtunnel.my.id"
-                },
-                "path": "/47.250.139.59-443",
                 "type": "ws"
             },
             "multiplex": {
