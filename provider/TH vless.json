@@ -2,10 +2,10 @@
     "outbounds": [
         {
             "type": "vless",
-            "tag": "18 🇹🇭 TRUE INTERNET Co. WS TLS",
+            "tag": "24 🇹🇭 TRUE INTERNET Co. WS TLS",
             "server": "104.18.1.196",
             "server_port": 443,
-            "uuid": "2d13a05c-5724-42c9-be9f-b0ee94e7ea50",
+            "uuid": "914601e7-cc9f-4783-9369-4df0227c0c12",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -17,7 +17,7 @@
                 "headers": {
                     "Host": "vpn.exbal.my.id"
                 },
-                "path": "/171.103.95.141-10330",
+                "path": "/171.103.164.62-30921",
                 "type": "ws"
             },
             "multiplex": {
@@ -26,10 +26,10 @@
         },
         {
             "type": "vless",
-            "tag": "20 🇹🇭 Siamdata Communication Co. WS TLS",
+            "tag": "13 🇹🇭 Siamdata Communication Co. WS TLS",
             "server": "104.18.1.196",
             "server_port": 443,
-            "uuid": "2d13a05c-5724-42c9-be9f-b0ee94e7ea50",
+            "uuid": "914601e7-cc9f-4783-9369-4df0227c0c12",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -41,7 +41,31 @@
                 "headers": {
                     "Host": "vpn.exbal.my.id"
                 },
-                "path": "/212.80.213.140-31557",
+                "path": "/103.40.119.7-443",
+                "type": "ws"
+            },
+            "multiplex": {
+                "enabled": false
+            }
+        },
+        {
+            "type": "vless",
+            "tag": "5 🇹🇭 CAT Telecom Public Company Limited WS TLS",
+            "server": "104.18.1.196",
+            "server_port": 443,
+            "uuid": "914601e7-cc9f-4783-9369-4df0227c0c12",
+            "network": "tcp",
+            "packet_encoding": "xudp",
+            "tls": {
+                "enabled": true,
+                "insecure": true,
+                "server_name": "vpn.exbal.my.id"
+            },
+            "transport": {
+                "headers": {
+                    "Host": "vpn.exbal.my.id"
+                },
+                "path": "/122.155.180.241-61389",
                 "type": "ws"
             },
             "multiplex": {
@@ -53,7 +77,7 @@
             "tag": "11 🇹🇭 Kaopu Cloud HK Limited WS TLS",
             "server": "104.18.1.196",
             "server_port": 443,
-            "uuid": "2d13a05c-5724-42c9-be9f-b0ee94e7ea50",
+            "uuid": "914601e7-cc9f-4783-9369-4df0227c0c12",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -74,10 +98,10 @@
         },
         {
             "type": "vless",
-            "tag": "12 🇹🇭 Tencent Building WS TLS",
+            "tag": "16 🇹🇭 Tencent Building WS TLS",
             "server": "104.18.1.196",
             "server_port": 443,
-            "uuid": "2d13a05c-5724-42c9-be9f-b0ee94e7ea50",
+            "uuid": "914601e7-cc9f-4783-9369-4df0227c0c12",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -90,30 +114,6 @@
                     "Host": "vpn.exbal.my.id"
                 },
                 "path": "/43.133.110.81-443",
-                "type": "ws"
-            },
-            "multiplex": {
-                "enabled": false
-            }
-        },
-        {
-            "type": "vless",
-            "tag": "16 🇹🇭 Alibaba (US) Technology Co. WS TLS",
-            "server": "104.18.1.196",
-            "server_port": 443,
-            "uuid": "2d13a05c-5724-42c9-be9f-b0ee94e7ea50",
-            "network": "tcp",
-            "packet_encoding": "xudp",
-            "tls": {
-                "enabled": true,
-                "insecure": true,
-                "server_name": "vpn.exbal.my.id"
-            },
-            "transport": {
-                "headers": {
-                    "Host": "vpn.exbal.my.id"
-                },
-                "path": "/8.213.206.54-443",
                 "type": "ws"
             },
             "multiplex": {
