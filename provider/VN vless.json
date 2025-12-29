@@ -2,20 +2,20 @@
     "outbounds": [
         {
             "type": "vless",
-            "tag": "1 🇻🇳 VNPT Corp WS TLS",
+            "tag": "3 🇻🇳 VNPT Corp WS TLS",
             "server": "104.18.1.196",
             "server_port": 443,
-            "uuid": "c15d3e9d-f8df-468f-bb88-ebe820fa31a1",
+            "uuid": "e29459cb-b996-424b-b5d5-917bb4828580",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
                 "enabled": true,
                 "insecure": true,
-                "server_name": "vpn.ex-vpn.my.id"
+                "server_name": "vpn.exbal.my.id"
             },
             "transport": {
                 "headers": {
-                    "Host": "vpn.ex-vpn.my.id"
+                    "Host": "vpn.exbal.my.id"
                 },
                 "path": "/103.15.90.134-49678",
                 "type": "ws"
@@ -26,44 +26,20 @@
         },
         {
             "type": "vless",
-            "tag": "2 🇻🇳 UCLOUD INFORMATION TECHNOLOGY (HK) LIMITED WS TLS",
+            "tag": "1 🇻🇳 Kaopu Cloud HK Limited WS TLS",
             "server": "104.18.1.196",
             "server_port": 443,
-            "uuid": "c15d3e9d-f8df-468f-bb88-ebe820fa31a1",
+            "uuid": "e29459cb-b996-424b-b5d5-917bb4828580",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
                 "enabled": true,
                 "insecure": true,
-                "server_name": "vpn.ex-vpn.my.id"
+                "server_name": "vpn.exbal.my.id"
             },
             "transport": {
                 "headers": {
-                    "Host": "vpn.ex-vpn.my.id"
-                },
-                "path": "/152.32.255.24-587",
-                "type": "ws"
-            },
-            "multiplex": {
-                "enabled": false
-            }
-        },
-        {
-            "type": "vless",
-            "tag": "4 🇻🇳 Kaopu Cloud HK Limited WS TLS",
-            "server": "104.18.1.196",
-            "server_port": 443,
-            "uuid": "c15d3e9d-f8df-468f-bb88-ebe820fa31a1",
-            "network": "tcp",
-            "packet_encoding": "xudp",
-            "tls": {
-                "enabled": true,
-                "insecure": true,
-                "server_name": "vpn.ex-vpn.my.id"
-            },
-            "transport": {
-                "headers": {
-                    "Host": "vpn.ex-vpn.my.id"
+                    "Host": "vpn.exbal.my.id"
                 },
                 "path": "/154.93.48.189-34237",
                 "type": "ws"
@@ -74,20 +50,44 @@
         },
         {
             "type": "vless",
-            "tag": "3 🇻🇳 VNPT Corp WS TLS",
+            "tag": "4 🇻🇳 UCLOUD INFORMATION TECHNOLOGY (HK) LIMITED WS TLS",
             "server": "104.18.1.196",
             "server_port": 443,
-            "uuid": "c15d3e9d-f8df-468f-bb88-ebe820fa31a1",
+            "uuid": "e29459cb-b996-424b-b5d5-917bb4828580",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
                 "enabled": true,
                 "insecure": true,
-                "server_name": "vpn.ex-vpn.my.id"
+                "server_name": "vpn.exbal.my.id"
             },
             "transport": {
                 "headers": {
-                    "Host": "vpn.ex-vpn.my.id"
+                    "Host": "vpn.exbal.my.id"
+                },
+                "path": "/152.32.255.24-587",
+                "type": "ws"
+            },
+            "multiplex": {
+                "enabled": false
+            }
+        },
+        {
+            "type": "vless",
+            "tag": "2 🇻🇳 VNPT Corp WS TLS",
+            "server": "104.18.1.196",
+            "server_port": 443,
+            "uuid": "e29459cb-b996-424b-b5d5-917bb4828580",
+            "network": "tcp",
+            "packet_encoding": "xudp",
+            "tls": {
+                "enabled": true,
+                "insecure": true,
+                "server_name": "vpn.exbal.my.id"
+            },
+            "transport": {
+                "headers": {
+                    "Host": "vpn.exbal.my.id"
                 },
                 "path": "/103.197.184.193-37461",
                 "type": "ws"
