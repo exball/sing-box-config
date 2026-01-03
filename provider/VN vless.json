@@ -5,7 +5,7 @@
             "tag": "4 🇻🇳 VNPT Corp WS TLS",
             "server": "104.18.1.196",
             "server_port": 443,
-            "uuid": "48e1fac2-20f7-4a63-9027-635be84eda86",
+            "uuid": "90553c6e-b92d-4906-91c8-b65b2edfe1d0",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -26,34 +26,10 @@
         },
         {
             "type": "vless",
-            "tag": "1 🇻🇳 UCLOUD INFORMATION TECHNOLOGY (HK) LIMITED WS TLS",
+            "tag": "2 🇻🇳 Kaopu Cloud HK Limited WS TLS",
             "server": "104.18.1.196",
             "server_port": 443,
-            "uuid": "48e1fac2-20f7-4a63-9027-635be84eda86",
-            "network": "tcp",
-            "packet_encoding": "xudp",
-            "tls": {
-                "enabled": true,
-                "insecure": true,
-                "server_name": "vpn.ex27.my.id"
-            },
-            "transport": {
-                "headers": {
-                    "Host": "vpn.ex27.my.id"
-                },
-                "path": "/152.32.255.24-587",
-                "type": "ws"
-            },
-            "multiplex": {
-                "enabled": false
-            }
-        },
-        {
-            "type": "vless",
-            "tag": "3 🇻🇳 Kaopu Cloud HK Limited WS TLS",
-            "server": "104.18.1.196",
-            "server_port": 443,
-            "uuid": "48e1fac2-20f7-4a63-9027-635be84eda86",
+            "uuid": "90553c6e-b92d-4906-91c8-b65b2edfe1d0",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -74,10 +50,34 @@
         },
         {
             "type": "vless",
-            "tag": "2 🇻🇳 VNPT Corp WS TLS",
+            "tag": "3 🇻🇳 UCLOUD INFORMATION TECHNOLOGY (HK) LIMITED WS TLS",
             "server": "104.18.1.196",
             "server_port": 443,
-            "uuid": "48e1fac2-20f7-4a63-9027-635be84eda86",
+            "uuid": "90553c6e-b92d-4906-91c8-b65b2edfe1d0",
+            "network": "tcp",
+            "packet_encoding": "xudp",
+            "tls": {
+                "enabled": true,
+                "insecure": true,
+                "server_name": "vpn.ex27.my.id"
+            },
+            "transport": {
+                "headers": {
+                    "Host": "vpn.ex27.my.id"
+                },
+                "path": "/152.32.255.24-587",
+                "type": "ws"
+            },
+            "multiplex": {
+                "enabled": false
+            }
+        },
+        {
+            "type": "vless",
+            "tag": "1 🇻🇳 VNPT Corp WS TLS",
+            "server": "104.18.1.196",
+            "server_port": 443,
+            "uuid": "90553c6e-b92d-4906-91c8-b65b2edfe1d0",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
