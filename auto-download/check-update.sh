@@ -3,6 +3,7 @@
 # Script untuk memeriksa dan mengupdate file auto-download.sh
 # Script ini akan memeriksa hash SHA-1 dari file tersebut dan mengunduhnya jika berbeda
 
+
 # ===== KONFIGURASI DASAR =====
 # URL untuk file yang akan diperiksa
 SCRIPT_UPDATE_URL="https://raw.githubusercontent.com/exball/sing-box-config/refs/heads/Master/auto-download/auto-download.sh"
