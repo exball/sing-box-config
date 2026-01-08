@@ -713,20 +713,16 @@ download_files() {
     if [ -n "${PROVIDER_URLS}" ]; then
         log_message ""
         log_message "✳️ Checking file provider ✳️"
-        
         for url in $PROVIDER_URLS; do
-
             filename=$(basename "$url" | sed 's/%20/ /g')
             temp_file="$TEMP_DIR/$filename"
             target_file="$SAVE_DIR/$filename"
-
             local set_executable=0
             if [ "${filename##*.}" = "sh" ]; then
                 set_executable=1
             fi
             unified_update_with_security "$url" "$target_file" "$filename" "$set_executable" 0
             local download_result=$?
-            
             case $download_result in
                 0)  continue
                     ;;
@@ -736,9 +732,11 @@ download_files() {
                 3)  continue
                     ;;
             esac
+            # Modifikasi file provider setelah download
+            if [ "${filename##*.}" = "json" ]; then
+                modify_provider_file "$target_file"
+            fi
         done
-        
-        # Cleanup unused provider files setelah download selesai
         cleanup_unused_provider_files
     else
         log_message "PROVIDER_URLS not configured or empty"
