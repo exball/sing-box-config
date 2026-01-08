@@ -343,9 +343,9 @@ ensure_directories "/data/adb/auto-download" "$TEMP_DIR"
 CONFIG_FILE="/data/adb/auto-download/auto-download.conf"
 if [ -f "$CONFIG_FILE" ]; then
     source "$CONFIG_FILE"
-    # Gabungkan token dari 6 bagian jika semua variabel ada
-    if [ -n "$GI" ] && [ -n "$UB" ] && [ -n "$EN" ] && [ -n "$_T" ] && [ -n "$TH" ] && [ -n "$OK" ]; then
-        GITHUB_TOKEN=$(echo -n "$GI$UB$EN$_T$TH$OK" | base64 -d)
+    # Decode token dari satu variabel base64 GI
+    if [ -n "$GI" ]; then
+        GITHUB_TOKEN=$(echo -n "$GI" | base64 -d)
     fi
     # Set header Authorization jika token tersedia
     if [ -n "$GITHUB_TOKEN" ]; then
