@@ -5,7 +5,7 @@
 
 # ===== KONFIGURASI DASAR =====
 # URL untuk file yang akan diperiksa
-SCRIPT_UPDATE_URL="https://raw.githubusercontent.com/exball/sing-box-config/refs/heads/Master/auto-download/auto-download.sh"
+SCRIPT_UPDATE_URL="https://raw.githubusercontent.com/exball/sing-box-config/Master/auto-download/auto-download.sh"
 
 # Path lokal untuk file tersebut
 SCRIPT_FILE="/data/adb/auto-download/auto-download.sh"
