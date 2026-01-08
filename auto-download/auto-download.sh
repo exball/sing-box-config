@@ -146,8 +146,28 @@ curl_download_file() {
     # Pastikan direktori output ada
     ensure_parent_directory "$output_file"
     
-    # Download file dengan follow redirects dan header Authorization jika token tersedia
-    if [ -n "$GITHUB_HEADER" ]; then
+    # Tentukan apakah repo private atau public
+    local send_auth=0
+    if echo "$source_url" | grep -q "api.github.com"; then
+        send_auth=1
+    elif [ -n "$GITHUB_HEADER" ]; then
+        # Cek apakah repo private dengan mencoba akses tanpa header
+        local test_file="$TEMP_DIR/test_public_access.$$"
+        "$CURL_BIN" -s -L --connect-timeout "$timeout_connect" --max-time "$timeout_max" \
+            "$source_url" -o "$test_file"
+        local curl_test_code=$?
+        local test_content=""
+        if [ -f "$test_file" ]; then
+            test_content=$(head -c 20 "$test_file")
+            rm -f "$test_file"
+        fi
+        if [ $curl_test_code -ne 0 ] || echo "$test_content" | grep -qi "not found"; then
+            send_auth=1
+        fi
+    fi
+    
+    # Download file dengan atau tanpa header Authorization
+    if [ $send_auth -eq 1 ] && [ -n "$GITHUB_HEADER" ]; then
         "$CURL_BIN" -s -L --connect-timeout "$timeout_connect" --max-time "$timeout_max" \
             -H "$GITHUB_HEADER" "$source_url" -o "$output_file"
     else
