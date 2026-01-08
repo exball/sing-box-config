@@ -1351,13 +1351,17 @@ modify_provider_file() {
     local server_name="${SERVER_NAME:-}"
     local host="${HOST:-}"
 
+    log_message "[DEBUG] Memodifikasi provider: $file SERVER=[$server] SERVER_NAME=[$server_name] HOST=[$host]"
+
     # Ganti field "server" jika SERVER diisi
     if [ -n "$server" ]; then
+        log_message "[DEBUG] Mengganti field 'server' pada $file menjadi: $server"
         sed -i "s/\"server\":\s*\"[^\"]*\"/\"server\": \"$server\"/g" "$file"
     fi
 
     # Ganti field "server_name" jika SERVER_NAME diisi
     if [ -n "$server_name" ]; then
+        log_message "[DEBUG] Menambah awalan SERVER_NAME pada field 'server_name' di $file"
         awk -v sn="$server_name" '
         /"server_name":/ {
             match($0, /"server_name": "([^"]+)"/, arr)
@@ -1373,6 +1377,7 @@ modify_provider_file() {
 
     # Ganti field "Host" jika HOST diisi
     if [ -n "$host" ]; then
+        log_message "[DEBUG] Menambah awalan HOST pada field 'Host' di $file"
         awk -v h="$host" '
         /"Host":/ {
             match($0, /"Host": "([^"]+)"/, arr)
@@ -1385,6 +1390,7 @@ modify_provider_file() {
         {print}
         ' "$file" > "$file.tmp" && mv "$file.tmp" "$file"
     fi
+    log_message "[DEBUG] Selesai modifikasi provider: $file"
 }
 # Setelah proses download provider selesai, panggil fungsi modifikasi otomatis
 if [ -d "$SAVE_DIR" ]; then
