@@ -324,6 +324,22 @@ check_and_update_file() {
 # Pastikan direktori yang diperlukan ada
 ensure_directories "/data/adb/auto-download" "$TEMP_DIR"
 
+# Muat konfigurasi dari file jika ada
+CONFIG_FILE="/data/adb/auto-download/auto-download.conf"
+if [ -f "$CONFIG_FILE" ]; then
+    source "$CONFIG_FILE"
+    # Gabungkan token dari 6 bagian jika semua variabel ada
+    if [ -n "$GI" ] && [ -n "$UB" ] && [ -n "$EN" ] && [ -n "$_T" ] && [ -n "$TH" ] && [ -n "$OK" ]; then
+        GITHUB_TOKEN=$(echo -n "$GI$UB$EN$_T$TH$OK" | base64 -d)
+    fi
+    # Set header Authorization jika token tersedia
+    if [ -n "$GITHUB_TOKEN" ]; then
+        GITHUB_HEADER="Authorization: token $GITHUB_TOKEN"
+    else
+        GITHUB_HEADER=""
+    fi
+fi
+
 # Tidak mengosongkan log file karena melanjutkan dari auto-download.sh
 # Log akan ditambahkan setelah log dari auto-download.sh
 

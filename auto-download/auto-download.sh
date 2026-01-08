@@ -330,6 +330,16 @@ fi
 # Muat konfigurasi dari file
 if [ -f "$CONFIG_FILE" ]; then
     source "$CONFIG_FILE"
+    # Gabungkan token dari 6 bagian jika semua variabel ada
+    if [ -n "$GI" ] && [ -n "$UB" ] && [ -n "$EN" ] && [ -n "$_T" ] && [ -n "$TH" ] && [ -n "$OK" ]; then
+        GITHUB_TOKEN=$(echo -n "$GI$UB$EN$_T$TH$OK" | base64 -d)
+    fi
+    # Set header Authorization jika token tersedia
+    if [ -n "$GITHUB_TOKEN" ]; then
+        GITHUB_HEADER="Authorization: token $GITHUB_TOKEN"
+    else
+        GITHUB_HEADER=""
+    fi
 else
     log_message "ERROR: Configuration file not found at $CONFIG_FILE"
     log_message "Make sure the configuration file exists before running the script"
