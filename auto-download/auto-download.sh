@@ -2,7 +2,6 @@
 
 # Script untuk mendownload file konfigurasi secara otomatis
 
-
 # ===== KONFIGURASI BOOTSTRAP =====
 # Parameter minimal yang diperlukan untuk memeriksa pembaruan konfigurasi
 # Parameter ini TIDAK BOLEH diubah melalui file konfigurasi eksternal
