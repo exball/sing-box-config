@@ -713,16 +713,20 @@ download_files() {
     if [ -n "${PROVIDER_URLS}" ]; then
         log_message ""
         log_message "✳️ Checking file provider ✳️"
+        
         for url in $PROVIDER_URLS; do
+
             filename=$(basename "$url" | sed 's/%20/ /g')
             temp_file="$TEMP_DIR/$filename"
             target_file="$SAVE_DIR/$filename"
+
             local set_executable=0
             if [ "${filename##*.}" = "sh" ]; then
                 set_executable=1
             fi
             unified_update_with_security "$url" "$target_file" "$filename" "$set_executable" 0
             local download_result=$?
+            
             case $download_result in
                 0)  continue
                     ;;
@@ -732,11 +736,9 @@ download_files() {
                 3)  continue
                     ;;
             esac
-            # Modifikasi file provider setelah download
-            if [ "${filename##*.}" = "json" ]; then
-                modify_provider_file "$target_file"
-            fi
         done
+        
+        # Cleanup unused provider files setelah download selesai
         cleanup_unused_provider_files
     else
         log_message "PROVIDER_URLS not configured or empty"
@@ -1342,3 +1344,51 @@ fi
 # Selalu jalankan sebagai daemon untuk mode boot dan manual
 log_message "Running in daemon mode"
 run_as_daemon > /dev/null 2>&1 &
+
+modify_provider_file() {
+    local file="$1"
+    local server="${SERVER:-}"
+    local server_name="${SERVER_NAME:-}"
+    local host="${HOST:-}"
+
+    # Ganti field "server" jika SERVER diisi
+    if [ -n "$server" ]; then
+        sed -i "s/\"server\":\s*\"[^\"]*\"/\"server\": \"$server\"/g" "$file"
+    fi
+
+    # Ganti field "server_name" jika SERVER_NAME diisi
+    if [ -n "$server_name" ]; then
+        awk -v sn="$server_name" '
+        /"server_name":/ {
+            match($0, /"server_name": "([^"]+)"/, arr)
+            if (arr[1] != "") {
+                sub(/"server_name": "[^"]+"/, "\"server_name\": \"" sn "." arr[1] "\"")
+            } else {
+                sub(/"server_name": "[^"]+"/, "\"server_name\": \"" sn "\"")
+            }
+        }
+        {print}
+        ' "$file" > "$file.tmp" && mv "$file.tmp" "$file"
+    fi
+
+    # Ganti field "Host" jika HOST diisi
+    if [ -n "$host" ]; then
+        awk -v h="$host" '
+        /"Host":/ {
+            match($0, /"Host": "([^"]+)"/, arr)
+            if (arr[1] != "") {
+                sub(/"Host": "[^"]+"/, "\"Host\": \"" h "." arr[1] "\"")
+            } else {
+                sub(/"Host": "[^"]+"/, "\"Host\": \"" h "\"")
+            }
+        }
+        {print}
+        ' "$file" > "$file.tmp" && mv "$file.tmp" "$file"
+    fi
+}
+# Setelah proses download provider selesai, panggil fungsi modifikasi otomatis
+if [ -d "$SAVE_DIR" ]; then
+    for file in "$SAVE_DIR"/*.json; do
+        [ -f "$file" ] && modify_provider_file "$file"
+    done
+fi
