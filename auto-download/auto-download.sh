@@ -145,8 +145,14 @@ curl_download_file() {
     # Pastikan direktori output ada
     ensure_parent_directory "$output_file"
     
-    # Download file dengan follow redirects
-    "$CURL_BIN" -s -L --connect-timeout "$timeout_connect" --max-time "$timeout_max" "$source_url" -o "$output_file"
+    # Download file dengan follow redirects dan header Authorization jika token tersedia
+    if [ -n "$GITHUB_HEADER" ]; then
+        "$CURL_BIN" -s -L --connect-timeout "$timeout_connect" --max-time "$timeout_max" \
+            -H "$GITHUB_HEADER" "$source_url" -o "$output_file"
+    else
+        "$CURL_BIN" -s -L --connect-timeout "$timeout_connect" --max-time "$timeout_max" \
+            "$source_url" -o "$output_file"
+    fi
     local curl_exit_code=$?
     
     # Jika gagal, hapus file yang mungkin sudah dibuat (partial download)
@@ -1307,4 +1313,3 @@ fi
 # Selalu jalankan sebagai daemon untuk mode boot dan manual
 log_message "Running in daemon mode"
 run_as_daemon > /dev/null 2>&1 &
-
