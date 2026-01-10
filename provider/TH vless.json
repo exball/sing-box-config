@@ -2,10 +2,10 @@
     "outbounds": [
         {
             "type": "vless",
-            "tag": "18 🇹🇭 Siamdata Communication Co. WS TLS",
+            "tag": "1 🇹🇭 TRUE INTERNET Co. WS TLS",
             "server": "104.18.1.196",
             "server_port": 443,
-            "uuid": "fff8f173-b4bb-4b69-8476-9967fcc36147",
+            "uuid": "53ee9337-193d-4d4f-af42-2def833231ad",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -17,7 +17,7 @@
                 "headers": {
                     "Host": "vpn.xtunnel.my.id"
                 },
-                "path": "/45.154.26.81-2053",
+                "path": "/171.103.223.50-10022",
                 "type": "ws"
             },
             "multiplex": {
@@ -26,10 +26,10 @@
         },
         {
             "type": "vless",
-            "tag": "2 🇹🇭 TRUE INTERNET Co. WS TLS",
+            "tag": "23 🇹🇭 Siamdata Communication Co. WS TLS",
             "server": "104.18.1.196",
             "server_port": 443,
-            "uuid": "fff8f173-b4bb-4b69-8476-9967fcc36147",
+            "uuid": "53ee9337-193d-4d4f-af42-2def833231ad",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -41,7 +41,7 @@
                 "headers": {
                     "Host": "vpn.xtunnel.my.id"
                 },
-                "path": "/171.103.223.50-10067",
+                "path": "/103.117.151.111-2053",
                 "type": "ws"
             },
             "multiplex": {
@@ -50,34 +50,10 @@
         },
         {
             "type": "vless",
-            "tag": "3 🇹🇭 Kaopu Cloud HK Limited WS TLS",
+            "tag": "2 🇹🇭 CAT Telecom Public Company Limited WS TLS",
             "server": "104.18.1.196",
             "server_port": 443,
-            "uuid": "fff8f173-b4bb-4b69-8476-9967fcc36147",
-            "network": "tcp",
-            "packet_encoding": "xudp",
-            "tls": {
-                "enabled": true,
-                "insecure": true,
-                "server_name": "vpn.xtunnel.my.id"
-            },
-            "transport": {
-                "headers": {
-                    "Host": "vpn.xtunnel.my.id"
-                },
-                "path": "/38.60.200.62-443",
-                "type": "ws"
-            },
-            "multiplex": {
-                "enabled": false
-            }
-        },
-        {
-            "type": "vless",
-            "tag": "5 🇹🇭 CAT Telecom Public Company Limited WS TLS",
-            "server": "104.18.1.196",
-            "server_port": 443,
-            "uuid": "fff8f173-b4bb-4b69-8476-9967fcc36147",
+            "uuid": "53ee9337-193d-4d4f-af42-2def833231ad",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -98,10 +74,10 @@
         },
         {
             "type": "vless",
-            "tag": "7 🇹🇭 Alibaba (US) Technology Co. WS TLS",
+            "tag": "9 🇹🇭 Tencent Building WS TLS",
             "server": "104.18.1.196",
             "server_port": 443,
-            "uuid": "fff8f173-b4bb-4b69-8476-9967fcc36147",
+            "uuid": "53ee9337-193d-4d4f-af42-2def833231ad",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -113,7 +89,31 @@
                 "headers": {
                     "Host": "vpn.xtunnel.my.id"
                 },
-                "path": "/8.213.206.54-443",
+                "path": "/43.133.110.81-443",
+                "type": "ws"
+            },
+            "multiplex": {
+                "enabled": false
+            }
+        },
+        {
+            "type": "vless",
+            "tag": "15 🇹🇭 Kaopu Cloud HK Limited WS TLS",
+            "server": "104.18.1.196",
+            "server_port": 443,
+            "uuid": "53ee9337-193d-4d4f-af42-2def833231ad",
+            "network": "tcp",
+            "packet_encoding": "xudp",
+            "tls": {
+                "enabled": true,
+                "insecure": true,
+                "server_name": "vpn.xtunnel.my.id"
+            },
+            "transport": {
+                "headers": {
+                    "Host": "vpn.xtunnel.my.id"
+                },
+                "path": "/38.60.200.62-443",
                 "type": "ws"
             },
             "multiplex": {
