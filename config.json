@@ -153,8 +153,8 @@
       "tag": "server",
       "outbounds": [
         "best latency",
-        "best_latency_vmess",
-        "best_latency_cf",
+        "best latency vmess",
+        "best latency cf",
         "Vmess-Tls",
         "Vmess-Ntls",
         "ID-vless",
@@ -184,26 +184,6 @@
         "best_latency_cf"
       ],
       "interval": "30s"
-    },
-    {
-      "type": "urltest",
-      "tag": "best_latency_vmess",
-      "outbounds": [
-        "Vmess-Tls",
-        "Vmess-Ntls"
-      ]
-    },
-    {
-      "type": "urltest",
-      "tag": "best_latency_cf",
-      "outbounds": [
-        "ID-vless",
-        "SG-vless",
-        "TH-vless",
-        "MY-vless",
-        "VN-vless",
-        "Backup-"
-      ]
     },
     {
       "type": "dns",
