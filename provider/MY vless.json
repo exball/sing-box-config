@@ -2,10 +2,10 @@
     "outbounds": [
         {
             "type": "vless",
-            "tag": "7 🇲🇾 Terabix WS TLS",
+            "tag": "2 🇲🇾 Evoxt Enterprise WS TLS",
             "server": "104.18.1.196",
             "server_port": 443,
-            "uuid": "97570662-061e-4f0d-acf7-4e09d18bfed2",
+            "uuid": "d5aa8b7a-4ada-4ebd-96bf-f2340c9816b3",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -17,7 +17,7 @@
                 "headers": {
                     "Host": "vpn.ex-vpn.my.id"
                 },
-                "path": "/160.30.209.220-18886",
+                "path": "/23.27.53.119-35209",
                 "type": "ws"
             },
             "multiplex": {
@@ -26,58 +26,10 @@
         },
         {
             "type": "vless",
-            "tag": "5 🇲🇾 Evoxt Enterprise WS TLS",
+            "tag": "1 🇲🇾 Kaopu Cloud HK Limited WS TLS",
             "server": "104.18.1.196",
             "server_port": 443,
-            "uuid": "97570662-061e-4f0d-acf7-4e09d18bfed2",
-            "network": "tcp",
-            "packet_encoding": "xudp",
-            "tls": {
-                "enabled": true,
-                "insecure": true,
-                "server_name": "vpn.ex-vpn.my.id"
-            },
-            "transport": {
-                "headers": {
-                    "Host": "vpn.ex-vpn.my.id"
-                },
-                "path": "/45.134.36.65-11517",
-                "type": "ws"
-            },
-            "multiplex": {
-                "enabled": false
-            }
-        },
-        {
-            "type": "vless",
-            "tag": "3 🇲🇾 TM TECHNOLOGY SERVICES SDN. BHD. WS TLS",
-            "server": "104.18.1.196",
-            "server_port": 443,
-            "uuid": "97570662-061e-4f0d-acf7-4e09d18bfed2",
-            "network": "tcp",
-            "packet_encoding": "xudp",
-            "tls": {
-                "enabled": true,
-                "insecure": true,
-                "server_name": "vpn.ex-vpn.my.id"
-            },
-            "transport": {
-                "headers": {
-                    "Host": "vpn.ex-vpn.my.id"
-                },
-                "path": "/58.27.117.24-443",
-                "type": "ws"
-            },
-            "multiplex": {
-                "enabled": false
-            }
-        },
-        {
-            "type": "vless",
-            "tag": "6 🇲🇾 Kaopu Cloud HK Limited WS TLS",
-            "server": "104.18.1.196",
-            "server_port": 443,
-            "uuid": "97570662-061e-4f0d-acf7-4e09d18bfed2",
+            "uuid": "d5aa8b7a-4ada-4ebd-96bf-f2340c9816b3",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -98,10 +50,10 @@
         },
         {
             "type": "vless",
-            "tag": "4 🇲🇾 Terabix WS TLS",
+            "tag": "6 🇲🇾 Terabix WS TLS",
             "server": "104.18.1.196",
             "server_port": 443,
-            "uuid": "97570662-061e-4f0d-acf7-4e09d18bfed2",
+            "uuid": "d5aa8b7a-4ada-4ebd-96bf-f2340c9816b3",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -113,7 +65,55 @@
                 "headers": {
                     "Host": "vpn.ex-vpn.my.id"
                 },
-                "path": "/160.30.209.220-18884",
+                "path": "/160.30.209.220-9884",
+                "type": "ws"
+            },
+            "multiplex": {
+                "enabled": false
+            }
+        },
+        {
+            "type": "vless",
+            "tag": "7 🇲🇾 TM TECHNOLOGY SERVICES SDN. BHD. WS TLS",
+            "server": "104.18.1.196",
+            "server_port": 443,
+            "uuid": "d5aa8b7a-4ada-4ebd-96bf-f2340c9816b3",
+            "network": "tcp",
+            "packet_encoding": "xudp",
+            "tls": {
+                "enabled": true,
+                "insecure": true,
+                "server_name": "vpn.ex-vpn.my.id"
+            },
+            "transport": {
+                "headers": {
+                    "Host": "vpn.ex-vpn.my.id"
+                },
+                "path": "/58.27.117.24-443",
+                "type": "ws"
+            },
+            "multiplex": {
+                "enabled": false
+            }
+        },
+        {
+            "type": "vless",
+            "tag": "4 🇲🇾 Evoxt Enterprise WS TLS",
+            "server": "104.18.1.196",
+            "server_port": 443,
+            "uuid": "d5aa8b7a-4ada-4ebd-96bf-f2340c9816b3",
+            "network": "tcp",
+            "packet_encoding": "xudp",
+            "tls": {
+                "enabled": true,
+                "insecure": true,
+                "server_name": "vpn.ex-vpn.my.id"
+            },
+            "transport": {
+                "headers": {
+                    "Host": "vpn.ex-vpn.my.id"
+                },
+                "path": "/45.134.36.65-11517",
                 "type": "ws"
             },
             "multiplex": {
