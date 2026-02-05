@@ -7,7 +7,7 @@
   "dns": {
     "servers": [
       {
-        "tag": "dns_server",
+        "tag": "dns_server_vmess",
         "address": [
           "1.0.0.1",
           "1.1.1.1",
@@ -15,7 +15,18 @@
           "8.8.8.8",
           "9.9.9.9"
         ],
-        "detour": "server"
+        "detour": "best_latency_vmess"
+      },
+      {
+        "tag": "dns_server_cf",
+        "address": [
+          "https://1.0.0.1/dns-query",
+          "https://1.1.1.1/dns-query",
+          "https://8.8.4.4/dns-query",
+          "https://8.8.8.8/dns-query",
+          "https://9.9.9.9/dns-query"
+        ],
+        "detour": "best_latency_cf"
       },
       {
         "tag": "local",
@@ -142,8 +153,8 @@
       "tag": "server",
       "outbounds": [
         "best latency",
-        "best latency vmess",
-        "best latency cf",
+        "best_latency_vmess",
+        "best_latency_cf",
         "Vmess-Tls",
         "Vmess-Ntls",
         "ID-vless",
@@ -163,20 +174,20 @@
         "VN_vless",
         "Backup_"
       ],
-      "default": "best latency cf"
+      "default": "best_latency_cf"
     },
     {
       "type": "urltest",
       "tag": "best latency",
       "outbounds": [
-        "best latency vmess",
-        "best latency cf"
+        "best_latency_vmess",
+        "best_latency_cf"
       ],
       "interval": "30s"
     },
     {
       "type": "urltest",
-      "tag": "best latency vmess",
+      "tag": "best_latency_vmess",
       "outbounds": [
         "Vmess-Tls",
         "Vmess-Ntls"
@@ -184,7 +195,7 @@
     },
     {
       "type": "urltest",
-      "tag": "best latency cf",
+      "tag": "best_latency_cf",
       "outbounds": [
         "ID-vless",
         "SG-vless",
@@ -335,7 +346,7 @@
           "tokopedia-static.net",
           "render.com"
         ],
-        "outbound": "best latency vmess"
+        "outbound": "best_latency_vmess"
       },
       {
         "domain_suffix": [
@@ -356,7 +367,7 @@
           "tokopedia-static.net",
           "render.com"
         ],
-        "outbound": "best latency vmess"
+        "outbound": "best_latency_vmess"
       },
       {
         "protocol": "udp",
@@ -364,7 +375,7 @@
           3478,
           3482
         ],
-        "outbound": "best latency vmess"
+        "outbound": "best_latency_vmess"
       },
       {
         "domain_suffix": [
@@ -389,7 +400,7 @@
           443,
           5222
         ],
-        "outbound": "best latency vmess"
+        "outbound": "best_latency_vmess"
       },
       {
         "process_name": [
@@ -400,7 +411,7 @@
           "xlaxiata.co.id",
           "*.xlaxiata.co.id"
         ],
-        "outbound": "best latency vmess"
+        "outbound": "best_latency_vmess"
       },
       {
         "ip_cidr": [
@@ -418,10 +429,9 @@
           "185.60.216.0/22",
           "204.15.20.0/22"
         ],
-        "outbound": "best latency vmess"
+        "outbound": "best_latency_vmess"
       }
     ],
-    "final": "server",
     "auto_detect_interface": false
   },
   "outbound_providers": [
