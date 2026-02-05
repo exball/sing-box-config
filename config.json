@@ -186,6 +186,26 @@
       "interval": "30s"
     },
     {
+      "type": "urltest",
+      "tag": "best latency vmess",
+      "outbounds": [
+        "Vmess-Tls",
+        "Vmess-Ntls"
+      ]
+    },
+    {
+      "type": "urltest",
+      "tag": "best latency cf",
+      "outbounds": [
+        "ID-vless",
+        "SG-vless",
+        "TH-vless",
+        "MY-vless",
+        "VN-vless",
+        "Backup-"
+      ]
+    },
+    {
       "type": "dns",
       "tag": "dns"
     },
