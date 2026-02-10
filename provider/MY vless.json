@@ -2,10 +2,58 @@
     "outbounds": [
         {
             "type": "vless",
-            "tag": "1 🇲🇾 Kaopu Cloud HK Limited WS TLS",
+            "tag": "3 🇲🇾 Terabix WS TLS",
             "server": "104.18.1.196",
             "server_port": 443,
-            "uuid": "e531c046-2887-49d4-a71b-2d1df9e0ae45",
+            "uuid": "9cbc2506-8670-4afc-9850-55fa046099f3",
+            "network": "tcp",
+            "packet_encoding": "xudp",
+            "tls": {
+                "enabled": true,
+                "insecure": true,
+                "server_name": "vpn.xtunnel.my.id"
+            },
+            "transport": {
+                "headers": {
+                    "Host": "vpn.xtunnel.my.id"
+                },
+                "path": "/160.30.209.220-18886",
+                "type": "ws"
+            },
+            "multiplex": {
+                "enabled": false
+            }
+        },
+        {
+            "type": "vless",
+            "tag": "7 🇲🇾 Evoxt Enterprise WS TLS",
+            "server": "104.18.1.196",
+            "server_port": 443,
+            "uuid": "9cbc2506-8670-4afc-9850-55fa046099f3",
+            "network": "tcp",
+            "packet_encoding": "xudp",
+            "tls": {
+                "enabled": true,
+                "insecure": true,
+                "server_name": "vpn.xtunnel.my.id"
+            },
+            "transport": {
+                "headers": {
+                    "Host": "vpn.xtunnel.my.id"
+                },
+                "path": "/45.134.36.65-11517",
+                "type": "ws"
+            },
+            "multiplex": {
+                "enabled": false
+            }
+        },
+        {
+            "type": "vless",
+            "tag": "4 🇲🇾 Kaopu Cloud HK Limited WS TLS",
+            "server": "104.18.1.196",
+            "server_port": 443,
+            "uuid": "9cbc2506-8670-4afc-9850-55fa046099f3",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -26,34 +74,10 @@
         },
         {
             "type": "vless",
-            "tag": "3 🇲🇾 Terabix WS TLS",
+            "tag": "6 🇲🇾 TM TECHNOLOGY SERVICES SDN. BHD. WS TLS",
             "server": "104.18.1.196",
             "server_port": 443,
-            "uuid": "e531c046-2887-49d4-a71b-2d1df9e0ae45",
-            "network": "tcp",
-            "packet_encoding": "xudp",
-            "tls": {
-                "enabled": true,
-                "insecure": true,
-                "server_name": "vpn.xtunnel.my.id"
-            },
-            "transport": {
-                "headers": {
-                    "Host": "vpn.xtunnel.my.id"
-                },
-                "path": "/160.30.209.220-9884",
-                "type": "ws"
-            },
-            "multiplex": {
-                "enabled": false
-            }
-        },
-        {
-            "type": "vless",
-            "tag": "5 🇲🇾 TM TECHNOLOGY SERVICES SDN. BHD. WS TLS",
-            "server": "104.18.1.196",
-            "server_port": 443,
-            "uuid": "e531c046-2887-49d4-a71b-2d1df9e0ae45",
+            "uuid": "9cbc2506-8670-4afc-9850-55fa046099f3",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -74,10 +98,10 @@
         },
         {
             "type": "vless",
-            "tag": "7 🇲🇾 Evoxt Enterprise WS TLS",
+            "tag": "5 🇲🇾 Terabix WS TLS",
             "server": "104.18.1.196",
             "server_port": 443,
-            "uuid": "e531c046-2887-49d4-a71b-2d1df9e0ae45",
+            "uuid": "9cbc2506-8670-4afc-9850-55fa046099f3",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -89,7 +113,7 @@
                 "headers": {
                     "Host": "vpn.xtunnel.my.id"
                 },
-                "path": "/45.134.36.65-11517",
+                "path": "/160.30.209.220-9884",
                 "type": "ws"
             },
             "multiplex": {
