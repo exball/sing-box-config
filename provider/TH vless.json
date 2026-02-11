@@ -2,44 +2,20 @@
     "outbounds": [
         {
             "type": "vless",
-            "tag": "1 🇹🇭 CAT Telecom Public Company Limited WS TLS",
-            "server": "104.18.1.196",
-            "server_port": 443,
-            "uuid": "04365a12-c735-44bc-b876-fade39c713a2",
-            "network": "tcp",
-            "packet_encoding": "xudp",
-            "tls": {
-                "enabled": true,
-                "insecure": true,
-                "server_name": "vpn.ex27.my.id"
-            },
-            "transport": {
-                "headers": {
-                    "Host": "vpn.ex27.my.id"
-                },
-                "path": "/122.155.180.241-61389",
-                "type": "ws"
-            },
-            "multiplex": {
-                "enabled": false
-            }
-        },
-        {
-            "type": "vless",
             "tag": "10 🇹🇭 TRUE INTERNET Co. WS TLS",
             "server": "104.18.1.196",
             "server_port": 443,
-            "uuid": "04365a12-c735-44bc-b876-fade39c713a2",
+            "uuid": "9ef9b804-74fe-48d4-adfe-ce4d84b67ef1",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
                 "enabled": true,
                 "insecure": true,
-                "server_name": "vpn.ex27.my.id"
+                "server_name": "vpn.ex-vpn.my.id"
             },
             "transport": {
                 "headers": {
-                    "Host": "vpn.ex27.my.id"
+                    "Host": "vpn.ex-vpn.my.id"
                 },
                 "path": "/171.103.223.50-10022",
                 "type": "ws"
@@ -50,44 +26,20 @@
         },
         {
             "type": "vless",
-            "tag": "5 🇹🇭 Alibaba (US) Technology Co. WS TLS",
+            "tag": "5 🇹🇭 Siamdata Communication Co. WS TLS",
             "server": "104.18.1.196",
             "server_port": 443,
-            "uuid": "04365a12-c735-44bc-b876-fade39c713a2",
+            "uuid": "9ef9b804-74fe-48d4-adfe-ce4d84b67ef1",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
                 "enabled": true,
                 "insecure": true,
-                "server_name": "vpn.ex27.my.id"
+                "server_name": "vpn.ex-vpn.my.id"
             },
             "transport": {
                 "headers": {
-                    "Host": "vpn.ex27.my.id"
-                },
-                "path": "/8.213.206.54-443",
-                "type": "ws"
-            },
-            "multiplex": {
-                "enabled": false
-            }
-        },
-        {
-            "type": "vless",
-            "tag": "6 🇹🇭 Siamdata Communication Co. WS TLS",
-            "server": "104.18.1.196",
-            "server_port": 443,
-            "uuid": "04365a12-c735-44bc-b876-fade39c713a2",
-            "network": "tcp",
-            "packet_encoding": "xudp",
-            "tls": {
-                "enabled": true,
-                "insecure": true,
-                "server_name": "vpn.ex27.my.id"
-            },
-            "transport": {
-                "headers": {
-                    "Host": "vpn.ex27.my.id"
+                    "Host": "vpn.ex-vpn.my.id"
                 },
                 "path": "/212.80.213.140-31557",
                 "type": "ws"
@@ -98,22 +50,70 @@
         },
         {
             "type": "vless",
-            "tag": "8 🇹🇭 Tencent Building WS TLS",
+            "tag": "1 🇹🇭 Tencent Building WS TLS",
             "server": "104.18.1.196",
             "server_port": 443,
-            "uuid": "04365a12-c735-44bc-b876-fade39c713a2",
+            "uuid": "9ef9b804-74fe-48d4-adfe-ce4d84b67ef1",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
                 "enabled": true,
                 "insecure": true,
-                "server_name": "vpn.ex27.my.id"
+                "server_name": "vpn.ex-vpn.my.id"
             },
             "transport": {
                 "headers": {
-                    "Host": "vpn.ex27.my.id"
+                    "Host": "vpn.ex-vpn.my.id"
                 },
                 "path": "/43.133.110.81-443",
+                "type": "ws"
+            },
+            "multiplex": {
+                "enabled": false
+            }
+        },
+        {
+            "type": "vless",
+            "tag": "4 🇹🇭 Alibaba (US) Technology Co. WS TLS",
+            "server": "104.18.1.196",
+            "server_port": 443,
+            "uuid": "9ef9b804-74fe-48d4-adfe-ce4d84b67ef1",
+            "network": "tcp",
+            "packet_encoding": "xudp",
+            "tls": {
+                "enabled": true,
+                "insecure": true,
+                "server_name": "vpn.ex-vpn.my.id"
+            },
+            "transport": {
+                "headers": {
+                    "Host": "vpn.ex-vpn.my.id"
+                },
+                "path": "/8.213.206.54-443",
+                "type": "ws"
+            },
+            "multiplex": {
+                "enabled": false
+            }
+        },
+        {
+            "type": "vless",
+            "tag": "8 🇹🇭 CAT Telecom Public Company Limited WS TLS",
+            "server": "104.18.1.196",
+            "server_port": 443,
+            "uuid": "9ef9b804-74fe-48d4-adfe-ce4d84b67ef1",
+            "network": "tcp",
+            "packet_encoding": "xudp",
+            "tls": {
+                "enabled": true,
+                "insecure": true,
+                "server_name": "vpn.ex-vpn.my.id"
+            },
+            "transport": {
+                "headers": {
+                    "Host": "vpn.ex-vpn.my.id"
+                },
+                "path": "/122.155.180.241-61389",
                 "type": "ws"
             },
             "multiplex": {
