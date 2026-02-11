@@ -2,10 +2,10 @@
     "outbounds": [
         {
             "type": "vless",
-            "tag": "10 🇹🇭 TRUE INTERNET Co. WS TLS",
+            "tag": "6 🇹🇭 Siamdata Communication Co. WS TLS",
             "server": "104.18.1.196",
             "server_port": 443,
-            "uuid": "9ef9b804-74fe-48d4-adfe-ce4d84b67ef1",
+            "uuid": "2b890374-8f9a-4e99-9eb6-74d7ea7360f8",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -17,7 +17,7 @@
                 "headers": {
                     "Host": "vpn.ex-vpn.my.id"
                 },
-                "path": "/171.103.223.50-10022",
+                "path": "/45.91.134.226-386",
                 "type": "ws"
             },
             "multiplex": {
@@ -26,10 +26,10 @@
         },
         {
             "type": "vless",
-            "tag": "5 🇹🇭 Siamdata Communication Co. WS TLS",
+            "tag": "9 🇹🇭 TRUE INTERNET Co. WS TLS",
             "server": "104.18.1.196",
             "server_port": 443,
-            "uuid": "9ef9b804-74fe-48d4-adfe-ce4d84b67ef1",
+            "uuid": "2b890374-8f9a-4e99-9eb6-74d7ea7360f8",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -41,31 +41,7 @@
                 "headers": {
                     "Host": "vpn.ex-vpn.my.id"
                 },
-                "path": "/212.80.213.140-31557",
-                "type": "ws"
-            },
-            "multiplex": {
-                "enabled": false
-            }
-        },
-        {
-            "type": "vless",
-            "tag": "1 🇹🇭 Tencent Building WS TLS",
-            "server": "104.18.1.196",
-            "server_port": 443,
-            "uuid": "9ef9b804-74fe-48d4-adfe-ce4d84b67ef1",
-            "network": "tcp",
-            "packet_encoding": "xudp",
-            "tls": {
-                "enabled": true,
-                "insecure": true,
-                "server_name": "vpn.ex-vpn.my.id"
-            },
-            "transport": {
-                "headers": {
-                    "Host": "vpn.ex-vpn.my.id"
-                },
-                "path": "/43.133.110.81-443",
+                "path": "/171.103.221.162-10026",
                 "type": "ws"
             },
             "multiplex": {
@@ -77,7 +53,7 @@
             "tag": "4 🇹🇭 Alibaba (US) Technology Co. WS TLS",
             "server": "104.18.1.196",
             "server_port": 443,
-            "uuid": "9ef9b804-74fe-48d4-adfe-ce4d84b67ef1",
+            "uuid": "2b890374-8f9a-4e99-9eb6-74d7ea7360f8",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -98,10 +74,34 @@
         },
         {
             "type": "vless",
-            "tag": "8 🇹🇭 CAT Telecom Public Company Limited WS TLS",
+            "tag": "8 🇹🇭 Tencent Building WS TLS",
             "server": "104.18.1.196",
             "server_port": 443,
-            "uuid": "9ef9b804-74fe-48d4-adfe-ce4d84b67ef1",
+            "uuid": "2b890374-8f9a-4e99-9eb6-74d7ea7360f8",
+            "network": "tcp",
+            "packet_encoding": "xudp",
+            "tls": {
+                "enabled": true,
+                "insecure": true,
+                "server_name": "vpn.ex-vpn.my.id"
+            },
+            "transport": {
+                "headers": {
+                    "Host": "vpn.ex-vpn.my.id"
+                },
+                "path": "/43.133.110.81-443",
+                "type": "ws"
+            },
+            "multiplex": {
+                "enabled": false
+            }
+        },
+        {
+            "type": "vless",
+            "tag": "22 🇹🇭 CAT Telecom Public Company Limited WS TLS",
+            "server": "104.18.1.196",
+            "server_port": 443,
+            "uuid": "2b890374-8f9a-4e99-9eb6-74d7ea7360f8",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
