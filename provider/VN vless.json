@@ -2,34 +2,10 @@
     "outbounds": [
         {
             "type": "vless",
-            "tag": "1 🇻🇳 Kaopu Cloud HK Limited WS TLS",
+            "tag": "1 🇻🇳 VNPT Corp WS TLS",
             "server": "104.18.1.196",
             "server_port": 443,
-            "uuid": "cb5c53f0-7697-4da1-a087-d54c5c183009",
-            "network": "tcp",
-            "packet_encoding": "xudp",
-            "tls": {
-                "enabled": true,
-                "insecure": true,
-                "server_name": "vpn.ex27.my.id"
-            },
-            "transport": {
-                "headers": {
-                    "Host": "vpn.ex27.my.id"
-                },
-                "path": "/154.93.48.189-34237",
-                "type": "ws"
-            },
-            "multiplex": {
-                "enabled": false
-            }
-        },
-        {
-            "type": "vless",
-            "tag": "2 🇻🇳 VNPT Corp WS TLS",
-            "server": "104.18.1.196",
-            "server_port": 443,
-            "uuid": "cb5c53f0-7697-4da1-a087-d54c5c183009",
+            "uuid": "0c72629f-7737-4970-af9b-0f3c180ba950",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -42,6 +18,30 @@
                     "Host": "vpn.ex27.my.id"
                 },
                 "path": "/103.15.90.134-49678",
+                "type": "ws"
+            },
+            "multiplex": {
+                "enabled": false
+            }
+        },
+        {
+            "type": "vless",
+            "tag": "2 🇻🇳 Kaopu Cloud HK Limited WS TLS",
+            "server": "104.18.1.196",
+            "server_port": 443,
+            "uuid": "0c72629f-7737-4970-af9b-0f3c180ba950",
+            "network": "tcp",
+            "packet_encoding": "xudp",
+            "tls": {
+                "enabled": true,
+                "insecure": true,
+                "server_name": "vpn.ex27.my.id"
+            },
+            "transport": {
+                "headers": {
+                    "Host": "vpn.ex27.my.id"
+                },
+                "path": "/154.93.48.189-34237",
                 "type": "ws"
             },
             "multiplex": {
