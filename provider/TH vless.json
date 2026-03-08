@@ -2,44 +2,20 @@
     "outbounds": [
         {
             "type": "vless",
-            "tag": "10 🇹🇭 TRUE INTERNET Co. WS TLS",
+            "tag": "7 🇹🇭 Siamdata Communication Co. WS TLS",
             "server": "104.18.1.196",
             "server_port": 443,
-            "uuid": "15105c1d-020e-4a46-911f-6c3af0e92464",
+            "uuid": "7d66ba8b-f683-466f-8a30-f0852f676dcb",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
                 "enabled": true,
                 "insecure": true,
-                "server_name": "vpn.ex-vpn.my.id"
+                "server_name": "vpn.exbal.my.id"
             },
             "transport": {
                 "headers": {
-                    "Host": "vpn.ex-vpn.my.id"
-                },
-                "path": "/171.103.223.50-10279",
-                "type": "ws"
-            },
-            "multiplex": {
-                "enabled": false
-            }
-        },
-        {
-            "type": "vless",
-            "tag": "14 🇹🇭 Siamdata Communication Co. WS TLS",
-            "server": "104.18.1.196",
-            "server_port": 443,
-            "uuid": "15105c1d-020e-4a46-911f-6c3af0e92464",
-            "network": "tcp",
-            "packet_encoding": "xudp",
-            "tls": {
-                "enabled": true,
-                "insecure": true,
-                "server_name": "vpn.ex-vpn.my.id"
-            },
-            "transport": {
-                "headers": {
-                    "Host": "vpn.ex-vpn.my.id"
+                    "Host": "vpn.exbal.my.id"
                 },
                 "path": "/45.136.253.18-33273",
                 "type": "ws"
@@ -50,22 +26,22 @@
         },
         {
             "type": "vless",
-            "tag": "6 🇹🇭 Alibaba (US) Technology Co. WS TLS",
+            "tag": "3 🇹🇭 TRUE INTERNET Co. WS TLS",
             "server": "104.18.1.196",
             "server_port": 443,
-            "uuid": "15105c1d-020e-4a46-911f-6c3af0e92464",
+            "uuid": "7d66ba8b-f683-466f-8a30-f0852f676dcb",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
                 "enabled": true,
                 "insecure": true,
-                "server_name": "vpn.ex-vpn.my.id"
+                "server_name": "vpn.exbal.my.id"
             },
             "transport": {
                 "headers": {
-                    "Host": "vpn.ex-vpn.my.id"
+                    "Host": "vpn.exbal.my.id"
                 },
-                "path": "/8.213.206.54-443",
+                "path": "/171.103.223.50-10022",
                 "type": "ws"
             },
             "multiplex": {
@@ -77,17 +53,17 @@
             "tag": "8 🇹🇭 CAT Telecom Public Company Limited WS TLS",
             "server": "104.18.1.196",
             "server_port": 443,
-            "uuid": "15105c1d-020e-4a46-911f-6c3af0e92464",
+            "uuid": "7d66ba8b-f683-466f-8a30-f0852f676dcb",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
                 "enabled": true,
                 "insecure": true,
-                "server_name": "vpn.ex-vpn.my.id"
+                "server_name": "vpn.exbal.my.id"
             },
             "transport": {
                 "headers": {
-                    "Host": "vpn.ex-vpn.my.id"
+                    "Host": "vpn.exbal.my.id"
                 },
                 "path": "/122.155.180.241-61389",
                 "type": "ws"
@@ -98,20 +74,44 @@
         },
         {
             "type": "vless",
-            "tag": "12 🇹🇭 Tencent Building WS TLS",
+            "tag": "9 🇹🇭 Alibaba (US) Technology Co. WS TLS",
             "server": "104.18.1.196",
             "server_port": 443,
-            "uuid": "15105c1d-020e-4a46-911f-6c3af0e92464",
+            "uuid": "7d66ba8b-f683-466f-8a30-f0852f676dcb",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
                 "enabled": true,
                 "insecure": true,
-                "server_name": "vpn.ex-vpn.my.id"
+                "server_name": "vpn.exbal.my.id"
             },
             "transport": {
                 "headers": {
-                    "Host": "vpn.ex-vpn.my.id"
+                    "Host": "vpn.exbal.my.id"
+                },
+                "path": "/8.213.206.54-443",
+                "type": "ws"
+            },
+            "multiplex": {
+                "enabled": false
+            }
+        },
+        {
+            "type": "vless",
+            "tag": "10 🇹🇭 Tencent Building WS TLS",
+            "server": "104.18.1.196",
+            "server_port": 443,
+            "uuid": "7d66ba8b-f683-466f-8a30-f0852f676dcb",
+            "network": "tcp",
+            "packet_encoding": "xudp",
+            "tls": {
+                "enabled": true,
+                "insecure": true,
+                "server_name": "vpn.exbal.my.id"
+            },
+            "transport": {
+                "headers": {
+                    "Host": "vpn.exbal.my.id"
                 },
                 "path": "/43.133.110.81-443",
                 "type": "ws"
