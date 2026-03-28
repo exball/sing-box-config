@@ -124,21 +124,13 @@
         "Vmess-Tls",
         "Vmess-Ntls",
         "ID-vless",
-        "SG-vless",
-        "TH-vless",
-        "MY-vless",
-        "VN-vless",
-        "Backup-"
+        "SG-vless"
       ],
       "providers": [
         "Vmess_Tls",
         "Vmess_Ntls",
         "ID_vless",
-        "SG_vless",
-        "TH_vless",
-        "MY_vless",
-        "VN_vless",
-        "Backup_"
+        "SG_vless"
       ],
       "default": "best latency cf"
     },
@@ -164,11 +156,7 @@
       "tag": "best latency cf",
       "outbounds": [
         "ID-vless",
-        "SG-vless",
-        "TH-vless",
-        "MY-vless",
-        "VN-vless",
-        "Backup-"
+        "SG-vless"
       ]
     },
     {
@@ -208,34 +196,6 @@
       "type": "urltest",
       "tag": "SG-vless",
       "providers": "SG_vless",
-      "url": "https://www.gstatic.com/generate_204",
-      "interval": "1m0s"
-    },
-    {
-      "type": "urltest",
-      "tag": "TH-vless",
-      "providers": "TH_vless",
-      "url": "https://www.gstatic.com/generate_204",
-      "interval": "1m0s"
-    },
-    {
-      "type": "urltest",
-      "tag": "MY-vless",
-      "providers": "MY_vless",
-      "url": "https://www.gstatic.com/generate_204",
-      "interval": "1m0s"
-    },
-    {
-      "type": "urltest",
-      "tag": "VN-vless",
-      "providers": "VN_vless",
-      "url": "https://www.gstatic.com/generate_204",
-      "interval": "1m0s"
-    },
-    {
-      "type": "urltest",
-      "tag": "Backup-",
-      "providers": "Backup_",
       "url": "https://www.gstatic.com/generate_204",
       "interval": "1m0s"
     }
@@ -481,26 +441,6 @@
       "type": "local",
       "path": "./provider/SG vless.json",
       "tag": "SG_vless"
-    },
-    {
-      "type": "local",
-      "path": "./provider/TH vless.json",
-      "tag": "TH_vless"
-    },
-    {
-      "type": "local",
-      "path": "./provider/MY vless.json",
-      "tag": "MY_vless"
-    },
-    {
-      "type": "local",
-      "path": "./provider/VN vless.json",
-      "tag": "VN_vless"
-    },
-    {
-      "type": "local",
-      "path": "./provider/Backup.json",
-      "tag": "Backup_"
     }
   ],
   "experimental": {
