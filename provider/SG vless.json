@@ -2,22 +2,22 @@
     "outbounds": [
         {
             "type": "vless",
-            "tag": "19 🇸🇬 DigitalOcean WS TLS",
+            "tag": "56 🇸🇬 DigitalOcean WS TLS",
             "server": "104.18.1.196",
             "server_port": 443,
-            "uuid": "c49349d7-aa54-4fef-ba5f-01ff39156abd",
+            "uuid": "cc892028-b812-403f-b9a7-6eaf5da07946",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
                 "enabled": true,
                 "insecure": true,
-                "server_name": "vpn.xtunnel.my.id"
+                "server_name": "vpn.ex27.my.id"
             },
             "transport": {
                 "headers": {
-                    "Host": "vpn.xtunnel.my.id"
+                    "Host": "vpn.ex27.my.id"
                 },
-                "path": "/134.209.96.76-74",
+                "path": "/188.166.249.31-443",
                 "type": "ws"
             },
             "multiplex": {
@@ -26,22 +26,22 @@
         },
         {
             "type": "vless",
-            "tag": "16 🇸🇬 Oracle Corporation WS TLS",
+            "tag": "58 🇸🇬 Oracle Corporation WS TLS",
             "server": "104.18.1.196",
             "server_port": 443,
-            "uuid": "c49349d7-aa54-4fef-ba5f-01ff39156abd",
+            "uuid": "cc892028-b812-403f-b9a7-6eaf5da07946",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
                 "enabled": true,
                 "insecure": true,
-                "server_name": "vpn.xtunnel.my.id"
+                "server_name": "vpn.ex27.my.id"
             },
             "transport": {
                 "headers": {
-                    "Host": "vpn.xtunnel.my.id"
+                    "Host": "vpn.ex27.my.id"
                 },
-                "path": "/140.245.51.172-52295",
+                "path": "/129.150.58.86-57621",
                 "type": "ws"
             },
             "multiplex": {
@@ -50,116 +50,20 @@
         },
         {
             "type": "vless",
-            "tag": "1 🇸🇬 The Constant Company WS TLS",
+            "tag": "21 🇸🇬 Amazon.com WS TLS",
             "server": "104.18.1.196",
             "server_port": 443,
-            "uuid": "c49349d7-aa54-4fef-ba5f-01ff39156abd",
+            "uuid": "cc892028-b812-403f-b9a7-6eaf5da07946",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
                 "enabled": true,
                 "insecure": true,
-                "server_name": "vpn.xtunnel.my.id"
+                "server_name": "vpn.ex27.my.id"
             },
             "transport": {
                 "headers": {
-                    "Host": "vpn.xtunnel.my.id"
-                },
-                "path": "/45.32.116.252-20205",
-                "type": "ws"
-            },
-            "multiplex": {
-                "enabled": false
-            }
-        },
-        {
-            "type": "vless",
-            "tag": "3 🇸🇬 OVH SAS WS TLS",
-            "server": "104.18.1.196",
-            "server_port": 443,
-            "uuid": "c49349d7-aa54-4fef-ba5f-01ff39156abd",
-            "network": "tcp",
-            "packet_encoding": "xudp",
-            "tls": {
-                "enabled": true,
-                "insecure": true,
-                "server_name": "vpn.xtunnel.my.id"
-            },
-            "transport": {
-                "headers": {
-                    "Host": "vpn.xtunnel.my.id"
-                },
-                "path": "/51.79.158.58-8443",
-                "type": "ws"
-            },
-            "multiplex": {
-                "enabled": false
-            }
-        },
-        {
-            "type": "vless",
-            "tag": "8 🇸🇬 Alibaba (US) Technology Co. WS TLS",
-            "server": "104.18.1.196",
-            "server_port": 443,
-            "uuid": "c49349d7-aa54-4fef-ba5f-01ff39156abd",
-            "network": "tcp",
-            "packet_encoding": "xudp",
-            "tls": {
-                "enabled": true,
-                "insecure": true,
-                "server_name": "vpn.xtunnel.my.id"
-            },
-            "transport": {
-                "headers": {
-                    "Host": "vpn.xtunnel.my.id"
-                },
-                "path": "/8.219.56.26-40011",
-                "type": "ws"
-            },
-            "multiplex": {
-                "enabled": false
-            }
-        },
-        {
-            "type": "vless",
-            "tag": "30 🇸🇬 Tencent Building WS TLS",
-            "server": "104.18.1.196",
-            "server_port": 443,
-            "uuid": "c49349d7-aa54-4fef-ba5f-01ff39156abd",
-            "network": "tcp",
-            "packet_encoding": "xudp",
-            "tls": {
-                "enabled": true,
-                "insecure": true,
-                "server_name": "vpn.xtunnel.my.id"
-            },
-            "transport": {
-                "headers": {
-                    "Host": "vpn.xtunnel.my.id"
-                },
-                "path": "/43.156.181.203-443",
-                "type": "ws"
-            },
-            "multiplex": {
-                "enabled": false
-            }
-        },
-        {
-            "type": "vless",
-            "tag": "26 🇸🇬 Amazon.com WS TLS",
-            "server": "104.18.1.196",
-            "server_port": 443,
-            "uuid": "c49349d7-aa54-4fef-ba5f-01ff39156abd",
-            "network": "tcp",
-            "packet_encoding": "xudp",
-            "tls": {
-                "enabled": true,
-                "insecure": true,
-                "server_name": "vpn.xtunnel.my.id"
-            },
-            "transport": {
-                "headers": {
-                    "Host": "vpn.xtunnel.my.id"
+                    "Host": "vpn.ex27.my.id"
                 },
                 "path": "/47.130.35.116-8888",
                 "type": "ws"
@@ -170,20 +74,68 @@
         },
         {
             "type": "vless",
-            "tag": "17 🇸🇬 Melbikomas UAB WS TLS",
+            "tag": "7 🇸🇬 The Constant Company WS TLS",
             "server": "104.18.1.196",
             "server_port": 443,
-            "uuid": "c49349d7-aa54-4fef-ba5f-01ff39156abd",
+            "uuid": "cc892028-b812-403f-b9a7-6eaf5da07946",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
                 "enabled": true,
                 "insecure": true,
-                "server_name": "vpn.xtunnel.my.id"
+                "server_name": "vpn.ex27.my.id"
             },
             "transport": {
                 "headers": {
-                    "Host": "vpn.xtunnel.my.id"
+                    "Host": "vpn.ex27.my.id"
+                },
+                "path": "/45.76.183.217-49292",
+                "type": "ws"
+            },
+            "multiplex": {
+                "enabled": false
+            }
+        },
+        {
+            "type": "vless",
+            "tag": "54 🇸🇬 CDS Global Cloud Co. WS TLS",
+            "server": "104.18.1.196",
+            "server_port": 443,
+            "uuid": "cc892028-b812-403f-b9a7-6eaf5da07946",
+            "network": "tcp",
+            "packet_encoding": "xudp",
+            "tls": {
+                "enabled": true,
+                "insecure": true,
+                "server_name": "vpn.ex27.my.id"
+            },
+            "transport": {
+                "headers": {
+                    "Host": "vpn.ex27.my.id"
+                },
+                "path": "/164.52.2.99-443",
+                "type": "ws"
+            },
+            "multiplex": {
+                "enabled": false
+            }
+        },
+        {
+            "type": "vless",
+            "tag": "43 🇸🇬 Melbikomas UAB WS TLS",
+            "server": "104.18.1.196",
+            "server_port": 443,
+            "uuid": "cc892028-b812-403f-b9a7-6eaf5da07946",
+            "network": "tcp",
+            "packet_encoding": "xudp",
+            "tls": {
+                "enabled": true,
+                "insecure": true,
+                "server_name": "vpn.ex27.my.id"
+            },
+            "transport": {
+                "headers": {
+                    "Host": "vpn.ex27.my.id"
                 },
                 "path": "/91.192.81.154-8443",
                 "type": "ws"
@@ -194,22 +146,22 @@
         },
         {
             "type": "vless",
-            "tag": "18 🇸🇬 LEASEWEB SINGAPORE PTE. LTD. WS TLS",
+            "tag": "30 🇸🇬 OVH SAS WS TLS",
             "server": "104.18.1.196",
             "server_port": 443,
-            "uuid": "c49349d7-aa54-4fef-ba5f-01ff39156abd",
+            "uuid": "cc892028-b812-403f-b9a7-6eaf5da07946",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
                 "enabled": true,
                 "insecure": true,
-                "server_name": "vpn.xtunnel.my.id"
+                "server_name": "vpn.ex27.my.id"
             },
             "transport": {
                 "headers": {
-                    "Host": "vpn.xtunnel.my.id"
+                    "Host": "vpn.ex27.my.id"
                 },
-                "path": "/194.127.193.240-50791",
+                "path": "/51.79.158.58-2053",
                 "type": "ws"
             },
             "multiplex": {
@@ -218,22 +170,22 @@
         },
         {
             "type": "vless",
-            "tag": "21 🇸🇬 CDS Global Cloud Co. WS TLS",
+            "tag": "18 🇸🇬 FIRST SERVER LIMITED WS TLS",
             "server": "104.18.1.196",
             "server_port": 443,
-            "uuid": "c49349d7-aa54-4fef-ba5f-01ff39156abd",
+            "uuid": "cc892028-b812-403f-b9a7-6eaf5da07946",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
                 "enabled": true,
                 "insecure": true,
-                "server_name": "vpn.xtunnel.my.id"
+                "server_name": "vpn.ex27.my.id"
             },
             "transport": {
                 "headers": {
-                    "Host": "vpn.xtunnel.my.id"
+                    "Host": "vpn.ex27.my.id"
                 },
-                "path": "/164.52.2.100-443",
+                "path": "/194.36.179.17-8443",
                 "type": "ws"
             },
             "multiplex": {
@@ -242,46 +194,94 @@
         },
         {
             "type": "vless",
-            "tag": "25 🇸🇬 Akamai Connected Cloud WS TLS",
+            "tag": "8 🇸🇬 Tencent Building WS TLS",
             "server": "104.18.1.196",
             "server_port": 443,
-            "uuid": "c49349d7-aa54-4fef-ba5f-01ff39156abd",
+            "uuid": "cc892028-b812-403f-b9a7-6eaf5da07946",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
                 "enabled": true,
                 "insecure": true,
-                "server_name": "vpn.xtunnel.my.id"
+                "server_name": "vpn.ex27.my.id"
             },
             "transport": {
                 "headers": {
-                    "Host": "vpn.xtunnel.my.id"
+                    "Host": "vpn.ex27.my.id"
+                },
+                "path": "/43.156.116.194-443",
+                "type": "ws"
+            },
+            "multiplex": {
+                "enabled": false
+            }
+        },
+        {
+            "type": "vless",
+            "tag": "20 🇸🇬 Alibaba (US) Technology Co. WS TLS",
+            "server": "104.18.1.196",
+            "server_port": 443,
+            "uuid": "cc892028-b812-403f-b9a7-6eaf5da07946",
+            "network": "tcp",
+            "packet_encoding": "xudp",
+            "tls": {
+                "enabled": true,
+                "insecure": true,
+                "server_name": "vpn.ex27.my.id"
+            },
+            "transport": {
+                "headers": {
+                    "Host": "vpn.ex27.my.id"
+                },
+                "path": "/47.74.254.191-8900",
+                "type": "ws"
+            },
+            "multiplex": {
+                "enabled": false
+            }
+        },
+        {
+            "type": "vless",
+            "tag": "34 🇸🇬 GREEN FLOID LLC WS TLS",
+            "server": "104.18.1.196",
+            "server_port": 443,
+            "uuid": "cc892028-b812-403f-b9a7-6eaf5da07946",
+            "network": "tcp",
+            "packet_encoding": "xudp",
+            "tls": {
+                "enabled": true,
+                "insecure": true,
+                "server_name": "vpn.ex27.my.id"
+            },
+            "transport": {
+                "headers": {
+                    "Host": "vpn.ex27.my.id"
+                },
+                "path": "/5.34.176.119-81",
+                "type": "ws"
+            },
+            "multiplex": {
+                "enabled": false
+            }
+        },
+        {
+            "type": "vless",
+            "tag": "40 🇸🇬 Akamai Connected Cloud WS TLS",
+            "server": "104.18.1.196",
+            "server_port": 443,
+            "uuid": "cc892028-b812-403f-b9a7-6eaf5da07946",
+            "network": "tcp",
+            "packet_encoding": "xudp",
+            "tls": {
+                "enabled": true,
+                "insecure": true,
+                "server_name": "vpn.ex27.my.id"
+            },
+            "transport": {
+                "headers": {
+                    "Host": "vpn.ex27.my.id"
                 },
                 "path": "/143.42.66.91-443",
-                "type": "ws"
-            },
-            "multiplex": {
-                "enabled": false
-            }
-        },
-        {
-            "type": "vless",
-            "tag": "28 🇸🇬 Streamline Servers Pty Ltd WS TLS",
-            "server": "104.18.1.196",
-            "server_port": 443,
-            "uuid": "c49349d7-aa54-4fef-ba5f-01ff39156abd",
-            "network": "tcp",
-            "packet_encoding": "xudp",
-            "tls": {
-                "enabled": true,
-                "insecure": true,
-                "server_name": "vpn.xtunnel.my.id"
-            },
-            "transport": {
-                "headers": {
-                    "Host": "vpn.xtunnel.my.id"
-                },
-                "path": "/141.11.43.124-443",
                 "type": "ws"
             },
             "multiplex": {
