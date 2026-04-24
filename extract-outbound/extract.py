@@ -20,21 +20,21 @@ outbound_format = None
 # File untuk menyimpan history proxy yang sudah diambil
 HISTORY_FILE = "proxy_history.json"
 
- # URL untuk mengambil proxy (4 domain dengan pembagian 6 jam)
-PROXY_URL_PERIOD1 = "https://vpn.ex-vpn.my.id"      # Digunakan dari 00:00-05:59 (UTC+8)
-PROXY_URL_PERIOD2 = "https://vpn.exbal.my.id"       # Digunakan dari 06:00-11:59 (UTC+8)
-PROXY_URL_PERIOD3 = "https://vpn.xtunnel.my.id"   # Digunakan dari 12:00-17:59 (UTC+8)
-PROXY_URL_PERIOD4 = "https://vpn.ex27.my.id"        # Digunakan dari 18:00-23:59 (UTC+8)
+ # URL untuk mengambil proxy (4 domain dengan pembagian waktu custom)
+PROXY_URL_PERIOD1 = "https://vpn.ex-vpn.my.id"      # Digunakan dari 00:00-09:59 (UTC+8) - 10 jam
+PROXY_URL_PERIOD2 = "https://vpn.exbal.my.id"       # Digunakan dari 10:00-15:59 (UTC+8) - 6 jam
+PROXY_URL_PERIOD3 = "https://vpn.xtunnel.my.id"   # Digunakan dari 16:00-19:59 (UTC+8) - 4 jam
+PROXY_URL_PERIOD4 = "https://vpn.ex27.my.id"        # Digunakan dari 20:00-23:59 (UTC+8) - 4 jam
 
  # Fungsi untuk mendapatkan URL proxy berdasarkan waktu saat ini (UTC+8)
 def get_proxy_base_url():
     """
     Mengembalikan URL dasar untuk mengambil proxy berdasarkan waktu saat ini.
-    Pembagian 4 domain dengan periode 6 jam masing-masing:
-    - Dari jam 00:00-05:59 (UTC+8): menggunakan vpn.ex-vpn.my.id
-    - Dari jam 06:00-11:59 (UTC+8): menggunakan vpn.exbal.my.id
-    - Dari jam 12:00-17:59 (UTC+8): menggunakan proxy.xtunnel.my.id
-    - Dari jam 18:00-23:59 (UTC+8): menggunakan vpn.ex27.my.id
+    Pembagian 4 domain dengan periode waktu yang berbeda:
+    - Dari jam 00:00-09:59 (UTC+8) [10 jam]: menggunakan vpn.ex-vpn.my.id
+    - Dari jam 10:00-15:59 (UTC+8) [6 jam]: menggunakan vpn.exbal.my.id
+    - Dari jam 16:00-19:59 (UTC+8) [4 jam]: menggunakan vpn.xtunnel.my.id
+    - Dari jam 20:00-23:59 (UTC+8) [4 jam]: menggunakan vpn.ex27.my.id
     """
     # Dapatkan waktu saat ini dalam UTC
     utc_now = datetime.now(pytz.UTC)
@@ -43,14 +43,14 @@ def get_proxy_base_url():
     now_utc8 = utc_now.astimezone(tz_utc8)
     # Ambil jam dalam format 24 jam
     current_hour = now_utc8.hour
-    # Tentukan URL berdasarkan jam (pembagian 6 jam per domain)
-    if 0 <= current_hour < 6:
+    # Tentukan URL berdasarkan jam
+    if 0 <= current_hour < 10:
         print(f"Waktu saat ini: {now_utc8.strftime('%H:%M:%S')} (UTC+8) - Menggunakan {PROXY_URL_PERIOD1}")
         return PROXY_URL_PERIOD1
-    elif 6 <= current_hour < 12:
+    elif 10 <= current_hour < 16:
         print(f"Waktu saat ini: {now_utc8.strftime('%H:%M:%S')} (UTC+8) - Menggunakan {PROXY_URL_PERIOD2}")
         return PROXY_URL_PERIOD2
-    elif 12 <= current_hour < 18:
+    elif 16 <= current_hour < 20:
         print(f"Waktu saat ini: {now_utc8.strftime('%H:%M:%S')} (UTC+8) - Menggunakan {PROXY_URL_PERIOD3}")
         return PROXY_URL_PERIOD3
     else:
