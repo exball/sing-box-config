@@ -2,20 +2,44 @@
     "outbounds": [
         {
             "type": "vless",
-            "tag": "1 🇮🇩 Kaopu Cloud HK Limited WS TLS",
+            "tag": "1 🇮🇩 Amazon.com WS TLS",
             "server": "104.18.1.196",
             "server_port": 443,
-            "uuid": "bd8ef1e1-85d6-4dbb-aad7-ba39b12a2cac",
+            "uuid": "7b454eb8-dfb2-4e7b-a5cf-bac125e51d0a",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
                 "enabled": true,
                 "insecure": true,
-                "server_name": "vpn.ex-vpn.my.id"
+                "server_name": "vpn.exbal.my.id"
             },
             "transport": {
                 "headers": {
-                    "Host": "vpn.ex-vpn.my.id"
+                    "Host": "vpn.exbal.my.id"
+                },
+                "path": "/43.218.77.16-443",
+                "type": "ws"
+            },
+            "multiplex": {
+                "enabled": false
+            }
+        },
+        {
+            "type": "vless",
+            "tag": "2 🇮🇩 Kaopu Cloud HK Limited WS TLS",
+            "server": "104.18.1.196",
+            "server_port": 443,
+            "uuid": "7b454eb8-dfb2-4e7b-a5cf-bac125e51d0a",
+            "network": "tcp",
+            "packet_encoding": "xudp",
+            "tls": {
+                "enabled": true,
+                "insecure": true,
+                "server_name": "vpn.exbal.my.id"
+            },
+            "transport": {
+                "headers": {
+                    "Host": "vpn.exbal.my.id"
                 },
                 "path": "/156.244.1.250-8443",
                 "type": "ws"
