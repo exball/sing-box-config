@@ -4,7 +4,7 @@
       "type": "vmess",
       "tag": "IpTunel-point TLS",
       "uuid": "239f340d-fb6f-4423-b4ae-a89d469949cb",
-      "security": "",
+      "security": "auto",
       "server": "104.18.1.196",
       "server_port": 80,
       "tls": {
@@ -20,7 +20,9 @@
         }
       },
       "multiplex": {
-        "enabled": false
+        "enabled": true,
+        "protocol": "smux",
+        "max_streams": 32
       }
     },
     {
