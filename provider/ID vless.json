@@ -2,20 +2,20 @@
     "outbounds": [
         {
             "type": "vless",
-            "tag": "20 🇮🇩 Akamai Connected Cloud WS TLS",
+            "tag": "13 🇮🇩 Akamai Connected Cloud WS TLS",
             "server": "104.18.1.196",
             "server_port": 443,
-            "uuid": "9eec28a1-572f-4045-bbd8-2450e471e90a",
+            "uuid": "e676b8d3-760f-43cb-84d4-e97bb3b11fde",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
                 "enabled": true,
                 "insecure": true,
-                "server_name": "vpn.exbal.my.id"
+                "server_name": "vpn.xtunnel.my.id"
             },
             "transport": {
                 "headers": {
-                    "Host": "vpn.exbal.my.id"
+                    "Host": "vpn.xtunnel.my.id"
                 },
                 "path": "/172.232.234.20-386",
                 "type": "ws"
@@ -26,46 +26,22 @@
         },
         {
             "type": "vless",
-            "tag": "13 🇮🇩 PT Pusat Media Indonesia WS TLS",
+            "tag": "5 🇮🇩 PT Pusat Media Indonesia WS TLS",
             "server": "104.18.1.196",
             "server_port": 443,
-            "uuid": "9eec28a1-572f-4045-bbd8-2450e471e90a",
+            "uuid": "e676b8d3-760f-43cb-84d4-e97bb3b11fde",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
                 "enabled": true,
                 "insecure": true,
-                "server_name": "vpn.exbal.my.id"
+                "server_name": "vpn.xtunnel.my.id"
             },
             "transport": {
                 "headers": {
-                    "Host": "vpn.exbal.my.id"
+                    "Host": "vpn.xtunnel.my.id"
                 },
-                "path": "/103.6.207.108-19224",
-                "type": "ws"
-            },
-            "multiplex": {
-                "enabled": false
-            }
-        },
-        {
-            "type": "vless",
-            "tag": "1 🇮🇩 Kaopu Cloud HK Limited WS TLS",
-            "server": "104.18.1.196",
-            "server_port": 443,
-            "uuid": "9eec28a1-572f-4045-bbd8-2450e471e90a",
-            "network": "tcp",
-            "packet_encoding": "xudp",
-            "tls": {
-                "enabled": true,
-                "insecure": true,
-                "server_name": "vpn.exbal.my.id"
-            },
-            "transport": {
-                "headers": {
-                    "Host": "vpn.exbal.my.id"
-                },
-                "path": "/156.244.1.250-8443",
+                "path": "/103.6.207.108-8080",
                 "type": "ws"
             },
             "multiplex": {
@@ -77,17 +53,17 @@
             "tag": "7 🇮🇩 PT Telekomunikasi Indonesia WS TLS",
             "server": "104.18.1.196",
             "server_port": 443,
-            "uuid": "9eec28a1-572f-4045-bbd8-2450e471e90a",
+            "uuid": "e676b8d3-760f-43cb-84d4-e97bb3b11fde",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
                 "enabled": true,
                 "insecure": true,
-                "server_name": "vpn.exbal.my.id"
+                "server_name": "vpn.xtunnel.my.id"
             },
             "transport": {
                 "headers": {
-                    "Host": "vpn.exbal.my.id"
+                    "Host": "vpn.xtunnel.my.id"
                 },
                 "path": "/36.95.152.58-12137",
                 "type": "ws"
@@ -98,20 +74,44 @@
         },
         {
             "type": "vless",
-            "tag": "17 🇮🇩 Amazon.com WS TLS",
+            "tag": "11 🇮🇩 Kaopu Cloud HK Limited WS TLS",
             "server": "104.18.1.196",
             "server_port": 443,
-            "uuid": "9eec28a1-572f-4045-bbd8-2450e471e90a",
+            "uuid": "e676b8d3-760f-43cb-84d4-e97bb3b11fde",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
                 "enabled": true,
                 "insecure": true,
-                "server_name": "vpn.exbal.my.id"
+                "server_name": "vpn.xtunnel.my.id"
             },
             "transport": {
                 "headers": {
-                    "Host": "vpn.exbal.my.id"
+                    "Host": "vpn.xtunnel.my.id"
+                },
+                "path": "/156.244.1.250-8443",
+                "type": "ws"
+            },
+            "multiplex": {
+                "enabled": false
+            }
+        },
+        {
+            "type": "vless",
+            "tag": "14 🇮🇩 Amazon.com WS TLS",
+            "server": "104.18.1.196",
+            "server_port": 443,
+            "uuid": "e676b8d3-760f-43cb-84d4-e97bb3b11fde",
+            "network": "tcp",
+            "packet_encoding": "xudp",
+            "tls": {
+                "enabled": true,
+                "insecure": true,
+                "server_name": "vpn.xtunnel.my.id"
+            },
+            "transport": {
+                "headers": {
+                    "Host": "vpn.xtunnel.my.id"
                 },
                 "path": "/43.218.77.16-443",
                 "type": "ws"
@@ -122,22 +122,22 @@
         },
         {
             "type": "vless",
-            "tag": "3 🇮🇩 Akamai Connected Cloud WS TLS",
+            "tag": "2 🇮🇩 Akamai Connected Cloud WS TLS",
             "server": "104.18.1.196",
             "server_port": 443,
-            "uuid": "9eec28a1-572f-4045-bbd8-2450e471e90a",
+            "uuid": "e676b8d3-760f-43cb-84d4-e97bb3b11fde",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
                 "enabled": true,
                 "insecure": true,
-                "server_name": "vpn.exbal.my.id"
+                "server_name": "vpn.xtunnel.my.id"
             },
             "transport": {
                 "headers": {
-                    "Host": "vpn.exbal.my.id"
+                    "Host": "vpn.xtunnel.my.id"
                 },
-                "path": "/172.232.234.20-12306",
+                "path": "/172.232.234.155-74",
                 "type": "ws"
             },
             "multiplex": {
@@ -146,22 +146,22 @@
         },
         {
             "type": "vless",
-            "tag": "12 🇮🇩 PT Pusat Media Indonesia WS TLS",
+            "tag": "10 🇮🇩 PT Pusat Media Indonesia WS TLS",
             "server": "104.18.1.196",
             "server_port": 443,
-            "uuid": "9eec28a1-572f-4045-bbd8-2450e471e90a",
+            "uuid": "e676b8d3-760f-43cb-84d4-e97bb3b11fde",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
                 "enabled": true,
                 "insecure": true,
-                "server_name": "vpn.exbal.my.id"
+                "server_name": "vpn.xtunnel.my.id"
             },
             "transport": {
                 "headers": {
-                    "Host": "vpn.exbal.my.id"
+                    "Host": "vpn.xtunnel.my.id"
                 },
-                "path": "/103.6.207.108-8080",
+                "path": "/103.6.207.108-19224",
                 "type": "ws"
             },
             "multiplex": {
@@ -170,20 +170,20 @@
         },
         {
             "type": "vless",
-            "tag": "19 🇮🇩 Akamai Connected Cloud WS TLS",
+            "tag": "1 🇮🇩 Akamai Connected Cloud WS TLS",
             "server": "104.18.1.196",
             "server_port": 443,
-            "uuid": "9eec28a1-572f-4045-bbd8-2450e471e90a",
+            "uuid": "e676b8d3-760f-43cb-84d4-e97bb3b11fde",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
                 "enabled": true,
                 "insecure": true,
-                "server_name": "vpn.exbal.my.id"
+                "server_name": "vpn.xtunnel.my.id"
             },
             "transport": {
                 "headers": {
-                    "Host": "vpn.exbal.my.id"
+                    "Host": "vpn.xtunnel.my.id"
                 },
                 "path": "/172.232.234.20-20205",
                 "type": "ws"
@@ -194,22 +194,22 @@
         },
         {
             "type": "vless",
-            "tag": "15 🇮🇩 Akamai Connected Cloud WS TLS",
+            "tag": "6 🇮🇩 Akamai Connected Cloud WS TLS",
             "server": "104.18.1.196",
             "server_port": 443,
-            "uuid": "9eec28a1-572f-4045-bbd8-2450e471e90a",
+            "uuid": "e676b8d3-760f-43cb-84d4-e97bb3b11fde",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
                 "enabled": true,
                 "insecure": true,
-                "server_name": "vpn.exbal.my.id"
+                "server_name": "vpn.xtunnel.my.id"
             },
             "transport": {
                 "headers": {
-                    "Host": "vpn.exbal.my.id"
+                    "Host": "vpn.xtunnel.my.id"
                 },
-                "path": "/172.232.234.20-74",
+                "path": "/172.232.234.20-443",
                 "type": "ws"
             },
             "multiplex": {
@@ -218,20 +218,20 @@
         },
         {
             "type": "vless",
-            "tag": "18 🇮🇩 Akamai Connected Cloud WS TLS",
+            "tag": "12 🇮🇩 Akamai Connected Cloud WS TLS",
             "server": "104.18.1.196",
             "server_port": 443,
-            "uuid": "9eec28a1-572f-4045-bbd8-2450e471e90a",
+            "uuid": "e676b8d3-760f-43cb-84d4-e97bb3b11fde",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
                 "enabled": true,
                 "insecure": true,
-                "server_name": "vpn.exbal.my.id"
+                "server_name": "vpn.xtunnel.my.id"
             },
             "transport": {
                 "headers": {
-                    "Host": "vpn.exbal.my.id"
+                    "Host": "vpn.xtunnel.my.id"
                 },
                 "path": "/172.232.234.20-32225",
                 "type": "ws"
@@ -242,22 +242,46 @@
         },
         {
             "type": "vless",
-            "tag": "14 🇮🇩 Akamai Connected Cloud WS TLS",
+            "tag": "4 🇮🇩 Akamai Connected Cloud WS TLS",
             "server": "104.18.1.196",
             "server_port": 443,
-            "uuid": "9eec28a1-572f-4045-bbd8-2450e471e90a",
+            "uuid": "e676b8d3-760f-43cb-84d4-e97bb3b11fde",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
                 "enabled": true,
                 "insecure": true,
-                "server_name": "vpn.exbal.my.id"
+                "server_name": "vpn.xtunnel.my.id"
             },
             "transport": {
                 "headers": {
-                    "Host": "vpn.exbal.my.id"
+                    "Host": "vpn.xtunnel.my.id"
                 },
-                "path": "/172.232.234.20-443",
+                "path": "/172.232.234.20-12306",
+                "type": "ws"
+            },
+            "multiplex": {
+                "enabled": false
+            }
+        },
+        {
+            "type": "vless",
+            "tag": "9 🇮🇩 Akamai Connected Cloud WS TLS",
+            "server": "104.18.1.196",
+            "server_port": 443,
+            "uuid": "e676b8d3-760f-43cb-84d4-e97bb3b11fde",
+            "network": "tcp",
+            "packet_encoding": "xudp",
+            "tls": {
+                "enabled": true,
+                "insecure": true,
+                "server_name": "vpn.xtunnel.my.id"
+            },
+            "transport": {
+                "headers": {
+                    "Host": "vpn.xtunnel.my.id"
+                },
+                "path": "/172.232.234.155-443",
                 "type": "ws"
             },
             "multiplex": {
