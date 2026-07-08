@@ -2,10 +2,10 @@
     "outbounds": [
         {
             "type": "vless",
-            "tag": "4 🇮🇩 PT Pusat Media Indonesia WS TLS",
+            "tag": "2 🇮🇩 PT Pusat Media Indonesia WS TLS",
             "server": "104.18.1.196",
             "server_port": 443,
-            "uuid": "48fa2651-74ec-4294-b8f8-1aac24815fed",
+            "uuid": "a499110a-b5f0-48fa-958c-402c7bb6cedf",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -26,34 +26,10 @@
         },
         {
             "type": "vless",
-            "tag": "1 🇮🇩 Amazon.com WS TLS",
+            "tag": "1 🇮🇩 PT Telekomunikasi Indonesia WS TLS",
             "server": "104.18.1.196",
             "server_port": 443,
-            "uuid": "48fa2651-74ec-4294-b8f8-1aac24815fed",
-            "network": "tcp",
-            "packet_encoding": "xudp",
-            "tls": {
-                "enabled": true,
-                "insecure": true,
-                "server_name": "vpn.xtunnel.my.id"
-            },
-            "transport": {
-                "headers": {
-                    "Host": "vpn.xtunnel.my.id"
-                },
-                "path": "/43.218.77.16-443",
-                "type": "ws"
-            },
-            "multiplex": {
-                "enabled": false
-            }
-        },
-        {
-            "type": "vless",
-            "tag": "2 🇮🇩 PT Telekomunikasi Indonesia WS TLS",
-            "server": "104.18.1.196",
-            "server_port": 443,
-            "uuid": "48fa2651-74ec-4294-b8f8-1aac24815fed",
+            "uuid": "a499110a-b5f0-48fa-958c-402c7bb6cedf",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -74,10 +50,34 @@
         },
         {
             "type": "vless",
-            "tag": "3 🇮🇩 PT Pusat Media Indonesia WS TLS",
+            "tag": "3 🇮🇩 Amazon.com WS TLS",
             "server": "104.18.1.196",
             "server_port": 443,
-            "uuid": "48fa2651-74ec-4294-b8f8-1aac24815fed",
+            "uuid": "a499110a-b5f0-48fa-958c-402c7bb6cedf",
+            "network": "tcp",
+            "packet_encoding": "xudp",
+            "tls": {
+                "enabled": true,
+                "insecure": true,
+                "server_name": "vpn.xtunnel.my.id"
+            },
+            "transport": {
+                "headers": {
+                    "Host": "vpn.xtunnel.my.id"
+                },
+                "path": "/43.218.77.16-443",
+                "type": "ws"
+            },
+            "multiplex": {
+                "enabled": false
+            }
+        },
+        {
+            "type": "vless",
+            "tag": "4 🇮🇩 PT Pusat Media Indonesia WS TLS",
+            "server": "104.18.1.196",
+            "server_port": 443,
+            "uuid": "a499110a-b5f0-48fa-958c-402c7bb6cedf",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
