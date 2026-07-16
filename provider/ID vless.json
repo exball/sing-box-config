@@ -2,10 +2,10 @@
     "outbounds": [
         {
             "type": "vless",
-            "tag": "1 🇮🇩 PT Pusat Media Indonesia WS TLS",
+            "tag": "4 🇮🇩 PT Pusat Media Indonesia WS TLS",
             "server": "104.18.1.196",
             "server_port": 443,
-            "uuid": "f97167d4-6bfb-45b3-9f06-e366d98fea57",
+            "uuid": "a7f793b1-37be-4409-8e78-96894fe5c136",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -26,34 +26,10 @@
         },
         {
             "type": "vless",
-            "tag": "3 🇮🇩 Amazon.com WS TLS",
+            "tag": "2 🇮🇩 PT Telekomunikasi Indonesia WS TLS",
             "server": "104.18.1.196",
             "server_port": 443,
-            "uuid": "f97167d4-6bfb-45b3-9f06-e366d98fea57",
-            "network": "tcp",
-            "packet_encoding": "xudp",
-            "tls": {
-                "enabled": true,
-                "insecure": true,
-                "server_name": "vpn.exbal.my.id"
-            },
-            "transport": {
-                "headers": {
-                    "Host": "vpn.exbal.my.id"
-                },
-                "path": "/43.218.77.16-443",
-                "type": "ws"
-            },
-            "multiplex": {
-                "enabled": false
-            }
-        },
-        {
-            "type": "vless",
-            "tag": "4 🇮🇩 PT Telekomunikasi Indonesia WS TLS",
-            "server": "104.18.1.196",
-            "server_port": 443,
-            "uuid": "f97167d4-6bfb-45b3-9f06-e366d98fea57",
+            "uuid": "a7f793b1-37be-4409-8e78-96894fe5c136",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -74,10 +50,34 @@
         },
         {
             "type": "vless",
-            "tag": "2 🇮🇩 PT Pusat Media Indonesia WS TLS",
+            "tag": "3 🇮🇩 Amazon.com WS TLS",
             "server": "104.18.1.196",
             "server_port": 443,
-            "uuid": "f97167d4-6bfb-45b3-9f06-e366d98fea57",
+            "uuid": "a7f793b1-37be-4409-8e78-96894fe5c136",
+            "network": "tcp",
+            "packet_encoding": "xudp",
+            "tls": {
+                "enabled": true,
+                "insecure": true,
+                "server_name": "vpn.exbal.my.id"
+            },
+            "transport": {
+                "headers": {
+                    "Host": "vpn.exbal.my.id"
+                },
+                "path": "/43.218.77.16-443",
+                "type": "ws"
+            },
+            "multiplex": {
+                "enabled": false
+            }
+        },
+        {
+            "type": "vless",
+            "tag": "1 🇮🇩 PT Pusat Media Indonesia WS TLS",
+            "server": "104.18.1.196",
+            "server_port": 443,
+            "uuid": "a7f793b1-37be-4409-8e78-96894fe5c136",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
