@@ -2,10 +2,34 @@
     "outbounds": [
         {
             "type": "vless",
-            "tag": "3 🇮🇩 PT Pusat Media Indonesia WS TLS",
+            "tag": "6 🇮🇩 Akamai Connected Cloud WS TLS",
             "server": "104.18.1.196",
             "server_port": 443,
-            "uuid": "3409dca0-14f8-44b8-8e75-38a3878d6900",
+            "uuid": "25acceba-fe2d-40b8-9a55-a9a171270ff1",
+            "network": "tcp",
+            "packet_encoding": "xudp",
+            "tls": {
+                "enabled": true,
+                "insecure": true,
+                "server_name": "vpn.ex-vpn.my.id"
+            },
+            "transport": {
+                "headers": {
+                    "Host": "vpn.ex-vpn.my.id"
+                },
+                "path": "/172.232.234.166-20205",
+                "type": "ws"
+            },
+            "multiplex": {
+                "enabled": false
+            }
+        },
+        {
+            "type": "vless",
+            "tag": "2 🇮🇩 PT Pusat Media Indonesia WS TLS",
+            "server": "104.18.1.196",
+            "server_port": 443,
+            "uuid": "25acceba-fe2d-40b8-9a55-a9a171270ff1",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -26,10 +50,10 @@
         },
         {
             "type": "vless",
-            "tag": "1 🇮🇩 PT Telekomunikasi Indonesia WS TLS",
+            "tag": "9 🇮🇩 PT Telekomunikasi Indonesia WS TLS",
             "server": "104.18.1.196",
             "server_port": 443,
-            "uuid": "3409dca0-14f8-44b8-8e75-38a3878d6900",
+            "uuid": "25acceba-fe2d-40b8-9a55-a9a171270ff1",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -50,10 +74,34 @@
         },
         {
             "type": "vless",
-            "tag": "2 🇮🇩 PT Pusat Media Indonesia WS TLS",
+            "tag": "1 🇮🇩 Akamai Connected Cloud WS TLS",
             "server": "104.18.1.196",
             "server_port": 443,
-            "uuid": "3409dca0-14f8-44b8-8e75-38a3878d6900",
+            "uuid": "25acceba-fe2d-40b8-9a55-a9a171270ff1",
+            "network": "tcp",
+            "packet_encoding": "xudp",
+            "tls": {
+                "enabled": true,
+                "insecure": true,
+                "server_name": "vpn.ex-vpn.my.id"
+            },
+            "transport": {
+                "headers": {
+                    "Host": "vpn.ex-vpn.my.id"
+                },
+                "path": "/172.232.234.166-32225",
+                "type": "ws"
+            },
+            "multiplex": {
+                "enabled": false
+            }
+        },
+        {
+            "type": "vless",
+            "tag": "7 🇮🇩 PT Pusat Media Indonesia WS TLS",
+            "server": "104.18.1.196",
+            "server_port": 443,
+            "uuid": "25acceba-fe2d-40b8-9a55-a9a171270ff1",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -66,6 +114,102 @@
                     "Host": "vpn.ex-vpn.my.id"
                 },
                 "path": "/103.6.207.108-19224",
+                "type": "ws"
+            },
+            "multiplex": {
+                "enabled": false
+            }
+        },
+        {
+            "type": "vless",
+            "tag": "8 🇮🇩 Akamai Connected Cloud WS TLS",
+            "server": "104.18.1.196",
+            "server_port": 443,
+            "uuid": "25acceba-fe2d-40b8-9a55-a9a171270ff1",
+            "network": "tcp",
+            "packet_encoding": "xudp",
+            "tls": {
+                "enabled": true,
+                "insecure": true,
+                "server_name": "vpn.ex-vpn.my.id"
+            },
+            "transport": {
+                "headers": {
+                    "Host": "vpn.ex-vpn.my.id"
+                },
+                "path": "/172.232.234.166-386",
+                "type": "ws"
+            },
+            "multiplex": {
+                "enabled": false
+            }
+        },
+        {
+            "type": "vless",
+            "tag": "3 🇮🇩 Akamai Connected Cloud WS TLS",
+            "server": "104.18.1.196",
+            "server_port": 443,
+            "uuid": "25acceba-fe2d-40b8-9a55-a9a171270ff1",
+            "network": "tcp",
+            "packet_encoding": "xudp",
+            "tls": {
+                "enabled": true,
+                "insecure": true,
+                "server_name": "vpn.ex-vpn.my.id"
+            },
+            "transport": {
+                "headers": {
+                    "Host": "vpn.ex-vpn.my.id"
+                },
+                "path": "/172.232.234.166-12306",
+                "type": "ws"
+            },
+            "multiplex": {
+                "enabled": false
+            }
+        },
+        {
+            "type": "vless",
+            "tag": "4 🇮🇩 Akamai Connected Cloud WS TLS",
+            "server": "104.18.1.196",
+            "server_port": 443,
+            "uuid": "25acceba-fe2d-40b8-9a55-a9a171270ff1",
+            "network": "tcp",
+            "packet_encoding": "xudp",
+            "tls": {
+                "enabled": true,
+                "insecure": true,
+                "server_name": "vpn.ex-vpn.my.id"
+            },
+            "transport": {
+                "headers": {
+                    "Host": "vpn.ex-vpn.my.id"
+                },
+                "path": "/172.232.234.166-443",
+                "type": "ws"
+            },
+            "multiplex": {
+                "enabled": false
+            }
+        },
+        {
+            "type": "vless",
+            "tag": "5 🇮🇩 Akamai Connected Cloud WS TLS",
+            "server": "104.18.1.196",
+            "server_port": 443,
+            "uuid": "25acceba-fe2d-40b8-9a55-a9a171270ff1",
+            "network": "tcp",
+            "packet_encoding": "xudp",
+            "tls": {
+                "enabled": true,
+                "insecure": true,
+                "server_name": "vpn.ex-vpn.my.id"
+            },
+            "transport": {
+                "headers": {
+                    "Host": "vpn.ex-vpn.my.id"
+                },
+                "path": "/172.232.234.166-74",
                 "type": "ws"
             },
             "multiplex": {
