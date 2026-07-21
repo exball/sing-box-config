@@ -2,20 +2,20 @@
     "outbounds": [
         {
             "type": "vless",
-            "tag": "3 🇮🇩 PT Pusat Media Indonesia WS TLS",
+            "tag": "2 🇮🇩 PT Pusat Media Indonesia WS TLS",
             "server": "104.18.1.196",
             "server_port": 443,
-            "uuid": "1c1fe0e2-ea5f-4809-89f4-e5bc64c7801e",
+            "uuid": "54e71d82-02d3-4058-a70f-9735e5553889",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
                 "enabled": true,
                 "insecure": true,
-                "server_name": "vpn.ex-vpn.my.id"
+                "server_name": "vpn.exbal.my.id"
             },
             "transport": {
                 "headers": {
-                    "Host": "vpn.ex-vpn.my.id"
+                    "Host": "vpn.exbal.my.id"
                 },
                 "path": "/103.6.207.108-19224",
                 "type": "ws"
@@ -26,44 +26,20 @@
         },
         {
             "type": "vless",
-            "tag": "1 🇮🇩 PT Telekomunikasi Indonesia WS TLS",
+            "tag": "1 🇮🇩 PT Pusat Media Indonesia WS TLS",
             "server": "104.18.1.196",
             "server_port": 443,
-            "uuid": "1c1fe0e2-ea5f-4809-89f4-e5bc64c7801e",
+            "uuid": "54e71d82-02d3-4058-a70f-9735e5553889",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
                 "enabled": true,
                 "insecure": true,
-                "server_name": "vpn.ex-vpn.my.id"
+                "server_name": "vpn.exbal.my.id"
             },
             "transport": {
                 "headers": {
-                    "Host": "vpn.ex-vpn.my.id"
-                },
-                "path": "/36.95.152.58-12137",
-                "type": "ws"
-            },
-            "multiplex": {
-                "enabled": false
-            }
-        },
-        {
-            "type": "vless",
-            "tag": "2 🇮🇩 PT Pusat Media Indonesia WS TLS",
-            "server": "104.18.1.196",
-            "server_port": 443,
-            "uuid": "1c1fe0e2-ea5f-4809-89f4-e5bc64c7801e",
-            "network": "tcp",
-            "packet_encoding": "xudp",
-            "tls": {
-                "enabled": true,
-                "insecure": true,
-                "server_name": "vpn.ex-vpn.my.id"
-            },
-            "transport": {
-                "headers": {
-                    "Host": "vpn.ex-vpn.my.id"
+                    "Host": "vpn.exbal.my.id"
                 },
                 "path": "/103.6.207.108-8080",
                 "type": "ws"
