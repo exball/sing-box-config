@@ -2,10 +2,10 @@
     "outbounds": [
         {
             "type": "vless",
-            "tag": "12 🇮🇩 Akamai Connected Cloud WS TLS",
+            "tag": "20 🇮🇩 Akamai Connected Cloud WS TLS",
             "server": "104.18.1.196",
             "server_port": 443,
-            "uuid": "9ecd906b-8b96-4809-9206-87d791da9d94",
+            "uuid": "9ee58374-36ac-4e53-a104-652bd46b975e",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -17,7 +17,7 @@
                 "headers": {
                     "Host": "vpn.ex-vpn.my.id"
                 },
-                "path": "/172.232.234.155-20205",
+                "path": "/172.232.232.163-20205",
                 "type": "ws"
             },
             "multiplex": {
@@ -26,10 +26,34 @@
         },
         {
             "type": "vless",
-            "tag": "5 🇮🇩 Alibaba (US) Technology Co.. Ltd. WS TLS",
+            "tag": "2 🇮🇩 PT. Eka Mas Republik WS TLS",
             "server": "104.18.1.196",
             "server_port": 443,
-            "uuid": "9ecd906b-8b96-4809-9206-87d791da9d94",
+            "uuid": "9ee58374-36ac-4e53-a104-652bd46b975e",
+            "network": "tcp",
+            "packet_encoding": "xudp",
+            "tls": {
+                "enabled": true,
+                "insecure": true,
+                "server_name": "vpn.ex-vpn.my.id"
+            },
+            "transport": {
+                "headers": {
+                    "Host": "vpn.ex-vpn.my.id"
+                },
+                "path": "/103.125.37.180-24841",
+                "type": "ws"
+            },
+            "multiplex": {
+                "enabled": false
+            }
+        },
+        {
+            "type": "vless",
+            "tag": "15 🇮🇩 Alibaba (US) Technology Co.. Ltd. WS TLS",
+            "server": "104.18.1.196",
+            "server_port": 443,
+            "uuid": "9ee58374-36ac-4e53-a104-652bd46b975e",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -50,82 +74,10 @@
         },
         {
             "type": "vless",
-            "tag": "2 🇮🇩 Sekolah Tinggi Teknologi Kedirgantaraan Yogyakarta WS TLS",
+            "tag": "7 🇮🇩 LIGHT NODE LIMITED WS TLS",
             "server": "104.18.1.196",
             "server_port": 443,
-            "uuid": "9ecd906b-8b96-4809-9206-87d791da9d94",
-            "network": "tcp",
-            "packet_encoding": "xudp",
-            "tls": {
-                "enabled": true,
-                "insecure": true,
-                "server_name": "vpn.ex-vpn.my.id"
-            },
-            "transport": {
-                "headers": {
-                    "Host": "vpn.ex-vpn.my.id"
-                },
-                "path": "/103.153.131.67-443",
-                "type": "ws"
-            },
-            "multiplex": {
-                "enabled": false
-            }
-        },
-        {
-            "type": "vless",
-            "tag": "4 🇮🇩 PT Biznet Gio Nusantara WS TLS",
-            "server": "104.18.1.196",
-            "server_port": 443,
-            "uuid": "9ecd906b-8b96-4809-9206-87d791da9d94",
-            "network": "tcp",
-            "packet_encoding": "xudp",
-            "tls": {
-                "enabled": true,
-                "insecure": true,
-                "server_name": "vpn.ex-vpn.my.id"
-            },
-            "transport": {
-                "headers": {
-                    "Host": "vpn.ex-vpn.my.id"
-                },
-                "path": "/103.150.192.28-443",
-                "type": "ws"
-            },
-            "multiplex": {
-                "enabled": false
-            }
-        },
-        {
-            "type": "vless",
-            "tag": "16 🇮🇩 PT. Eka Mas Republik WS TLS",
-            "server": "104.18.1.196",
-            "server_port": 443,
-            "uuid": "9ecd906b-8b96-4809-9206-87d791da9d94",
-            "network": "tcp",
-            "packet_encoding": "xudp",
-            "tls": {
-                "enabled": true,
-                "insecure": true,
-                "server_name": "vpn.ex-vpn.my.id"
-            },
-            "transport": {
-                "headers": {
-                    "Host": "vpn.ex-vpn.my.id"
-                },
-                "path": "/103.125.37.180-13014",
-                "type": "ws"
-            },
-            "multiplex": {
-                "enabled": false
-            }
-        },
-        {
-            "type": "vless",
-            "tag": "17 🇮🇩 LIGHT NODE LIMITED WS TLS",
-            "server": "104.18.1.196",
-            "server_port": 443,
-            "uuid": "9ecd906b-8b96-4809-9206-87d791da9d94",
+            "uuid": "9ee58374-36ac-4e53-a104-652bd46b975e",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -146,10 +98,58 @@
         },
         {
             "type": "vless",
-            "tag": "18 🇮🇩 PT Telekomunikasi Indonesia WS TLS",
+            "tag": "8 🇮🇩 PT Biznet Gio Nusantara WS TLS",
             "server": "104.18.1.196",
             "server_port": 443,
-            "uuid": "9ecd906b-8b96-4809-9206-87d791da9d94",
+            "uuid": "9ee58374-36ac-4e53-a104-652bd46b975e",
+            "network": "tcp",
+            "packet_encoding": "xudp",
+            "tls": {
+                "enabled": true,
+                "insecure": true,
+                "server_name": "vpn.ex-vpn.my.id"
+            },
+            "transport": {
+                "headers": {
+                    "Host": "vpn.ex-vpn.my.id"
+                },
+                "path": "/103.150.192.28-443",
+                "type": "ws"
+            },
+            "multiplex": {
+                "enabled": false
+            }
+        },
+        {
+            "type": "vless",
+            "tag": "18 🇮🇩 Sekolah Tinggi Teknologi Kedirgantaraan Yogyakarta WS TLS",
+            "server": "104.18.1.196",
+            "server_port": 443,
+            "uuid": "9ee58374-36ac-4e53-a104-652bd46b975e",
+            "network": "tcp",
+            "packet_encoding": "xudp",
+            "tls": {
+                "enabled": true,
+                "insecure": true,
+                "server_name": "vpn.ex-vpn.my.id"
+            },
+            "transport": {
+                "headers": {
+                    "Host": "vpn.ex-vpn.my.id"
+                },
+                "path": "/103.153.131.67-443",
+                "type": "ws"
+            },
+            "multiplex": {
+                "enabled": false
+            }
+        },
+        {
+            "type": "vless",
+            "tag": "22 🇮🇩 PT Telekomunikasi Indonesia WS TLS",
+            "server": "104.18.1.196",
+            "server_port": 443,
+            "uuid": "9ee58374-36ac-4e53-a104-652bd46b975e",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -170,10 +170,10 @@
         },
         {
             "type": "vless",
-            "tag": "10 🇮🇩 Akamai Connected Cloud WS TLS",
+            "tag": "17 🇮🇩 Akamai Connected Cloud WS TLS",
             "server": "104.18.1.196",
             "server_port": 443,
-            "uuid": "9ecd906b-8b96-4809-9206-87d791da9d94",
+            "uuid": "9ee58374-36ac-4e53-a104-652bd46b975e",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -185,7 +185,7 @@
                 "headers": {
                     "Host": "vpn.ex-vpn.my.id"
                 },
-                "path": "/172.232.232.163-386",
+                "path": "/172.232.232.163-443",
                 "type": "ws"
             },
             "multiplex": {
@@ -194,10 +194,34 @@
         },
         {
             "type": "vless",
-            "tag": "11 🇮🇩 Alibaba (US) Technology Co.. Ltd. WS TLS",
+            "tag": "11 🇮🇩 PT. Eka Mas Republik WS TLS",
             "server": "104.18.1.196",
             "server_port": 443,
-            "uuid": "9ecd906b-8b96-4809-9206-87d791da9d94",
+            "uuid": "9ee58374-36ac-4e53-a104-652bd46b975e",
+            "network": "tcp",
+            "packet_encoding": "xudp",
+            "tls": {
+                "enabled": true,
+                "insecure": true,
+                "server_name": "vpn.ex-vpn.my.id"
+            },
+            "transport": {
+                "headers": {
+                    "Host": "vpn.ex-vpn.my.id"
+                },
+                "path": "/103.125.37.180-11837",
+                "type": "ws"
+            },
+            "multiplex": {
+                "enabled": false
+            }
+        },
+        {
+            "type": "vless",
+            "tag": "21 🇮🇩 Alibaba (US) Technology Co.. Ltd. WS TLS",
+            "server": "104.18.1.196",
+            "server_port": 443,
+            "uuid": "9ee58374-36ac-4e53-a104-652bd46b975e",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -218,10 +242,10 @@
         },
         {
             "type": "vless",
-            "tag": "15 🇮🇩 Akamai Connected Cloud WS TLS",
+            "tag": "4 🇮🇩 Akamai Connected Cloud WS TLS",
             "server": "104.18.1.196",
             "server_port": 443,
-            "uuid": "9ecd906b-8b96-4809-9206-87d791da9d94",
+            "uuid": "9ee58374-36ac-4e53-a104-652bd46b975e",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -233,7 +257,7 @@
                 "headers": {
                     "Host": "vpn.ex-vpn.my.id"
                 },
-                "path": "/172.232.234.155-443",
+                "path": "/172.232.234.155-74",
                 "type": "ws"
             },
             "multiplex": {
@@ -242,10 +266,10 @@
         },
         {
             "type": "vless",
-            "tag": "21 🇮🇩 Alibaba (US) Technology Co.. Ltd. WS TLS",
+            "tag": "1 🇮🇩 PT. Eka Mas Republik WS TLS",
             "server": "104.18.1.196",
             "server_port": 443,
-            "uuid": "9ecd906b-8b96-4809-9206-87d791da9d94",
+            "uuid": "9ee58374-36ac-4e53-a104-652bd46b975e",
             "network": "tcp",
             "packet_encoding": "xudp",
             "tls": {
@@ -257,31 +281,7 @@
                 "headers": {
                     "Host": "vpn.ex-vpn.my.id"
                 },
-                "path": "/149.129.218.213-443",
-                "type": "ws"
-            },
-            "multiplex": {
-                "enabled": false
-            }
-        },
-        {
-            "type": "vless",
-            "tag": "8 🇮🇩 Akamai Connected Cloud WS TLS",
-            "server": "104.18.1.196",
-            "server_port": 443,
-            "uuid": "9ecd906b-8b96-4809-9206-87d791da9d94",
-            "network": "tcp",
-            "packet_encoding": "xudp",
-            "tls": {
-                "enabled": true,
-                "insecure": true,
-                "server_name": "vpn.ex-vpn.my.id"
-            },
-            "transport": {
-                "headers": {
-                    "Host": "vpn.ex-vpn.my.id"
-                },
-                "path": "/172.232.249.224-2053",
+                "path": "/103.125.37.180-11102",
                 "type": "ws"
             },
             "multiplex": {
